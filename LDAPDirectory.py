@@ -229,8 +229,6 @@ class LDAPDirectory(BaseDirectory):
         base = self.ldap_base
         attrs = self._makeAttrsFromData(entry)
         attrs['objectClass'] = self.ldap_object_classes
-        LOG('createEntry', DEBUG, 'base=%s rdn=%s attrs=%s' %
-            (base, rdn, attrs))
         msg = self._delegate.insert(base=base, rdn=rdn, attrs=attrs)
         if msg:
             raise ValueError("LDAP error: %s" % msg)
@@ -309,8 +307,6 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         if not res['size']:
             raise ValueError("No user '%s'" % id)
 
-        LOG('_getEntry', DEBUG, 'got for field_ids=%s entry=%s' % (
-            field_ids, res))
         return res['results'][0]
 
     def getData(self):
