@@ -111,7 +111,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return getSecurityManager().getUser().has_role(
             self.acl_access_roles)
 
-    security.declarePrivate('isCreateEntryAllowed')
+    security.declarePublic('isCreateEntryAllowed')
     def isCreateEntryAllowed(self):
         """Check that user can create an entry.
 

@@ -11,7 +11,7 @@
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="header">
-    <h1 tal:content="python: ok=='results' and 'Results' or default">
+    <h1 tal:content="python: ok=='results' and 'label_results' or 'label_search'" i18n:translate="">
       Search...
     </h1>
     <div class="description">

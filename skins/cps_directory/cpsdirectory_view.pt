@@ -22,7 +22,7 @@
   i18n:domain="cpsdirectory">
   <metal:main fill-slot="main">
 
-    <h1 i18n:translate="directories">
+    <h1 i18n:translate="">
       Directories
     </h1>
     <tal:block condition="directories">

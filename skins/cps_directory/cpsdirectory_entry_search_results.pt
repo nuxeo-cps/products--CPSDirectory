@@ -11,7 +11,5 @@
   </li>
 </tal:block>
 </ul>
-<p tal:condition="not:ids">
-  Aucun résultat.
-</p>
+<p tal:condition="not:ids"><span i18n:translate="label_no_results">label_no_results</span></p>
 </tal:block>

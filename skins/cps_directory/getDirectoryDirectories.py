@@ -10,6 +10,7 @@ Get the directories used.
 members_directory = {
     'type': 'CPS Members Directory',
     'data': {
+        'title': 'label_members',
         'schema': 'members',
         'schema_search': 'members_search',
         'layout': 'members',
@@ -28,6 +29,7 @@ members_directory = {
 roles_directory = {
     'type': 'CPS Roles Directory',
     'data': {
+        'title': 'label_roles',
         'schema': 'roles',
         'layout': 'roles',
         'role_field': 'role',
@@ -42,6 +44,7 @@ roles_directory = {
 groups_directory = {
     'type': 'CPS Groups Directory',
     'data': {
+        'title': 'label_groups',
         'schema': 'groups',
         'layout': 'groups',
         'group_field': 'group',

@@ -198,5 +198,21 @@ def install(self):
                 else:
                     pr( '    Skipping not installed locale for file %s' % file)
 
+    # Changing the action
+    pr("Updating Directory action")
+    actiontool = portal['portal_actions']
+    i=0
+    actions = []
+    for action in actiontool._actions:
+        if action.id == 'directories':
+            actions.append(i)
+        i += 1
+    actiontool.deleteActions( selections=actions)
+    actiontool.addAction(id='directories', name='Directories',
+        action = 'string: ${portal_url}/cpsdirectory_view',
+        condition='python:not portal.portal_membership.isAnonymousUser()',
+        permission='View', category='global', visible=1)
+
+
     pr("End of specific CPSDirectory install")
     return pr('flush')

@@ -14,9 +14,8 @@
                        err python: ds.getError(wid);
                        is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
                        ">
-      <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
-        <div class="label" tal:condition="widget/label_edit"
-          class="label">
+      <td align="right"  valign="top" bgcolor="#EEEEEE">
+        <div class="label" tal:condition="widget/label_edit">
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label_edit">label</span
           ><span tal:condition="not:widget/is_i18n"
@@ -42,5 +41,13 @@
 </table>
 <input type="submit" class="standalone" name="cpsdirectory_search_button"
   value="button_search" i18n:attributes="value">
+</form>
+<form action="cpsdirectory_entry_create_form" method="post"
+  tal:define="dirname request/dirname;
+              dir here/portal_directories/?dirname;">
+  <input type="hidden" name="dirname" value="." tal:attributes="value dirname" />
+  <input type="submit" class="standalone" name="cpsdirectory_search_button"
+    value="button_create_entry" i18n:attributes="value"
+    tal:condition="python: dir.isCreateEntryAllowed()" />
 </form>
 </tal:block>

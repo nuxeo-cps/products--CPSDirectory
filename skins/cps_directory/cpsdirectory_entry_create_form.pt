@@ -14,7 +14,7 @@
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="header">
-    <h1>Create entry</h1>
+    <h1 i18n:translate="">label_create_entry</h1>
     <div class="description">
     </div>
   </metal:block>

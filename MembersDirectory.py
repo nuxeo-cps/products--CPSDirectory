@@ -19,7 +19,7 @@
 """MembersDirectory
 """
 
-from zLOG import LOG, DEBUG
+from zLOG import LOG, DEBUG, WARNING
 
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -226,9 +226,11 @@ class MemberStorageAdapter(BaseStorageAdapter):
             else:
                 LOG('_setMemberGroups', DEBUG, 'member %s is not in LDAP'
                     % member)
-        else:
-            if hasattr(aq_base(user), 'setGroupsOfUser'):
+        elif hasattr(aq_base(aclu), 'setGroupsOfUser'):
                 aclu.setGroupsOfUser(list(groups), user.getUserName())
+        else:
+            LOG('_setMemberGroups', WARNING, 'No group support found in UserFolder')
+
 
     def getData(self):
         """Get data from an entry, returns a mapping.

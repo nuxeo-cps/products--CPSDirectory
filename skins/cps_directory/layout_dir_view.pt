@@ -1,27 +1,38 @@
 <tal:block define="layout options/layout;
-                   ds options/datastructure;
+                   dirname request/dirname;
+                   dir here/portal_directories/?dirname;
+                   id_field dir/id_field;
                    ">
-<table cellpadding="2" cellspacing="2" border="0">
-  <tr tal:repeat="row layout/rows">
-    <tal:block repeat="cell row">
-    <tal:block define="widget cell/widget">
-      <td width="120" align="right" valign="top" bgcolor="#EEEEEE">
-        <strong>
-        <span i18n:translate="" tal:condition="widget/is_i18n"
-          tal:content="widget/label">label</span
-        ><span tal:condition="not:widget/is_i18n"
-          tal:content="widget/label">label</span
-        >&nbsp;:
-        </strong>
-      </td>
-      <td valign="top" colspan="1"
-        tal:attributes="colspan python:cell['ncols']*2-1">
-        <div tal:attributes="class widget/css_class|nothing">
-          <tal:block replace="structure cell/widget_rendered" />
-        </div>
-      </td>
-    </tal:block>
-    </tal:block>
-  </tr>
-</table>
+<form action="cpsdirectory_entry_edit_form" method="post">
+  <input type="hidden" name="dirname" value="." tal:attributes="value dirname" />
+  <table cellpadding="2" cellspacing="2" border="0">
+    <tr tal:repeat="row layout/rows">
+      <tal:block repeat="cell row">
+      <tal:block define="widget cell/widget">
+        <td align="right" valign="top" bgcolor="#EEEEEE">
+          <input type="hidden" name="id" value="."
+            tal:condition="python: cell['widget_id']==id_field"
+            tal:attributes="value cell/widget_rendered" />
+          <span class="label">
+          <span i18n:translate="" tal:condition="widget/is_i18n"
+            tal:content="widget/label">label</span
+          ><span tal:condition="not:widget/is_i18n"
+            tal:content="widget/label">label</span
+          >&nbsp;:
+          </span>
+        </td>
+        <td valign="top" colspan="1"
+          tal:attributes="colspan python:cell['ncols']*2-1">
+          <div tal:attributes="class widget/css_class|nothing">
+            <tal:block replace="structure cell/widget_rendered" />
+          </div>
+        </td>
+      </tal:block>
+      </tal:block>
+    </tr>
+  </table>
+    <input type="submit" class="standalone"
+      value="button_edit" i18n:attributes="value"
+      tal:condition="python: dir.isCreateEntryAllowed()" />
+</form>
 </tal:block>
