@@ -118,9 +118,9 @@ class LDAPDirectory(BaseDirectory):
     all_ldap_scopes = ('BASE', 'ONELEVEL', 'SUBTREE')
 
     def __init__(self, id, **kw):
-        BaseDirectory.__init__(self, id, **kw)
         self._delegate = LDAPDelegate()
         self._delegate.addServer('')
+        BaseDirectory.__init__(self, id, **kw)
 
     def _postProcessProperties(self):
         """Post-processing after properties change."""
