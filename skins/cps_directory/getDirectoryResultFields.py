@@ -12,6 +12,10 @@ if not fields:
                   {'id': 'givenName', 'title': 'label_first_name'},
                   {'id': 'id', 'title': 'label_user_name'},
                   ]
+    elif directory_id == 'groups':
+        fields = [{'id': 'group', 'title': 'label_group'},]
+    elif directory_id == 'roles':
+        fields = [{'id': 'role', 'title': 'label_roles'},]
 
 if not fields:
     fields = [{'id': default_field,
