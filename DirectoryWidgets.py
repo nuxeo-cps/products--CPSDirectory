@@ -52,7 +52,7 @@ class EntryMixin:
             id = value
             try:
                 title = dir.getEntry(id)[dir.title_field]
-            except (IndexError, ValueError, KeyError):
+            except (IndexError, ValueError, KeyError, TypeError, AttributeError):
                 title = None
         else: # entry_type == 'dn':
             try:
