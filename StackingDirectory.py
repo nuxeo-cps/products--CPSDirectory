@@ -188,7 +188,7 @@ class StackingDirectory(BaseDirectory):
         if not done:
             raise KeyError(id)
 
-    security.declarePrivate('deleteEntry')
+    security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory."""
         id_field = self.id_field
