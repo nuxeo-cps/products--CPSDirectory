@@ -1,117 +1,117 @@
-# translation of en.po to francais
+# ##########################################################
+# ################# DON'T EDIT THIS FILE! ##################
+# ##########################################################
 # Gettext Message File for default.
 # Your Name <your@email>, Year
-# emmanuel <epietriga@nuxeo.com>, 2004.
 msgid ""
 msgstr ""
-"Project-Id-Version: en\n"
+"Project-Id-Version: default\n"
 "POT-Creation-Date: 2004-01-06 08:45default\n"
-"PO-Revision-Date: 2004-01-06 08:45+0100\n"
-"Last-Translator: emmanuel <epietriga@nuxeo.com>\n"
-"Language-Team: francais <fr@li.org>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Your Name <your@email>\n"
+"Language-Team: Name <email>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language-code: LL\n"
 "Language-name: Language\n"
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
-"X-Generator: KBabel 1.0.2\n"
 
 #.   <h1>
 #.         Directories
 #.       </h1>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "Directories"
-msgstr "Directories"
+msgstr ""
 
 #.   <em content="err" style="color:red">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
-msgstr "Error"
+msgstr ""
 
 #.   <a attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" content="dir/title_or_id" href="">
 #.                 Title
 #.               </a>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "Title"
-msgstr "Title"
+msgstr ""
 
 #.   <input onclick="javascript:history.back()" class="context" type="button" value="button_back">
 #.   </input>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "button_back"
-msgstr "Back"
+msgstr ""
 
 #.   <input condition="not:creation" value="button_change" class="standalone" name="cpsdirectory_entry_edit_form:method" type="submit">
 #.       <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
 #.       </input></input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_change"
-msgstr "Save Changes"
+msgstr ""
 
 #.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
-msgstr "Create"
+msgstr ""
 
 #.   <input condition="dir/isDeleteEntryAllowed" attributes="onclick python:'return window.confirm(\'%s\')' %
 #.               (here.Localizer.default('description_confirm_delete'), )" value="button_delete" class="destructive" name="cpsdirectory_entry_delete:method" type="submit">
 #.         </input>
 #: from ../skins/cps_directory/layout_dir_view.pt
 msgid "button_delete"
-msgstr "Delete"
+msgstr ""
 
 #.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "button_search"
-msgstr "Search"
+msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr "Choose a directory"
+msgstr ""
 
 #.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create ${dirname}"
-msgstr "Create in ${dirname}"
+msgstr ""
 
 #.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
 #.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr "Create a New Entry"
+msgstr ""
 
 #.   <span>cpsdir_label_edit</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit"
-msgstr "Edit"
+msgstr ""
 
 #.   <a attributes="href
 #.           string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id">cpsdir_label_edit_entry</a>
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_edit_entry"
-msgstr "Edit Entry"
+msgstr ""
 
 #.   <span condition="python:ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
-msgstr "Results"
+msgstr ""
 
 #.   <span condition="python:ok != 'results'">cpsdir_label_search</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search"
-msgstr "Search"
+msgstr ""
 
 #.   <a attributes="href
 #.              string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname">cpsdir_label_search_entry</a>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_search_entry"
-msgstr "Search an Entry"
+msgstr ""
 
 #.   <b>cpsdir_label_upto_directories</b>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -119,23 +119,23 @@ msgstr "Search an Entry"
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_upto_directories"
-msgstr "Up to Directories"
+msgstr ""
 
 #.   <span>cpsdir_label_view</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view"
-msgstr "View"
+msgstr ""
 
 #.   <a attributes="href
 #.           string:${base_url}cpsdirectory_entry_view?dirname=$dirname&id=$id">cpsdir_label_view_entry</a>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_view_entry"
-msgstr "View Entry"
+msgstr ""
 
 #.   <th>id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
-msgstr "id"
+msgstr ""
 
 #.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
 #.   <span condition="widget/is_i18n" content="widget/label">label</span>
@@ -143,35 +143,34 @@ msgstr "id"
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
-msgstr "label"
+msgstr ""
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
-msgstr "No match"
+msgstr ""
 
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr "No directory available"
+msgstr ""
 
 msgid "button_edit"
-msgstr "Edit"
+msgstr ""
 
 msgid "psm_entry_created"
-msgstr "Entry created"
+msgstr ""
 
 msgid "label_members"
-msgstr "Members"
+msgstr ""
 
 msgid "label_first_name"
-msgstr "First Name"
+msgstr ""
 
 msgid "label_last_name"
-msgstr "Last Name"
+msgstr ""
 
 msgid "label_full_name"
-msgstr "Full Name"
-
+msgstr ""
