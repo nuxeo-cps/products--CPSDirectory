@@ -254,6 +254,12 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         self.assertEquals(res, [('BBB', {'foo': 'oo', 'email': 'evil@hell'}),
                                 ('CCC', {'foo': 'oo', 'email': 'yo@mama'})])
 
+        # All return fields
+        res = dir.searchEntries(foo='oo', return_fields=['*'])
+        res.sort()
+        self.assertEquals(res, [('BBB', entry2),
+                                ('CCC', entry3)])
+
     def test_searchEntries_ghost(self):
         dir = self.dirmeta
         fooentry = {'idd': 'DDD', 'foo': 'ouah', 'pasglop': 'arg'}
@@ -470,6 +476,8 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
         self.assertEquals(barentry2, barentry3)
 
     def XXXXXXXXXXXtest_searchEntries(self):
+        # TODO FIXME: the code doesn't treat the case where we
+        # do a search on an attribute that's in the missing entry.
         dir = self.dirmeta
 
         entry1 = {'id': 'AAA', 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}

@@ -323,6 +323,7 @@ class MetaDirectory(BaseDirectory):
             field_rename = info['field_rename']
             field_rename_back = info['field_rename_back']
             b_field_ids = b_dir._getFieldIds()
+            b_id_field = b_dir.id_field
 
             # Get sub-query
             b_query = {}
@@ -334,6 +335,15 @@ class MetaDirectory(BaseDirectory):
             # Get return fields
             if return_fields is None:
                 b_return_fields = None
+            elif return_fields == ['*']:
+                b_return_fields = []
+                for b_fid in b_field_ids:
+                    if b_fid == b_id_field:
+                        # Won't be useful, we want the minimum
+                        continue
+                    if b_fid in field_ignore:
+                        continue
+                    b_return_fields.append(b_fid)
             else:
                 b_return_fields = []
                 for fid in return_fields:
@@ -420,7 +430,8 @@ class MetaDirectory(BaseDirectory):
             else:
                 acc_res = [(id, {}) for id in ids]
 
-        if return_fields is not None and id_field in return_fields:
+        if (return_fields is not None and
+            (return_fields == ['*'] or id_field in return_fields)):
             # Re-add id if requested in return_fields
             for id, entry in acc_res:
                 entry[id_field] = id
