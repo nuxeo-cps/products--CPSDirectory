@@ -344,7 +344,7 @@ class MetaDirectory(BaseDirectory):
                 entry[id_field] = id
 
         #print '-> %s' % `acc_res`
-        LOG('searchEntries', DEBUG, 'rf=%s idf=%s sidf=%s res=%s' % (return_fields, id_field, self.id_field, acc_res))
+        #LOG('searchEntries', DEBUG, 'rf=%s idf=%s sidf=%s res=%s' % (return_fields, id_field, self.id_field, acc_res))
         return acc_res
 
     #
