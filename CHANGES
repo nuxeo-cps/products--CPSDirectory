@@ -3,7 +3,9 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- metadirectory and stacking can now retrieve content urls from
+  backing directory calling
+
 Bug fixes:
 ~~~~~~~~~~
 -
