@@ -32,8 +32,6 @@
               Title
             </a>
           </dt>
-          <dd>
-          </dd>
           </tal:block>
         </tal:block>
       </dl>
