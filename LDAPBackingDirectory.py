@@ -43,6 +43,7 @@ from ldap import INAPPROPRIATE_AUTH
 from ldap import UNWILLING_TO_PERFORM
 from ldap import INVALID_DN_SYNTAX
 from ldap import NO_SUCH_OBJECT
+from ldap import SERVER_DOWN
 #from ldap import SIZELIMIT_EXCEEDED
 
 from Globals import InitializeClass
@@ -54,6 +55,7 @@ from Products.CPSSchemas.Field import ValidationError
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
+from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import _replaceProperty
 
 
@@ -604,7 +606,11 @@ class LDAPBackingDirectory(BaseDirectory):
         conn._cps_bound_dn = None
         conn._cps_bound_password = None
         LOG('connectLDAP', TRACE, "bind_s dn=%s" % bind_dn)
-        conn.simple_bind_s(bind_dn, bind_password)
+        try:
+            conn.simple_bind_s(bind_dn, bind_password)
+        except SERVER_DOWN:
+            raise ConfigurationError("Directory '%s': LDAP server is down"
+                                     % self.getId())
         # may raise INVALID_CREDENTIALS
         conn._cps_bound_dn = bind_dn
         conn._cps_bound_password = bind_password
