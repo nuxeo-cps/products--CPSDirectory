@@ -1,4 +1,20 @@
 *******************************************
+** CPSDirectory V1.12.4 [R1 build 2004/05/14-17:08 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- LDAPBackingDirectory: handle ldap.INAPPROPRIATE_AUTH.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Import LDAP constants at the top of LDAPBackingDirectory.
+
+*******************************************
 ** CPSDirectory V1.12.3 [R1 build 2004/05/13-16:59 by guillaum]
 
 Requires:

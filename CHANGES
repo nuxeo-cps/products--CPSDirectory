@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- LDAPBackingDirectory: handle ldap.INAPPROPRIATE_AUTH.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Import LDAP constants at the top of LDAPBackingDirectory.
+-
