@@ -108,7 +108,6 @@ class ProxyDirectory(SimpleItemWithProperties):
     def isVisible(self):
         """Is the directory visible by the current user?"""
         ob = self._getContent()
-        print ob
         if not ob:
             return 0
         return ob.isVisible()
