@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"POT-Creation-Date: 2004-03-04 16:49default\n"
+"POT-Creation-Date: 2004-03-24 17:37default\n"
 "PO-Revision-Date: 2004-02-27 15:24+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -48,6 +48,7 @@ msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
 
 #.   <b>cpsdir_label_upto_directories</b>
+#.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
@@ -116,6 +117,16 @@ msgstr "Nome completo"
 
 msgid "cpsdir_label_delete_entry"
 msgstr "Elimina elemento"
+
+#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#, fuzzy
+msgid "cpsdir_help_homeless"
+msgstr "Risultati della ricerca "
+
+#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#, fuzzy
+msgid "cpsdir_label_homeless"
+msgstr "Risultati della ricerca "
 
 #~ msgid "button_edit"
 #~ msgstr "Modifica"

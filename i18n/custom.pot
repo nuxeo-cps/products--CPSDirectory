@@ -57,3 +57,9 @@ msgstr ""
 
 msgid "cpsdir_label_results"
 msgstr ""
+
+msgid "cpsdir_help_homeless"
+msgstr ""
+
+msgid "cpsdir_label_homeless"
+msgstr ""
