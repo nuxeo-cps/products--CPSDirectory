@@ -29,8 +29,6 @@ from Products.CMFCore.CMFCorePermissions import View, ManagePortal
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
-from Products.CPSSchemas.Vocabulary import CPSVocabulary
-
 
 class DirectoryVocabulary(SimpleItemWithProperties):
     """Directory Vocabulary
