@@ -3,7 +3,9 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Indirect directories can now store entries coming from different directories.
+- Local directory 'directory_id' property has been changed from string to list
+  because it is used for indirect directories.
 Bug fixes:
 ~~~~~~~~~~
 -
