@@ -552,6 +552,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns the list of roles whose condition evaluates to true.
         """
         res = []
+        if not self.entry_roles:
+            return res
         expr_context = self._createEntryLocalRoleExpressionContext(entry)
         for role, e, compiled in self.entry_roles:
             if not compiled:
