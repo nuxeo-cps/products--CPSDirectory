@@ -93,8 +93,12 @@ def _simpleEscaping(s):
 
 def explodeDN(dn):
     """Explode a dn into list of rdns."""
-    rdns = ldap.explode_dn(dn)
-    return [_simpleEscaping(rdn) for rdn in rdns]
+    try:
+        rdns = ldap.explode_dn(dn)
+    except LDAPError:
+        return []
+    else:
+        return [_simpleEscaping(rdn) for rdn in rdns]
 
 def implodeDN(rdns):
     """Implode a sequence of rdns into a dn."""
