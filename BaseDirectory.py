@@ -48,6 +48,23 @@ from Products.CPSSchemas.Field import WriteAccessError
 _marker = []
 
 
+class AuthenticationFailed(Exception):
+    """Raised when authentication fails."""
+    pass
+
+
+# Utility functions for _properties, should be elsewhere
+def _replaceProperty(props, id, prop):
+    res = []
+    for d in props:
+        if d['id'] == id:
+            if prop is not None:
+                res.append(prop)
+            continue
+        res.append(d)
+    return tuple(res)
+
+
 class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     """Base Directory.
 
@@ -311,6 +328,26 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Get entry filtered by processes but not acls."""
         dm = self._getDataModel(id, check_acls=0, **kw)
         return self._getEntryFromDataModel(dm)
+
+    security.declarePublic('isAuthenticating')
+    def isAuthenticating(self):
+        """Check if this directory does authentication.
+
+        Returns a boolean.
+        """
+        return 0
+
+    security.declarePrivate('getEntryAuthenticated')
+    def getEntryAuthenticated(self, id, password, **kw):
+        """Get and authenticate an entry.
+
+        Doesn't check ACLs.
+
+        Returns the entry if authenticated.
+        Raises KeyError if the entry doesn't exist.
+        Raises AuthenticationFailed if authentication failed.
+        """
+        raise AuthenticationFailed
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
