@@ -23,11 +23,11 @@ from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
-from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from types import TupleType, StringType
 
 from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 class IndirectDirectory(BaseDirectory):
     """A Directory that just stores ids of entries of other directories.
@@ -95,7 +95,7 @@ class IndirectDirectory(BaseDirectory):
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
-        if id is None:
+        if not id:
             return None
         else:
             directory_id = self._getDirectoryIdForId(id)
@@ -176,6 +176,32 @@ class IndirectDirectory(BaseDirectory):
             res.extend(entries)
         return res
 
+    security.declarePublic('searchPossibleEntries')
+    def searchPossibleEntries(self, return_fields=None, **kw):
+        """Search for possible entries in the directories.
+        """
+        res = []
+        for directory_id in self.directory_ids:
+            directory = self._getDirectory(directory_id)
+            real_entries = directory.searchEntries(return_fields, **kw)
+            # filter entries returned from the search on the
+            # real directory
+            if return_fields is None:
+                # If there are no return_fields, you get:
+                # ['id1', 'id2', etc.]
+                entries = [self._makeId(directory_id, x) for x in real_entries]
+            else:
+                # If there is a return_fields parameter, you get:
+                # [('id1', {'field1': value1, 'field2': value2}),
+                #  ('id2', {'field1': value3, 'field2': value4}),
+                #   etc.
+                #  ]
+                # return_fields being in this example ('field1', 'field2')
+                entries = [(self._makeId(directory_id, x[0]), x[1]) for x in real_entries]
+            res.extend(entries)
+        return res
+
+
     #
     # Internal
     #
@@ -184,16 +210,24 @@ class IndirectDirectory(BaseDirectory):
     def _getAdapters(self, id, search=0, **kw):
         """Get the adapters for an entry."""
         if id is not None:
-            directory_id = self._getDirectoryIdForId(id)
             entry_id = self._getEntryIdForId(id)
-            directory = self._getDirectory(directory_id)
-            return directory._getAdapters(entry_id, search, **kw)
+            directory_id = self._getDirectoryIdForId(id)
         else:
+            entry_id = None
             try:
-                # try to get adapters from any of the directories...
-                return self._getDirectory(self.directory_ids[0])._getAdapters(None, search, **kw)
+                directory_id = self.directory_ids[0]
             except IndexError:
                 return []
+        directory = self._getDirectory(directory_id)
+        original_adapters = directory._getAdapters(entry_id, search, **kw)
+        adapters = [IndirectStorageAdapter(adapter.getSchema(),
+                                           id=entry_id,
+                                           dir=directory,
+                                           indirect_id=id,
+                                           adapter=adapter,
+                                           **kw)
+                    for adapter in original_adapters]
+        return adapters
 
     security.declarePrivate('_getDirectory')
     def _getDirectory(self, directory_id):
@@ -235,3 +269,39 @@ class IndirectDirectory(BaseDirectory):
         return res
 
 InitializeClass(IndirectDirectory)
+
+
+class IndirectStorageAdapter(BaseStorageAdapter):
+    """Indirect Storage Adapter
+
+    This adapter gets and sets data from the user folder and the member
+    data.
+    """
+
+    def __init__(self, schema, id, dir, indirect_id, adapter, **kw):
+        """Create an Adapter for a schema.
+
+        The id passed is the member id within the directory.
+        indirect_id is in fact 'directory/id'.
+        """
+        self._id = id
+        self._dir = dir
+        self._indirect_id = indirect_id
+        self._adapter = adapter
+        BaseStorageAdapter.__init__(self, schema, **kw)
+
+    def getData(self):
+        """Get data from an entry, returns a mapping.
+
+        Fills default value from the field if the object has no attribute.
+        """
+        if self._id is None:
+            data = self.getDefaultData()
+        else:
+            data = self._adapter.getData()
+            dir = self._dir
+            if data.has_key(dir.id_field):
+                data[dir.id_field] = self._indirect_id
+        return data
+
+InitializeClass(IndirectStorageAdapter)
