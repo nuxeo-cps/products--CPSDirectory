@@ -1,10 +1,7 @@
 #!/usr/bin/python
 # -*- encoding: iso-8859-15 -*-
+# (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
 # Author: Tarek Ziadé <tz@nuxeo.com>
-#
-#  split_tokens and extract_tokens are taken from python-ldap :
-#  written by Michael Stroeder <michael@stroeder.com>
-#  See http://python-ldap.sourceforge.net for details.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -20,13 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-"""
-
-
-"""
-
-
-__version__ = '0.1.1'
+# $Id$
 
 __all__ = [
   'open','initialize','init',
