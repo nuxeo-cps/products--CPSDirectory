@@ -316,6 +316,74 @@ class CPSUserIdentifierWidgetType(CPSWidgetType):
 
 InitializeClass(CPSUserIdentifierWidgetType)
 
+############################################################"
+
+class CPSLinkedDirectoriesWidget(CPSMultiSelectWidget):
+    """
+    Allow displaying the components of a list-type
+    field of a directory as links to the
+    'view' pages of these components, assuming that
+    they represents items from another directory,
+    logically related to the first one.
+    """
+    meta_type = "CPS Linked Directories Widget"
+
+    _properties = CPSMultiSelectWidget._properties + (
+        {'id': 'related_directory_name', 'type': 'string', 'mode': 'w',
+         'label': 'display related directory entries as links' },
+         {'id': 'links_css', 'type': 'string', 'mode': 'w',
+         'label': 'css to be applied to the related directory entries' },
+        )
+    related_directory_name = ''
+    links_css = ''
+    
+    def getLinkTag(self, directoryName, entryId, entryTitle, css):
+        a_tag = '<a href="cpsdirectory_entry_view?dirname=' + \
+               directoryName + '&id=' + entryId + '"'
+        if css:
+            a_tag += ' class="' + css + '"'
+        title = entryTitle
+        if not entryTitle:
+            title = entryId
+        a_tag += '>' + title + '</a>'
+        return a_tag
+
+    def relatedDirectoryExists(self):
+        """ Verify that the directory identified by 'related_directory_name'
+        does exist
+        """
+        portalDirectories = getToolByName(self, 'portal_directories')
+        relatedDir = getattr(portalDirectories, self.related_directory_name, None)
+        return not not relatedDir
+            
+    
+    def render(self, mode, datastructure, **kw):
+        """Render in mode from datastructure."""
+        value = datastructure[self.getWidgetId()]
+        vocabulary = self._getVocabulary(datastructure)
+        if mode == 'view':
+            if not value:
+                return self.format_empty
+            if self.relatedDirectoryExists():
+                return ', '.join([self.getLinkTag(self.related_directory_name,
+                                                  i,
+                                                  escape(vocabulary.get(i, i)),
+                                                  self.links_css) for i in value])
+            else:
+                return ', '.join([escape(vocabulary.get(i, i)) for i in value])
+        elif mode == 'edit':
+            return CPSMultiSelectWidget.render(self, mode, datastructure, **kw)
+        raise RuntimeError('unknown mode %s' % mode)
+
+InitializeClass(CPSLinkedDirectoriesWidget)
+
+class CPSLinkedDirectoriesWidgetType(CPSWidgetType):
+    """Linked Directories Widget Type."""
+    meta_type = "CPS Linked Directories Widget Type"
+    cls = CPSLinkedDirectoriesWidget
+
+InitializeClass(CPSLinkedDirectoriesWidgetType)
+
 ##################################################
 
 WidgetTypeRegistry.register(CPSDirectoryEntryWidgetType,
@@ -324,3 +392,5 @@ WidgetTypeRegistry.register(CPSDirectoryMultiEntriesWidgetType,
                             CPSDirectoryMultiEntriesWidget)
 WidgetTypeRegistry.register(CPSUserIdentifierWidgetType,
                             CPSUserIdentifierWidget)
+WidgetTypeRegistry.register(CPSLinkedDirectoriesWidgetType,
+                            CPSLinkedDirectoriesWidget)
