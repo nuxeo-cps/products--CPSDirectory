@@ -28,7 +28,7 @@ Changes
 
 6. Be aware that results from a searchEntry is different than before.
 
-   If there are not return_fields, you get::
+   If there are no return_fields, you get::
 
      ['id1', 'id2', etc.]
 
