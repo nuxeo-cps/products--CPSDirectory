@@ -27,10 +27,11 @@ In this directory the id is always the dn.
 from zLOG import LOG, DEBUG, TRACE, ERROR
 
 import re
+import sys
 import ldap
 from ldap.filter import filter_format
 
-from types import ListType, TupleType, StringType, IntType
+from types import ListType, TupleType, StringType, IntType, UnicodeType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from OFS.Image import Image
@@ -47,8 +48,14 @@ from Products.CPSDirectory.BaseDirectory import _replaceProperty
 # UTF-8
 #
 
+default_encoding = sys.getdefaultencoding()
+if default_encoding == 'ascii':
+    default_encoding = 'latin1'
+
 def toUTF8(s):
-    return unicode(s).encode('utf-8')
+    if not isinstance(s, UnicodeType):
+        s = unicode(s, default_encoding)
+    return s.encode('utf-8')
 
 #
 # LDAP escaping
