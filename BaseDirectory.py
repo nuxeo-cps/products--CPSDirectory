@@ -290,6 +290,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory.
+
+        Returns the id given to the entry if different from the one given
+        or None.
         """
         raise NotImplementedError
 
@@ -513,7 +516,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # Check new entry id does not already exist
             # XXX should be done by field/schema... XXX
             id = dm.data[self.id_field]
-            if self.hasEntry(id):
+            if id and self.hasEntry(id):
                 ok = 0
                 widget_id = 'widget__'+self.id_field # XXX hack!
                 ds.setError(widget_id, 'cpsdirectory_err_entry_already_exists')
@@ -529,7 +532,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # XXX
             entry = dm.data.copy() # Need full entry not filtered by ACLs
             self.checkCreateEntryAllowed(id=id, entry=entry)
-            self.createEntry(entry)
+            new_id = self.createEntry(entry)
+            if new_id is not None and id != new_id:
+                # new id computed by createEntry
+                id = new_id
+                dm.data[self.id_field] = id
+
             # Redirect/render
             created_func = getattr(self, created_callback, None)
             if created_func is None:
