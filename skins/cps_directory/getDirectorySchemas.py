@@ -39,6 +39,22 @@ members_schema = {
                 'acl_write_roles_str': 'Manager',
             },
         },
+    'givenName': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 1,
+                'acl_write_roles_str': 'Manager; Owner',
+            },
+        },
+    'sn': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 1,
+                'acl_write_roles_str': 'Manager; Owner',
+            },
+        },
     'email': {
         'type': 'CPS String Field',
         'data': {
@@ -66,6 +82,20 @@ members_search_schema = {
         },
     'groups': {
         'type': 'CPS String List Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'givenName': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'sn': {
+        'type': 'CPS String Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,
