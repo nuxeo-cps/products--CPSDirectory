@@ -147,7 +147,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
 
     props=['*'] means to return all available properties.
     """
-    query.update(kw)
+    kw.update(query)
+    query = kw
     aclu = self.acl_users
 
     done_props = []
