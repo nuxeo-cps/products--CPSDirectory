@@ -21,21 +21,11 @@
 
 from zLOG import LOG, DEBUG
 
-from cgi import escape
-from types import ListType, TupleType, StringType
-from Globals import Persistent
 from Globals import InitializeClass
-from Acquisition import Implicit
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from AccessControl.Role import RoleManager
 from ComputedAttribute import ComputedAttribute
-from OFS.SimpleItem import Item_w__name__
-from Products.CMFCore.CMFCorePermissions import ManagePortal
 
-from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
-from Products.CMFCore.utils import getToolByName, SimpleItemWithProperties
-from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
+from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 
