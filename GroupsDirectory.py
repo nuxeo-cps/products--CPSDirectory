@@ -86,12 +86,14 @@ class GroupsDirectory(BaseDirectory):
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
         kwgroup = kw.get(self.id_field)
+        if kwgroup:
+            kwgroup = kwgroup.lower()
         kwmembers = kw.get(self.members_field)
         groups = []
         for group in self.listEntryIds():
             if kwgroup:
                 # XXX treat list
-                if group != kwgroup:
+                if group.lower().find(kwgroup) == -1:
                     continue
             if kwmembers:
                 if not hasattr(aq_base(aclu), 'getGroupById'):
