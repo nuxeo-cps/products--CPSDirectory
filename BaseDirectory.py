@@ -136,6 +136,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('isEditEntryAllowed')
     def isEditEntryAllowed(self, id=None, entry=None):
+        # XXX should also have a new_entry arg.
         """Check that user can edit a given entry.
 
         Uses the computed entry local roles.
@@ -178,12 +179,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             raise Unauthorized("No delete access to directory")
 
     security.declarePublic('checkEditEntryAllowed')
-    def checkEditEntryAllowed(self, id):
+    def checkEditEntryAllowed(self, id=None, entry=None):
         """Check that user can edit a given entry.
 
         Raises Unauthorized if not.
         """
-        if not self.isEditEntryAllowed():
+        if not self.isEditEntryAllowed(id=id, entry=entry):
             raise Unauthorized("No edit access to entry '%s'" % id)
 
     security.declarePrivate('listEntryIds')
@@ -335,6 +336,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             ok = layout.validateLayoutStructure(layout_structure, ds,
                                                 layout_mode=layout_mode, **kw)
             if ok:
+                self.checkEditEntryAllowed(id)
+                # XXX do better error messages than raise Unauthorized!
                 dm._commit()
             else:
                 layout_mode = layout_mode_err
