@@ -1,4 +1,5 @@
 # translation of en.po to 
+# translation of en.po to
 # translation of en.po to Francais
 # translation of en.po to ben
 # translation of en.po to francais
@@ -10,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
-"PO-Revision-Date: 2004-08-30 11:33+0200\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
+"PO-Revision-Date: 2004-08-30 12:21+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -143,5 +144,10 @@ msgid "label_roles_Member"
 msgstr "Member"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Sorry but this entry can not be deleted, you have to delete all sub entries first."
+msgstr ""
+"Sorry but this entry can not be deleted, you have to delete all sub entries "
+"first."
+
+msgid "cpsdir_err_entry_already_exists"
+msgstr "An entry with the same identifier already exists"
 

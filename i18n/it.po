@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
 "PO-Revision-Date: 2004-05-10 12:28+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -66,8 +66,6 @@ msgstr "Visualizza l'elemento"
 msgid "description_too_many_results_refine_query"
 msgstr ""
 
-#    <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
-#    <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
@@ -144,6 +142,9 @@ msgid "label_roles_Member"
 msgstr "Collaboratori"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+msgid "cpsdir_err_entry_already_exists"
 msgstr ""
 
 #, fuzzy

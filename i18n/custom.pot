@@ -73,3 +73,5 @@ msgstr ""
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
+msgid "cpsdir_err_entry_already_exists"
+msgstr ""

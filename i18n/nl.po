@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: French <cantact@nuxeo.com>\n"
@@ -140,6 +140,9 @@ msgid "label_roles_Member"
 msgstr "Leden"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+msgid "cpsdir_err_entry_already_exists"
 msgstr ""
 
 #~ msgid "label_roles"

@@ -1,4 +1,5 @@
 # translation of fr.po to 
+# translation of fr.po to
 # translation of fr.po to Francais
 # translation of fr.po to ben
 # translation of fr.po to francais
@@ -10,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
-"PO-Revision-Date: 2004-08-30 11:39+0200\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
+"PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -143,5 +144,10 @@ msgid "label_roles_Member"
 msgstr "Membre"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Attention l'entré n'a pas été supprimé ! pour supprimer l'entré il vous faut d'abord supprimer toutes les sous entrés."
+msgstr ""
+"Attention l'entré n'a pas été supprimé ! pour supprimer l'entré il vous faut "
+"d'abord supprimer toutes les sous entrés."
+
+msgid "cpsdir_err_entry_already_exists"
+msgstr "Une entré existe déjà avec le même identifiant"
 

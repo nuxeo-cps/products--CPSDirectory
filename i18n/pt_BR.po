@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
 "PO-Revision-Date: 2004-06-08 14:06-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@curiango.ipen.br>\n"
 "Language-Team: Português do Brasil <pt@li.org>\n"
@@ -139,6 +139,9 @@ msgid "label_roles_Member"
 msgstr "Membros"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+msgid "cpsdir_err_entry_already_exists"
 msgstr ""
 
 #, fuzzy

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"POT-Creation-Date: 2004-08-30 11:29default\n"
+"POT-Creation-Date: 2004-08-30 12:18default\n"
 "PO-Revision-Date: 2004-07-12 18:30+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: Francais <rheinland@dzug.org>\n"
@@ -136,6 +136,9 @@ msgid "label_roles_Member"
 msgstr "Rolle(n)"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+msgid "cpsdir_err_entry_already_exists"
 msgstr ""
 
 #~ msgid "button_edit"
