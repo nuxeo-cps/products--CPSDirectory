@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Invalid Entry in view mode is a link to a CPS Error page
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
