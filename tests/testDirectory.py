@@ -90,6 +90,9 @@ class TestDirectoryWithDefaultUserFolder(
         #self.assertRaises(ValueError, members.createEntry, 
         #    {'id': member_id})
 
+        # XXX: not implemented yet
+        #members.deleteEntry(member_id)
+        #self.assert_(not members.hasEntry(member_id))
 
     #
     # Groups
@@ -125,6 +128,9 @@ class TestDirectoryWithDefaultUserFolder(
         self.assertRaises(ValueError, groups.createEntry, 
             {'group': group_id})
 
+        # XXX: not implemented yet
+        #groups.deleteEntry(group_id)
+        #self.assert_(not groups.hasEntry(group_id))
 
     #
     # Roles
@@ -161,6 +167,10 @@ class TestDirectoryWithDefaultUserFolder(
         self.assert_(role_id in roles.listEntryIds())
 
         self.assertRaises(ValueError, roles.createEntry, {'role': role_id})
+
+        # XXX: not implemented yet
+        #roles.deleteEntry(role_id)
+        #self.assert_(not roles.hasEntry(role_id))
 
     #
     # TODO: add a more complex scenario here
