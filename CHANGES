@@ -9,5 +9,4 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Implemented listEntryIdsAndTitles for MetaDirectory.
-- Implemented specific authentication API for directories.
+-

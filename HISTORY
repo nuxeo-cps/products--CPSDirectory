@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.12.0 [R1 build 2004/05/06-16:59 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Implemented listEntryIdsAndTitles for MetaDirectory.
+- Implemented specific authentication API for directories.
+
+*******************************************
 ** CPSDirectory V1.11.0 [R1 build 2004/05/05-00:11 by guillaum]
 
 Requires:
