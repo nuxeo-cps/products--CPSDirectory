@@ -45,6 +45,12 @@ def importDirectoryTool(context):
 
     if context.shouldPurge():
         for dir_id in _getDirectoryIds(tool):
+            # XXX
+            # Ensure we don't remove a directory with some conf in it
+            # Remove it by hand before importing, it's safer.
+            if len(tool[dir_id].objectIds()):
+                raise ValueError("Directory %s not empty, aborting import"
+                                 % dir_id)
             tool._delObject(dir_id)
 
     text = context.readDataFile(_FILENAME)
@@ -53,7 +59,7 @@ def importDirectoryTool(context):
 
     dtconf = DirectoryToolConfigurator(site, encoding)
     tool_info = dtconf.parseXML(text)
-    dconf = DirectoryConfigurator(site, encoding)
+    dconf = DirectoryImportConfigurator(site, encoding)
 
     for info in tool_info['directories']:
         dir_id = str(info['id'])
@@ -67,11 +73,10 @@ def importDirectoryTool(context):
         dir_info = dconf.parseXML(dir_text)
 
         dir = tool.manage_addCPSDirectory(dir_id, dir_info['kind'])
-        for prop_info in dir_info['props'][0]['properties']:
+        for prop_info in dir_info['properties']:
             dconf.initProperty(dir, prop_info)
             dir._postProcessProperties()
-        for elr in dir_info['elrs']:
-            elr = elr['elr'][0]
+        for elr in dir_info['entry-local-roles']:
             res = dir.addEntryLocalRole(elr['role'], elr['expr'])
             if res:
                 raise ValueError(res)
@@ -85,14 +90,15 @@ def exportDirectoryTool(context):
     tool = getToolByName(site, 'portal_directories')
 
     dtconf = DirectoryToolConfigurator(site).__of__(site)
-    dconf = DirectoryConfigurator(site).__of__(site)
 
     tool_xml = dtconf.generateXML()
     context.writeDataFile(_FILENAME, tool_xml, 'text/xml')
 
     for info in dtconf.listDirectoryInfo():
         dir_id = info['id']
-        dir_xml = dconf.generateXML(dir=tool[dir_id])
+        dir = tool[dir_id]
+        dconf = DirectoryExportConfigurator(dir, site).__of__(site)
+        dir_xml = dconf.generateXML()
         context.writeDataFile(_getDirectoryFilename(dir_id),
                               dir_xml, 'text/xml',
                               _getDirectoryDir(dir_id))
@@ -137,47 +143,18 @@ class DirectoryToolConfigurator(ConfiguratorBase):
 InitializeClass(DirectoryToolConfigurator)
 
 
-class DirectoryConfigurator(ConfiguratorBase):
-    security = ClassSecurityInfo()
-
-    security.declareProtected(ManagePortal, 'getDirectoryKind')
-    def getDirectoryKind(self, dir):
-        """Return the directory type."""
-        return dir.meta_type
-
-    security.declareProtected(ManagePortal, 'getDirectoryPropsXML')
-    def getDirectoryPropsXML(self, dir):
-        """Return props as XML."""
-        prop_infos = self._getDirectoryProperties(dir)
-        lines = self.generatePropertyNodes(prop_infos).splitlines()
-        return '\n'.join(['  '+line for line in lines])
-
-    security.declareProtected(ManagePortal, 'getDirectoryEntryLR')
-    def getDirectoryEntryLR(self, dir):
-        """Return entry local roles."""
-        return [{'role': role, 'expr': expr}
-                for role, expr in dir.listEntryLocalRoles()]
-
-    def _getDirectoryProperties(self, dir):
-        properties = [self._extractProperty(dir, prop_map)
-                      for prop_map in dir._propertyMap()]
-        return tuple(properties)
-
-    def _getExportTemplate(self):
-        return PageTemplateFile('directoryExport.xml', _xmldir)
+class DirectoryImportConfigurator(ConfiguratorBase):
+    """Directory configurator for a given directory.
+    """
+    def _getExportTemplate(self): # XXX artefact
+        return None
 
     def _getImportMapping(self):
         return {
             'directory': {
                 'kind': {},
-                'properties': {KEY: 'props'},
-                'entry-local-roles': {KEY: 'elrs', DEFAULT: ()},
-                },
-            'properties': {
-                'property': {KEY: 'properties'},
-                },
-            'entry-local-roles': {
-                'entry-local-role': {KEY: 'elr'},
+                'property': {KEY: 'properties', DEFAULT: ()},
+                'entry-local-role': {KEY: 'entry-local-roles', DEFAULT: ()},
                 },
             'entry-local-role': {
                 'role': {},
@@ -185,8 +162,41 @@ class DirectoryConfigurator(ConfiguratorBase):
                 },
             }
 
-InitializeClass(DirectoryConfigurator)
+InitializeClass(DirectoryImportConfigurator)
 
+
+class DirectoryExportConfigurator(ConfiguratorBase):
+    """Directory export configurator for a given directory.
+    """
+    security = ClassSecurityInfo()
+
+    def __init__(self, dir, *args, **kw):
+        self.dir = dir
+        ConfiguratorBase.__init__(self, *args, **kw)
+
+    security.declareProtected(ManagePortal, 'getDirectoryKind')
+    def getDirectoryKind(self):
+        """Return the directory type."""
+        return self.dir.meta_type
+
+    security.declareProtected(ManagePortal, 'getDirectoryPropsXML')
+    def getDirectoryPropsXML(self):
+        """Return props as XML."""
+        dir = self.dir
+        prop_infos = [self._extractProperty(dir, prop_map)
+                      for prop_map in dir._propertyMap()]
+        return self.generatePropertyNodes(prop_infos)
+
+    security.declareProtected(ManagePortal, 'getDirectoryEntryLR')
+    def getDirectoryEntryLR(self):
+        """Return entry local roles."""
+        return [{'role': role, 'expr': expr}
+                for role, expr in self.dir.listEntryLocalRoles()]
+
+    def _getExportTemplate(self):
+        return PageTemplateFile('directoryExport.xml', _xmldir)
+
+InitializeClass(DirectoryExportConfigurator)
 
 
 def _getDirectoryDir(dir_id):
