@@ -227,7 +227,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
                 LOG('_setMemberGroups', DEBUG, 'member %s is not in LDAP'
                     % member)
         elif hasattr(aq_base(aclu), 'setGroupsOfUser'):
-                aclu.setGroupsOfUser(list(groups), user.getUserName())
+            aclu.setGroupsOfUser(list(groups), user.getUserName())
         else:
             LOG('_setMemberGroups', WARNING, 'No group support found in UserFolder')
 
