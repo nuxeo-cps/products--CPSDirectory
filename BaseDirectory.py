@@ -564,6 +564,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             schemas.append(schema)
         return schemas
 
+    security.declarePrivate('_getFieldIds')
+    def _getFieldIds(self, search=0):
+        """Get the fields ids by querying the schemas."""
+        keys = []
+        for schema in self._getSchemas(search=search):
+            keys.extend(schema.keys())
+        return keys
+
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, **kw):
         """Get the adapters for an entry.
