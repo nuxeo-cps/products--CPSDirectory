@@ -78,6 +78,7 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
         dir = self._getDirectory()
         voc = dir.getEntry(self.entry_id, None)
         res = voc.get(self.voc_entry_field, [])
+
         if self.add_empty_key:
             v = ''
             res = list(res)
@@ -85,7 +86,9 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
                 res.insert(0, v)
             else:
                 res.append(v)
+
         return res
+
 
     security.declareProtected(View, 'items')
     def items(self):
@@ -93,14 +96,16 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
         keys = self.keys()
         res = []
         for key in keys:
-            res.append((key, key))
+          res.append((key, key))
+
+        # XXX self.keys() already adds empty key
+        # we just need here to add empty_key_value
         if self.add_empty_key:
-            v = ('', self.empty_key_value)
-            res = list(res)
+            v = ('',self.empty_key_value)
             if self.empty_key_pos == 'first':
-                res.insert(0, v)
+                res[0] = v
             else:
-                res.append(v)
+                res[-1] =  v
         return res
 
     security.declareProtected(View, 'has_key')
