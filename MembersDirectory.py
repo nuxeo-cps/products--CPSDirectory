@@ -150,7 +150,17 @@ class MembersDirectory(BaseDirectory):
         if member is None or not hasattr(aq_base(member), 'getMemberId'):
             raise ValueError("Cannot add member '%s'" % id)
         member.setMemberProperties({}) # Trigger registration in memberdata.
-        self.editEntry(entry)
+
+        # Edit the just-create entry.
+        # XXX this is basically editEntry without ACL checks
+        dm = self._getDataModel(id)
+        dm._check_acls = 0 # XXX use API
+        for key in dm.keys():
+            if not entry.has_key(key):
+                continue
+            dm[key] = entry[key]
+        dm._commit()
+
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
