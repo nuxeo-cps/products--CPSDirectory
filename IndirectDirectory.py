@@ -122,12 +122,16 @@ class IndirectDirectory(BaseDirectory):
         """
         directory = self._getDirectory()
         entries = directory.searchEntries(return_fields, **kw)
+        # filter entries returned from the search on the
+        # real directory
         if return_fields is None:
             # If there are no return_fields, you get:
             # ['id1', 'id2', etc.]
+            new_entries = []
             for id in entries:
-                if id not in self.object_ids:
-                    entries.remove(id)
+                if id in self.object_ids:
+                    new_entries.append(id)
+            entries = new_entries
         else:
             # If there is a return_fields parameter, you get:
             # [('id1', {'field1': value1, 'field2': value2}),
