@@ -67,6 +67,16 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         dirmeta = self.pd.manage_addCPSDirectory('dirmeta',
                                                  'CPS Meta Directory')
         dirmeta.manage_changeProperties(schema='smeta', id_field='id')
+        dirmeta.setBackingDirectories(
+            ({'dir_id': 'dirfoo',
+              'id_conv': None,
+              'field_ignore': ('pasglop',),
+              },
+             {'dir_id': 'dirbar',
+              'id_conv': None,
+              'field_rename': {'mail': 'email'}, # back:meta
+              },
+             ))
 
         self.dirfoo = dirfoo
         self.dirbar = dirbar
@@ -166,78 +176,78 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         self.failIf(self.dirbar.hasEntry(id))
         self.failIf(self.dirmeta.hasEntry(id))
 
-    def xxxtestSearch(self):
-        dir = self.dir
+    def test_searchEntries(self):
+        dir = self.dirmeta
 
-        id1 = 'tree'
-        foo1 = 'green'
-        bar1 = ['a123', 'gra']
-        e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
-        dir.createEntry(e1)
+        entry1 = {'id': 'AAA', 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}
+        dir.createEntry(entry1)
+        entry2 = {'id': 'BBB', 'foo': 'oo', 'bar': 'man', 'email': 'evil@hell'}
+        dir.createEntry(entry2)
+        entry3 = {'id': 'CCC', 'foo': 'oo', 'bar': 'rab', 'email': 'yo@mama'}
+        dir.createEntry(entry3)
 
-        id2 = 'sea'
-        foo2 = 'blue'
-        bar2 = ['812A', 'gra']
-        e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
-        dir.createEntry(e2)
-
-        ids = [id1, id2]
+        # Simple
+        ids = dir.searchEntries()
         ids.sort()
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
 
-        ### Without substrings
-        dir.search_substring_fields = []
+        ids = dir.searchEntries(id='AAA')
+        self.assertEquals(ids, ['AAA'])
+        ids = dir.searchEntries(foo='oo')
+        ids.sort()
+        self.assertEquals(ids, ['BBB', 'CCC'])
+        ids = dir.searchEntries(bar='rab')
+        ids.sort()
+        self.assertEquals(ids, ['AAA', 'CCC'])
+        ids = dir.searchEntries(hooooole='ohle')
+        ids.sort()
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
+        ids = dir.searchEntries(email='evil@hell')
+        self.assertEquals(ids, ['BBB'])
 
-        # Basic searches
-        res = dir.searchEntries(idd=id1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1, foo2])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2, 'hop'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, '81'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='a123')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar=['a123'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gra'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['a123', '8'])
-        self.assertEquals(res, [id1])
+        # With field_ids
+        res = dir.searchEntries(return_fields=['email'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {'email': 'lame@at'}),
+                                ('BBB', {'email': 'evil@hell'}),
+                                ('CCC', {'email': 'yo@mama'})])
+        res = dir.searchEntries(foo='oo', return_fields=['email', 'pasglop'])
+        res.sort()
+        self.assertEquals(res, [('BBB', {'email': 'evil@hell'}),
+                                ('CCC', {'email': 'yo@mama'})])
+        res = dir.searchEntries(email='lame@at', return_fields=['foo'])
+        self.assertEquals(res, [('AAA', {'foo': 'oof'})])
 
-        # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo2, bar='gra')
-        self.assertEquals(res, [id2])
-        res = dir.searchEntries(foo=[foo1, foo2], bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2], bar='a123')
-        self.assertEquals(res, [id1])
+        # Not strictly defined but test it anyway
+        res = dir.searchEntries(return_fields=['blort'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {}), ('BBB', {}), ('CCC', {})])
+        res = dir.searchEntries(return_fields=['id'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {'id':'AAA'}),
+                                ('BBB', {'id':'BBB'}),
+                                ('CCC', {'id':'CCC'})])
 
-        # Failing substring searches
-        res = dir.searchEntries(idd='re')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='e')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar='812a')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar='gr')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar=['gr'])
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='E', bar='12')
-        self.assertEquals(res, [])
+        # Fields coming from both dirs
+        res = dir.searchEntries(foo='oo', return_fields=['email', 'foo'])
+        res.sort()
+        self.assertEquals(res, [('BBB', {'foo': 'oo', 'email': 'evil@hell'}),
+                                ('CCC', {'foo': 'oo', 'email': 'yo@mama'})])
+
+    def test_searchEntries_ghost(self):
+        dir = self.dirmeta
+        fooentry = {'idd': 'DDD', 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': 'DDD', 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        entry = {'id': 'EEE', 'foo': 'bli', 'bar': 'bot', 'email': 'me@me'}
+        dir.createEntry(entry)
+
+        ids = dir.searchEntries(pasglop='blblbl')
+        self.assertEquals(ids, ['DDD', 'EEE'])
+        res = dir.searchEntries(pasglop='arg', return_fields=['pasglop'])
+        res.sort()
+        self.assertEquals(res, [('DDD', {}), ('EEE', {})])
 
     def xxxtestSearchSubstrings(self):
         dir = self.dir

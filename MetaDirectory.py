@@ -38,20 +38,6 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 _marker = [] # XXX used?
 
 
-class DirectoryMapping:
-    security = ClassSecurityInfo()
-    security.declareObjectProtected(ManagePortal)
-
-    def __init__(self, dir_id,
-                 id_conv=None, field_rename=None, field_ignore=None):
-        self.dir_id = dir_id
-        self.id_conv = id_conv
-        self.field_rename = (field_rename or {}).copy()
-        self.field_ignore = field_ignore and tuple(field_ignore) or ()
-
-InitializeClass(DirectoryMapping)
-
-
 class MetaDirectory(BaseDirectory):
     """Meta Directory
 
@@ -81,7 +67,7 @@ class MetaDirectory(BaseDirectory):
               },
              {'dir_id': 'dirbar',
               'id_conv': None,
-              'field_rename': {'mail': 'email'}, # back:meta
+              'field_rename': {'mail': 'email'}, # back_id:id
               },
              ))
 
@@ -104,9 +90,26 @@ class MetaDirectory(BaseDirectory):
     #
 
     security.declareProtected(ManagePortal, 'getBackingDirectories')
-    def getBackingDirectories(self):
-        """Get the list of backing directories and their infos."""
-        return self.backing_dir_infos
+    def getBackingDirectories(self, no_dir=0):
+        """Get the list of backing directories and their infos.
+
+        Returns a sequence of dicts with keys dir, dir_id, id_conv, ...
+
+        If no_dir, do not attempt to add the dir object.
+        """
+        dtool = getToolByName(self, 'portal_directories')
+        infos = []
+        for b_info in self.backing_dir_infos:
+            info = b_info.copy()
+            if not no_dir:
+                dir_id = b_info['dir_id']
+                try:
+                    dir = getattr(dtool, dir_id)
+                except AttributeError:
+                    raise ValueError("No backing directory '%s'" % dir_id)
+                info['dir'] = dir
+            infos.append(info)
+        return infos
 
     security.declareProtected(ManagePortal, 'setBackingDirectories')
     def setBackingDirectories(self, infos):
@@ -117,13 +120,21 @@ class MetaDirectory(BaseDirectory):
         """
         backing_dir_infos = []
         for info in infos:
+            field_rename = info.get('field_rename') or {}
+            field_ignore = info.get('field_ignore')
+            field_rename_back = {}
+            for back, meta in field_rename.items():
+                if field_rename_back.has_key(meta):
+                    raise ValueError("Field id %s is renamed twice" % meta)
+                field_rename_back[meta] = back
             backing_dir_infos.append(
-                DirectoryMapping(info['dir_id'],
-                                 id_conv=info['id_conv'],
-                                 field_rename=info.get('field_rename'),
-                                 field_ignore=info.get('field_ignore')))
+                {'dir_id': info['dir_id'],
+                 'id_conv': info['id_conv'],
+                 'field_rename': field_rename.copy(),
+                 'field_rename_back': field_rename_back,
+                 'field_ignore': field_ignore and tuple(field_ignore) or (),
+                 })
         self.backing_dir_infos = tuple(backing_dir_infos)
-
 
     #
     # Internal API
@@ -145,16 +156,10 @@ class MetaDirectory(BaseDirectory):
     def _getFirstDirectory(self):
         """Get the first directory."""
         # XXX later: first directory that has no id conversion
-        mappings = self.getBackingDirectories()
-        if not mappings:
+        infos = self.getBackingDirectories()
+        if not infos:
             return None
-        dir_id = mappings[0].dir_id
-        dtool = getToolByName(self, 'portal_directories')
-        try:
-            b_dir = getattr(dtool, dir_id)
-        except AttributeError:
-            raise ValueError("No backing directory '%s'" % dir_id)
-        return b_dir
+        return infos[0]['dir']
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -205,13 +210,8 @@ class MetaDirectory(BaseDirectory):
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         dtool = getToolByName(self, 'portal_directories')
-        for mapping in self.getBackingDirectories():
-            # Get backing dir
-            try:
-                b_dir = getattr(dtool, mapping.dir_id)
-            except AttributeError:
-                raise ValueError("No backing directory '%s'" %
-                                 mapping.dir_id)
+        for info in self.getBackingDirectories():
+            b_dir = info['dir']
             # Get id XXX maybe convert
             b_id = id
             b_dir.deleteEntry(b_id)
@@ -222,13 +222,133 @@ class MetaDirectory(BaseDirectory):
 
         See API in the base class.
         """
-        raise NotImplementedError
-        #1. build queries for each backing dir
-        #2. find in what order to do search
-        #3. do searches
-        #4. intersect results
-        #5. merge entries from each backing dir
+        #print 'dir=%s rf=%s query=%s' % (self.id, return_fields, kw)
 
+        schema = self._getSchemas()[0]
+        all_field_ids = schema.keys()
+        id_field = self.id_field
+
+        # Compute query.
+        query = {}
+        for key, value in kw.items():
+            if key not in all_field_ids:
+                continue
+            if not value:
+                # Ignore empty searches.
+                continue
+            query[key] = value
+
+        # Build queries for each backing dir
+        b_queries = []
+        for info in self.getBackingDirectories():
+            b_dir = info['dir']
+            field_ignore = info['field_ignore']
+            field_rename = info['field_rename']
+            field_rename_back = info['field_rename_back']
+            b_field_ids = b_dir._getFieldIds()
+
+            # Get sub-query
+            b_query = {}
+            for key, value in query.items():
+                b_key = field_rename_back.get(key, key)
+                if b_key in b_field_ids:
+                    b_query[b_key] = value
+
+            # Get return fields
+            if return_fields is None:
+                b_return_fields = None
+            else:
+                b_return_fields = []
+                for fid in return_fields:
+                    if fid == id_field:
+                        # Won't contribute anything useful
+                        continue
+                    b_fid = field_rename_back.get(fid, fid)
+                    if b_fid in field_ignore:
+                        continue
+                    if b_fid not in b_field_ids:
+                        continue
+                    b_return_fields.append(b_fid)
+
+            b_queries.append((info, b_return_fields, b_query))
+
+        # Optimizations: find in what order to do the searches
+        qs = []
+        for info, b_return_fields, b_query in b_queries:
+            if not b_return_fields and not b_query:
+                # This query gets us no info and returns everything
+                #print ' ignoring query on %s' % info['dir_id']
+                continue
+            qs.append((info, b_return_fields, b_query))
+
+        # Do searches
+        acc_res = None
+        for info, b_return_fields, b_query in qs:
+            b_dir = info['dir']
+            b_id_field = b_dir.id_field
+
+            # Do query
+            #print ' subquery dir=%s rf=%s query=%s' % ( # XXX
+            #    info['dir_id'], b_return_fields, b_query)
+            b_res = b_dir.searchEntries(return_fields=b_return_fields,
+                                        **b_query)
+            #print ' res=%s' % `b_res`
+
+            # Back-convert fields in query
+            if return_fields is None:
+                res = b_res
+            else:
+                res = []
+                for id, b_entry in b_res:
+                    entry = {}
+                    for b_fid, value in b_entry.items():
+                        fid = field_rename.get(b_fid, b_fid)
+                        entry[fid] = value
+                    res.append((id, entry))
+
+            # Accumulate res into acc_res
+            #print ' accumulating %s into %s' % (res, acc_res)
+            if acc_res is None:
+                acc_res = res
+            else:
+                # Do intelligent intersection
+                if len(acc_res) > len(res):
+                    acc_res, res = res, acc_res
+                    # acc_res is now always smaller
+                resids_d = {}
+                if return_fields is None:
+                    # Intersect
+                    for id in res:
+                        resids_d[id] = None
+                    acc_res = [id for id in acc_res if resids_d.has_key(id)]
+                else:
+                    # Intersect and merge values for matching
+                    for id, d in res:
+                        resids_d[id] = d
+                    old_res = acc_res
+                    acc_res = []
+                    for id, old_d in old_res:
+                        new_d = resids_d.get(id)
+                        if new_d is None:
+                            continue
+                        old_d.update(new_d)
+                        acc_res.append((id, old_d))
+            #print ' now acc_res=%s' % `acc_res`
+
+        if acc_res is None:
+            # No directories entries contributed at all...
+            # Get all entries, with no information
+            ids = self.listEntryIds()
+            if return_fields is None:
+                acc_res = ids
+            else:
+                if id_field in return_fields:
+                    acc_res = [(id, {id_field: id}) for id in ids]
+                else:
+                    acc_res = [(id, {}) for id in ids]
+
+        #print '-> %s' % `acc_res`
+        return acc_res
 
     #
     # Internal
@@ -238,13 +358,10 @@ class MetaDirectory(BaseDirectory):
         """Compute an entry from the backing directories."""
         dtool = getToolByName(self, 'portal_directories')
         entry = {self.id_field: id}
-        for mapping in self.getBackingDirectories():
-            # Get backing dir
-            try:
-                b_dir = getattr(dtool, mapping.dir_id)
-            except AttributeError:
-                raise ValueError("No backing directory '%s'" %
-                                 mapping.dir_id)
+        for info in self.getBackingDirectories():
+            b_dir = info['dir']
+            field_ignore = info['field_ignore']
+            field_rename = info['field_rename']
             # Get id XXX maybe convert
             b_id = id
             # Get field ids we want
@@ -253,10 +370,10 @@ class MetaDirectory(BaseDirectory):
                 if b_fid == b_dir.id_field:
                     # Ignore id
                     continue
-                if b_fid in mapping.field_ignore:
+                if b_fid in field_ignore:
                     # Ignore fields ignored by mapping
                     continue
-                fid = mapping.field_rename.get(b_fid, b_fid)
+                fid = field_rename.get(b_fid, b_fid)
                 if fid not in field_ids:
                     # Ignore fields unwanted in arguments
                     continue
@@ -268,7 +385,7 @@ class MetaDirectory(BaseDirectory):
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
-                fid = mapping.field_rename.get(b_fid, b_fid)
+                fid = field_rename.get(b_fid, b_fid)
                 entry[fid] = b_entry[b_fid]
         return entry
 
@@ -323,13 +440,11 @@ class MetaStorageAdapter(BaseStorageAdapter):
         # Do we assume we want to write all fields ?
 
         dtool = getToolByName(dir, 'portal_directories')
-        for mapping in dir.getBackingDirectories():
-            # Get backing dir
-            try:
-                b_dir = getattr(dtool, mapping.dir_id)
-            except AttributeError:
-                raise ValueError("No backing directory '%s'" %
-                                 mapping.dir_id)
+        for info in dir.getBackingDirectories():
+            b_dir = info['dir']
+            field_ignore = info['field_ignore']
+            field_rename = info['field_rename']
+
             # Get id XXX maybe convert
             b_id = id
 
@@ -339,10 +454,10 @@ class MetaStorageAdapter(BaseStorageAdapter):
                 if b_fid == b_dir.id_field:
                     # Ignore id, already done.
                     continue
-                if b_fid in mapping.field_ignore:
+                if b_fid in field_ignore:
                     # Ignore fields ignored by mapping
                     continue
-                fid = mapping.field_rename.get(b_fid, b_fid)
+                fid = field_rename.get(b_fid, b_fid)
                 if not data.has_key(fid):
                     # Skip fields missing in data
                     continue
