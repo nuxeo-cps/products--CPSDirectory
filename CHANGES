@@ -10,7 +10,8 @@ New features:
   so you can click a button to sync it afterwards (closes #310)
 Bug fixes:
 ~~~~~~~~~~
--
+- fix: deleteEntry raise error allowed pseudo role that are not manager
+- fix: delete entry checking don't use entry id
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Better internal API for no ACL checks on datamodel.
