@@ -4,8 +4,6 @@ IndirectDirectory Design
 
 $Id$
 
-XXX  need to update information since it is now possible to store links
-     towards entries stored in several directories
 
 Introduction
 ============
@@ -34,6 +32,9 @@ to, and also the list of entries to link to.
 All the possible entries (e.g. all the entries of the directories accpeted)
 are also available, so that the indirect directory can be managed
 through the ZMI interface, by manipulating a multiple selection.
+When an entry is not anymore in the directory it refers to, the entry is
+still in the list, but the None value is returned when calling for the
+entry.
 
 Getting and searching for the entries
 -------------------------------------
@@ -55,6 +56,7 @@ An error is raised when the user tries to add an entry that already exists
 in the indirect directory, or when he/she tries to delete an entry that is
 not in the indirect directory.
 
+
 Schema and layout to use for indirect directories
 -------------------------------------------------
 
@@ -67,6 +69,6 @@ The layout used should also be the same, except that:
 - The better way to set the widget storing the id is to set it as a 'Select
   Widget', using a vocabulary with type 'CPS Indirect Directory Vocabulary',
   that would only present the ids accepted in the directory. It should also
-  be read only in edit mode to prevent errors.
+  be 'read only' in edit mode to prevent errors.
   It would be even better if this widget, in create mode, would not present
   to the user entries that are already stored in the indirect directory.
