@@ -169,10 +169,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return entry
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, **kw):
+    def searchEntries(self, return_attrs=None, **kw):
         """Search for entries in the directory.
 
-        Returns a list of entry ids. # XXX more attrs needed...
+        If return_attrs is None, returns a list of entry ids.
+
+        Otherwise returns a list of dictionnaries with the specified
+        attributes (in addition to the id).
         """
         raise NotImplementedError
 
