@@ -1,4 +1,12 @@
 <tal:block define="results options/results;
+  params python:here.getDisplayParams(nb_items=len(results));
+  columns python:1;
+  items_per_page params/items_per_page;
+  batches_all python:here.getBatchList(results, columns, items_per_page);
+  batch_list python:batches_all[0];
+  batch_info python:batches_all[1];
+  form request/form;
+  mq nocall:modules/ZTUtils/make_query;
   portal_url here/portal_url;
   dirname here/getId;
   title_field here/title_field;
@@ -17,7 +25,7 @@
             <th i18n:translate="" tal:content="field/title">id</th>
           </tal:block>
         </tr>
-        <tal:block repeat="result results">
+        <tal:block repeat="result python:batch_list[0]">
           <tal:block define="id python:result[0];
             data python:result[1];
             even repeat/result/even;
@@ -54,11 +62,39 @@
             i18n:attributes="value"
             tal:attributes="onclick python:'return window.confirm(\'%s\')'
             % cpsmcat('description_confirm_delete')" />
-
         </tal:block>
         <input type="button" class="context" value="button_back"
           onclick="javascript:history.back()" i18n:attributes="value" />
       </p>
     </form>
+    <tal:block condition="python:batch_info and batch_info['nb_pages'] > 1">
+      <br />
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"
+        summary="navigation layout">
+        <tr class="even">
+          <td align="center" width="100%">
+            <span i18n:translate="label_page">Pages</span>:
+            <a tal:define="previous batch_info/previous"
+               tal:condition="python:previous is not None"
+               tal:attributes="href python:'%s?%s'%(request['URL'],
+                                              mq(request.form, b_start=previous))"
+               i18n:translate="batch_previous">Previous</a>
+            <a tal:repeat="page batch_info/pages"
+               tal:attributes="href python:'%s?%s'%(request['URL'],
+                                                  mq(request.form, b_start=page))"
+               tal:omit-tag="python:page == batch_info['start'] - 1"
+               tal:content="repeat/page/number">1</a>
+            <a tal:define="next batch_info/next"
+               tal:condition="python:next is not None"
+               tal:attributes="href python:'%s?%s'%(request['URL'],
+                                                  mq(request.form, b_start=next))"
+               i18n:translate="batch_next">Next</a>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </tal:block>            
   </div>
 </tal:block>
