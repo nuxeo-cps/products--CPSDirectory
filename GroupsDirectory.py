@@ -202,10 +202,9 @@ class GroupStorageAdapter(BaseStorageAdapter):
         groupob = aclu.getGroupById(group)
         if hasattr(aq_base(groupob), 'setGroups'): # PluggableUserFolder
             groupob.setGroups(subgroups)
-            return
-        LOG('GroupsDirectory', WARNING,
-            'Attempt to set groups on groups on unsupported User Folder')
-        return None
+        else:
+            LOG('GroupsDirectory', WARNING,
+                'Attempt to set groups on groups on unsupported User Folder')
 
     def getData(self):
         """Get data from an entry, returns a mapping.
