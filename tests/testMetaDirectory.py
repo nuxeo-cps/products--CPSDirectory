@@ -342,9 +342,184 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
+class TestMetaDirectoryMissing(CPSDirectoryTestCase):
+
+    def afterSetUp(self):
+        self.login('root')
+        self.pd = self.portal.portal_directories
+        self.makeDirs()
+
+    def beforeTearDown(self):
+        self.logout()
+
+
+    def makeDirs(self):
+        stool = self.portal.portal_schemas
+        schema = stool.manage_addCPSSchema('sfoo')
+        schema.manage_addField('idd', 'CPS String Field') # different id
+        schema.manage_addField('foo', 'CPS String Field') # kept
+        schema.manage_addField('pasglop', 'CPS String Field') # ignored
+
+        schema = stool.manage_addCPSSchema('sbar')
+        schema.manage_addField('id', 'CPS String Field') # same id
+        schema.manage_addField('bar', 'CPS String Field') # kept
+        schema.manage_addField('mail', 'CPS String Field') # renamed
+
+        schema = stool.manage_addCPSSchema('smeta')
+        schema.manage_addField('id', 'CPS String Field')
+        schema.manage_addField('foo', 'CPS String Field')
+        schema.manage_addField('bar', 'CPS String Field')
+        schema.manage_addField('email', 'CPS String Field')
+
+        dirfoo = self.pd.manage_addCPSDirectory('dirfoo',
+                                                'CPS ZODB Directory')
+        dirfoo.manage_changeProperties(schema='sfoo', id_field='idd')
+
+        dirbar = self.pd.manage_addCPSDirectory('dirbar',
+                                                'CPS ZODB Directory')
+        dirbar.manage_changeProperties(schema='sbar', id_field='id')
+
+        dirmeta = self.pd.manage_addCPSDirectory('dirmeta',
+                                                 'CPS Meta Directory')
+        dirmeta.manage_changeProperties(schema='smeta', id_field='id',
+                                        title_field='bar')
+        dirmeta.setBackingDirectories(
+            ({'dir_id': 'dirfoo',
+              'field_ignore': ('pasglop',),
+              'missing_entry_expr': "python:{'foo': 'defaultfoo'}"
+              },
+             {'dir_id': 'dirbar',
+              'field_rename': {'mail': 'email'}, # back:meta
+              },
+             ))
+
+        self.dirfoo = dirfoo
+        self.dirbar = dirbar
+        self.dirmeta = dirmeta
+
+
+    def test_getEntry(self):
+        id = 'LDHL'
+        self.assertRaises(KeyError, self.dirmeta.getEntry, id)
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'ma'}
+        okentry = {'id': id, 'foo': 'defaultfoo', 'bar': 'brr', 'email': 'ma'}
+        self.dirbar.createEntry(barentry)
+        entry = self.dirmeta.getEntry(id)
+        self.assertEquals(entry, okentry)
+
+    def test_hasEntry(self):
+        id = 'XOR'
+        self.failIf(self.dirmeta.hasEntry(id))
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirbar.createEntry(barentry)
+        self.assert_(self.dirmeta.hasEntry(id))
+
+    def test_hasEntry_fail(self):
+        id = 'BNE'
+        self.failIf(self.dirmeta.hasEntry(id))
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        self.dirfoo.createEntry(fooentry)
+        self.failIf(self.dirmeta.hasEntry(id))
+
+    def test_deleteEntry(self):
+        id = 'DJNZ'
+        self.failIf(self.dirfoo.hasEntry(id))
+        self.failIf(self.dirbar.hasEntry(id))
+        self.failIf(self.dirmeta.hasEntry(id))
+        barentry = {'id': id, 'bar': 'babar', 'mail': 'mymail@m'}
+        self.dirbar.createEntry(barentry)
+        self.assert_(self.dirmeta.hasEntry(id))
+        self.dirmeta.deleteEntry(id)
+        self.failIf(self.dirfoo.hasEntry(id))
+        self.failIf(self.dirbar.hasEntry(id))
+        self.failIf(self.dirmeta.hasEntry(id))
+
+    def test_editEntry(self):
+        # Build previous entry in backing dir
+        id = 'BEQ'
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirbar.createEntry(barentry)
+        # Now change it
+        entry = {'id': id, 'bar': 'BAR', 'email': 'EMAIL@COM'}
+        self.dirmeta.editEntry(entry)
+        # Check changed
+        okentry = {'id': id, 'foo': 'defaultfoo', 'bar': 'BAR',
+                   'email': 'EMAIL@COM'}
+        entry2 = self.dirmeta.getEntry(id)
+        self.assertEquals(entry2, okentry)
+        # Check backing dirs have changed
+        fooentry2 = self.dirfoo.getEntry(id)
+        barentry2 = self.dirbar.getEntry(id)
+        fooentry3 = {'idd': id, 'foo': 'defaultfoo', 'pasglop': ''}
+        barentry3 = {'id': id, 'bar': 'BAR', 'mail': 'EMAIL@COM'}
+        self.assertEquals(fooentry2, fooentry3)
+        self.assertEquals(barentry2, barentry3)
+
+    def XXXXXXXXXXXtest_searchEntries(self):
+        dir = self.dirmeta
+
+        entry1 = {'id': 'AAA', 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}
+        dir.createEntry(entry1)
+        entry2 = {'id': 'BBB', 'foo': 'oo', 'bar': 'man', 'email': 'evil@hell'}
+        dir.createEntry(entry2)
+        entry3 = {'id': 'CCC', 'foo': 'oo', 'bar': 'rab', 'email': 'yo@mama'}
+        dir.createEntry(entry3)
+
+        # Simple
+        ids = dir.searchEntries()
+        ids.sort()
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
+
+        ids = dir.searchEntries(id='AAA')
+        self.assertEquals(ids, ['AAA'])
+        ids = dir.searchEntries(foo='oo')
+        ids.sort()
+        self.assertEquals(ids, ['BBB', 'CCC'])
+        ids = dir.searchEntries(bar='rab')
+        ids.sort()
+        self.assertEquals(ids, ['AAA', 'CCC'])
+        ids = dir.searchEntries(hooooole='ohle')
+        ids.sort()
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
+        ids = dir.searchEntries(email='evil@hell')
+        self.assertEquals(ids, ['BBB'])
+
+        # With field_ids
+        res = dir.searchEntries(return_fields=['email'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {'email': 'lame@at'}),
+                                ('BBB', {'email': 'evil@hell'}),
+                                ('CCC', {'email': 'yo@mama'})])
+        res = dir.searchEntries(foo='oo', return_fields=['email', 'pasglop'])
+        res.sort()
+        self.assertEquals(res, [('BBB', {'email': 'evil@hell'}),
+                                ('CCC', {'email': 'yo@mama'})])
+        res = dir.searchEntries(email='lame@at', return_fields=['foo'])
+        self.assertEquals(res, [('AAA', {'foo': 'oof'})])
+
+        res = dir.searchEntries(foo='oof', return_fields=['id'])
+        self.assertEquals(res, [('AAA', {'id': 'AAA'})])
+
+        # Not strictly defined but test it anyway
+        res = dir.searchEntries(return_fields=['blort'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {}), ('BBB', {}), ('CCC', {})])
+        res = dir.searchEntries(return_fields=['id'])
+        res.sort()
+        self.assertEquals(res, [('AAA', {'id':'AAA'}),
+                                ('BBB', {'id':'BBB'}),
+                                ('CCC', {'id':'CCC'})])
+
+        # Fields coming from both dirs
+        res = dir.searchEntries(foo='oo', return_fields=['email', 'foo'])
+        res.sort()
+        self.assertEquals(res, [('BBB', {'foo': 'oo', 'email': 'evil@hell'}),
+                                ('CCC', {'foo': 'oo', 'email': 'yo@mama'})])
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestMetaDirectory))
+    suite.addTest(unittest.makeSuite(TestMetaDirectoryMissing))
     return suite
 
 if __name__ == '__main__':

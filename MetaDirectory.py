@@ -25,10 +25,13 @@ from zLOG import LOG, DEBUG, WARNING
 
 from Globals import InitializeClass
 from Globals import DTMLFile
+from DateTime.DateTime import DateTime
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.Expression import Expression
+from Products.CMFCore.Expression import getEngine
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
@@ -66,7 +69,7 @@ class MetaDirectory(BaseDirectory):
 
     security.declareProtected(ManagePortal, 'manage_changeBacking')
     def manage_changeBacking(self, dir_id, field_ignore, field_renames,
-                             delete=0, REQUEST=None):
+                             missing_entry_expr, delete=0, REQUEST=None):
         """Change mappings from ZMI."""
         infos = self.getBackingDirectories(no_dir=1)
         new_infos = []
@@ -78,11 +81,12 @@ class MetaDirectory(BaseDirectory):
             if delete:
                 msg = 'Deleted.'
                 continue
-            info['field_ignore'] = field_ignore
             field_rename = {}
             for d in field_renames:
                 field_rename[d['b_id']] = d['id']
+            info['field_ignore'] = field_ignore
             info['field_rename'] = field_rename
+            info['missing_entry_expr'] = missing_entry_expr
             new_infos.append(info)
         self.setBackingDirectories(new_infos)
         if REQUEST is not None:
@@ -92,16 +96,17 @@ class MetaDirectory(BaseDirectory):
 
     security.declareProtected(ManagePortal, 'manage_addBacking')
     def manage_addBacking(self, dir_id, field_ignore, field_renames,
-                          REQUEST=None):
+                          missing_entry_expr, REQUEST=None):
         """Change mappings from ZMI."""
         infos = self.getBackingDirectories(no_dir=1)
+        info = {'dir_id': dir_id.strip()}
         field_rename = {}
         for d in field_renames:
             field_rename[d['b_id']] = d['id']
-        infos.append({'dir_id': dir_id.strip(),
-                      'field_ignore': field_ignore,
-                      'field_rename': field_rename,
-                      })
+        info['field_ignore'] = field_ignore
+        info['field_rename'] = field_rename
+        info['missing_entry_expr'] = missing_entry_expr
+        infos.append(info)
         self.setBackingDirectories(infos)
         if REQUEST is not None:
             args = 'manage_tabs_message=Added.'
@@ -131,6 +136,10 @@ class MetaDirectory(BaseDirectory):
                 except AttributeError:
                     raise ValueError("No backing directory '%s'" % dir_id)
                 info['dir'] = dir
+            # Treat Upgrades
+            if not info.has_key('missing_entry_expr'):
+                info['missing_entry_expr'] = ''
+                info['missing_entry'] = None
             infos.append(info)
         return infos
 
@@ -158,12 +167,21 @@ class MetaDirectory(BaseDirectory):
                     raise ValueError("Field id '%s' is renamed twice" % meta)
                 field_rename[back] = meta
                 field_rename_back[meta] = back
+            missing_entry_expr = (info.get('missing_entry_expr') or '').strip()
+            if missing_entry_expr:
+                expr = Expression(missing_entry_expr)
+                expr_context = self._createMissingExpressionContext()
+                missing_entry = expr(expr_context)
+            else:
+                missing_entry = None
             backing_dir_infos.append(
                 {'dir_id': info['dir_id'],
                  'id_conv': info.get('id_conv'),
                  'field_rename': field_rename.copy(),
                  'field_rename_back': field_rename_back,
                  'field_ignore': field_ignore and tuple(field_ignore) or (),
+                 'missing_entry_expr': missing_entry_expr,
+                 'missing_entry': missing_entry,
                  })
         self.backing_dir_infos = tuple(backing_dir_infos)
 
@@ -217,10 +235,10 @@ class MetaDirectory(BaseDirectory):
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
-        dir = self._getFirstDirectory()
-        if dir is None:
-            return 0
-        return dir.hasEntry(id)
+        for info in self.getBackingDirectories():
+            if info['missing_entry'] is None:
+                return info['dir'].hasEntry(id)
+        return 0
 
     security.declarePublic('isAuthenticating')
     def isAuthenticating(self):
@@ -276,7 +294,12 @@ class MetaDirectory(BaseDirectory):
             b_dir = info['dir']
             # Get id XXX maybe convert
             b_id = id
-            b_dir.deleteEntry(b_id)
+            try:
+                b_dir.deleteEntry(b_id)
+            except KeyError:
+                if info['missing_entry'] is None:
+                    raise
+                pass
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -418,6 +441,15 @@ class MetaDirectory(BaseDirectory):
     # Internal
     #
 
+    def _createMissingExpressionContext(self):
+        """Create an expression context for missing entry computation."""
+        mapping = {
+            'portal': getToolByName(self, 'portal_url').getPortalObject(),
+            'DateTime': DateTime,
+            'nothing': None,
+            }
+        return getEngine().getContext(mapping)
+
     def _getEntryFromBacking(self, id, field_ids, password=None):
         """Compute an entry from the backing directories."""
         entry = {self.id_field: id}
@@ -448,7 +480,13 @@ class MetaDirectory(BaseDirectory):
             else:
                 if not b_fids:
                     continue
-                b_entry = b_dir._getEntry(b_id, fields_ids=b_fids)
+                try:
+                    b_entry = b_dir._getEntry(b_id, fields_ids=b_fids)
+                except KeyError:
+                    missing_entry = info['missing_entry']
+                    if missing_entry is None:
+                        raise
+                    b_entry = missing_entry
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
@@ -535,6 +573,11 @@ class MetaStorageAdapter(BaseStorageAdapter):
             if self._do_create:
                 b_dir.createEntry(b_entry)
             else:
-                b_dir.editEntry(b_entry)
+                try:
+                    b_dir.editEntry(b_entry)
+                except KeyError:
+                    if info['missing_entry'] is None:
+                        raise
+                    b_dir.createEntry(b_entry)
 
 InitializeClass(MetaStorageAdapter)

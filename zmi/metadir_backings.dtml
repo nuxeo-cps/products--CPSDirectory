@@ -40,6 +40,10 @@
     </table>
   </p>
   <p>
+    Entry used if missing (TALES):
+      <input type="text" name="missing_entry_expr" value="&dtml-missing_entry_expr;" size="40" />
+  </p>
+  <p>
     <input type="submit" name="manage_changeBacking:method" value="Change" />
   </p>
 </form>
@@ -70,6 +74,10 @@
         </tr>
       </dtml-in>
     </table>
+  </p>
+  <p>
+    Entry used if missing (TALES):
+      <input type="text" name="missing_entry_expr" size="40" />
   </p>
   <p>
     <input type="submit" name="manage_addBacking:method" value="Add backing" />
