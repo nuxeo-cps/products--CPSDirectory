@@ -578,7 +578,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data, **kw)
-        for field_id, field in self._field_items:
+        for field_id, field in self.getFieldItems():
             if field.write_ignore_storage:
                 del data[field_id]
 
