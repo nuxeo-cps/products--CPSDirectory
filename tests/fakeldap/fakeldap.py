@@ -38,6 +38,7 @@ class LogFile:
 
     def write(self, msg):
         # todo
+        pass
 
 class LdifReader:
     """ this class reads an ldif file
