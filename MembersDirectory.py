@@ -68,7 +68,7 @@ class MembersDirectory(BaseDirectory):
 
     # Provide more useful defaults for this directory.
     acl_entry_edit_roles = 'Manager; Owner'
-    acl_entry_edit_roles_l = ['Manager', 'Owner']
+    acl_entry_edit_roles_c = ['Manager', 'Owner']
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):

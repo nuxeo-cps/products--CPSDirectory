@@ -62,7 +62,7 @@ members_schema = {
                 'is_indexed': 1,
                 'acl_write_roles': 'Nobody',
                 'read_ignore_storage': 1,
-                'read_process_expression_str': 'python: givenName+" "+sn',
+                'read_process_expr': 'python: givenName+" "+sn',
                 'read_process_dependent_fields': ['givenName', 'sn'],
                 'write_ignore_storage': 1,
             },

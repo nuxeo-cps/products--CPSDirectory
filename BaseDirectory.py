@@ -92,16 +92,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     title_field = ''
     entry_roles = []
 
-    acl_access_roles_l = ['Manager', 'Member']
-    acl_entry_create_roles_l = ['Manager']
-    acl_entry_delete_roles_l = ['Manager']
-    acl_entry_edit_roles_l = ['Manager']
+    acl_access_roles_c = ['Manager', 'Member']
+    acl_entry_create_roles_c = ['Manager']
+    acl_entry_delete_roles_c = ['Manager']
+    acl_entry_edit_roles_c = ['Manager']
 
     _properties_post_process_split = (
-        ('acl_access_roles', 'acl_access_roles_l', ',; '),
-        ('acl_entry_create_roles', 'acl_entry_create_roles_l', ',; '),
-        ('acl_entry_delete_roles', 'acl_entry_delete_roles_l', ',; '),
-        ('acl_entry_edit_roles', 'acl_entry_edit_roles_l', ',; '),
+        ('acl_access_roles', 'acl_access_roles_c', ',; '),
+        ('acl_entry_create_roles', 'acl_entry_create_roles_c', ',; '),
+        ('acl_entry_delete_roles', 'acl_entry_delete_roles_c', ',; '),
+        ('acl_entry_edit_roles', 'acl_entry_edit_roles_c', ',; '),
         )
 
     def __init__(self, id, **kw):
@@ -115,7 +115,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def isVisible(self):
         """Is the directory visible by the current user?"""
         return getSecurityManager().getUser().has_role(
-            self.acl_access_roles_l)
+            self.acl_access_roles_c)
 
     security.declarePublic('isCreateEntryAllowed')
     def isCreateEntryAllowed(self):
@@ -124,7 +124,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_create_roles_l)
+            self.acl_entry_create_roles_c)
 
     security.declarePublic('isDeleteEntryAllowed')
     def isDeleteEntryAllowed(self):
@@ -133,7 +133,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_delete_roles_l)
+            self.acl_entry_delete_roles_c)
 
     security.declarePublic('isEditEntryAllowed')
     def isEditEntryAllowed(self, id=None, entry=None):
@@ -156,7 +156,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         add_roles = self._getAdditionalRoles(id)
         entry_local_roles = self.getEntryLocalRoles(entry)
         all_roles = list(roles) + list(add_roles) + list(entry_local_roles)
-        for r in self.acl_entry_edit_roles_l:
+        for r in self.acl_entry_edit_roles_c:
             if r in all_roles:
                 return 1
         return 0
