@@ -6,22 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- Fix copy/paste and rename of directories
-- Fix ZODBDirectory with computed title attribute
-- LocalDirectory method "isVisible" did not return 0 if user
-  did not have a home folder (and thus did not have a personal directory)
-- Fixed some translation about groups.
-- Fixed initialization of IndirectDirectoryVocabulary.
-- Fix: multientry widget use an hard coded title for the navigation popup
-  fixed by using label_edit property
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- ZMI: New Search tab on the directories.
-- Trying to access to a personal directory now raises an Unauthorized error
-  instead of a KeyError (LocalDirectory).
-- Added headers in .po files to make them recognized by
-  PlacelessTranslationService
-- You may specified a search_restricted_member_list within the options so
-  that the research will be restricted to this list when specified. A use
-  case is when you want to perform a research in a given context on people
-  having local roles within this context only
+-
