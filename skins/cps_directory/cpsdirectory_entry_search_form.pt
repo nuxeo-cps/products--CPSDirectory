@@ -32,7 +32,7 @@
        <span tal:condition="python: ok == 'results'"
          i18n:translate="">cpsdir_label_results</span>
        <span tal:condition="python: ok != 'results'"
-         i18n:translate="cpsdir_label_search_entry" /></h1>
+         i18n:translate="cpsdir_label_search_entry">search an entry</span></h1>
   </metal:block>
 
   <metal:block fill-slot="main">
