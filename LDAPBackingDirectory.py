@@ -233,7 +233,6 @@ class LDAPBackingDirectory(BaseDirectory):
         - Keys with empty values are removed.
         - Keys with value '*' search for an existing field.
         """
-        LOG('searchEntries', DEBUG, 'rf=%s query=%s' % (return_fields, kw))
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
 
@@ -256,7 +255,6 @@ class LDAPBackingDirectory(BaseDirectory):
 
         filter = self._buildFilter(kw)
         res = self._searchEntries(filter, attrs)
-        LOG('searchEntries', DEBUG, 'res=%s' % `res`)
         return res
 
     security.declarePublic('hasEntry')
@@ -271,15 +269,12 @@ class LDAPBackingDirectory(BaseDirectory):
         return self.existsLDAP(id)
 
     security.declarePrivate('getEntryAuthenticated')
-    def getEntryAuthenticated(self, id, password, default=_marker):
+    def getEntryAuthenticated(self, id, password):
         """Get and authenticate an entry."""
         try:
             return self._getEntryKW(id, password=password)
         except KeyError:
-            if default is not _marker:
-                return default
-            else:
-                raise
+            return None
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
@@ -388,9 +383,6 @@ class LDAPBackingDirectory(BaseDirectory):
             attrs = ['dn']
         else:
             attrs = return_attrs
-        LOG('LDAPBackingDirectory._searchEntries', DEBUG,
-            'base=%s scope=%s filter=%s return_attrs=%s' %
-            (self.ldap_base, self.ldap_scope_c, filter, attrs))
 
         results = self.searchLDAP(self.ldap_base, self.ldap_scope_c,
                                   filter, attrs)
