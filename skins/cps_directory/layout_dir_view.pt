@@ -33,9 +33,9 @@
   </table>
     <input type="submit" name="cpsdirectory_entry_edit_form:method"
       class="standalone" value="button_edit" i18n:attributes="value"
-      tal:condition="python: dir.isCreateEntryAllowed()" />
+      tal:condition="dir/isCreateEntryAllowed" />
     <input type="submit" name="cpsdirectory_entry_delete:method"
       class="standalone" value="button_delete" i18n:attributes="value"
-      tal:condition="python: dir.isCreateEntryAllowed()" />
+      tal:condition="dir/isDeleteEntryAllowed" />
 </form>
 </tal:block>

@@ -5,6 +5,7 @@ ZODB Requires:
 New features:
 ~~~~~~~~~~~~~
 - The default schema now has a 'fullname' computed field.
+- Separation of entry creation and deletion roles.
 
 Bug fixes:
 ~~~~~~~~~~

@@ -61,7 +61,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         {'id': 'acl_access_roles_str', 'type': 'string', 'mode': 'w',
          'label': "ACL: directory access roles"},
         {'id': 'acl_entry_create_roles_str', 'type': 'string', 'mode': 'w',
-         'label': "ACL: directory create roles"},
+         'label': "ACL: entry create roles"},
+        {'id': 'acl_entry_delete_roles_str', 'type': 'string', 'mode': 'w',
+         'label': "ACL: entry delete roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry id'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
@@ -74,11 +76,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     layout_search = ''
     acl_access_roles_str = 'Manager; Member'
     acl_entry_create_roles_str = 'Manager'
+    acl_entry_delete_roles_str = 'Manager'
     id_field = ''
     title_field = ''
 
     acl_access_roles = ['Manager', 'Member']
     acl_entry_create_roles = ['Manager']
+    acl_entry_delete_roles = ['Manager']
 
     def __init__(self, id, **kw):
         self.id = id
@@ -89,6 +93,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         for attr_str, attr, seps in (
             ('acl_access_roles_str', 'acl_access_roles', ',; '),
             ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
+            ('acl_entry_delete_roles_str', 'acl_entry_delete_roles', ',; '),
             ):
             v = [getattr(self, attr_str)]
             for sep in seps:
@@ -120,6 +125,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return getSecurityManager().getUser().has_role(
             self.acl_entry_create_roles)
 
+    security.declarePublic('isDeleteEntryAllowed')
+    def isDeleteEntryAllowed(self):
+        """Check that user can delete an entry.
+
+        Returns a boolean.
+        """
+        return getSecurityManager().getUser().has_role(
+            self.acl_entry_delete_roles)
+
     security.declarePublic('checkCreateEntryAllowed')
     def checkCreateEntryAllowed(self):
         """Check that user can create an entry.
@@ -128,6 +142,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         if not self.isCreateEntryAllowed():
             raise Unauthorized("No create access to directory")
+
+    security.declarePublic('checkDeleteEntryAllowed')
+    def checkDeleteEntryAllowed(self):
+        """Check that user can delete an entry.
+
+        Raises Unauthorized if not.
+        """
+        if not self.isDeleteEntryAllowed():
+            raise Unauthorized("No delete access to directory")
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
