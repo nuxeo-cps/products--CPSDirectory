@@ -75,6 +75,12 @@ members_schema = {
                 'acl_write_roles': 'Manager; Owner',
             },
         },
+    'homeless': {
+        'type': 'CPS Int Field',
+        'data': {'default_expr': 'python:0',
+                 'acl_write_roles': 'Manager',
+                 },
+        }
     }
 
 members_search_schema = {

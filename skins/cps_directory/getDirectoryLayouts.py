@@ -134,9 +134,23 @@ members_layout = {
                 'css_class': '',
                 'display_width': 30,
                 'size_max': 0,
+                },
+            },
+        'homeless': {
+            'type': 'Boolean Widget',
+            'data': {
+                'fields': ['homeless'],
+                'label': 'cpsdir_label_homeless',
+                'label_edit': 'cpsdir_label_homeless',
+                'help': 'cpsdir_help_homeless',
+                'description': "Homeless ?",
+                'is_i18n': 1,
+                'css_class': '',
+                'label_false': 'cpsschemas_label_yes',
+                'label_true': 'cpsschemas_label_no',
+                },
             },
         },
-    },
     'layout': {
         'style_prefix': 'layout_dir_',
         'ncols': 2,
@@ -148,6 +162,7 @@ members_layout = {
             [{'widget_id': 'fullname'},],
             [{'widget_id': 'email'},],
             [{'widget_id': 'roles'}, {'widget_id': 'groups'},],
+            [{'widget_id': 'homeless'},],
             ],
         },
     }
