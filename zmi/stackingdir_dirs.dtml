@@ -1,0 +1,40 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Backing Directories'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<h2>Backing Directories</h2>
+<p class="form-help">
+  The Stacking Directory can find entries in the following backing directories.
+</p>
+
+<p>
+<dl>
+  <dtml-in getBackingDirectories>
+  <dtml-let info=sequence-item
+            dir_id="info[0]"
+            style="info[1]"
+            fix="info[2]"
+            strip="info[3]">
+    <dt>&dtml-dir_id;</dt>
+    <dd>
+      <dtml-if "style == 'none'">
+        No prefix conversion
+      <dtml-elif "style == 'prefix'">
+        Prefixed
+      <dtml-elif "style == 'suffix'">
+        Suffixed
+      </dtml-if>
+      <dtml-if fix>
+        by &dtml-fix;
+      </dtml-if>
+      <dtml-if strip>
+        (stripped in backing directory)
+      </dtml-if>
+    </dd>
+  </dtml-let>
+  </dtml-in>
+</dl>
+</p>
+
+<dtml-var manage_page_footer>
