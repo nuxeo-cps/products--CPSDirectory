@@ -1,37 +1,65 @@
 <tal:block define="results options/results;
-                   portal_url here/portal_url;
-                   dirname here/getId;
-                   title_field here/title_field;
-                   fields python:here.getDirectoryResultFields(dirname);
-                   ">
-<div style="padding-left: 1.5em">
-<table tal:condition="results">
-<tr>
-  <tal:block repeat="field fields">
-    <th i18n:translate="" tal:content="field/title">id</th>
-  </tal:block>
-</tr>
-<tal:block repeat="result results">
-  <tal:block define="id python:result[0];
-                     data python:result[1];
-                     even repeat/result/even;
-                     ">
-  <tr tal:attributes="class python:test(even, 'even', 'odd')">
-    <tal:block repeat="field fields">
-    <td>
-      <a href="."
-        tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
-        ><b tal:content="python:data.get(field['id'])">john</b></a>
-    </td>
-    </tal:block>
-  </tr>
-  </tal:block>
-</tal:block>
-</table>
-<div tal:condition="not:results">
-  <span i18n:translate="label_no_results" />
-</div>
-<br><br><input type="button" class="context" value="button_back"
-    onclick="javascript:history.back()" i18n:attributes="value">
-</div>
+  portal_url here/portal_url;
+  dirname here/getId;
+  title_field here/title_field;
+  fields python:here.getDirectoryResultFields(dirname);
+  isAdmin python:here.portal_membership.getAuthenticatedMember().has_role(['Manager',]);
+  cpsmcat nocall:here/Localizer/default;
+  ">
+  <div style="padding-left: 1.5em">
+    <form action="cpsdirectory_entry_delete" method="post">
+      <table tal:condition="results">
+        <tr>
+          <th tal:condition="isAdmin">
+            Selection
+          </th>
+          <tal:block repeat="field fields">
+            <th i18n:translate="" tal:content="field/title">id</th>
+          </tal:block>
+        </tr>
+        <tal:block repeat="result results">
+          <tal:block define="id python:result[0];
+            data python:result[1];
+            even repeat/result/even;
+            ">
+            <tr tal:attributes="class python:test(even, 'even', 'odd')">
+              <tal:block repeat="field fields">
+                <td tal:condition="not:repeat/field/index">
+                  <input type="checkbox" name="ids:list"
+                    tal:condition="isAdmin" tal:attributes="value id"/>
+                </td>
+                <td>
+                  <a href="."
+                    tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
+                    ><strong tal:content="python:data.get(field['id'])">john</strong></a>
+                </td>
+              </tal:block>
+            </tr>
+          </tal:block>
+        </tal:block>
+      </table>
+      <div tal:condition="not:results">
+        <span i18n:translate="label_no_results" />
+      </div>
+      <p>
+        <input type="hidden" name="dirname" tal:attributes="value dirname"/>
+        <input type="hidden" name="ids:tokens:default" value=""/>
+
+        <input type="button" class="context" value="button_back"
+          onclick="javascript:history.back()" i18n:attributes="value"/>
+
+        <tal:block condition="python:isAdmin and results">
+          <input type="submit" class="standalone" value="button_delete"
+            i18n:attributes="value"
+            tal:attributes="onclick python:'return window.confirm(\'%s\')'
+            % cpsmcat('description_confirm_delete')" />
+
+          <input type="button" value="button_select_all" class="context"
+            i18n:attributes="value"
+            tal:attributes="onclick python:'toggleSelect(this, \'%s\', \'%s\')'
+            % (cpsmcat('button_select_all'), cpsmcat('button_deselect_all'))" />
+        </tal:block>
+      </p>
+    </form>
+  </div>
 </tal:block>

@@ -3,7 +3,9 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Providing an easy way to delete multiple entries at a time through the search
+  results form
+
 Bug fixes:
 ~~~~~~~~~~
 - Invalid Entry in view mode is a link to a CPS Error page
