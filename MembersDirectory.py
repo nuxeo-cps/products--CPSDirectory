@@ -129,7 +129,7 @@ class MembersDirectory(BaseDirectory):
         self.checkCreateAllowed()
         id = entry[self.id_field]
         mtool = getToolByName(self, 'portal_membership')
-        password = '38fnvas7ds'
+        password = '38fnvas7ds' # XXX default password ???
         roles = ()
         domains = []
         # XXX this should check that the member doesn't already exist
