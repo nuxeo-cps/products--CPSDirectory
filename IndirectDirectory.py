@@ -41,8 +41,8 @@ class IndirectDirectory(BaseDirectory):
         {'id': 'directories_ids', 'type': 'tokens', 'mode': 'w',
          'label': 'Ids of the directories it refers to'},
         {'id': 'object_ids', 'type': 'multiple selection',
-         'select_variable': 'listAllPossibleEntries', 'mode': 'w',
-         'label': 'Ids of the entries of the other directory'},
+         'select_variable': 'listAllPossibleEntriesIds', 'mode': 'w',
+         'label': 'Ids of the entries of the others directories'},
         )
     # list of directory ids
     directories_ids = []
@@ -72,6 +72,21 @@ class IndirectDirectory(BaseDirectory):
         # Default dummy implementation.
         # To be implemented
         return [(id, id) for id in self.listEntryIds()]
+
+    security.declarePrivate('listAllPossibleEntriesIds')
+    def listAllPossibleEntriesIds(self):
+        res = []
+        for directory_id in self.directories_ids:
+            directory = self._getDirectory(directory_id)
+            res_to_append = [self._makeId(directory_id,x) for x in directory.listEntryIds()]
+            res.extend(res_to_append)
+        return res
+
+    security.declarePrivate('listAllPossibleEntriesIdsAndTitles')
+    def listAllPossibleEntriesIdsAndTitles(self):
+        # Default dummy implementation.
+        # To be implemented
+        return [(id, id) for id in self.listAllPossibleEntriesIds()]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
@@ -220,20 +235,5 @@ class IndirectDirectory(BaseDirectory):
         except IndexError:
             res = None
         return res
-
-
-    security.declarePrivate('listAllPossibleEntries')
-    def listAllPossibleEntries(self):
-        res = []
-        for directory_id in self.directories_ids:
-            directory = self._getDirectory(directory_id)
-            res_to_append = [self._makeId(directory_id,x) for x in directory.listEntryIds()]
-            res.extend(res_to_append)
-        return res
-
-    security.declarePrivate('listAllpossibleEntriesForDirectory')
-    def listAllpossibleEntriesForDirectory(self, directory_id):
-        directory = self._getDirectory(directory_id)
-        return directory.listEntryIds()
 
 InitializeClass(IndirectDirectory)
