@@ -3,10 +3,21 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Added a new type of directory that just stores links towards entries of
+  another directory (Indirect Directory)
+- Changed Local Directory to be able to use Local Directory with an
+  Indirect directory that would be created automatically.
+  WARNING: directory_id does not refer to the id of the directory created
+  locally (this one will have the same id than the directory with type
+  'CPS Local Directory'), but is used when creating an indirect directory
+  locally : it is the id of the directory it refers to (entries will be links
+  to entries of that directory).
 Bug fixes:
 ~~~~~~~~~~
--
+- Local Directory: fixed a bug related to the fact that the admin is not
+  always a member of the site, but should be able to access to the directory
+  properties.
+
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
