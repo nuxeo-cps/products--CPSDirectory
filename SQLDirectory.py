@@ -62,6 +62,8 @@ class SQLDirectory(BaseDirectory):
          'label': "SQL table"},
         #{'id': 'sql_auxiliary_tables', 'type': 'string', 'mode': 'w',
         # 'label': "SQL auxiliary tables"},
+        {'id': 'ignore_case_for_substring_comparisons', 'type': 'boolean', 'mode': 'w',
+         'label': "Ignore case for substring comparisons"},
         )
 
     #all_sql_syntaxes = ('postgresql',)
@@ -71,6 +73,7 @@ class SQLDirectory(BaseDirectory):
     #sql_syntax = all_sql_syntaxes[0]
     sql_table = ''
     #sql_auxiliary_tables = ''
+    ignore_case_for_substring_comparisons = 0
 
     def all_sql_connection_paths(self):
         """Get SQL database connections in the current folder and above.
@@ -315,7 +318,11 @@ class SQLDirectory(BaseDirectory):
                 val = '('+val+')'
             else:
                 raise ValueError("Bad value %s for '%s'" % (`value`, key))
-            clause = "%s %s %s" % (sqlfield, op, val)
+            if self.ignore_case_for_substring_comparisons and op == 'LIKE':
+                val = val.lower()
+                clause = "lower(%s) %s %s" % (sqlfield, op, val)
+            else:
+                clause = "%s %s %s" % (sqlfield, op, val)
             clauses.append(clause)
         if clauses:
             sql = sql + " WHERE " + " AND ".join(clauses)
