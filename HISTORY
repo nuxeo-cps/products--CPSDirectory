@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.12.3 [R1 build 2004/05/13-16:59 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- LDAPBackingDirectory: Made entry creation work if the dn is not present.
+Bug fixes:
+~~~~~~~~~~
+- MetaDirectory: fixed listEntryIds with 'missing' directory as first backing.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- LDAPBackingDirectory: Precompute objectClass search filter, used it for all
+  searches.
+- LDAPBackingDirectory: Treat ldap.UNWILLING_TO_PERFORM (empty password)
+- Small refactoring to simplify getting of search adapters.
+
+*******************************************
 ** CPSDirectory V1.12.2 [R1 build 2004/05/12-17:25 by guillaum]
 
 Requires:
