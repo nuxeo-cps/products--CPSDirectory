@@ -23,7 +23,7 @@ from zLOG import LOG, DEBUG, ERROR
 
 import re
 
-from types import ListType, TupleType, StringType
+from types import ListType, TupleType, StringType, IntType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from DateTime.DateTime import DateTime
@@ -262,6 +262,8 @@ class LDAPDirectory(BaseDirectory):
                 if value == '*':
                     f = filter_format('(%s=*)', (key,))
                 f = filter_format(fmt, (key, value))
+            elif isinstance(value, IntType):
+                f = filter_format(fmt, (key, str(value)))
             elif isinstance(value, ListType) or isinstance(value, TupleType):
                 fl = []
                 for v in value:
@@ -422,7 +424,7 @@ class LDAPDirectory(BaseDirectory):
             elif isinstance(value, TupleType):
                 value = list(value)
             elif not isinstance(value, ListType):
-                value = [value]
+                value = [str(value)]
             attrs[field_id] = value
         return attrs
 

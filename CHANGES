@@ -8,7 +8,8 @@ Bug fixes:
 ~~~~~~~~~~
 - LDAP multivalue search is done using substring match
 - LocalDirectory "Recursion Depth Exceeded" bug fixed.
-- The test if there was a local directory is no longer necessary.
+- The tests if there is a local directory is no longer necessary.
+- LDAPDirectory didn't work with IntegerFields.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
