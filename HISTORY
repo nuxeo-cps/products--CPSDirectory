@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.18.0 [R1 build 2004/09/10-09:32 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- metadirectory and stacking can now retrieve content urls from
+  backing directory calling
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- improve a bit batching display for result page
+- Using PNG files instead of GIF files.
+
+*******************************************
 ** CPSDirectory V1.17.3 [R1 build 2004/09/03-13:33 by ben]
 
 Requires:
