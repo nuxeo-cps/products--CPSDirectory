@@ -153,10 +153,10 @@ class LDAPDirectory(BaseDirectory):
                                  self.ldap_use_ssl)
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, id_is_dn=0):
         """Get the adapters for an entry."""
         dir = self
-        adapters = [LDAPStorageAdapter(schema, id, dir)
+        adapters = [LDAPStorageAdapter(schema, id, dir, id_is_dn=id_is_dn)
                     for schema in self._getSchemas()]
         return adapters
 
@@ -169,6 +169,15 @@ class LDAPDirectory(BaseDirectory):
         """List all the entry ids."""
         return self.searchEntries()
 
+    security.declarePrivate('listEntryDNs')
+    def listEntryDNs(self):
+        """List all the entry dns.
+
+        This is LDAP-specific and assumes that 'dn' is in the schema.
+        """
+        res = self.searchEntries(return_fields=['dn'])
+        return [data['dn'] for id, data in res]
+
     security.declarePrivate('listEntryIdsAndTitles')
     def listEntryIdsAndTitles(self):
         """List all the entry ids and titles."""
@@ -179,6 +188,28 @@ class LDAPDirectory(BaseDirectory):
         else:
             res = self.searchEntries(return_fields=[title_field])
             return [(id, data[title_field]) for id, data in res]
+
+    security.declarePrivate('listEntryDNsAndTitles')
+    def listEntryDNsAndTitles(self):
+        """List all the entry dns and titles.
+
+        This is LDAP-specific and assumes that 'dn' is in the schema.
+        """
+        title_field = self.title_field
+        res = self.searchEntries(return_fields=['dn', title_field])
+        return [(data['dn'], data[title_field]) for id, data in res]
+
+    security.declarePrivate('getEntryByDN')
+    def getEntryByDN(self, dn):
+        """Get entry filtered by acls and processes.
+
+        This is LDAP-specific and assumes that 'dn' is in the schema.
+        """
+        dn = re.sub(r',\s+', ',', dn)
+        if not (','+dn).endswith(','+self.ldap_base):
+            raise ValueError("DN '%s' must be under '%s'" %
+                             (dn, self.ldap_base))
+        return self._getEntryKW(dn, id_is_dn=1)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -246,11 +277,35 @@ class LDAPDirectory(BaseDirectory):
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
+        return self._hasEntry(id)
+
+    security.declarePrivate('hasEntryByDN')
+    def hasEntryByDN(self, dn):
+        """Does the directory have a given entry?
+
+        This is LDAP-specific.
+        """
+        dn = re.sub(r',\s+', ',', dn)
+        if not (','+dn).endswith(','+self.ldap_base):
+            raise ValueError("DN '%s' must be under '%s'" %
+                             (dn, self.ldap_base))
+        return self._hasEntry(dn, id_is_dn=1)
+
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id, id_is_dn=0):
+        """Does the directory have a given entry?"""
         id_attr = self.id_field
-        filter = ('(&%s(objectClass=*))' %
-                  filter_format('(%s=%s)', (id_attr, id)))
-        res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope_c,
+        if id_is_dn or id_attr == 'dn':
+            base = id
+            scope = ldap.SCOPE_BASE
+            filter = '(objectClass=*)'
+        else:
+            base = self.ldap_base
+            scope = self.ldap_scope_c
+            filter = ('(&%s%s)' % (self.objectClassFilter(),
+                                   filter_format('(%s=%s)', (id_attr, id))))
+        res = self._delegate.search(base=base,
+                                    scope=scope,
                                     filter=filter,
                                     attrs=[id_attr])
         if res['exception']:
@@ -359,16 +414,24 @@ class LDAPDirectory(BaseDirectory):
             attrs[field_id] = value
         return attrs
 
-    def _getLDAPEntry(self, id, field_ids=['dn']):
+    def _getLDAPEntry(self, id, field_ids=['dn'], id_is_dn=0):
         """Get LDAP entry for a user."""
-        # XXX treat case where id_field == 'dn' (use base=dn)
-        # XXX use self.ldap_search_classes_c here too
-        filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
-                                                        (self.id_field, id))
-        res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope_c,
+        id_attr = self.id_field
+        if id_is_dn or id_attr == 'dn':
+            base = id
+            scope = ldap.SCOPE_BASE
+            filter = '(objectClass=*)'
+        else:
+            base = self.ldap_base
+            scope = self.ldap_scope_c
+            filter = ('(&%s%s)' % (self.objectClassFilter(),
+                                   filter_format('(%s=%s)', (id_attr, id))))
+
+        res = self._delegate.search(base=base,
+                                    scope=scope,
                                     filter=filter,
                                     attrs=field_ids)
+
         if res['exception']:
             LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
                 % res['exception'])
@@ -448,11 +511,15 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from an LDAP server.
     """
 
-    def __init__(self, schema, id, dir, field_ids=None):
+    def __init__(self, schema, id, dir, field_ids=None, id_is_dn=0):
         """Create an Adapter for a schema.
+
+        If id_is_dn is true, then the passed id is actually a dn.
+        This is used to get an entry by its dn.
         """
         self._id = id
         self._dir = dir
+        self._id_is_dn = id_is_dn
         BaseStorageAdapter.__init__(self, schema, field_ids=field_ids)
 
     def getData(self):
@@ -466,7 +533,11 @@ class LDAPStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
         # Compute entry so that it is passed as kw to _getFieldData.
         field_ids = [field_id for field_id, field in self.getFieldItems()]
-        entry = self._dir._getLDAPEntry(id, field_ids)
+        dir = self._dir
+        if self._id_is_dn:
+            entry = dir._getLDAPEntry(id, field_ids=field_ids, id_is_dn=1)
+        else:
+            entry = dir._getLDAPEntry(id, field_ids=field_ids)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
