@@ -145,6 +145,21 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, [])
 
+        # Searches with return fields
+        res = dir.searchEntries(foo='green', return_fields=['*'])
+        self.assertEquals(res, [(id1, e1)])
+        res = dir.searchEntries(foo='green', return_fields=['idd'])
+        self.assertEquals(res, [(id1, {'idd': id1})])
+        res = dir.searchEntries(foo='green', return_fields=['foo'])
+        self.assertEquals(res, [(id1, {'foo': foo1})])
+        res = dir.searchEntries(foo='green', return_fields=['foo', 'idd'])
+        self.assertEquals(res, [(id1, {'idd': id1, 'foo': foo1})])
+        res = dir.searchEntries(foo='green', return_fields=['foo', 'bar'])
+        self.assertEquals(res, [(id1, {'foo': foo1, 'bar': bar1})])
+        res = dir.searchEntries(foo='green', return_fields=['zblurg'])
+        self.assertEquals(res, [(id1, {})])
+
+
     def testSearchSubstrings(self):
         dir = self.dir
 
