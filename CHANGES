@@ -7,6 +7,7 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - no widget help available on creation form
+- Better error message in LocalDirectory if the home folder is missing.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
