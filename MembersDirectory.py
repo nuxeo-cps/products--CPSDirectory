@@ -245,44 +245,46 @@ class MemberStorageAdapter(BaseStorageAdapter):
         if id is None:
             # Creation.
             return self.getDefaultData()
-        dir = self._dir
-        member = self._getMember()
-        data = {}
-        for fieldid, field in self._schema.items():
-            if fieldid == dir.id_field:
-                value = id
-            elif fieldid == dir.password_field:
-                value = NO_PASSWORD
-            elif fieldid == dir.roles_field:
-                value = self._getMemberRoles(member)
-            elif fieldid == dir.groups_field:
-                value = self._getMemberGroups(member)
-            else:
-                value = member.getProperty(fieldid, _marker)
-                if value is _marker:
-                    value = field.getDefault()
-            data[fieldid] = value
-        return data
+        # Pass member as kw to _getFieldData.
+        return self._getData(member=self._getMember())
 
-    def setData(self, data):
+    def _getFieldData(self, field_id, field, member=None):
+        """Get data from one field."""
+        dir = self._dir
+        if field_id == dir.id_field:
+            value = self._id
+        elif field_id == dir.password_field:
+            value = NO_PASSWORD
+        elif field_id == dir.roles_field:
+            value = self._getMemberRoles(member)
+        elif field_id == dir.groups_field:
+            value = self._getMemberGroups(member)
+        else:
+            value = member.getProperty(field_id, _marker)
+            if value is _marker:
+                value = field.getDefault()
+        return value
+
+    def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
+        data = self._setDataDoProcess(data, **kw)
+
         dir = self._dir
         member = self._getMember()
         mapping = {}
-        for fieldid, field in self._schema.items():
-            value = data[fieldid]
-            if fieldid == dir.id_field:
+        for field_id, value in data.items():
+            if field_id == dir.id_field:
                 pass
                 #raise ValueError("Can't write to id") # XXX
-            elif fieldid == dir.password_field:
+            elif field_id == dir.password_field:
                 if value != NO_PASSWORD:
                     self._setMemberPassword(member, value)
-            elif fieldid == dir.roles_field:
+            elif field_id == dir.roles_field:
                 self._setMemberRoles(member, value)
-            elif fieldid == dir.groups_field:
+            elif field_id == dir.groups_field:
                 self._setMemberGroups(member, value)
             else:
-                mapping[fieldid] = value
+                mapping[field_id] = value
         if mapping:
             member.setMemberProperties(mapping)
 
