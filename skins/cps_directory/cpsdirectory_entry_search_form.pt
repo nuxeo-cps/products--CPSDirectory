@@ -48,7 +48,10 @@ actions['object'].append({'id':'new_entry',
         here.getImgTag('cpsdirectoryup_icon.gif', base_url=base_url)" />
       <b i18n:translate="">cpsdir_label_upto_directories</b></a>
     <h1><span i18n:translate="" tal:content="dirtitle" />:
-        <span i18n:translate="cpsdir_label_search_entry" /></h1>
+       <span tal:condition="python: ok == 'results'"
+         i18n:translate="">cpsdir_label_results</span>
+       <span tal:condition="python: ok != 'results'"
+         i18n:translate="cpsdir_label_search_entry" /></h1>
     <div class="description">
     </div>
   </metal:block>
