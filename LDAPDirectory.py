@@ -161,7 +161,7 @@ class LDAPDirectory(BaseDirectory):
         field_ids = []
         for schema in schemas:
             field_ids.extend(schema.keys())
-        filter_elems = []
+        filter_elems = [self.objectClassFilter()]
         for key, value in kw.items():
             if not key in field_ids:
                 continue
@@ -271,6 +271,16 @@ class LDAPDirectory(BaseDirectory):
                 return [e['dn'] for e in results]
             else:
                 return [e[id_attr][0] for e in results]
+
+    def objectClassFilter(self):
+        if self.ldap_object_classes:
+            res = '(|'
+            for each in self.ldap_object_classes:
+                res += ' (objectClass=%s)' % each
+            res += ')'
+            return res
+        else:
+            return '(objectClass=*)'
 
 InitializeClass(LDAPDirectory)
 
