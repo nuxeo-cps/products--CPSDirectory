@@ -39,6 +39,23 @@ members_layout = {
                 'hidden_empty': 1,
             },
         },
+        'confirm': {
+            'type': 'Password Widget',
+            'data': {
+                'fields': ['confirm'],
+                'label': 'label_password_confirm',
+                'label_edit': 'label_password_confirm',
+                'description': 'Password confirmation when editing',
+                'is_i18n': 1,
+                'css_class': '',
+                'display_width': 20,
+                'size_max': 0,
+                'hidden_layout_modes': ['view', 'search'],
+                'hidden_readonly_layout_modes': ['edit'],
+                'hidden_empty': 1,
+                'password_widget': 'password',
+            },
+        },
         'roles': {
             'type': 'MultiSelect Widget',
             'data': {

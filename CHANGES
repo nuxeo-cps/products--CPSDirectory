@@ -4,6 +4,7 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
+- Password widget uses a confirmation widget in edit mode.
 -
 
 Bug fixes:
