@@ -51,6 +51,10 @@ else:
 from DirectoryVocabulary import DirectoryVocabulary
 
 
+import UserFolderPatch
+import MemberToolsPatch
+
+
 tools = (DirectoryTool.DirectoryTool,
          )
 
