@@ -31,6 +31,8 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 from Products.CPSDirectory.IndirectDirectory import IndirectDirectory
 
+_marker = []
+
 class LocalDirectory(BaseDirectory):
     """A Directory that acts as a Proxy to a directory in the UserHomeFolder.
     """
@@ -218,11 +220,11 @@ class LocalDirectory(BaseDirectory):
         return ob.createEntry(entry)
 
     security.declarePublic('getEntry')
-    def getEntry(self, id):
+    def getEntry(self, id, default=_marker):
         """Get entry filtered by acls and processes.
         """
         ob = self._getContent()
-        return ob.getEntry(id)
+        return ob.getEntry(id, default)
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
