@@ -153,9 +153,15 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
-        """Create an entry in the directory."""
+        """@summary: Create an entry in the directory.
+        Set the isUserModified flag
+        @param entry: dictonnary of entry values
+        @type: @Dict
+        """
         self.checkCreateEntryAllowed(entry=entry)
-        id = entry[self.id_field]
+        id = entry.get(self.id_field)
+        if id is None:
+            raise KeyError("Entry data must have '%s' field" % self.id_field)
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
         ob = ZODBDirectoryEntry()
@@ -165,14 +171,22 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             # Cleanup object for minimal memory usage.
             delattr(ob, '__ac_local_roles__')
         self.editEntry(entry)
+        if not self.isUserModified():
+            self.setUserModified(True)
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
-        """Delete an entry in the directory."""
+        """@summary: Delete an entry in the directory.
+        Set the isUserModified flag
+        @param id: entry identifiant
+        @type id: @String
+        """
         self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         self._delObject(id)
+        if not self.isUserModified():
+            self.setUserModified(True)
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
