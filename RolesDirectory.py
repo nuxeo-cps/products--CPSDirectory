@@ -71,7 +71,7 @@ class RolesDirectory(BaseDirectory):
         """Get entry filtered by acls and processes.
         """
         return {
-            'id': id,
+            'role': id,
             'users': ('Raoul', 'XXX')
             }
 
@@ -89,10 +89,17 @@ class RoleStorageAdapter(BaseStorageAdapter):
         """
         self._role = role
         self._dir = dir
+        self._portal = getToolByName(dir, 'portal_url').getPortalObject()
         BaseStorageAdapter.__init__(self, schema)
 
     def _delete(self, field_id):
         raise NotImplementedError
+
+    def _getValidRoles(self):
+        """Get the list of valid roles.
+        """
+        # XXX take into account LDAPUserFolder API to get all roles.
+        return self._portal.valid_roles()
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -101,8 +108,9 @@ class RoleStorageAdapter(BaseStorageAdapter):
         """
         role = self._role
         dir = self._dir
-        portal = aq_parent(aq_inner(aq_parent(aq_inner(dir))))
-        aclu = portal.acl_users
+        if role not in self._getValidRoles():
+            raise KeyError("No role '%s'" % role)
+        aclu = self._portal.acl_users
         # XXX Stupid slow search for now. Optimizable for LDAP.
         users = []
         for user in aclu.getUsers():
@@ -123,7 +131,5 @@ class RoleStorageAdapter(BaseStorageAdapter):
     def setData(self, data):
         """Set data to the entry, from a mapping."""
         raise NotImplementedError
-        for field_id in self._schema.keys():
-            setattr(self._ob, field_id, data[field_id])
 
 InitializeClass(RoleStorageAdapter)
