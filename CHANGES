@@ -15,3 +15,4 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Added unit tests for members, groups, roles
+- Allow restriction of LDAP searches to specific objectClasses.
