@@ -115,7 +115,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def isVisible(self):
         """Is the directory visible by the current user?"""
         return getSecurityManager().getUser().has_role(
-            self.acl_access_roles_c)
+            self.acl_access_roles_c, object=self)
 
     security.declarePublic('isCreateEntryAllowed')
     def isCreateEntryAllowed(self):
@@ -124,7 +124,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_create_roles_c)
+            self.acl_entry_create_roles_c, object=self)
 
     security.declarePublic('isDeleteEntryAllowed')
     def isDeleteEntryAllowed(self):
@@ -133,7 +133,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_delete_roles_c)
+            self.acl_entry_delete_roles_c, object=self)
 
     security.declarePublic('isEditEntryAllowed')
     def isEditEntryAllowed(self, id=None, entry=None):
