@@ -26,6 +26,9 @@ msgstr "Maak een item aan"
 msgid "psm_entry_created"
 msgstr "Item aangemaakt"
 
+msgid "label_roles"
+msgstr "Rollen"
+
 msgid "label_groups"
 msgstr "Groepen"
 

@@ -163,6 +163,9 @@ msgstr "Edit"
 msgid "psm_entry_created"
 msgstr "Entry created"
 
+msgid "label_roles"
+msgstr "Role(s)"
+
 msgid "label_groups"
 msgstr "Group(s)"
 
