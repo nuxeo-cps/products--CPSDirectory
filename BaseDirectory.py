@@ -358,6 +358,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         if validate:
             ok = layout.validateLayoutStructure(layout_structure, ds,
                                                 layout_mode=layout_mode, **kw)
+            id_field = self.id_field
+            if not ds.hasError(id_field) and dm.data[id_field] != id:
+                ds.setError(id_field, 'cpsschemas_err_readonly')
+                ok = 0
             if ok:
                 self.checkEditEntryAllowed(id)
                 # XXX do better error messages than raise Unauthorized!
