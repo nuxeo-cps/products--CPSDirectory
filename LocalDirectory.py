@@ -253,6 +253,18 @@ class LocalDirectory(BaseDirectory):
         ob = self._getContent()
         return ob.searchEntries(return_fields, **kw)
 
+    security.declarePublic('searchPossibleEntries')
+    def searchPossibleEntries(self, return_fields=None, **kw):
+        """List all the possible entry ids.
+
+        Implemented in Indirect Directory only.
+        """
+        ob = self._getContent()
+        try:
+            return ob.searchPossibleEntries(return_fields, **kw)
+        except AttributeError:
+            raise NotImplementedError
+
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory.
@@ -266,6 +278,15 @@ class LocalDirectory(BaseDirectory):
         """Get the adapters for an entry."""
         ob = self._getContent()
         return ob._getAdapters(id, **kw)
+
+    security.declarePrivate('_getDataModel')
+    def _getDataModel(self, id, check_acls=1, **kw):
+        """Get the datamodel for an entry.
+
+        Passes additional **kw to _getAdapters.
+        """
+        ob = self._getContent()
+        return ob._getDataModel(id, check_acls,**kw)
 
     security.declarePrivate('_getAdditionalRoles')
     def _getAdditionalRoles(self, id):
