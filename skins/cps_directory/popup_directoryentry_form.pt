@@ -20,49 +20,10 @@
  <script type="text/javascript"
   tal:content='structure string:
   <!--
-function getSelectedRadio(buttonGroup) {
-   if (buttonGroup[0]) {
-      for (var i=0; i<buttonGroup.length; i++) {
-         if (buttonGroup[i].checked) {
-            return i
-         }
-      }
-   } else {
-      if (buttonGroup.checked) { return 0; }
-   }
-   return -1;
-}
-
-function getSelectedRadioValue(buttonGroup) {
-   var i = getSelectedRadio(buttonGroup);
-   if (i == -1) {
-      return "";
-   } else {
-      if (buttonGroup[i]) {
-         return buttonGroup[i].value;
-      } else {
-         return buttonGroup.value;
-      }
-   }
-}
-
-function getSelectedRadioTitle(buttonGroup) {
-   var i = getSelectedRadio(buttonGroup);
-   if (i == -1) {
-      return "";
-   } else {
-      if (buttonGroup[i]) {
-         return buttonGroup[i].id;
-      } else {
-         return buttonGroup.id;
-      }
-   }
-}
-
 
 function updateParent() {
   value = getSelectedRadioValue(document.forms[0].uid)
-  title = getSelectedRadioTitle(document.forms[0].uid)
+  title = getSelectedRadioId(document.forms[0].uid)
   parentinput = opener.document.getElementById("$input_id");
   parentinput.innerHTML = "<input type=\"hidden\" name=\"${input_id}\" value=\"" + value + "\" />" + title
  self.close();
