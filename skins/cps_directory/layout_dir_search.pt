@@ -1,7 +1,7 @@
 <tal:block define="
   layout options/layout;
   ds options/datastructure;
-  formaction python: 'cpsdirectory_entry_search_form';
+  formaction request/formaction|python: 'cpsdirectory_entry_search_form';
   ">
 <div class="group">
 <form action="." method="POST" name="form" enctype="multipart/form-data"
