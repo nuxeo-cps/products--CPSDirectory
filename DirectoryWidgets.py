@@ -93,7 +93,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
 
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
-         'label': 'Directory','is_required' : 1},
+         'label': 'Directory', 'is_required' : 1},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
@@ -193,7 +193,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
 
     _properties = CPSMultiSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
-         'label': 'Directory'},
+         'label': 'Directory', 'is_required' : 1},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
