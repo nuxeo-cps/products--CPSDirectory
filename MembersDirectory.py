@@ -137,8 +137,8 @@ class MembersDirectory(BaseDirectory):
 
         XXX: OK, but what exactly is an 'entry'?
         """
-        self.checkCreateEntryAllowed()
         id = entry[self.id_field]
+        self.checkCreateEntryAllowed(id=id)
         if self.hasEntry(id):
             raise KeyError("Member '%s' already exists" % id)
         mtool = getToolByName(self, 'portal_membership')
