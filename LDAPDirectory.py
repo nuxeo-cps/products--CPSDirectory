@@ -157,6 +157,17 @@ class LDAPDirectory(BaseDirectory):
         """List all the entry ids."""
         return self.searchEntries()
 
+    security.declarePrivate('listEntryIdsAndTitles')
+    def listEntryIdsAndTitles(self):
+        """List all the entry ids and titles."""
+        title_field = self.title_field
+        if self.id_field == title_field:
+            res = self.searchEntries()
+            return [(id, id) for id in res]
+        else:
+            res = self.searchEntries(return_fields=[title_field])
+            return [(id, data[title_field]) for id, data in res]
+
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
@@ -164,9 +175,10 @@ class LDAPDirectory(BaseDirectory):
         See API in the base class.
 
         LDAP specifics:
-        Keys with empty values are removed.
-        Keys with value '*' search for an existing field.
-        Otherwise does substring search.
+        - Returns all entries if query is empty.
+        - Keys with empty values are removed.
+        - Keys with value '*' search for an existing field.
+        - Otherwise does substring search.
         """
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
