@@ -13,52 +13,13 @@
   global title ds/?title_field|id;
   portal_status_message request/portal_status_message|nothing;
   global portal_status_message python: portal_status_message or (validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) or '';
-  global delete_allowed python: dir.isDeleteEntryAllowed(id);
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="css_slot">
-    <tal:block define="dummy python:request.set('breadcrumb_set',
-    [{
-      'id': 'directories',
-      'url': here.portal_url() + '/cpsdirectory_view',
-      'title': here.Localizer.default('Directories'),
-    },
-    {
-      'id': 'directories',
-      'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
-      'title': here.Localizer.default(dirtitle),
-    }
-   ]);" />
-    <tal:block define="global actions python:
-actions.update({'object': [{'id':'search_entry',
-  'url':base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
-  'name': 'cpsdir_label_search_entry',
-  'category': 'object'}]})" />
-    <tal:block condition="dir/isCreateEntryAllowed">
-      <tal:block define="global actions python:
-actions['object'].append({'id':'new_entry',
-  'url':base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
-  'name': 'cpsdir_label_create_entry',
-  'category': 'object'})" />
-    </tal:block>
-    <tal:block define="global actions python:
-actions['object'].append({'id':'view_entry',
-  'url':base_url+'cpsdirectory_entry_view?dirname='+dirname+'&id='+id,
-  'name': 'cpsdir_label_view_entry',
-  'category': 'object'})" />
-    <tal:block define="global actions python:
-actions['object'].append({'id':'edit_entry',
-  'url':base_url+'cpsdirectory_entry_edit_form?dirname='+dirname+'&id='+id,
-  'name': 'cpsdir_label_edit_entry',
-  'category': 'object'})" />
-    <tal:block condition="delete_allowed">
-      <tal:block define="global actions python:
-actions['object'].append({'id':'delete_entry',
-  'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
-  'onclick': 'return window.confirm(\''+ here.Localizer.default('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
-  'name': 'cpsdir_label_delete_entry',
-  'category': 'object'})" />
-    </tal:block>
+    <tal:block define="dummy
+      python:context.setDirectoryBreadCrumbs(request, dirname, dir, dirtitle)"/>
+    <tal:block define="global actions
+      python:context.getDirectoryActions(actions, dirname, dir, 'edit', id)"/>
 
     <link rel="Stylesheet" type="text/css" href=""
       tal:attributes="href string:${base_url}document.css" />
