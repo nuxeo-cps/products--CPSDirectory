@@ -169,7 +169,10 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         self._setObject(id, ob)
         if hasattr(ob, '__ac_local_roles__'):
             # Cleanup object for minimal memory usage.
-            delattr(ob, '__ac_local_roles__')
+            try:
+                delattr(ob, '__ac_local_roles__')
+            except KeyError:
+                pass
         self.editEntry(entry)
         if not self.isUserModified():
             self.setUserModified(True)

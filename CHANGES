@@ -8,6 +8,9 @@ Bug fixes:
 ~~~~~~~~~~
 - Used "Products.CMFCore.permissions" instead of deprecated
   "Products.CMFCore.CMFCorePermissions".
+- ZODBDirectory.createEntry()
+  The "KeyError" is necessary due to an "ExtensionClass" bug, probably
+  fixed in Zope 2.8: 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - manage_addCPSDirectory() takes a **kw args that is propagated to the cls constructor
