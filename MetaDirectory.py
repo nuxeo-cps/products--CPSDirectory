@@ -248,7 +248,8 @@ class MetaDirectory(BaseDirectory):
 
         Asks the backing directories, one of them must be authenticating.
         """
-        for b_dir in self._getBackingDirs():
+        for info in self.getBackingDirectories():
+            b_dir = info['dir']
             if b_dir.isAuthenticating():
                 return 1
         return 0
