@@ -32,4 +32,5 @@ New internal features:
 - use cpsdefault.pot as blacklist_pot 
 - Added LDAPUserGroupsFolder as a folder having subgroups support.
 - Implemented group deletion by calling userFolderDelGroups.
+- Role directory is hidden by default
 - Implemented updateMemberDataFromSchema as found in NuxMetaDirectories.
