@@ -24,10 +24,11 @@
             ">
             <tr tal:attributes="class python:test(even, 'even', 'odd')">
               <tal:block repeat="field fields">
-                <td tal:condition="not:repeat/field/index">
-                  <input type="checkbox" name="ids:list"
-                    tal:condition="isAdmin" tal:attributes="value id" />
-                </td>
+                <tal:block tal:condition="isAdmin">
+                  <td tal:condition="not:repeat/field/index">
+                    <input type="checkbox" name="ids:list" tal:attributes="value id" />
+                  </td>
+                </tal:block>
                 <td>
                   <a href="."
                     tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
