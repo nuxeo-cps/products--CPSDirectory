@@ -119,13 +119,13 @@ class GroupsDirectory(BaseDirectory):
     def createEntry(self, entry):
         """Create an entry in the directory."""
         self.checkCreateEntryAllowed()
-        id = entry[self.id_field]
-        if self.hasEntry(id):
-            raise ValueError("Group '%s' already exists." % id)
+        group = entry[self.id_field]
+        if self.hasEntry(group):
+            raise ValueError("Group '%s' already exists." % groups)
         aclu = self.acl_users
         if not hasattr(aq_base(aclu), 'userFolderAddGroup'):
             return # XXX
-        aclu.userFolderAddGroup(id)
+        aclu.userFolderAddGroup(group)
         self.writeEntry(entry)
 
 InitializeClass(GroupsDirectory)
