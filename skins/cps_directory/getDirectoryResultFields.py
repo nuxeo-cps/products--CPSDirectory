@@ -3,6 +3,7 @@
 Get the list of fields to be displayed in the search result list.
 
 Format is [{'id': 'sn', 'title': 'Name'}, ] title will be i18n.
+see getCustomDirectoryResultFields for more information
 """
 fields = context.getCustomDirectoryResultFields(directory_id, default_field)
 
