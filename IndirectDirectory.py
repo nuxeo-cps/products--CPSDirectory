@@ -24,12 +24,13 @@ from zLOG import LOG, DEBUG
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
+from types import TupleType, StringType
 
 from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 class IndirectDirectory(BaseDirectory):
-    """A Directory that just stores ids of entries of another directory.
+    """A Directory that just stores ids of entries of other directories.
     """
 
     meta_type = 'CPS Indirect Directory'
@@ -37,28 +38,25 @@ class IndirectDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'directory_id', 'type': 'string', 'mode': 'w',
-         'label': 'Id of the directory it refers to'},
+        {'id': 'directories_ids', 'type': 'tokens', 'mode': 'w',
+         'label': 'Ids of the directories it refers to'},
         {'id': 'object_ids', 'type': 'multiple selection',
-         'select_variable': 'listAllpossibleEntries', 'mode': 'w',
+         'select_variable': 'listAllPossibleEntries', 'mode': 'w',
          'label': 'Ids of the entries of the other directory'},
         )
-    directory_id = ''
+    # list of directory ids
+    directories_ids = []
+    # list of strings directory_id/entry_id using '/' as a special character
     object_ids = []
 
     def __init__(self, id, **kw):
         BaseDirectory.__init__(self, id, **kw)
-        self.directory_id = kw.get('directory_id', '')
+        self.directories_ids = kw.get('directories_ids', [])
         self.object_ids = []
 
     #
     # API
     #
-
-    security.declarePrivate('listAllpossibleEntries')
-    def listAllpossibleEntries(self):
-        directory = self._getDirectory()
-        return directory.listEntryIds()
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -78,15 +76,24 @@ class IndirectDirectory(BaseDirectory):
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
-        return id in self.object_ids
+        return id in self.listEntryIds()
 
     security.declarePublic('getEntry')
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
-        directory = self._getDirectory()
-        if directory.hasEntry(id):
-            return directory.getEntry(id)
+        if id is not None:
+            directory_id = self._getDirectoryIdForId(id)
+            entry_id = self._getEntryIdForId(id)
+            directory = self._getDirectory(directory_id)
+            if directory.hasEntry(entry_id):
+                entry = directory.getEntry(entry_id)
+                # giving to entry the good id...
+                id = entry[directory.id_field]
+                entry[directory.id_field] = self._makeId(directory_id, id)
+                return entry
+            else:
+                return None
         else:
             return None
 
@@ -94,18 +101,22 @@ class IndirectDirectory(BaseDirectory):
     def createEntry(self, entry):
         """Create an entry in the directory."""
         self.checkCreateEntryAllowed(entry=entry)
-        id = entry[self.id_field]
-        if self.hasEntry(id):
-            raise KeyError("Entry '%s' already exists" % id)
-        else:
-            directory = self._getDirectory()
-            if directory.hasEntry(id):
-                object_ids_list = list(self.object_ids)
-                object_ids_list.append(id)
-                self.object_ids = tuple(object_ids_list)
+        if entry is not None:
+            # entry is supposed to have the good id already...
+            id = entry[self.id_field]
+            directory_id = self._getDirectoryIdForId(id)
+            entry_id = self._getEntryIdForId(id)
+            if self.hasEntry(id):
+                raise KeyError("Entry '%s' already exists" % id)
             else:
-                raise KeyError("Entry '%s' does not exist in directory '%s'"
-                               % (id, self.directory_id,))
+                directory = self._getDirectory(directory_id)
+                if directory.hasEntry(entry_id):
+                    object_ids_list = list(self.object_ids)
+                    object_ids_list.append(id)
+                    self.object_ids = tuple(object_ids_list)
+                else:
+                    raise KeyError("Entry '%s' does not exist in directory '%s'"
+                                   % (entry_id, directory_id,))
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
@@ -121,31 +132,36 @@ class IndirectDirectory(BaseDirectory):
     def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
-        directory = self._getDirectory()
-        entries = directory.searchEntries(return_fields, **kw)
-        # filter entries returned from the search on the
-        # real directory
-        if return_fields is None:
-            # If there are no return_fields, you get:
-            # ['id1', 'id2', etc.]
-            new_entries = []
-            for id in entries:
-                if id in self.object_ids:
-                    new_entries.append(id)
-            entries = new_entries
-        else:
-            # If there is a return_fields parameter, you get:
-            # [('id1', {'field1': value1, 'field2': value2}),
-            #  ('id2', {'field1': value3, 'field2': value4}),
-            #   etc.
-            #  ]
-            # return_fields being in this example ('field1', 'field2')
-            new_entries = []
-            for entry in entries:
-                if entry[0] in self.object_ids:
-                    new_entries.append(entry)
-            entries = new_entries
-        return entries
+        res = []
+        for directory_id in self.directories_ids:
+            directory = self._getDirectory(directory_id)
+            real_entries = directory.searchEntries(return_fields, **kw)
+            # filter entries returned from the search on the
+            # real directory
+            if return_fields is None:
+                # If there are no return_fields, you get:
+                # ['id1', 'id2', etc.]
+                entries = [self._makeId(directory_id, x) for x in real_entries]
+                new_entries = []
+                for id in entries:
+                    if id in self.object_ids:
+                        new_entries.append(id)
+                entries = new_entries
+            else:
+                # If there is a return_fields parameter, you get:
+                # [('id1', {'field1': value1, 'field2': value2}),
+                #  ('id2', {'field1': value3, 'field2': value4}),
+                #   etc.
+                #  ]
+                # return_fields being in this example ('field1', 'field2')
+                entries = [(self._makeId(directory_id, x[0]), x[1]) for x in real_entries]
+                new_entries = []
+                for entry in entries:
+                    if entry[0] in self.object_ids:
+                        new_entries.append(entry)
+                entries = new_entries
+            res.extend(entries)
+        return res
 
     #
     # Internal
@@ -154,16 +170,70 @@ class IndirectDirectory(BaseDirectory):
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, search=0, **kw):
         """Get the adapters for an entry."""
-        directory = self._getDirectory()
-        return directory._getAdapters(id, search, **kw)
+        if id is not None:
+            directory_id = self._getDirectoryIdForId(id)
+            entry_id = self._getEntryIdForId(id)
+            directory = self._getDirectory(directory_id)
+            return directory._getAdapters(entry_id, search, **kw)
+        else:
+            try:
+                # try to get adapters from any of the directories...
+                return self._getDirectory(self.directories_ids[0])._getAdapters(None, search, **kw)
+            except IndexError:
+                return []
 
     security.declarePrivate('_getDirectory')
-    def _getDirectory(self):
+    def _getDirectory(self, directory_id):
+        if directory_id not in self.directories_ids:
+            raise AttributeError("Directory '%s' is not allowed" % directory_id)
         dtool = getToolByName(self, 'portal_directories', None)
-        directory = getattr(dtool, self.directory_id, None)
+        directory = getattr(dtool, directory_id, None)
         if directory is None:
-            raise AttributeError("Directory '%s' does not exist" % self.directory_id)
+            raise AttributeError("Directory '%s' does not exist" % directory_id)
         else:
             return directory
+
+    security.declarePrivate('_makeId')
+    def _makeId(self, directory_id, entry_id):
+        return directory_id+'/'+entry_id
+
+    security.declarePrivate('_getDirectoryIdForId')
+    def _getEntryIdForId(self, id):
+        try:
+            res = id.split('/')[1]
+        except IndexError:
+            res = None
+        return res
+
+    security.declarePrivate('_getDirectoryIdForId')
+    def _getDirectoryIdForId(self, id):
+        try:
+            res = id.split('/')[0]
+        except IndexError:
+            res = None
+        return res
+
+    security.declarePrivate('_getDirectoryIdForId')
+    def _getEntryIdForId(self, id):
+        try:
+            res = id.split('/')[1]
+        except IndexError:
+            res = None
+        return res
+
+
+    security.declarePrivate('listAllPossibleEntries')
+    def listAllPossibleEntries(self):
+        res = []
+        for directory_id in self.directories_ids:
+            directory = self._getDirectory(directory_id)
+            res_to_append = [self._makeId(directory_id,x) for x in directory.listEntryIds()]
+            res.extend(res_to_append)
+        return res
+
+    security.declarePrivate('listAllpossibleEntriesForDirectory')
+    def listAllpossibleEntriesForDirectory(self, directory_id):
+        directory = self._getDirectory(directory_id)
+        return directory.listEntryIds()
 
 InitializeClass(IndirectDirectory)
