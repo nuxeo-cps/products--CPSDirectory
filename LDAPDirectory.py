@@ -221,7 +221,6 @@ class LDAPDirectory(BaseDirectory):
         - Returns all entries if query is empty.
         - Keys with empty values are removed.
         - Keys with value '*' search for an existing field.
-        - Otherwise does substring search.
         """
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
@@ -250,25 +249,26 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if not value:
                 continue
-            if value == '*':
-                value = ''
-            if isinstance(value, ListType) or isinstance(value, TupleType):
-                pass
-            elif isinstance(value, StringType):
-                value = [value]
+            if isinstance(value, StringType):
+                if value == '*':
+                    f = filter_format('(%s=*)', (key,))
+                elif key in self.search_substring_fields:
+                    f = filter_format('(%s=*%s*)', (key, value))
+                else:
+                    f = filter_format('(%s=%s)', (key, value))
+            elif isinstance(value, ListType) or isinstance(value, TupleType):
+                fl = []
+                for v in value:
+                    if v:
+                        fv = filter_format('(%s=*%s*)', (key, v))
+                        fl.append(fv)
+                f = ''.join(fl)
+                if len(fl) > 1:
+                    f = '(|%s)' % f
             else:
                 raise ValueError("Bad value %s for '%s'" % (`value`, key))
-            fl = []
-            for v in value:
-                if v:
-                    fv = filter_format('(%s=*%s*)', (key, v))
-                else:
-                    fv = filter_format('(%s=*)', (key,))
-                fl.append(fv)
-            f = ''.join(fl)
-            if len(fl) > 1:
-                f = '(|%s)' % f
-            filter_elems.append(f)
+            if f:
+                filter_elems.append(f)
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter

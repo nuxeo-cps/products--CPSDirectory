@@ -116,7 +116,11 @@ class MembersDirectory(BaseDirectory):
             if f != p and kw.has_key(f):
                 kw[p] = kw[f]
                 del kw[f]
-        res = mdtool.searchForMembers(kw, props=return_fields)
+            # XXX should also convert search_substring_fields
+        res = mdtool.searchForMembers(kw, props=return_fields,
+                                      options={'search_substring_props':
+                                               self.search_substring_fields,
+                                               })
         # XXX if returning props, back-convert known names.
         return res
 
@@ -136,15 +140,17 @@ class MembersDirectory(BaseDirectory):
         """
         self.checkCreateEntryAllowed()
         id = entry[self.id_field]
+        if self.hasEntry(id):
+            raise ValueError("Member '%s' already exists" % id)
         mtool = getToolByName(self, 'portal_membership')
         password = '38fnvas7ds' # XXX default password ???
         roles = ()
         domains = []
-        # XXX this should check that the member doesn't already exist
         mtool.addMember(id, password, roles, domains)
         member = mtool.getMemberById(id)
         if member is None or not hasattr(aq_base(member), 'getMemberId'):
             raise ValueError("Cannot add member '%s'" % id)
+        member.setMemberProperties({}) # Trigger registration in memberdata.
         self.editEntry(entry)
 
 InitializeClass(MembersDirectory)

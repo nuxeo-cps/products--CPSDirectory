@@ -21,6 +21,7 @@
 
 from zLOG import LOG, DEBUG, WARNING
 
+from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
@@ -87,14 +88,31 @@ class GroupsDirectory(BaseDirectory):
         aclu = portal.acl_users
         kwgroup = kw.get(self.id_field)
         if kwgroup:
-            kwgroup = kwgroup.lower()
+            if isinstance(kwgroup, StringType):
+                if self.id_field in self.search_substring_fields:
+                    kwgroup = kwgroup.lower()
+            elif (isinstance(kwgroup, ListType) or
+                  isinstance(kwgroup, TupleType)):
+                pass
+            else:
+                raise ValueError("Bad value for %s: %s" %
+                                 (self.id_field, kwgroup))
         kwmembers = kw.get(self.members_field)
+        if isinstance(kwmembers, StringType):
+            kwmembers = [kwmembers]
         groups = []
         for group in self.listEntryIds():
             if kwgroup:
-                # XXX treat list
-                if group.lower().find(kwgroup) == -1:
-                    continue
+                if isinstance(kwgroup, StringType):
+                    if self.id_field in self.search_substring_fields:
+                        if group.lower().find(kwgroup) == -1:
+                            continue
+                    else:
+                        if group != kwgroup:
+                            continue
+                else:
+                    if group not in kwgroup:
+                        continue
             if kwmembers:
                 if not hasattr(aq_base(aclu), 'getGroupById'):
                     # No group support and want a member

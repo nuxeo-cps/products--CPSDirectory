@@ -4,11 +4,13 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
--
+- Directories can now specify which fields are searched with a substring
+  search (the rest are searched with exact matches). Implemented for
+  all directories.
 
 Bug fixes:
 ~~~~~~~~~~
--
+- Correctly fail when trying to create an already existing member.
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~

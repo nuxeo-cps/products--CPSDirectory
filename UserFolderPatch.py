@@ -33,27 +33,31 @@ from AccessControl.User import UserFolder, User
 # Helpers
 #
 
-def _preprocessQuery(mapping):
-    """Compute is_list_search and query."""
-    is_list_search = {}
+def _preprocessQuery(mapping, search_substring_props):
+    """Compute search_types and query."""
+    search_types = {}
     query = {}
     for key, value in mapping.items():
         if type(value) is StringType:
-            is_list_search[key] = 0
-            query[key] = value.lower()
+            if key in search_substring_props:
+                search_types[key] = 'substring'
+                value = value.lower()
+            else:
+                search_types[key] = 'exact'
         else:
-            is_list_search[key] = 1
-            query[key] = value
-    return is_list_search, query
+            search_types[key] = 'list'
+        query[key] = value
+    return search_types, query
 
-def _isEntryMatching(entry, is_list_search, query):
+def _isEntryMatching(entry, search_types, query):
     """Is the entry matching the query?
 
     Does an AND search for all key, value of the query.
     If the entry value corresponding to a key is a list,
     does an OR search on all the list elements.
-    If the query value is a string, does a substring lowercase search.
     If the query value is a list, does OR search with exact match.
+    If the query value is a string, does an case-independent match or a
+    substring case independent search depending on search_substring_props.
     """
     for key, value in query.items():
         if not value:
@@ -68,10 +72,12 @@ def _isEntryMatching(entry, is_list_search, query):
             searched = (searched,)
         matched = 0
         for item in searched:
-            if is_list_search[key]:
+            if search_types[key] == 'list':
                 matched = item in value
-            else:
+            elif search_types[key] == 'substring':
                 matched = item.lower().find(value) != -1
+            else: # search_types[key] == 'exact':
+                matched = item == value
             if matched:
                 break
         if not matched:
@@ -84,7 +90,7 @@ def _isEntryMatching(entry, is_list_search, query):
 
 # User Folder
 
-def searchUsers(self, query={}, props=None, options=None, **kw):
+def searchUsers(self, query={}, props=None, options={}, **kw):
     """Search for users having certain properties.
 
     If props is None, returns a list of ids:
@@ -105,7 +111,8 @@ def searchUsers(self, query={}, props=None, options=None, **kw):
     query = kw
     do_roles = query.has_key('roles')
     do_groups = query.has_key('groups')
-    is_list_search, query = _preprocessQuery(query)
+    search_substring_props = options.get('search_substring_props', [])
+    search_types, query = _preprocessQuery(query, search_substring_props)
     res = []
     for user in self.getUsers():
         base_user = aq_base(user)
@@ -117,7 +124,7 @@ def searchUsers(self, query={}, props=None, options=None, **kw):
                               if r not in ('Anonymous', 'Authenticated')]
         if do_groups and hasattr(base_user, 'getGroups'):
             entry['groups'] = user.getGroups()
-        if not _isEntryMatching(entry, is_list_search, query):
+        if not _isEntryMatching(entry, search_types, query):
             continue
         if props is None:
             res.append(id)

@@ -88,6 +88,85 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         #members.deleteEntry(member_id)
         #self.assert_(not members.hasEntry(member_id))
 
+    def testMemberCreateTwice(self):
+        members = self.pd.members
+        member_id = 'new_membertwice'
+        members.createEntry({'id': member_id})
+        self.assertRaises(ValueError, members.createEntry, {'id': member_id})
+
+    def testMemberSearch(self):
+        members = self.pd.members
+        member_id1 = 'new_member5'
+        member_email1 = 'example@mail'
+        member_sn1 = 'MemberFive'
+        members.createEntry({'id': member_id1,
+                             'email': member_email1,
+                             'sn': member_sn1,
+                             })
+        member_id2 = 'new_member6'
+        member_email2 = 'nospam@example.com'
+        member_sn2 = 'six'
+        members.createEntry({'id': member_id2,
+                             'email': member_email2,
+                             'sn': member_sn2,
+                             })
+        member_ids = [member_id1, member_id2]
+
+        ### Without substrings
+        members.search_substring_fields = []
+
+        # Basic searches
+        res = members.searchEntries(id=member_id1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=[member_id1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=member_email1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=[member_email1])
+        self.assertEquals(res, [member_id1])
+
+        # Multi-field searches
+        res = members.searchEntries(id=member_id1, email=[member_email1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=member_id1, email=[member_email2])
+        self.assertEquals(res, [])
+
+        # Failing substring searches
+        res = members.searchEntries(id='new_mem')
+        self.assertEquals(res, [])
+        res = members.searchEntries(email='exam')
+        self.assertEquals(res, [])
+
+
+        ### With substrings
+        members.search_substring_fields = ['id', 'email']
+
+        # Basic searches
+        res = members.searchEntries(id=member_id1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=[member_id1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=member_email1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=[member_email1])
+        self.assertEquals(res, [member_id1])
+
+        # Multi-field searches
+        res = members.searchEntries(id=member_id1, email=[member_email1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=member_id1, email=[member_email2])
+        self.assertEquals(res, [])
+
+        # Substring searches
+        res = members.searchEntries(id='new_mem')
+        self.assertEquals(res, member_ids)
+        res = members.searchEntries(email='exam')
+        self.assertEquals(res, member_ids)
+        res = members.searchEntries(email='spam')
+        self.assertEquals(res, [member_id2])
+        res = members.searchEntries(email=['@']) # list implies exact match
+        self.assertEquals(res, [])
+
     #
     # Groups
     #
@@ -126,6 +205,12 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         #groups.deleteEntry(group_id)
         #self.assert_(not groups.hasEntry(group_id))
 
+    def testGroupCreateTwice(self):
+        groups = self.pd.groups
+        group_id = 'new_grouptwice'
+        groups.createEntry({'group': group_id})
+        self.assertRaises(ValueError, groups.createEntry, {'group': group_id})
+
     def testMemberQueryingOnGroups(self):
         groups = self.pd.groups
         group_id = 'new_group2'
@@ -136,8 +221,74 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         members.createEntry({'id': member_id, 'groups': [group_id,]})
 
         search_result = members.searchEntries(groups=[group_id])
-        #print "testMemberQueryingOnGroups search_result = %s" % str(search_result)
         self.assertEquals(search_result, [member_id])
+
+    def testGroupSearch(self):
+        groups = self.pd.groups
+        group_id = 'new_group3'
+        groups.createEntry({'group': group_id})
+
+        members = self.pd.members
+        member_id1 = 'new_member7'
+        members.createEntry({'id': member_id1, 'groups': [group_id,]})
+        member_id2 = 'new_member8'
+        members.createEntry({'id': member_id2, 'groups': [group_id,]})
+        member_ids = [member_id1, member_id2]
+
+        ### Without substrings
+        groups.search_substring_fields = []
+
+        # Basic searches
+        res = groups.searchEntries(members=member_ids)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(members=[member_id1])
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(members=member_id1)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group=group_id)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group=[group_id])
+        self.assertEquals(res, [group_id])
+
+        # Multi-field searches
+        res = groups.searchEntries(members=member_id1, group=group_id)
+        self.assertEquals(res, [group_id])
+
+        # Failing substring searches
+        res = groups.searchEntries(members='new_mem')
+        self.assertEquals(res, [])
+        res = groups.searchEntries(group='new_gro')
+        self.assertEquals(res, [])
+
+
+        ### With substrings
+        groups.search_substring_fields = ['group', 'members']
+
+        # Basic searches
+        res = groups.searchEntries(members=member_ids)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(members=[member_id1])
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(members=member_id1)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group=group_id)
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group=[group_id])
+        self.assertEquals(res, [group_id])
+
+        # Multi-field searches
+        res = groups.searchEntries(members=member_id1, group=group_id)
+        self.assertEquals(res, [group_id])
+
+        # Substring searches
+        res = groups.searchEntries(members='new_mem')
+        self.assertEquals(res, []) # never substring on members
+        res = groups.searchEntries(group='new_gro')
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group='ew_gro')
+        self.assertEquals(res, [group_id])
+        res = groups.searchEntries(group=['new_gro']) # list: exact match
+        self.assertEquals(res, [])
 
     #
     # Roles
@@ -179,6 +330,79 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         # XXX: not implemented yet
         #roles.deleteEntry(role_id)
         #self.assert_(not roles.hasEntry(role_id))
+
+    def testRoleCreateTwice(self):
+        roles = self.pd.roles
+        role_id = 'new_roletwice'
+        roles.createEntry({'role': role_id})
+        self.assertRaises(ValueError, roles.createEntry, {'role': role_id})
+
+    def testRoleSearch(self):
+        roles = self.pd.roles
+        role_id = 'new_role3'
+        roles.createEntry({'role': role_id})
+
+        members = self.pd.members
+        member_id1 = 'new_member3'
+        members.createEntry({'id': member_id1, 'roles': [role_id,]})
+        member_id2 = 'new_member4'
+        members.createEntry({'id': member_id2, 'roles': [role_id,]})
+        member_ids = [member_id1, member_id2]
+
+        ### Without substrings
+        roles.search_substring_fields = []
+
+        # Basic searches
+        res = roles.searchEntries(members=member_ids)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(members=[member_id1])
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(members=member_id1)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role=role_id)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role=[role_id])
+        self.assertEquals(res, [role_id])
+
+        # Multi-field searches
+        res = roles.searchEntries(members=member_id1, role=role_id)
+        self.assertEquals(res, [role_id])
+
+        # Failing substring searches
+        res = roles.searchEntries(members='new_mem')
+        self.assertEquals(res, [])
+        res = roles.searchEntries(role='new_rol')
+        self.assertEquals(res, [])
+
+
+        ### With substrings
+        roles.search_substring_fields = ['role', 'members']
+
+        # Basic searches
+        res = roles.searchEntries(members=member_ids)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(members=[member_id1])
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(members=member_id1)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role=role_id)
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role=[role_id])
+        self.assertEquals(res, [role_id])
+
+        # Multi-field searches
+        res = roles.searchEntries(members=member_id1, role=role_id)
+        self.assertEquals(res, [role_id])
+
+        # Substring searches
+        res = roles.searchEntries(members='new_mem')
+        self.assertEquals(res, []) # never substring on members
+        res = roles.searchEntries(role='new_rol')
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role='ew_rol')
+        self.assertEquals(res, [role_id])
+        res = roles.searchEntries(role=['new_rol']) # list implies exact match
+        self.assertEquals(res, [])
 
     #
     # TODO: add a more complex scenario here

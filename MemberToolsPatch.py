@@ -44,27 +44,31 @@ _marker = []
 # Helpers
 #
 
-def _preprocessQuery(mapping):
-    """Compute is_list_search and query."""
-    is_list_search = {}
+def _preprocessQuery(mapping, search_substring_props):
+    """Compute search_types and query."""
+    search_types = {}
     query = {}
     for key, value in mapping.items():
         if type(value) is StringType:
-            is_list_search[key] = 0
-            query[key] = value.lower()
+            if key in search_substring_props:
+                search_types[key] = 'substring'
+                value = value.lower()
+            else:
+                search_types[key] = 'exact'
         else:
-            is_list_search[key] = 1
-            query[key] = value
-    return is_list_search, query
+            search_types[key] = 'list'
+        query[key] = value
+    return search_types, query
 
-def _isEntryMatching(entry, is_list_search, query):
+def _isEntryMatching(entry, search_types, query):
     """Is the entry matching the query?
 
     Does an AND search for all key, value of the query.
     If the entry value corresponding to a key is a list,
     does an OR search on all the list elements.
-    If the query value is a string, does a substring lowercase search.
     If the query value is a list, does OR search with exact match.
+    If the query value is a string, does an case-independent match or a
+    substring case independent search depending on search_substring_props.
     """
     for key, value in query.items():
         if not value:
@@ -79,26 +83,29 @@ def _isEntryMatching(entry, is_list_search, query):
             searched = (searched,)
         matched = 0
         for item in searched:
-            if is_list_search[key]:
+            if search_types[key] == 'list':
                 matched = item in value
-            else:
+            elif search_types[key] == 'substring':
                 matched = item.lower().find(value) != -1
+            else: # search_types[key] == 'exact':
+                matched = item == value
             if matched:
                 break
         if not matched:
             return 0
     return 1
 
-def _searchInMemberData(self, query, props=None):
+def _searchInMemberData(self, query, props=None, search_substring_props=[]):
     """Search members using only MemberData._members."""
-    is_list_search, query = _preprocessQuery(query)
+    search_types, query = _preprocessQuery(query, search_substring_props)
     mdtool = self
     mdtool_props = mdtool.propertyIds()
+    checked_props = [p for p in mdtool_props if query.has_key(p)]
     res = []
     for id, member in mdtool._members.items():
         base_member = aq_base(member)
         entry = {'id': id}
-        for key in mdtool_props:
+        for key in checked_props:
             searched = getattr(base_member, key, _marker)
             if searched is _marker:
                 searched = mdtool.getProperty(key, _marker)
@@ -106,7 +113,7 @@ def _searchInMemberData(self, query, props=None):
                     # No value in tool?!
                     continue
             entry[key] = searched
-        if not _isEntryMatching(entry, is_list_search, query):
+        if not _isEntryMatching(entry, search_types, query):
             continue
         if props is None:
             res.append(id)
@@ -129,7 +136,7 @@ def hasMember(self, member_id):
     raise NotImplementedError
 
 # MemberDataTool
-def searchForMembers(self, query={}, props=None, options=None, **kw):
+def searchForMembers(self, query={}, props=None, options={}, **kw):
     """Search for members.
 
     If props is None, returns a list of ids:
@@ -141,6 +148,11 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
       [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
 
     props=['*'] means to return all available properties.
+
+    options is a dictionnary with keys:
+      - search_substring_props: the props where search has to be done
+        by substring.
+
     """
     kw.update(query)
     query = kw
@@ -169,7 +181,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
         LOG('searchForMembers', DEBUG, 'user_query=%s user_props=%s' %
             (user_query, user_props))
         if user_query:
-            users_res = aclu.searchUsers(user_query, props=user_props)
+            users_res = aclu.searchUsers(user_query, props=user_props,
+                                         options=options)
             done_props.extend(aclu_props)
             done_query_keys.extend(user_query.keys())
         else:
@@ -199,8 +212,11 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
     LOG('searchForMembers', DEBUG, 'member_query=%s member_props=%s' %
         (member_query, member_props))
     if member_query:
-        members_res = _searchInMemberData(self, member_query,
-                                          props=member_props)
+        search_substring_props = options.get('search_substring_props', [])
+        members_res = _searchInMemberData(
+            self, member_query,
+            props=member_props,
+            search_substring_props=search_substring_props)
         done_props.extend(mdtool_props)
         done_query_keys.extend(member_query.keys())
     else:

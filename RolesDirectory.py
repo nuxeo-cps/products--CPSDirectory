@@ -21,6 +21,7 @@
 
 from zLOG import LOG, DEBUG
 
+from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
@@ -79,15 +80,31 @@ class RolesDirectory(BaseDirectory):
         aclu = portal.acl_users
         kwrole = kw.get(self.id_field)
         if kwrole:
-            kwrole = kwrole.lower()
+            if isinstance(kwrole, StringType):
+                if self.id_field in self.search_substring_fields:
+                    kwrole = kwrole.lower()
+            elif isinstance(kwrole, ListType) or isinstance(kwrole, TupleType):
+                pass
+            else:
+                raise ValueError("Bad value for %s: %s" %
+                                 (self.id_field, kwrole))
         kwmembers = kw.get(self.members_field)
+        if isinstance(kwmembers, StringType):
+            kwmembers = [kwmembers]
         user_roles = None # Lazily computed.
         roles = []
         for role in self.listEntryIds():
             if kwrole:
-                # XXX treat list
-                if role.lower().find(kwrole) == -1:
-                    continue
+                if isinstance(kwrole, StringType):
+                    if self.id_field in self.search_substring_fields:
+                        if role.lower().find(kwrole) == -1:
+                            continue
+                    else:
+                        if role != kwrole:
+                            continue
+                else:
+                    if role not in kwrole:
+                        continue
             if kwmembers:
                 if user_roles is None:
                     # We'll have to search by users, build info on them.
