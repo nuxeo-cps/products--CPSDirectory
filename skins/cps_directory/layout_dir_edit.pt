@@ -1,3 +1,4 @@
+<metal:block define-macro="edit">
 <tal:block define="
   layout options/layout;
   ds options/datastructure;
@@ -7,10 +8,7 @@
   ">
 <form action="." method="POST" name="form" enctype="multipart/form-data"
   tal:attributes="action formaction">
-<input type="hidden" name="type_name" value="." tal:condition="creation"
-  tal:attributes="value request/type_name">
 <input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
-<input type="hidden" name="id" value="." tal:attributes="value request/id">
 <table cellpadding="2" cellspacing="2" border="0">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
@@ -52,3 +50,4 @@
   value="button_create" i18n:attributes="value" tal:condition="creation">
 </form>
 </tal:block>
+</metal:block>

@@ -24,6 +24,7 @@ from zLOG import LOG, DEBUG
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
+from AccessControl import Unauthorized
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
@@ -55,6 +56,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Layout"},
         {'id': 'acl_access_roles_str', 'type': 'string', 'mode': 'w',
          'label': "ACL: directory access roles"},
+        {'id': 'acl_entry_create_roles_str', 'type': 'string', 'mode': 'w',
+         'label': "ACL: directory create roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry id'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
@@ -64,10 +67,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     schema = ''
     layout = ''
     acl_access_roles_str = 'Manager; Member'
+    acl_entry_create_roles_str = 'Manager'
     id_field = ''
     title_field = ''
 
     acl_access_roles = ['Manager', 'Member']
+    acl_entry_create_roles = ['Manager']
 
     def __init__(self, id, **kw):
         self.id = id
@@ -77,6 +82,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         # Split on ',' or ';' or ' '.
         for attr_str, attr, seps in (
             ('acl_access_roles_str', 'acl_access_roles', ',; '),
+            ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
             ):
             v = [getattr(self, attr_str)]
             for sep in seps:
@@ -99,9 +105,32 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return getSecurityManager().getUser().has_role(
             self.acl_access_roles)
 
+    security.declarePrivate('isCreateEntryAllowed')
+    def isCreateEntryAllowed(self):
+        """Check that user can create an entry.
+
+        Returns a boolean.
+        """
+        return getSecurityManager().getUser().has_role(
+            self.acl_entry_create_roles)
+
+    security.declarePublic('checkCreateEntryAllowed')
+    def checkCreateEntryAllowed(self):
+        """Check that user can create an entry.
+
+        Raises Unauthorized if not.
+        """
+        if not self.isCreateEntryAllowed():
+            raise Unauthorized("No create access to directory")
+
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
+        raise NotImplementedError
+
+    security.declarePublic('hasEntry')
+    def hasEntry(self, id):
+        """Does the directory have a given entry?"""
         raise NotImplementedError
 
     security.declarePublic('createEntry')
@@ -222,6 +251,60 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             ok = 1
         rendered = self._renderLayout(layout_structure, ds,
                                       layout_mode=layout_mode, ok=ok, **kw)
+
+        return rendered, ok, ds
+
+
+    security.declarePublic('renderCreateEntryDetailed')
+    def renderCreateEntryDetailed(self, request=None, validate=1,
+                                  layout_mode='create',
+                                  created_callback=None, **kw):
+        """Render an entry for creation, maybe create it.
+
+        Returns (rendered, ok, datastructure):
+        - rendered is the rendered HTML,
+        - ok is the result of the validation,
+        - datastructure is the resulting datastructure.
+        """
+        dm = self._getDataModel(None)
+        ds = DataStructure(datamodel=dm)
+        layout = self._getLayout(self.layout)
+        layout.prepareLayoutWidgets(ds)
+        if request is not None:
+            ds.updateFromMapping(request.form)
+        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
+        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        if validate:
+            ok = layout.validateLayoutStructure(layout_structure, ds,
+                                                layout_mode=layout_mode, **kw)
+        else:
+            ok = 1
+
+        if validate and ok:
+            # Check new entry id does not already exist
+            # XXX should be done by field/schema... XXX
+            id = dm.data[self.id_field]
+            if self.hasEntry(id):
+                ok = 0
+                widget_id = 'widget__'+self.id_field # XXX hack!
+                ds.setError(widget_id, 'cpsdirectory_err_entry_already_exists')
+
+        if not validate or not ok:
+            rendered = self._renderLayout(layout_structure, ds,
+                                          layout_mode=layout_mode, ok=ok, **kw)
+        else:
+            # Creation...
+            # Compute new id.
+            id = dm.data[self.id_field]
+            # XXX create
+            entry = dm.data.copy()
+            self.createEntry(entry)
+            # Redirect/render
+            created_func = getattr(self, created_callback, None)
+            if created_func is None:
+                raise ValueError("Unknown created_callback %s" %
+                                 created_callback)
+            rendered = created_func(ds) or ''
 
         return rendered, ok, ds
 

@@ -177,6 +177,31 @@ class MembersDirectory(BaseDirectory):
         """
         return self._searchMemberData(kw)
 
+    security.declarePublic('hasEntry')
+    def hasEntry(self, id):
+        """Does the directory have a given entry?"""
+        # XXX check security?
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        aclu = portal.acl_users
+        return id in aclu.getUserNames()
+
+    security.declarePublic('createEntry')
+    def createEntry(self, entry):
+        """Create an entry in the directory.
+        """
+        self.checkCreateAllowed()
+        id = entry[self.id_field]
+        mtool = getToolByName(self, 'portal_membership')
+        password = '38fnvas7ds'
+        roles = ()
+        domains = []
+        # XXX this should check that the member doesn't already exist
+        mtool.addMember(id, password, roles, domains)
+        member = mtool.getMemberById(id)
+        if member is None or not hasattr(aq_base(member), 'getMemberId'):
+            raise ValueError("Cannot add member '%s'" % id)
+        self.writeEntry(entry)
+
 InitializeClass(MembersDirectory)
 
 
@@ -190,7 +215,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
     def __init__(self, schema, id, dir):
         """Create an Adapter for a schema.
 
-        The id passed is the member id.
+        The id passed is the member id. It may be None for creation.
         """
         self._id = id
         self._dir = dir
@@ -210,6 +235,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
         if hasattr(aq_base(aclu), 'manage_editUserPassword'):
             # LDAPUserFolder
             # XXX find dn
+            return
             raise NotImplementedError
             dn = None
             aclu.manage_editUserPassword(dn, password)
@@ -228,6 +254,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
         if hasattr(aq_base(aclu), 'manage_editUserRoles'):
             # LDAPUserFolder
             # XXX find dn
+            return
             raise NotImplementedError
             aclu.manage_editUserRoles(dn, role_dns)
         else:
@@ -244,9 +271,10 @@ class MemberStorageAdapter(BaseStorageAdapter):
 
     def _setMemberGroups(self, member, groups):
         aclu = self._dir.acl_users # XXX
-        if hasattr(aq_base(aclu), 'manage_editUserGroupsXXXXXX'):
+        if hasattr(aq_base(aclu), 'manage_editUserGroups'):
             # LDAPUserFolder
             # XXX find dn
+            return
             raise NotImplementedError
         else:
             user = member.getUser()
@@ -259,6 +287,9 @@ class MemberStorageAdapter(BaseStorageAdapter):
         Fills default value from the field if the object has no attribute.
         """
         id = self._id
+        if id is None:
+            # Creation.
+            return self.getDefaultData()
         dir = self._dir
         member = self._getMember()
         data = {}

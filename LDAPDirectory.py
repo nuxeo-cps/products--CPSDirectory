@@ -188,7 +188,6 @@ class LDAPDirectory(BaseDirectory):
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter
-        LOG('searchEntries', DEBUG, 'filter %s' % filter)
         return self._searchEntries(filter=filter)
 
     #
