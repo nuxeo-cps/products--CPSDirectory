@@ -11,6 +11,8 @@ New features:
 - New navigation using action
 - Valid breadcrumbs
 - improve Members layout
+- Implemented getting and setting properties on the member when the user
+  folder supports it.
 Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
