@@ -458,7 +458,8 @@ class LDAPDirectory(BaseDirectory):
             attrs = list(return_attrs)
             if id_attr not in return_attrs:
                 attrs.append(id_attr)
-        LOG('_searchEntries', DEBUG, 'filter=%s attrs=%s' % (filter, attrs))
+        LOG('_searchEntries', DEBUG, 'base=%s scope=%s filter=%s attrs=%s' %
+            (self.ldap_base, self.ldap_scope_c, filter, attrs))
         res = self._delegate.search(base=to_utf8(self.ldap_base),
                                     scope=self.ldap_scope_c,
                                     filter=filter,
