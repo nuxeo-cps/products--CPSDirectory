@@ -8,7 +8,8 @@ New features:
 
 Bug fixes:
 ~~~~~~~~~~
-- Correctly do field processing for computed fields in the Members directory.
+- Correctly do field processing for computed fields in MembersDirectory,
+  RolesDirectory and GroupsDirectory. Was already correct in LDAP.
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~

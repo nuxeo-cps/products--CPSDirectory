@@ -191,26 +191,25 @@ class RoleStorageAdapter(BaseStorageAdapter):
         if role is None:
             # Creation.
             return self.getDefaultData()
-        dir = self._dir
-        members = self._getRoleMembers(role)
-        data = {}
-        for fieldid, field in self._schema.items():
-            if fieldid == dir.id_field:
-                value = role
-            elif fieldid == dir.members_field:
-                value = members
-            else:
-                raise ValueError("Invalid field %s for roles" % fieldid)
-            data[fieldid] = value
-        return data
+        return self._getData()
 
-    def setData(self, data):
-        """Set data to the entry, from a mapping."""
-        role = self._role
+    def _getFieldData(self, field_id, field):
+        """Get data from one field."""
         dir = self._dir
-        for fieldid, field in self._schema.items():
-            value = data[fieldid]
-            if fieldid == dir.members_field:
-                self._setRoleMembers(role, value)
+        role = self._role
+        if field_id == dir.id_field:
+            value = role
+        elif field_id == dir.members_field:
+            value = self._getRoleMembers(role)
+        else:
+            raise ValueError("Invalid field %s for roles" % field_id)
+        return value
+
+    def _setFieldData(self, field_id, field, value):
+        """Set data for one field."""
+        dir = self._dir
+        role = self._role
+        if field_id == dir.members_field:
+            self._setRoleMembers(role, value)
 
 InitializeClass(RoleStorageAdapter)

@@ -219,31 +219,29 @@ class GroupStorageAdapter(BaseStorageAdapter):
         if group is None:
             # Creation.
             return self.getDefaultData()
-        dir = self._dir
-        members = self._getGroupMembers(group)
-        subgroups = self._getGroupSubGroups(group)
-        data = {}
-        for fieldid, field in self._schema.items():
-            if fieldid == dir.id_field:
-                value = group
-            elif fieldid == dir.members_field:
-                value = members
-            elif fieldid == dir.subgroups_field:
-                value = subgroups
-            else:
-                raise ValueError("Invalid field %s for groups" % fieldid)
-            data[fieldid] = value
-        return data
+        return self._getData()
 
-    def setData(self, data):
-        """Set data to the entry, from a mapping."""
-        group = self._group
+    def _getFieldData(self, field_id, field):
+        """Get data from one field."""
         dir = self._dir
-        for fieldid, field in self._schema.items():
-            value = data[fieldid]
-            if fieldid == dir.members_field:
-                self._setGroupMembers(group, value)
-            elif fieldid == dir.subgroups_field:
-                self._setGroupSubGroups(group, value)
+        group = self._group
+        if field_id == dir.id_field:
+            value = group
+        elif field_id == dir.members_field:
+            value = self._getGroupMembers(group)
+        elif field_id == dir.subgroups_field:
+            value = self._getGroupSubGroups(group)
+        else:
+            raise ValueError("Invalid field %s for groups" % field_id)
+        return value
+
+    def _setFieldData(self, field_id, field, value):
+        """Set data for one field."""
+        dir = self._dir
+        group = self._group
+        if field_id == dir.members_field:
+            self._setGroupMembers(group, value)
+        elif field_id == dir.subgroups_field:
+            self._setGroupSubGroups(group, value)
 
 InitializeClass(GroupStorageAdapter)
