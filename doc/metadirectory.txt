@@ -25,22 +25,53 @@ Features
 Multiple backing directories for one entry
 ------------------------------------------
 
-An entry of a meta-directory can be built from the corresponding entries
-of several other directories, called the backing directories.
+An entry of a meta-directory is built from the corresponding entries of
+several other directories, called the backing directories.
 
 For each backing directory, the following must be specified:
 
-- how the id of the meta-directory is converted into the id of the
-  backing directory,
+- what fields from the backing directory are be ignored,
 
-- what fields from the backing directory are used,
+- what fields from the backing directory are renamed,
 
-- what fields are renamed from the backing directory.
+- what entry is used if it is missing from the backing directory.
+
+Ignoring a field is useful if the backing directory's schema contains
+too much information and some of it has to be ignored when constructing
+the meta-directory.
+
+Renaming means that the same field can be present in the meta-directory
+than in the backing directory but under a different name. A field cannot
+be renamed several times, there must be a one-to-one mapping (bijection)
+of field names between the backing directory and the meta-directory.
+
+The notion of missing entries is used when an entry is assembled from
+several backing directories, but may be missing in some of them. Without
+missing entries, all backing directories must contain information about
+exactly the same entries. Missing entries allow some backing directories
+(but not all) to have a default available when the entry is missing in
+them.
+
+A typical use case for missing entries is that of an LDAP backing
+directory containing all authoritative entries, and a ZODB directory
+containing additional information like 'last_login_time'. This ZODB
+directory cannot be kept in sync with LDAP because LDAP is an external
+source, so it's not possible to have exactly the same entries in both
+backing directories at all times. Specifiying an empty missing entry
+('python:{}') for the ZODB directory will allow the meta-directory to
+function, and generate an adequate default. When writing, though, the
+entry will be fully written in all backing directories, and further
+reads will retrieve those values.
+
+There is also an important constraint to all the backing directories:
+they must have the same id field than the meta-directory
+(StackingDirectory is a directory that can do id conversion from the
+backing directory, use that one if you need it).
 
 Cross-references
 ----------------
 
-(not implemented)
+(NOT IMPLEMENTED)
 
 Some fields of the meta-directory that are lists can be computed as
 cross-references to other directories. When these fields read, they are
