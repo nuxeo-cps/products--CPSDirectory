@@ -10,13 +10,16 @@
   tal:attributes="action formaction">
 <input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
 <input type="hidden" name="id" value="." tal:attributes="value request/id|nothing">
-<table cellpadding="2" cellspacing="2" border="0">
+<table cellpadding="2" cellspacing="2" border="0"
+  tal:define="global has_edits nothing">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
     <tal:block define="widget cell/widget;
                        wid widget/getWidgetId;
                        err python: ds.getError(wid);
-                       is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
+                       is_edit python: cell['widget_mode'] == 'edit';
+                       is_required python: is_edit and widget.is_required;
+                       global has_edits python: has_edits or is_edit;
                        ">
       <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
         <div class="label" tal:condition="widget/label_edit"
@@ -45,10 +48,12 @@
     </tal:block>
   </tr>
 </table>
+<tal:block condition="has_edits">
 <input type="submit" class="standalone" name="cpsdirectory_edit_button"
   value="button_change" i18n:attributes="value" tal:condition="not:creation">
 <input type="submit" class="standalone" name="cpsdirectory_create_button"
   value="button_create" i18n:attributes="value" tal:condition="creation">
+</tal:block>
 </form>
 </tal:block>
 </metal:block>
