@@ -1,8 +1,8 @@
-##parameters=
+##parameters=loadcustom=1
+#$Id$
 """
 Get the schemas used for the directories.
 """
-#$Id$
 
 #########################################################
 # members
@@ -171,7 +171,8 @@ schemas = {
     'groups': groups_schema,
     }
 
-cschemas = context.getCustomDirectorySchemas()
-schemas.update(cschemas)
+if loadcustom:
+    cschemas = context.getCustomDirectorySchemas()
+    schemas.update(cschemas)
 
 return schemas
