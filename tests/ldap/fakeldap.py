@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- encoding: iso-8859-1 -*-
+# -*- encoding: iso-8859-15 -*-
 # Author: Tarek Ziadé <tz@nuxeo.com>
 #
 #  split_tokens and extract_tokens are taken from python-ldap :
