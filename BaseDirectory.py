@@ -290,14 +290,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         if not self.isEditEntryAllowed(id=id, entry=entry):
             raise Unauthorized("No edit access to entry '%s'" % id)
 
-    security.declarePublic('checkCreateEntryAllowed')
+    security.declarePublic('checkSearchEntriesAllowed')
     def checkSearchEntriesAllowed(self):
-        """Check that the user can search entries
-            by checking if he can view entries
+        """Check that the user can search entries.
+
+        Actually checks if the user can view entries.
         Raises Unauthorized if not.
         """
         if not self.isViewEntryAllowed():
-            raise Unauthorized("No search access into this directory")
+            raise Unauthorized("No search access to directory")
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
