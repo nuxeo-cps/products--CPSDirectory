@@ -102,13 +102,17 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
          'label': 'Entry type'},
         {'id': 'skin_name', 'type': 'string', 'mode': 'w',
          'label': 'Skin name'},
-        # include_root
+        {'id': 'popup_mode', 'type': 'selection', 'mode': 'w',
+         'select_variable': 'all_popup_modes',
+         'label': 'browse or search'},
         )
     all_entry_types = ['id', 'dn']
+    all_popup_modes = ['browse', 'search']
 
     directory = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
+    popup_mode = all_popup_modes[0]
 
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
