@@ -47,6 +47,7 @@ from ZODBDirectory import ZODBDirectory
 from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
+from LocalDirectory import LocalDirectory
 
 if has_ldap:
     from LDAPDirectory import LDAPDirectory
@@ -85,6 +86,7 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
+    DirectoryTypeRegistry.register(LocalDirectory)
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
