@@ -29,6 +29,31 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
+import re
+
+def match_pattern(pattern, value):
+    """Tells whether value matches pattern.
+
+    Returns 1 pattern is a substring of value, considering that the '*'
+    character matches any character string.
+    '*' is the only special character accpeted.
+    """
+    pattern = pattern.lower()
+    value = value.lower()
+    if pattern.find('*') != -1:
+        re_pattern = re.compile(pattern.replace('*', '.*'), re.DOTALL)
+        if re_pattern.search(value) is None:
+            res = 0
+        else:
+            res = 1
+    else:
+        if value.find(pattern) != -1:
+            res = 1
+        else:
+            res = 0
+    return res
+
+
 class IndirectDirectory(BaseDirectory):
     """A Directory that just stores ids of entries of other directories.
     """
@@ -143,64 +168,77 @@ class IndirectDirectory(BaseDirectory):
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
-        """Search for entries in the directory.
+        """Search for entries in the indirect directory.
+
+        Return entries matching the following criteria:
+        - a reference towards the entry is kept in the indirect directory
+        - the entry matches the search criteria as if the search was made
+          within the directory that actually stores it.
         """
         res = []
         for directory_id in self.directory_ids:
             directory = self._getDirectory(directory_id)
-            real_entries = directory.searchEntries(return_fields, **kw)
-            # filter entries returned from the search on the
-            # real directory
-            if return_fields is None:
-                # If there are no return_fields, you get:
-                # ['id1', 'id2', etc.]
-                entries = [self._makeId(directory_id, x) for x in real_entries]
-                new_entries = []
-                for id in entries:
-                    if id in self.object_ids:
-                        new_entries.append(id)
-                entries = new_entries
+            id_field = directory.id_field
+            indirect_ids = [self._getEntryIdForId(x) for x in self.object_ids
+                            if self._getDirectoryIdForId(x) == directory_id]
+            # add kw to the search made on directory so that only
+            # objects already in indirect are searched
+            new_kw = kw.copy()
+            kw_id = kw.get(id_field, '')
+            if kw_id:
+                indirect_ids = [x for x in indirect_ids if match_pattern(kw_id, x)]
+            if not indirect_ids:
+                entries = []
             else:
-                # If there is a return_fields parameter, you get:
-                # [('id1', {'field1': value1, 'field2': value2}),
-                #  ('id2', {'field1': value3, 'field2': value4}),
-                #   etc.
-                #  ]
-                # return_fields being in this example ('field1', 'field2')
-                entries = [(self._makeId(directory_id, x[0]), x[1]) for x in real_entries]
-                new_entries = []
-                for entry in entries:
-                    if entry[0] in self.object_ids:
-                        new_entries.append(entry)
-                entries = new_entries
+                new_kw[id_field] = indirect_ids
+                real_entries = directory.searchEntries(return_fields, **new_kw)
+                entries = self.formatSearchResults(return_fields,
+                                                   directory_id,
+                                                   real_entries)
             res.extend(entries)
         return res
 
     security.declarePublic('searchPossibleEntries')
     def searchPossibleEntries(self, return_fields=None, **kw):
         """Search for possible entries in the directories.
+
+        Return entries matching the search criteria, whether a reference
+        towards each entry is kept in the indirect directory or not. This
+        method is useful when creating new entries in the indirect directory.
         """
         res = []
         for directory_id in self.directory_ids:
             directory = self._getDirectory(directory_id)
             real_entries = directory.searchEntries(return_fields, **kw)
-            # filter entries returned from the search on the
-            # real directory
-            if return_fields is None:
-                # If there are no return_fields, you get:
-                # ['id1', 'id2', etc.]
-                entries = [self._makeId(directory_id, x) for x in real_entries]
-            else:
-                # If there is a return_fields parameter, you get:
-                # [('id1', {'field1': value1, 'field2': value2}),
-                #  ('id2', {'field1': value3, 'field2': value4}),
-                #   etc.
-                #  ]
-                # return_fields being in this example ('field1', 'field2')
-                entries = [(self._makeId(directory_id, x[0]), x[1]) for x in real_entries]
+            # do not filter entries returned from the search on the real
+            # directory
+            entries = self.formatSearchResults(return_fields,
+                                               directory_id,
+                                               real_entries)
             res.extend(entries)
         return res
 
+    security.declarePublic('getSearchResults')
+    def formatSearchResults(self, return_fields, directory_id, results):
+        """ Format search results according.
+
+        Search results are formatted according to the return_fields parameter,
+        and identifiers are changed according to the format used in indirect
+        directories.
+        """
+        if return_fields is None:
+            # If there are no return_fields, you get:
+            # ['id1', 'id2', etc.]
+            res = [self._makeId(directory_id, x) for x in results]
+        else:
+            # If there is a return_fields parameter, you get:
+            # [('id1', {'field1': value1, 'field2': value2}),
+            #  ('id2', {'field1': value3, 'field2': value4}),
+            #   etc.
+            #  ]
+            # return_fields being in this example ('field1', 'field2')
+            res = [(self._makeId(directory_id, x[0]), x[1]) for x in results]
+        return res
 
     #
     # Internal
