@@ -59,6 +59,7 @@ else:
             error=error)
 
 from DirectoryVocabulary import DirectoryVocabulary
+from DirectoryEntryVocabulary import DirectoryEntryVocabulary
 if has_ldap:
     from LDAPDirectoryVocabulary import LDAPDirectoryVocabulary
 else:
@@ -85,6 +86,7 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(GroupsDirectory)
     DirectoryTypeRegistry.register(LocalDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
+    VocabularyTypeRegistry.register(DirectoryEntryVocabulary)
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPDirectory)
         VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)
