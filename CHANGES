@@ -6,6 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
+- fix: when creating an entry with an already exising id you have a generic 
+  psm without any explanantion
 - fix: dapdirectory deleting non leaf entry raise cps error
   now it display a warning psm
 New internal features:
