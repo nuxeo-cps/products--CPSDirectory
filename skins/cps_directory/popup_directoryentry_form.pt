@@ -1,5 +1,10 @@
 <tal:block define="emptybody python:1">
 <metal:block use-macro="here/main_template/macros/master">
+<metal:block fill-slot="head_slot">
+
+
+</metal:block>
+
 <metal:block fill-slot="body"
   tal:define="root_uid request/root_uid;
               res python:here.getNavigation(finder='ldap',
@@ -8,29 +13,59 @@
 <div style="float:right">
 <button onclick="window.close()">Fermer</button>
 </div>
-  <metal:block use-macro="here/navigation_lib/macros/multi_select_navigation">
+  <metal:block use-macro="here/navigation_lib/macros/select_navigation">
     <metal:block fill-slot="action">
-
  <script type="text/javascript"
   tal:content='structure string:
   <!--
+function getSelectedRadio(buttonGroup) {
+   if (buttonGroup[0]) {
+      for (var i=0; i<buttonGroup.length; i++) {
+         if (buttonGroup[i].checked) {
+            return i
+         }
+      }
+   } else {
+      if (buttonGroup.checked) { return 0; }
+   }
+   return -1;
+}
+
+function getSelectedRadioValue(buttonGroup) {
+   var i = getSelectedRadio(buttonGroup);
+   if (i == -1) {
+      return "";
+   } else {
+      if (buttonGroup[i]) {
+         return buttonGroup[i].value;
+      } else {
+         return buttonGroup.value;
+      }
+   }
+}
+
+function getSelectedRadioTitle(buttonGroup) {
+   var i = getSelectedRadio(buttonGroup);
+   if (i == -1) {
+      return "";
+   } else {
+      if (buttonGroup[i]) {
+         return buttonGroup[i].id;
+      } else {
+         return buttonGroup.id;
+      }
+   }
+}
+
+
 function updateParent() {
-  html = document.getElementById("divselection").innerHTML;
+  value = getSelectedRadioValue(document.forms[0].uid)
+  title = getSelectedRadioTitle(document.forms[0].uid)
   parentinput = opener.document.getElementById("$input_id");
-  parentinput.innerHTML = html;
-  self.close();
+  parentinput.innerHTML = "<input type=\"hidden\" name=\"${input_id}\" value=\"" + value + "\">" + title
+ self.close();
 }
   -->' />
-  <div id="divselection" style="display:none">
-  <tal:block repeat="item selection">
-    <div>
-      <input type="hidden"
-        tal:attributes="name input_id;value item/uid;">
-      <span tal:content="item/title" />
-    </div>
-  </tal:block>
-  </div>
-
    <input type="submit" class="standalone" value="button_update"
     onclick="updateParent();" i18n:attributes="value">
     </metal:block>
@@ -38,7 +73,3 @@ function updateParent() {
 </metal:block>
 </metal:block>
 </tal:block>
-
-
-
-
