@@ -11,3 +11,4 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Precompute objectClass search filter, use it for all searches.
 - Treat ldap.UNWILLING_TO_PERFORM (happens when password is empty).
+- Small refactoring to simplify getting of search adapters.
