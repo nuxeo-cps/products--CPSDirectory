@@ -39,9 +39,8 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.Field import ValidationError
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
-
-
-_marker = []
+from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
+from Products.CPSDirectory.BaseDirectory import _replaceProperty
 
 
 #
@@ -93,17 +92,6 @@ def implodeRDN(avas):
     return '+'.join(avas)
 
 
-
-def _makePropsIdFieldReadOnly(props):
-    res = []
-    for d in props:
-        if d['id'] == 'id_field':
-            d = d.copy()
-            d['mode'] = ''
-        res.append(d)
-    return tuple(res)
-
-
 class LDAPBackingDirectory(BaseDirectory):
     """LDAP Backing Directory.
 
@@ -124,6 +112,11 @@ class LDAPBackingDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
+        {'id': 'password_field', 'type': 'string', 'mode': 'w',
+         'label': "Field for password (if authentication)"},
+        {'id': 'password_encryption', 'type': 'selection', 'mode': 'w',
+         'label': "Password encryption",
+         'select_variable': 'all_password_encryptions'},
         {'id': 'ldap_server', 'type': 'string', 'mode': 'w',
          'label': 'LDAP server'},
         {'id': 'ldap_port', 'type': 'int', 'mode': 'w',
@@ -145,11 +138,16 @@ class LDAPBackingDirectory(BaseDirectory):
         {'id': 'ldap_object_classes', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes (create)'},
         )
-    _properties = _makePropsIdFieldReadOnly(_properties)
+    _properties = _replaceProperty(
+        _properties, 'id_field',
+        {'id': 'id_field', 'type': 'string', 'mode': '', # read-only
+         'label': 'Field for entry id'})
 
     id_field = 'dn'
     title_field = 'cn'
 
+    password_field = ''
+    password_encryption = 'none'
     ldap_server = ''
     ldap_port = 389
     ldap_use_ssl = 0
@@ -165,6 +163,7 @@ class LDAPBackingDirectory(BaseDirectory):
     ldap_search_classes_c = ['person']
     ldap_object_classes_c = ['top', 'person']
 
+    all_password_encryptions = ('none',)
     all_ldap_scopes = ('ONELEVEL', 'SUBTREE')
 
     _v_conn = None
@@ -268,13 +267,25 @@ class LDAPBackingDirectory(BaseDirectory):
             return 0
         return self.existsLDAP(id)
 
+    security.declarePublic('isAuthenticating')
+    def isAuthenticating(self):
+        """Check if this directory does authentication.
+
+        Returns a boolean.
+
+        Asks the backing directories, all of them must be authenticating.
+        """
+        return not not self.password_field
+
     security.declarePrivate('getEntryAuthenticated')
-    def getEntryAuthenticated(self, id, password):
-        """Get and authenticate an entry."""
-        try:
-            return self._getEntryKW(id, password=password)
-        except KeyError:
-            return None
+    def getEntryAuthenticated(self, id, password, **kw):
+        """Get and authenticate an entry.
+
+        Returns the entry if authenticated.
+        Raises KeyError if the entry doesn't exist.
+        Raises AuthenticationFailed if authentication failed.
+        """
+        return self._getEntryKW(id, password=password, **kw)
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
@@ -318,8 +329,18 @@ class LDAPBackingDirectory(BaseDirectory):
 
         Returns converted values.
         """
-        results = self.searchLDAP(id, ldap.SCOPE_BASE, '(objectClass=*)',
-                                  field_ids, password=password)
+        try:
+            results = self.searchLDAP(id, ldap.SCOPE_BASE, '(objectClass=*)',
+                                      field_ids, password=password)
+        except ldap.INVALID_CREDENTIALS:
+            if password is None:
+                LOG('_getEntryFromLDAP', ERROR,
+                    "Invalid credentials for directory %s" % self.getId())
+                raise ldap.INVALID_CREDENTIALS
+            else:
+                LOG('_getEntryFromLDAP', TRACE,
+                    "Invalid credentials for %s" % id)
+                raise AuthenticationFailed
         if not results:
             raise KeyError("No entry '%s'" % id)
         dn, ldap_entry = results[0]
@@ -568,9 +589,6 @@ class LDAPBackingDirectory(BaseDirectory):
                     # Avoid doing an LDAP request if we know we'll fail.
                     raise ldap.INVALID_DN_SYNTAX
                 conn = self.connectLDAP(base, password)
-            except ldap.INVALID_CREDENTIALS:
-                LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
-                return []
             except ldap.INVALID_DN_SYNTAX:
                 LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
                 return []
@@ -579,7 +597,6 @@ class LDAPBackingDirectory(BaseDirectory):
             (base, scope, filter, attrs))
         ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
         LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
-        #except ldap.INVALID_CREDENTIALS:
         #except ldap.NO_SUCH_OBJECT:
         #except ldap.SIZELIMIT_EXCEEDED:
         return ldap_entries
@@ -588,24 +605,18 @@ class LDAPBackingDirectory(BaseDirectory):
     def deleteLDAP(self, dn):
         """Delete an entry from LDAP."""
         # maybe check read_only
-        try:
-            conn = self.connectLDAP()
-            LOG('deleteLDAP', TRACE, "delete_s dn=%s" % dn)
-            conn.delete_s(dn)
-        except ldap.INVALID_CREDENTIALS:
-            raise
+        conn = self.connectLDAP()
+        LOG('deleteLDAP', TRACE, "delete_s dn=%s" % dn)
+        conn.delete_s(dn)
 
     security.declarePrivate('insertLDAP')
     def insertLDAP(self, dn, ldap_attrs):
         """Insert a new entry in LDAP."""
         # maybe check read_only
         attrs_list = [(k, v) for k, v in ldap_attrs.items()]
-        try:
-            conn = self.connectLDAP()
-            LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
-            conn.add_s(dn, attrs_list)
-        except ldap.INVALID_CREDENTIALS:
-            raise
+        conn = self.connectLDAP()
+        LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
+        conn.add_s(dn, attrs_list)
 
     security.declarePrivate('modifyLDAP')
     def modifyLDAP(self, dn, ldap_attrs):
