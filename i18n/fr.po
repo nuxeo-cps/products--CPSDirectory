@@ -19,7 +19,7 @@ msgid "button_edit"
 msgstr "Éditer"
 
 msgid "button_create_entry"
-msgstr "Créer une noveau entrée"
+msgstr "Créer une nouvelle entrée"
 
 msgid "label_create_entry"
 msgstr "Créer une entrée"
