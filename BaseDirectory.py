@@ -478,6 +478,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _getAdditionalRoles(self, id):
         """Get additional user roles provided to ACLs.
 
+        The default implementation returns no additional roles.
+
         XXX merge this into the Entry Local Roles concept...
         """
         return ()
