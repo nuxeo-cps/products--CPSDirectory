@@ -340,7 +340,7 @@ class LDAPDirectory(BaseDirectory):
             raise ValueError("Missing value for '%s' in entry" %
                              self.ldap_rdn_attr)
         id = entry[self.id_field]
-        if self.hasEntry(id):
+        if id and self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
         rdn_attr = self.ldap_rdn_attr
         rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])
@@ -362,6 +362,10 @@ class LDAPDirectory(BaseDirectory):
                                     attrs=attrs)
         if msg:
             raise ValueError("LDAP error: %s" % msg)
+
+        if not id and self.id_field == 'dn':
+            id = rdn + ',' + base
+            return id
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
