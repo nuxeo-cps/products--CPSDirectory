@@ -122,11 +122,11 @@ msgstr "Delete entry"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"A private area give you access to:<br />"
+"A private area gives you access to:<br />"
 "- a private workspace<br />"
 "- a personal calendar<br />"
 "- a favorites bookmark<br />"
-"- close/minimize boxes<br />"
+"- the ability to close/minimize boxes<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Enable private area"
