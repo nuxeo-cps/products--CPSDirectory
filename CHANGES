@@ -10,4 +10,4 @@ Bug fixes:
 - Fix ZODBDirectory with computed title attribute
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- New Search tab on the directories.
