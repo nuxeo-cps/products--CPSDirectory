@@ -23,7 +23,7 @@ global_roles_vocabulary = {
     'data': {
         'tuples': (
             ('Member', "Member", 'label_roles_Member'),
-            ('Manager', "Manager", 'labael_roles_Manager'),
+            ('Manager', "Manager", 'label_roles_Manager'),
             )
         },
     }
