@@ -167,6 +167,7 @@ groups_schema = {
 
 schemas = {
     'members': members_schema,
+    'members_search': members_search_schema,
     'roles': roles_schema,
     'groups': groups_schema,
     }
