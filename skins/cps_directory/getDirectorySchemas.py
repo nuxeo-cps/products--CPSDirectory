@@ -63,6 +63,7 @@ members_schema = {
                 'acl_write_roles_str': 'Nobody',
                 'read_ignore_storage': 1,
                 'read_process_expression_str': 'python: givenName+" "+sn',
+                'read_process_dependent_fields': ['givenName', 'sn'],
                 'write_ignore_storage': 1,
             },
         },
