@@ -208,7 +208,7 @@ class LDAPBackingDirectory(BaseDirectory):
         if classes:
             filt = ''.join(['(objectClass=%s)' % c for c in classes])
             if len(classes) > 1:
-                filt = '(|%s)' % res
+                filt = '(|%s)' % filt
         else:
             filt = '(objectClass=*)'
         self.ldap_search_classes_filter = filt
