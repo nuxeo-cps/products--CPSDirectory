@@ -75,7 +75,7 @@ def importDirectoryTool(context):
         dir = tool.manage_addCPSDirectory(dir_id, dir_info['kind'])
         for prop_info in dir_info['properties']:
             dconf.initProperty(dir, prop_info)
-            dir._postProcessProperties()
+        dir._postProcessProperties()
         for elr in dir_info['entry-local-roles']:
             res = dir.addEntryLocalRole(elr['role'], elr['expr'])
             if res:
