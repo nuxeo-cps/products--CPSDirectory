@@ -25,7 +25,7 @@
         <tal:block repeat="dirname directories">
           <tal:block define="dir dirtool/?dirname">
           <dt>
-            <img tal:replace="structure python:here.getImgTag('UserFolder_icon.gif', base_url=base_url)">
+            <img tal:replace="structure python:here.getImgTag('UserFolder_icon.png', base_url=base_url)">
             <a href=""  i18n:translate=""
                tal:attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}"
                tal:content="dir/title_or_id">

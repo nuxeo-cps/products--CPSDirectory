@@ -92,7 +92,7 @@ def initialize(registrar):
         'CPS Directory Tool',
         tools = tools,
         product_name = 'CPSDirectory',
-        icon = 'tool.gif',
+        icon = 'tool.png',
         ).initialize(registrar)
     DirectoryTypeRegistry.register(ZODBDirectory)
     DirectoryTypeRegistry.register(MembersDirectory)
