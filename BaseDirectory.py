@@ -354,7 +354,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         try:
             return self._getEntryKW(id)
-        except KeyError:
+        except (KeyError, ValueError):
             if default is not _marker:
                 return default
             else:
