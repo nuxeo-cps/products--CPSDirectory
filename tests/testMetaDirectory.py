@@ -218,6 +218,9 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(email='lame@at', return_fields=['foo'])
         self.assertEquals(res, [('AAA', {'foo': 'oof'})])
 
+        res = dir.searchEntries(foo='oof', return_fields=['id'])
+        self.assertEquals(res, [('AAA', {'id': 'AAA'})])
+
         # Not strictly defined but test it anyway
         res = dir.searchEntries(return_fields=['blort'])
         res.sort()
