@@ -79,7 +79,7 @@ class RolesDirectory(BaseDirectory):
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
         kwrole = kw.get(self.id_field)
-        if kwrole:
+        if kwrole is not None:
             if isinstance(kwrole, StringType):
                 if self.id_field in self.search_substring_fields:
                     kwrole = kwrole.lower()
@@ -89,12 +89,31 @@ class RolesDirectory(BaseDirectory):
                 raise ValueError("Bad value for %s: %s" %
                                  (self.id_field, kwrole))
         kwmembers = kw.get(self.members_field)
-        if isinstance(kwmembers, StringType):
-            kwmembers = [kwmembers]
-        user_roles = None # Lazily computed.
+        if kwmembers is not None:
+            if isinstance(kwmembers, StringType):
+                kwmembers = [kwmembers]
+            elif isinstance(kwmembers, ListType) or\
+                 isinstance(kwmembers, TupleType):
+                pass
+            else:
+                raise ValueError("Bad value for %s: %s" %
+                                 (self.members_field, kwmembers))
+            user_roles = []
+            # construct a list of roles covered by requested members
+            for username in kwmembers:
+                userroles = [r for r in aclu.getUser(username).getRoles()\
+                                     if r not in user_roles]
+                if userroles:
+                    user_roles.extend(userroles)
+
+        LOG('RolesDirectory.searchEntries', DEBUG,
+            "kwrole=%s, kwmembers=%s, return_fields=%s" %
+            (str(kwrole), str(kwmembers), str(return_fields)))
+
         roles = []
         for role in self.listEntryIds():
-            if kwrole:
+            # search for a subset of roles
+            if kwrole is not None:
                 if isinstance(kwrole, StringType):
                     if self.id_field in self.search_substring_fields:
                         if kwrole != '*' and \
@@ -106,23 +125,9 @@ class RolesDirectory(BaseDirectory):
                 else:
                     if role not in kwrole:
                         continue
-            if kwmembers:
-                if user_roles is None:
-                    # We'll have to search by users, build info on them.
-                    # XXX Optimize this using a new getRolesWithUsers() API.
-                    # XXX We cannot use getUsers because LDAPUserFolder and
-                    # PluggableUserFolder return only cached users.
-                    user_roles = {}
-                    for username in portal.acl_users.getUserNames():
-                        user = aclu.getUser(username)
-                        user_roles[username] = tuple(user.getRoles())
-                ok = 0
-                for username in kwmembers:
-                    if role in user_roles.get(username, []):
-                        ok = 1
-                        break
-                if not ok:
-                    continue
+            # at least one of the requested users has this role
+            if kwmembers is not None and role not in user_roles:
+                continue
             roles.append(role)
         if not return_fields:
             return roles
