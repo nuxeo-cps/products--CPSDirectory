@@ -9,6 +9,10 @@
   in this directory. Fields from the backing directory can be ignored or
   renamed.
 </p>
+<p class="form-help">
+  Note that all the backing directories must have the same id field as this Meta
+  Directory (&dtml-id_field;).
+</p>
 
 <dtml-in "getBackingDirectories(no_dir=1)" mapping>
 <form action="&dtml-URL1;" method="post">
