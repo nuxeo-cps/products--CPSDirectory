@@ -97,14 +97,18 @@ def searchUsers(self, query={}, props=None, options={}, **kw):
     """Search for users having certain properties.
 
     If props is None, returns a list of ids:
-      ['user1', 'user2']
+    ['user1', 'user2']
 
     If props is not None, it must be sequence of property ids. The
     method will return a list of tuples containing the user id and a
     dictionary of available properties:
       [('user1', {'email': 'foo', 'age': 75}), ('user2', {'age': 5})]
 
-    Options is used to specify the search type if possible. XXX
+    options is a dictionnary with keys:
+      - search_substring_props: the props where search has to be done
+        by substring.
+      - search_restricted_member_list : list of members on wich we want to
+        perform the research.  Just a matter of optimisation in here.
 
     Special properties are 'id', 'roles', 'groups'.
     """
@@ -115,11 +119,15 @@ def searchUsers(self, query={}, props=None, options={}, **kw):
     do_roles = query.has_key('roles')
     do_groups = query.has_key('groups')
     search_substring_props = options.get('search_substring_props', [])
+    search_restricted_member_list = options.get('search_restricted_member_list', [])
     search_types, query = _preprocessQuery(query, search_substring_props)
     res = []
     for user in self.getUsers():
         base_user = aq_base(user)
         id = user.getId()
+        if search_restricted_member_list != []:
+            if id not in search_restricted_member_list:
+                continue
         entry = {'id': id}
         if do_roles:
             roles = user.getRoles()
