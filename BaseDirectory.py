@@ -442,7 +442,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         Uses the directory as a rendering context.
         """
-        layout_mode = kw['layout_mode']
         layout = layout_structure['layout']
         # Render layout structure.
         layout.renderLayoutStructure(layout_structure, datastructure, **kw)
