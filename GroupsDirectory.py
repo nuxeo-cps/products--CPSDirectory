@@ -261,7 +261,7 @@ class GroupStorageAdapter(BaseStorageAdapter):
             raise ValueError("Invalid field %s for groups" % field_id)
         return value
 
-    def _setFieldData(self, field_id, field, value):
+    def _setFieldData(self, field_id, value):
         """Set data for one field."""
         dir = self._dir
         group = self._group

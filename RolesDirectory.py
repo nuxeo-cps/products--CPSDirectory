@@ -280,7 +280,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
             raise ValueError("Invalid field %s for roles" % field_id)
         return value
 
-    def _setFieldData(self, field_id, field, value):
+    def _setFieldData(self, field_id, value):
         """Set data for one field."""
         dir = self._dir
         role = self._role
