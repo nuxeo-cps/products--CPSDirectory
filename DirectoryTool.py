@@ -82,12 +82,11 @@ class DirectoryTool(UniqueObject, Folder):
              'action': 'manage_addForm_' + dt.replace(' ', ''),
              'permission': ManagePortal}
             for dt in DirectoryTypeRegistry.listTypes()]
-        #for info in Folder.all_meta_types(self):
-        #    name = info['name']
-        #    if (name == 'Z SQL Method'
-        #        or (name.startswith('Z ')
-        #            and name.endswith('Database Connection'))):
-        #        meta_types.append(info)
+        for info in Folder.all_meta_types(self):
+            name = info['name']
+            if (name.startswith('Z') and
+                name.endswith('Database Connection')):
+                meta_types.append(info)
         return meta_types
 
     security.declareProtected(ManagePortal, 'manage_addCPSDirectoryForm')

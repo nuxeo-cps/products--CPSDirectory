@@ -56,6 +56,7 @@ from GroupsDirectory import GroupsDirectory
 from LocalDirectory import LocalDirectory
 from MetaDirectory import MetaDirectory
 from StackingDirectory import StackingDirectory
+from SQLDirectory import SQLDirectory
 from IndirectDirectory import IndirectDirectory
 
 if has_ldap_delegate:
@@ -102,6 +103,7 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(LocalDirectory)
     DirectoryTypeRegistry.register(MetaDirectory)
     DirectoryTypeRegistry.register(StackingDirectory)
+    DirectoryTypeRegistry.register(SQLDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
     VocabularyTypeRegistry.register(DirectoryEntryVocabulary)
     if has_ldap_delegate:
