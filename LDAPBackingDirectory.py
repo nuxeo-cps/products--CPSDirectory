@@ -648,7 +648,7 @@ class LDAPBackingDirectory(BaseDirectory):
                 if ',' not in base:
                     # Avoid doing an LDAP request if we know we'll fail.
                     raise INVALID_DN_SYNTAX
-                conn = self.connectLDAP(base, password)
+                conn = self.connectLDAP(base, toUTF8(password))
             except INVALID_DN_SYNTAX:
                 LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
                 return []
