@@ -23,6 +23,7 @@ from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from ComputedAttribute import ComputedAttribute
 
 from Products.CMFCore.utils import getToolByName
@@ -137,7 +138,7 @@ class LocalDirectory(BaseDirectory):
         tool = getToolByName(self, 'portal_membership', None)
         folder = tool.getHomeFolder()
         if folder is None:
-            raise KeyError("Home folder could not be found. " \
+            raise Unauthorized("Home folder could not be found. " \
                 "Maybe you are not a member of this portal?")
         try:
             return folder._getOb(self.id)
@@ -270,6 +271,23 @@ class LocalDirectory(BaseDirectory):
     def _getAdditionalRoles(self, id):
         ob = self._getContent()
         return ob._getAdditionalRoles(id)
+
+    security.declarePublic('isVisible')
+    def isVisible(self):
+        """Check if the user can view the directory.
+
+        Uses the computed entry local roles and
+        checks first if the user has a home folder.
+
+        Returns a boolean.
+        """
+        tool = getToolByName(self, 'portal_membership', None)
+        folder = tool.getHomeFolder()
+        if folder is None:
+            return 0
+        else:
+            # directory exists
+            return BaseDirectory.isVisible(self)
 
 InitializeClass(LocalDirectory)
 
