@@ -9,6 +9,7 @@ New features:
 - Group and role creation work.
 - Display save button only if at least one widget is in edit mode.
 - Default schema/layout have first and last name.
+- LDAPDirectory allows entry modification.
 
 Bug fixes:
 ~~~~~~~~~~
