@@ -15,6 +15,6 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Renamed writeEntry to editEntry.
-- renaming properties that ending with '_str' and using '_c' for computed attribute
-  _expression_str -> _expr, _expression -> _expr_c
-  whatever_str -> whatever, whatever -> whatever_c
+- renaming properties '*_str' and used '*_c' for computed attribute
+  foo_expression_str -> foo_expr, foo_expression -> foo_expr_c
+  foo_str -> foo, foo -> foo_c
