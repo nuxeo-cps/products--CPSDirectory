@@ -18,6 +18,7 @@ members_directory = {
         'roles_field': 'roles',
         'groups_field': 'groups',
         'title_field': 'id',
+        'search_substring_fields': ['id', 'sn', 'givenName', 'email'],
         },
     }
 
@@ -33,6 +34,7 @@ roles_directory = {
         'role_field': 'role',
         'members_field': 'members',
         'title_field': 'role',
+        'search_substring_fields': ['role'],
         },
     }
 
@@ -48,6 +50,7 @@ groups_directory = {
         'group_field': 'group',
         'members_field': 'members',
         'title_field': 'group',
+        'search_substring_fields': ['groups'],
         },
     }
 
