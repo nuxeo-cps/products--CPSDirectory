@@ -1,4 +1,30 @@
 *******************************************
+** CPSDirectory V1.3.0 [R1 build 2003/12/23-15:18 by ben]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+- Re-enter all properties whose names used to be *_str.
+
+New features:
+~~~~~~~~~~~~~
+- Added isEditEntryAllowed to check for entry edit permission.
+- Added Entry Local Roles, a way for ACLs to get additional computed roles.
+- Added a 'base_dn' field to the LDAP directory that can be used during
+  creation to specify a subbranch.
+
+Bug fixes:
+~~~~~~~~~~
+- LDAPDirectory now converts date fields between the LDAP time strings
+  and DateTime objects.
+
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Renamed writeEntry to editEntry.
+- renaming properties '*_str' and used '*_c' for computed attribute
+  foo_expression_str -> foo_expr, foo_expression -> foo_expr_c
+  foo_str -> foo, foo -> foo_c
+
+*******************************************
 ** CPSDirectory V1.2.0 [R1 build 2003/12/10-18:17 by ben]
 
 ZODB Requires:
