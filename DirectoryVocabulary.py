@@ -99,8 +99,12 @@ class DirectoryVocabulary(SimpleItemWithProperties):
 
     security.declareProtected(View, 'getMsgid')
     def getMsgid(self, key, default=None):
-        # XXX dummy
-        return key+'msgid'
+        """ Create a default msgid for the key """
+        try:
+            label = self[key]
+        except (KeyError, AttributeError):
+            label = default
+        return "label_cpsdir_"+ self.id + "_" + label
 
     security.declareProtected(View, 'keys')
     def keys(self):
