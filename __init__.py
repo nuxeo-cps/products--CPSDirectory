@@ -31,7 +31,7 @@ from MembersDirectory import MembersDirectory
 tools = (DirectoryTool.DirectoryTool,
          )
 
-registerDirectory('skins/cps_directories', globals())
+registerDirectory('skins/cps_directory', globals())
 
 def initialize(registrar):
     ToolInit(
