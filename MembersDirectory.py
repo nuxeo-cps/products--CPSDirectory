@@ -33,6 +33,7 @@ from Products.CMFCore.utils import SimpleItemWithProperties
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import SearchSizeLimitExceeded
 
 
 _marker = []
@@ -129,10 +130,15 @@ class MembersDirectory(BaseDirectory):
                 kw[p] = kw[f]
                 del kw[f]
             # XXX should also convert search_substring_fields
-        res = mdtool.searchForMembers(kw, props=return_fields,
-                                      options={'search_substring_props':
-                                               self.search_substring_fields,
-                                               })
+        try:
+            res = mdtool.searchForMembers(kw, props=return_fields,
+                                          options={'search_substring_props':
+                                                   self.search_substring_fields,
+                                                   })
+        except ValueError, e:
+            if str(e) == 'Too many results for this query':
+                raise SearchSizeLimitExceeded(str(e))
+            raise
         # XXX if returning props, back-convert known names.
         return res
 

@@ -1,0 +1,3 @@
+<tal:block define="exception options/exception">
+  <p i18n:translate="description_too_many_results_refine_query"/>
+</tal:block>

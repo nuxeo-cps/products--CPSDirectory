@@ -28,6 +28,7 @@ from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
+from AccessControl import ModuleSecurityInfo
 from DateTime.DateTime import DateTime
 
 from Products.CMFCore.utils import getToolByName
@@ -51,6 +52,12 @@ _marker = []
 class AuthenticationFailed(Exception):
     """Raised when authentication fails."""
     pass
+
+
+class SearchSizeLimitExceeded(Exception):
+    """Raised when a search returns too many results."""
+    pass
+ModuleSecurityInfo('Products.CPSDirectory.BaseDirectory').declarePublic('SearchSizeLimitExceeded')
 
 
 class ConfigurationError(ValueError):

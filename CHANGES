@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Adding the handling SearchSizeLimitExceeded and now handling the case 
+  when a search returns too many results.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Don't raise RuntimeError but ValueError.

@@ -1,4 +1,7 @@
 ##parameters=dir, datastructure, **kw
+# $Id$
+
+from Products.CPSDirectory.BaseDirectory import SearchSizeLimitExceeded
 
 datamodel = datastructure.getDataModel()
 
@@ -26,7 +29,11 @@ for field in result_fields:
     if field.get('process'):
         process_fields[field['id']] = field['process']
 
-results = dir.searchEntries(return_fields=return_fields, **mapping)
+try:
+    results = dir.searchEntries(return_fields=return_fields, **mapping)
+except SearchSizeLimitExceeded:
+    rendered = dir.cpsdirectory_entry_search_errors(exception=SearchSizeLimitExceeded())
+    return rendered, 'results'
 
 for field, process_meth in process_fields.items():
     meth = getattr(context, process_meth, None)
