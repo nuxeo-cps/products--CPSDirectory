@@ -149,19 +149,15 @@ class StackingDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
+        
         self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
-        dir_id = self.creation_dir
-        if not dir_id:
-            raise ValueError("Creation not allowed (no backing directory)")
-        dtool = getToolByName(self, 'portal_directories')
-        try:
-            b_dir = getattr(dtool, dir_id)
-        except AttributeError:
-            raise ValueError("No backing directory '%s'" % dir_id)
-        b_dir.createEntry(entry)
+        
+        # XXX : adapter now does all the work        
+        adapter = self._getAdapters(id, creation=1)[0]                
+        adapter._setData(data=entry)  
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
@@ -335,7 +331,7 @@ class StackingStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from other backing directories.
     """
 
-    def __init__(self, schema, id, dir, password=None, **kw):
+    def __init__(self, schema, id, dir, password=None,creation=0, **kw):
         """Create an Adapter for a schema.
 
         The id passed is the member id. It may be None for creation.
@@ -343,6 +339,7 @@ class StackingStorageAdapter(BaseStorageAdapter):
         self._id = id
         self._dir = dir
         self._password = password
+        self._creation = creation
         BaseStorageAdapter.__init__(self, schema, **kw)
 
     def setContextObject(self, context):
@@ -369,14 +366,30 @@ class StackingStorageAdapter(BaseStorageAdapter):
 
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
+        
+        # TODO : this code should be placed in parent class
+        # and used by all StorageAdapter descendants        
         data = self._setDataDoProcess(data, **kw)
-
-        old_entry, b_dir = self._dir._getEntryFromBacking(self._id)
-
-        # XXX Note: if we attempt to change the backing id here, we get
-        # a KeyError. Unless an entry with the new backing id already exists,
-        # in which case, it would be overwritten...
-        # An explicit test would be better.
-        b_dir.editEntry(data)
+        
+        if not self._creation:        
+            # XXX Note: if we attempt to change the backing id here, we get
+            # a KeyError. Unless an entry with the new backing id already
+            # exists,
+            # in which case, it would be overwritten...
+            # An explicit test would be better.
+            old_entry, b_dir = self._dir._getEntryFromBacking(self._id)        
+            b_dir.editEntry(data)            
+        else:                    
+            dir_id = self._dir.creation_dir            
+            if not dir_id:
+                raise ValueError("Creation not allowed (no backing directory)")
+            
+            dtool = getToolByName(self._dir, 'portal_directories')
+            try:
+                b_dir = getattr(dtool, dir_id)
+            except AttributeError:
+                raise ValueError("No backing directory '%s'" % dir_id)
+            
+            b_dir.createEntry(data)
 
 InitializeClass(StackingStorageAdapter)
