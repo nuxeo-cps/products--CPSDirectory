@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.9.0 [R1 build 2004/03/08-14:01 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- Delete member and its member area when deleting from members directory.
+  Requires CPSMembershipTool >= 1.46.
+- use Identifiant widget for member, group and role Id
+Bug fixes:
+~~~~~~~~~~
+- Delete Entry action displayed for non authorized user
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- MultiEntries and Entry widget are compatible so we
+  can switch from one to another
+- Tighter ACL checks for creation and rendering.
+- Entry local roles are passed to the datamodel so can be used by field ACLs.
+- duplicate layout for search on members/groups/roles
+
+*******************************************
 ** CPSDirectory V1.8.0 [R1 build 2004/02/25-08:47 by ben]
 
 Requires:
