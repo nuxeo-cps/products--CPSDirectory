@@ -9,4 +9,5 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- MultiEntries and Entry widget are compatible so we
+  can switch from one to another
