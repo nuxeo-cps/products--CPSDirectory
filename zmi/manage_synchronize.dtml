@@ -1,0 +1,30 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Synchronize'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<h3>Synchronize</h3>
+
+<form action="manage_updateMemberDataFromSchema" method="post">
+<fieldset>
+  <legend>Update MemberData from schema</legend>
+
+  <p>You can synchronize the MemberData tool and the Members directory by
+  clicking on the button below. Fields defined in the <em>members</em> but not
+  in the memberdata properties will be added. These special fields are
+  ignored:</p>
+
+  <ul>
+    <li>groups</li>
+    <li>roles</li>
+    <li>password</li>
+    <li>confirm</li>
+  </ul>
+   
+  <p>Id and title are treated separately.</p>
+
+  <label><input type="submit" value=" Synchronize members "></label>
+</fieldset>
+</form>
+
+<dtml-var manage_page_footer>

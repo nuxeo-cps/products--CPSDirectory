@@ -21,12 +21,14 @@
 
 from zLOG import LOG, DEBUG, WARNING
 
-from Globals import InitializeClass
+from Globals import InitializeClass, DTMLFile
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 
+from Products.CMFCore.CMFCorePermissions import ManagePortal
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import SimpleItemWithProperties
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
@@ -50,6 +52,16 @@ class MembersDirectory(BaseDirectory):
     meta_type = 'CPS Members Directory'
 
     security = ClassSecurityInfo()
+
+    manage_options = (
+        SimpleItemWithProperties.manage_options[:1] + (
+        {'label': 'Entry Local Roles', 'action': 'manage_entryLocalRoles'},
+        {'label': 'Synchronize', 'action': 'manage_synchronize'},
+        ) + SimpleItemWithProperties.manage_options[1:]
+        )
+
+    security.declareProtected(ManagePortal, 'manage_synchronize')
+    manage_synchronize = DTMLFile('zmi/manage_synchronize', globals())
 
     _properties = BaseDirectory._properties + (
         {'id': 'password_field', 'type': 'string', 'mode': 'w',
@@ -170,9 +182,10 @@ class MembersDirectory(BaseDirectory):
         mtool = getToolByName(self, 'portal_membership')
         mtool.deleteMembers([id])
 
-    security.declarePrivate('updateMemberDataFromSchema')
-    def updateMemberDataFromSchema(self):
-        """Updates the MemberData tool properties with the ones found in the
+
+    security.declareProtected(ManagePortal, 'manage_updateMemberDataFromSchema')
+    def manage_updateMemberDataFromSchema(self, REQUEST=None):
+        """Update the MemberData tool properties with the ones found in the
         members directory schema.
 
         TODO These special fields are to be treated apart:
@@ -212,6 +225,10 @@ class MembersDirectory(BaseDirectory):
             prop_type = converter.get(field.meta_type, 'string')
             mdtool.manage_addProperty(field_id, prop_value, prop_type)
             LOG('updateMemberDataFromSchema', DEBUG, "added property=%s type=%s default value=%s" % (field_id, prop_type, prop_value))
+
+        if REQUEST is not None:
+            return self.manage_synchronize(self, REQUEST,
+                manage_tabs_message="MemberData synchronized.")
 
 InitializeClass(MembersDirectory)
 

@@ -6,6 +6,8 @@ New features:
 - DirectoryEntryVocabulary
 - New "User Identifier Widget" that use the isMemberIdAllowed() for
   validation.
+- updateMemberDataFromSchema renamed to manage_(...) and associated to a ZMI tab
+  so you can click a button to sync it afterwards (closes #310)
 Bug fixes:
 ~~~~~~~~~~
 -
