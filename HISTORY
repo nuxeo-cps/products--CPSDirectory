@@ -1,4 +1,24 @@
 *******************************************
+** CPSDirectory V1.7.0 [R1 build 2004/02/19-15:54 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- search result list can be sorted (cf getDirectoryResultFields)
+Bug fixes:
+~~~~~~~~~~
+- no widget help available on creation form
+- Better error message in LocalDirectory if the home folder is missing.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- _getDataModel and _getAdapters always propagate **kw arguments to
+  the underlying storage adapter.
+- When querying a directory vocabulary, only the title field is retrived
+  from an entry.
+
+*******************************************
 ** CPSDirectory V1.6.5 [R1 build 2004/02/11-14:33 by ben]
 
 Requires:
