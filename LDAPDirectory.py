@@ -71,14 +71,16 @@ class LDAPDirectory(BaseDirectory):
          'label': 'LDAP base'},
         {'id': 'ldap_scope_str', 'type': 'selection', 'mode': 'w',
          'label': 'LDAP scope', 'select_variable': 'all_ldap_scopes'},
+        {'id': 'ldap_search_classes_str', 'type': 'string', 'mode': 'w',
+         'label': 'LDAP object classes (search)'},
         {'id': 'ldap_bind_dn', 'type': 'string', 'mode': 'w',
          'label': 'LDAP bind dn'},
         {'id': 'ldap_bind_password', 'type': 'string', 'mode': 'w',
          'label': 'LDAP bind password'},
         {'id': 'ldap_rdn_attr', 'type': 'string', 'mode': 'w',
-         'label': 'LDAP rdn attribute'},
+         'label': 'LDAP rdn attribute (create)'},
         {'id': 'ldap_object_classes_str', 'type': 'string', 'mode': 'w',
-         'label': 'LDAP object classes'},
+         'label': 'LDAP object classes (create)'},
         )
 
     id_field = 'cn'
@@ -89,12 +91,14 @@ class LDAPDirectory(BaseDirectory):
     ldap_use_ssl = 0
     ldap_base = ''
     ldap_scope_str = 'SUBTREE'
+    ldap_search_classes_str = 'person'
     ldap_bind_dn = ''
     ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
     ldap_object_classes_str = 'top, person'
 
     ldap_scope = ldap.SCOPE_SUBTREE
+    ldap_search_classes = ['person']
     ldap_object_classes = ['top', 'person']
 
     all_ldap_scopes = ('BASE', 'ONELEVEL', 'SUBTREE')
@@ -114,6 +118,10 @@ class LDAPDirectory(BaseDirectory):
                 }
         self.ldap_scope = conv.get(self.ldap_scope_str, ldap.SCOPE_BASE)
         # Split classes
+        classes = self.ldap_search_classes_str
+        classes = [x.strip() for x in classes.split(',')]
+        self.ldap_search_classes = filter(None, classes)
+        self.ldap_search_classes_str = ', '.join(self.ldap_search_classes)
         classes = self.ldap_object_classes_str
         self.ldap_object_classes = [x.strip() for x in classes.split(',')]
         self.ldap_object_classes_str = ', '.join(self.ldap_object_classes)
@@ -256,6 +264,7 @@ class LDAPDirectory(BaseDirectory):
         """Search entries according to filter."""
         if not filter:
             filter = '(objectClass=*)'
+        LOG('_searchEntries', DEBUG, 'filter=%s' % `filter`)
         id_attr = self.id_field
         res = self._delegate.search(base=self.ldap_base,
                                     scope=self.ldap_scope,
@@ -273,7 +282,7 @@ class LDAPDirectory(BaseDirectory):
                 return [e[id_attr][0] for e in results]
 
     def objectClassFilter(self):
-        classes = self.ldap_object_classes
+        classes = self.ldap_search_classes
         if classes:
             res = ''.join(['(objectClass=%s)' % each
                            for each in classes])
@@ -304,7 +313,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         dir = self._dir
         id = self._id
         # XXX treat case where id_field == 'dn' (use base=dn)
-        # XXX use self.ldap_object_classes here too
+        # XXX use self.ldap_search_classes here too
         filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
                                                         (dir.id_field, id))
         res = dir._delegate.search(base=dir.ldap_base,
