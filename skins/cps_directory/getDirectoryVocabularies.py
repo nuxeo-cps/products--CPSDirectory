@@ -18,6 +18,16 @@ roles_vocabulary = {
         },
     }
 
+global_roles_vocabulary = {
+    'type': 'CPS Vocabulary',
+    'data': {
+        'tuples': (
+            ('Member', "Member"),
+            ('Manager', "Manager"),
+            )
+        },
+    }
+
 groups_vocabulary = {
     'type': 'CPS Directory Vocabulary',
     'data': {
@@ -28,6 +38,7 @@ groups_vocabulary = {
 vocabularies = {
     'members': members_vocabulary,
     'roles': roles_vocabulary,
+    'global_roles': global_roles_vocabulary,
     'groups': groups_vocabulary,
     }
 
