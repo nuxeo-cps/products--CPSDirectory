@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- 
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- getEntry have a default parameter, this prevent to raise a KeyError
+- getEntry now has a default parameter, to prevent a raise of KeyError
+  if the entry does not exist.
