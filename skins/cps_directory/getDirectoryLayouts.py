@@ -13,7 +13,6 @@ members_layout = {
             'type': 'String Widget',
             'data': {
                 'fields': ['id'],
-                'is_required': 1,
                 'label': "Id",
                 'label_edit': "Id",
                 'description': "Member login",
@@ -28,7 +27,6 @@ members_layout = {
             'type': 'Password Widget',
             'data': {
                 'fields': ['password'],
-                'is_required': 1,
                 'label': "Password",
                 'label_edit': "Password",
                 'description': "Member password",
@@ -36,7 +34,7 @@ members_layout = {
                 'css_class': '',
                 'display_width': 20,
                 'size_max': 0,
-                'hidden_layout_modes': ['view'],
+                'hidden_layout_modes': ['view', 'search'],
                 'hidden_readonly_layout_modes': ['edit'],
                 'hidden_empty': 1,
             },
@@ -71,7 +69,6 @@ members_layout = {
             'type': 'String Widget',
             'data': {
                 'fields': ['email'],
-                'is_required': 1,
                 'label': "Email",
                 'label_edit': "Email",
                 'description': "Member email",
@@ -109,7 +106,6 @@ roles_layout = {
             'type': 'String Widget',
             'data': {
                 'fields': ['role'],
-                'is_required': 1,
                 'label': "Role",
                 'label_edit': "Role",
                 'description': "",
@@ -155,7 +151,6 @@ groups_layout = {
             'type': 'String Widget',
             'data': {
                 'fields': ['group'],
-                'is_required': 1,
                 'label': "Group",
                 'label_edit': "Group",
                 'description': "",
