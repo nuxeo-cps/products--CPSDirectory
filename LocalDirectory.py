@@ -178,6 +178,31 @@ class LocalDirectory(BaseDirectory):
         ob = self._getContent()
         return ob.listEntryIdsAndTitles()
 
+    security.declarePrivate('listAllPossibleEntriesIds')
+    def listAllPossibleEntriesIds(self):
+        """List all the possible entry ids.
+
+        Implemented in Indirect Directory only.
+        """
+        ob = self._getContent()
+        try:
+            return ob.listAllPossibleEntriesIds()
+        except AttributeError:
+            raise NotImplementedError
+
+    security.declarePrivate('listAllPossibleEntriesIdsAndTitles')
+    def listAllPossibleEntriesIdsAndTitles(self):
+        """List all the possible entry ids and titles.
+
+        Returns a list of tuples (id, title).
+        Implemented in Indirect Directory only.
+        """
+        ob = self._getContent()
+        try:
+            return ob.listAllPossibleEntriesIdsAndTitles()
+        except AttributeError:
+            raise NotImplementedError
+
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
