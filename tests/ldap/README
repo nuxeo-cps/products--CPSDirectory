@@ -1,0 +1,35 @@
+FakeLdap
+
+
+What is it ?
+
+this tool can be used with cps ldap directories
+to simulate access to a ldap server.
+This is useful to run tests in a light environment
+it's based on a ldif file you will have to provide.
+It has been tested with LDAPBAckingDirectory and a typical ldap
+structure.
+
+It is fully functionnal except for ldap search queries :
+the implementation is not finished
+
+
+Todos
+
++ exports filenames
+
++ get rid of ugly split calls
+
++ correctly parse multiline entries like images
+
++ correctly parse compressed fields (::)
+
++ implement a real search query parser
+
+
+
+
+
+
+
+

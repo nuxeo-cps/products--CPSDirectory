@@ -1,0 +1,37 @@
+dn: uid=admin,ou=personnes,o=nuxeo,c=com
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: pkiUser
+objectClass: qmailUser
+objectClass: NuxeoPerson
+uid: admin
+ou: personnes
+cn: admin
+
+dn: uid=demo,ou=personnes,o=nuxeo,c=com
+sn: Demo
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: pkiUser
+objectClass: qmailUser
+objectClass: NuxeoPerson
+givenName: Demo
+gender: h
+uid: demo
+ou: personnes
+cn: demo
+
+dn: uid=tarek,ou=personnes,o=nuxeo,c=com
+sn: Tarek
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: pkiUser
+objectClass: qmailUser
+objectClass: NuxeoPerson
+gender: h
+uid: tarek
+ou: personnes
+cn: tarek
