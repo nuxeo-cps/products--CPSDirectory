@@ -16,3 +16,4 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Efficient search done on user folders that know about searchUsers().
 - New API on MemberDataTool to search members: searchForMembers().
+- Display save button only if at least one widget is in edit mode.
