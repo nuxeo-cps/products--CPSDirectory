@@ -57,6 +57,11 @@ else:
             error=error)
 
 from DirectoryVocabulary import DirectoryVocabulary
+if has_ldap:
+    from LDAPDirectoryVocabulary import LDAPDirectoryVocabulary
+else:
+    LOG('LDAPDirectoryVocabulary', INFO,
+        "Disabled (no LDAP user folder product found).")
 
 
 import UserFolderPatch
@@ -81,3 +86,5 @@ def initialize(registrar):
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
+    if has_ldap:
+        VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)

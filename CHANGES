@@ -5,7 +5,7 @@ ZODB Requires:
 New features:
 ~~~~~~~~~~~~~
 - Italian translation.
--
+- LDAPDirectoryVocabulary, referencing an LDAP directory by DN.
 
 Bug fixes:
 ~~~~~~~~~~
