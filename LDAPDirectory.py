@@ -465,17 +465,10 @@ class LDAPStorageAdapter(BaseStorageAdapter):
             hour = int(time[8:10])
             minute = int(time[10:12])
             second = int(time[12:14])
-            # XXX I'm not sure what the LDAP TimeZone format looks like,
-            # since I can't find any specifications. Let's assume it's
-            # The same is ISO. Examples:
+            # Timezones are in ISO spec. Examples:
             # GMT: 'Z'
             # CET: '+0100'
             # EST: '-0600'
-            # Please beware that this is a GUESS.
-            # We always store them in GMT with the timezone 'Z', as this
-            # is recommended in the specifications.
-            # As a result, this code is largely untested with "real" data,
-            # since we simply dont know how it looks.
             tz = time[14:]
             if tz[0] in ('+', '-'): # There is a timezone specified.
                 tz = 'GMT' + tz
