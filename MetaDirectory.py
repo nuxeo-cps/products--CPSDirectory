@@ -616,5 +616,19 @@ class MetaStorageAdapter(BaseStorageAdapter):
                     if info['missing_entry'] is None:
                         raise
                     b_dir.createEntry(b_entry)
+                    
+    def _getContentUrl(self, entry_id, field_id):
+        """ giving content url if backing has it"""
+        result = None
+        entry, b_dir = self._dir._getEntryFromBacking(self._id)
+        
+        if b_dir is not None:
+            # we need to check for ids
+            if b_dir.id_field <> self._dir.id_field:
+                entry_id = entry[b_dir.id_field]
+            child_adapter = b_dir._getAdapters(id)[0]
+            if getattr(child_adapter, '_getContentUrl', None) is not None:
+                result = child_adapter._getContentUrl(entry_id, field_id)
+        return result                    
 
 InitializeClass(MetaStorageAdapter)

@@ -364,30 +364,44 @@ class StackingStorageAdapter(BaseStorageAdapter):
 
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
-        
+
         # TODO : this code should be placed in parent class
-        # and used by all StorageAdapter descendants        
+        # and used by all StorageAdapter descendants
         data = self._setDataDoProcess(data, **kw)
-        
-        if not self._creation:        
+
+        if not self._creation:
             # XXX Note: if we attempt to change the backing id here, we get
             # a KeyError. Unless an entry with the new backing id already
             # exists,
             # in which case, it would be overwritten...
             # An explicit test would be better.
-            old_entry, b_dir = self._dir._getEntryFromBacking(self._id)        
-            b_dir.editEntry(data)            
-        else:                    
-            dir_id = self._dir.creation_dir            
+            old_entry, b_dir = self._dir._getEntryFromBacking(self._id)
+            b_dir.editEntry(data)
+        else:
+            dir_id = self._dir.creation_dir
             if not dir_id:
                 raise ValueError("Creation not allowed (no backing directory)")
-            
+
             dtool = getToolByName(self._dir, 'portal_directories')
             try:
                 b_dir = getattr(dtool, dir_id)
             except AttributeError:
                 raise ValueError("No backing directory '%s'" % dir_id)
-            
+
             b_dir.createEntry(data)
+
+    def _getContentUrl(self, entry_id, field_id):
+        """ giving content url if backing has it"""
+        result = None
+        entry, b_dir = self._dir._getEntryFromBacking(self._id)
+
+        if b_dir is not None:
+            # we need to check for ids
+            if b_dir.id_field <> self._dir.id_field:
+                entry_id = entry[b_dir.id_field]
+            child_adapter = b_dir._getAdapters(id)[0]
+            if getattr(child_adapter, '_getContentUrl', None) is not None:
+                result = child_adapter._getContentUrl(entry_id, field_id)
+        return result
 
 InitializeClass(StackingStorageAdapter)
