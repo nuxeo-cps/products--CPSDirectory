@@ -3,9 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- ZMI management for MetaDirectory's backing directories.
-- MetaDirectory has a new "missing entry" feature, which makes it possible
-  to have default values without creating entries in the backing directory.
+-
 Bug fixes:
 ~~~~~~~~~~
 -

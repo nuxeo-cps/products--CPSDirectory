@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.12.1 [R1 build 2004/05/10-17:14 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- ZMI management for MetaDirectory's backing directories.
+- MetaDirectory has a new "missing entry" feature, which makes it possible
+  to have default values without creating entries in the backing directory.
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.12.0 [R1 build 2004/05/06-16:59 by guillaum]
 
 Requires:
