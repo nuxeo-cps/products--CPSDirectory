@@ -13,5 +13,5 @@ New internal features:
 - Entry local roles are now usable for all directory ACLs.
 - In entry local roles namespace, all schema-defined fields are available
   (may be None if not present in the given entry).
-- MultiEntriesWidget able to customize separator for entries in view mode,
+- MultiEntriesWidget enable customization of view separator
 - MultiEntriesWidget sort entries by default
