@@ -90,7 +90,7 @@ class LDAPDirectory(BaseDirectory):
     ldap_port = 389
     ldap_use_ssl = 0
     ldap_base = ''
-    ldap_scope_str = 'SUBTREE'
+    ldap_scope_str = 'ONELEVEL'
     ldap_search_classes_str = 'person'
     ldap_bind_dn = ''
     ldap_bind_password = ''
