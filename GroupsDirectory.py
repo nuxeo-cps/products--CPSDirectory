@@ -100,12 +100,18 @@ class GroupsDirectory(BaseDirectory):
         kwmembers = kw.get(self.members_field)
         if isinstance(kwmembers, StringType):
             kwmembers = [kwmembers]
+
+        LOG('GroupsDirectory.searchEntries',
+            DEBUG, 'query group=%s, query member=%s, return_fields=%s'
+            % (kwgroup, kwmembers, return_fields))
+
         groups = []
         for group in self.listEntryIds():
             if kwgroup:
                 if isinstance(kwgroup, StringType):
                     if self.id_field in self.search_substring_fields:
-                        if group.lower().find(kwgroup) == -1:
+                        if kwgroup != '*' and \
+                               group.lower().find(kwgroup) == -1:
                             continue
                     else:
                         if group != kwgroup:
@@ -136,7 +142,7 @@ class GroupsDirectory(BaseDirectory):
             # This is for speed reasons, calling getEntry on each entry
             # is too slow.
             # XXX: implement optimized version.
-            return [(g, {}) for g in groups]
+            return [(g, {'group': g}) for g in groups]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):

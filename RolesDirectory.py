@@ -97,7 +97,8 @@ class RolesDirectory(BaseDirectory):
             if kwrole:
                 if isinstance(kwrole, StringType):
                     if self.id_field in self.search_substring_fields:
-                        if role.lower().find(kwrole) == -1:
+                        if kwrole != '*' and \
+                               role.lower().find(kwrole) == -1:
                             continue
                     else:
                         if role != kwrole:
@@ -130,7 +131,7 @@ class RolesDirectory(BaseDirectory):
             # This is for speed reasons, calling getEntry on each entry
             # is too slow.
             # XXX: implement optimized version.
-            return [ (role, {}) for role in roles]
+            return [ (role, {'role': role}) for role in roles]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
