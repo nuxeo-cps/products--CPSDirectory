@@ -27,7 +27,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
-from Products.CPSCore.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
