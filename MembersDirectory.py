@@ -82,79 +82,6 @@ class MembersDirectory(BaseDirectory):
         else:
             return ()
 
-    security.declarePrivate('_searchMemberData')
-    def _searchMemberData(self, params):
-        """Search members using MemberData._members.
-
-        Does an AND search for all key, value of the params.
-        If the member attributes corresponding to a key is a list,
-        does an OR search on all the list elements.
-        If the passed value is a string, does a substring lowercase.
-        If the passed value is a list, does OR search with exact match.
-        Returns a list of member ids.
-        """
-        _marker = []
-        res = []
-        inlist = {}
-        searchlist = {}
-        for key, value in params.items():
-            if type(value) is type(''):
-                inlist[key] = 0
-                searchlist[key] = value.lower()
-            else:
-                inlist[key] = 1
-                searchlist[key] = value
-        mdtool = getToolByName(self, 'portal_memberdata')
-        aclu = self.acl_users
-        for user_wrapper in mdtool._members.values():
-            # user_wrapper is a MemberData without context
-            userid = user_wrapper.id
-            user = _marker
-            found = 1
-            for key, value in searchlist.items():
-                if key == self.password_field:
-                    continue # ignore search on password field
-                elif key == self.roles_field:
-                    if user is _marker: user = aclu.getUserById(userid)
-                    if user is not None:
-                        searched = user.getRoles()
-                    else: # unpruned user in higher user folder
-                        searched = None
-                elif key == self.groups_field:
-                    if hasattr(aclu, 'setGroupsOfUser'):
-                        if user is _marker: user = aclu.getUserById(userid)
-                        if user is not None:
-                            try:
-                                searched = user.getGroups()
-                            except AttributeError:
-                                searched = None
-                        else:
-                            searched = None
-                    else:
-                        searched = None
-                else:
-                    searched = getattr(user_wrapper, key, None)
-                if searched is None:
-                    found = 0
-                    break
-                if type(searched) is type(''):
-                    searched = (searched, )
-                matched = 0
-                for item in searched:
-                    if inlist[key]:
-                        matched = item in value
-                    else:
-                        matched = item.lower().find(value) != -1
-                    if matched:
-                        break
-                if not matched:
-                    found = 0
-                    break
-            if found:
-                res.append(userid)
-
-        return res
-
     #
     # API
     #
@@ -175,7 +102,8 @@ class MembersDirectory(BaseDirectory):
     def searchEntries(self, **kw):
         """Search for entries in the directory.
         """
-        return self._searchMemberData(kw)
+        mdtool = getToolByName(self, 'portal_memberdata')
+        return mdtool.searchForMembers(kw, props=None)
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
