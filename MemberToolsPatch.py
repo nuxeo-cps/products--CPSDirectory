@@ -56,7 +56,7 @@ def _preprocessQuery(mapping, search_substring_props):
             if key in search_substring_props:
                 search_types[key] = 'substring'
                 value = value.lower()
-        elif isinstance(value, (ListType, TupleType)):
+        elif isinstance(value, ListType) or isinstance(value, TupleType):
             search_types[key] = 'list'
         query[key] = value
     return search_types, query
@@ -81,7 +81,7 @@ def _isEntryMatching(entry, search_types, query):
         searched = entry[key]
         if searched is None:
             return 0
-        if not isinstance(searched, (ListType, TupleType)):
+        if not isinstance(searched, ListType) or isinstance(searched, TupleType):
             searched = (searched,)
         matched = 0
         for item in searched:
