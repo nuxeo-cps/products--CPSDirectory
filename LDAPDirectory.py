@@ -21,6 +21,7 @@
 
 from zLOG import LOG, DEBUG, PROBLEM, ERROR
 
+from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
@@ -35,9 +36,11 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 try:
     from Products.LDAPUserGroupsFolder.LDAPDelegate import \
          LDAPDelegate, ldap
+    from Products.LDAPUserGroupsFolder.utils import filter_format
 except ImportError:
     from Products.LDAPUserFolder.LDAPDelegate import \
          LDAPDelegate, ldap
+    from Products.LDAPUserFolder.utils import filter_format
 
 ldap_scopes = (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
@@ -100,6 +103,7 @@ class LDAPDirectory(BaseDirectory):
 
     def _postProcessProperties(self):
         """Post-processing after properties change."""
+        BaseDirectory._postProcessProperties(self)
         # Convert string stuff
         conv = {'BASE': ldap.SCOPE_BASE,
                 'ONELEVEL': ldap.SCOPE_ONELEVEL,
@@ -138,10 +142,67 @@ class LDAPDirectory(BaseDirectory):
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        LOG('listEntryIds', DEBUG, 'servers %s' % `self._delegate._servers`)
+        return self._searchEntries()
+
+    security.declarePublic('searchEntries')
+    def searchEntries(self, **kw):
+        """Search for entries in the directory.
+
+        Keys with empty values are removed.
+        Keys with value '*' search for an existing field.
+        Otherwise do substring search.
+
+        Returns a list of entry ids.
+        """
+        schemas = self._getSchemas()
+        field_ids = []
+        for schema in schemas:
+            field_ids.extend(schema.keys())
+        filter_elems = []
+        for key, value in kw.items():
+            if not key in field_ids:
+                continue
+            if key == 'dn': # XXX treat it
+                continue
+            if not value:
+                continue
+            if value == '*':
+                value = ''
+            if isinstance(value, ListType) or isinstance(value, TupleType):
+                pass
+            elif isinstance(value, StringType):
+                value = [value]
+            else:
+                raise ValueError("Bad value %s for '%s'" % `value`, key)
+            fl = []
+            for v in value:
+                if v:
+                    fv = filter_format('(%s=*%s*)', (key, v))
+                else:
+                    fv = filter_format('(%s=*)', (key,))
+                fl.append(fv)
+            f = ''.join(fl)
+            if len(fl) > 1:
+                f = '(|%s)' % f
+            filter_elems.append(f)
+        filter = ''.join(filter_elems)
+        if len(filter_elems) > 1:
+            filter = '(&%s)' % filter
+        LOG('searchEntries', DEBUG, 'filter %s' % filter)
+        return self._searchEntries(filter=filter)
+
+    #
+    # Internal
+    #
+
+    def _searchEntries(self, filter=None):
+        """Search entries according to filter."""
+        if not filter:
+            filter = '(objectClass=*)'
         id_attr = self.id_field
         res = self._delegate.search(base=self.ldap_base,
                                     scope=self.ldap_scope,
+                                    filter=filter,
                                     attrs=[id_attr])
         if res['exception']:
             LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
@@ -153,12 +214,6 @@ class LDAPDirectory(BaseDirectory):
                 return [e['dn'] for e in results]
             else:
                 return [e[id_attr][0] for e in results]
-
-    security.declarePublic('searchEntries')
-    def searchEntries(self, **kw):
-        """Search for entries in the directory.
-        """
-        raise NotImplementedError
 
 InitializeClass(LDAPDirectory)
 
@@ -205,11 +260,14 @@ class LDAPStorageAdapter(BaseStorageAdapter):
 
         result = res['results'][0]
         data = {}
-        for field_id in field_ids:
+        for field_id, field in self._schema.items():
             if field_id == 'dn':
                 value = result['dn']
             else:
-                value = result[field_id][0] # XXX treat multi-valued args!!!
+                if result.has_key(field_id):
+                    value = result[field_id][0] # XXX multi-valued args!!!
+                else:
+                    value = field.getDefault()
             data[field_id] = value
         return data
 
