@@ -56,7 +56,7 @@ members_layout = {
             },
         },
         'roles': {
-            'type': 'MultiSelect Widget',
+            'type': 'Generic MultiSelect Widget',
             'data': {
                 'fields': ['roles'],
                 'label': "label_roles",
@@ -64,8 +64,8 @@ members_layout = {
                 'description': "Member roles",
                 'is_i18n': 1,
                 'css_class': '',
-                'vocabulary': 'roles',
-                'size': 7,
+                'vocabulary': 'global_roles',
+                'render_format': 'checkbox',
             },
         },
         'groups': {

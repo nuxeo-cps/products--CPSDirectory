@@ -12,6 +12,9 @@ New features:
   'CPS Local Directory'), but is used when creating an indirect directory
   locally : it is the id of the directory it refers to (entries will be links
   to entries of that directory).
+- Changed the default members layout: now available roles are only the global
+  roles 'Manager' and 'Member'. The widget used is a Generic MultiSelect
+  widget that displays checkboxes.
 Bug fixes:
 ~~~~~~~~~~
 - Local Directory: fixed a bug related to the fact that the admin is not
