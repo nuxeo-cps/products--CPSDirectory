@@ -1,7 +1,7 @@
 Requires:
 ~~~~~~~~~
 - require CPSCore >= 3.10.0
-- require CPSScemas >= 0.21.0
+- require CPSSchemas >= 0.21.0
 New features:
 ~~~~~~~~~~~~~
 - DirectoryEntryVocabulary
