@@ -4,14 +4,11 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
-- Italian translation.
-- LDAPDirectoryVocabulary, referencing an LDAP directory by DN.
+-
 
 Bug fixes:
 ~~~~~~~~~~
-- Correctly do field processing for computed fields in MembersDirectory,
-  RolesDirectory and GroupsDirectory. Was already correct in LDAP.
-- Group and Role directories now uses partial matching for ID.
+-
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~

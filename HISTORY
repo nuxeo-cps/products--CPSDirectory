@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.4.1 [R1 build 2004/01/15-14:33 by regebro]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+-
+
+New features:
+~~~~~~~~~~~~~
+- Italian translation.
+- LDAPDirectoryVocabulary, referencing an LDAP directory by DN.
+
+Bug fixes:
+~~~~~~~~~~
+- Correctly do field processing for computed fields in MembersDirectory,
+  RolesDirectory and GroupsDirectory. Was already correct in LDAP.
+- Group and Role directories now uses partial matching for ID.
+
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.4.0 [R1 build 2004-01/06-15:09 by anguenot]
 
 ZODB Requires:
