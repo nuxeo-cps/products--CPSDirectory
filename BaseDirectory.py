@@ -144,6 +144,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """List all the entry ids."""
         raise NotImplementedError
 
+    security.declarePrivate('listEntryIdsAndTitles')
+    def listEntryIdsAndTitles(self):
+        """List all the entry ids and titles.
+
+        Returns a list of tuples (id, title).
+        """
+        # Default dummy implementation.
+        return [(id, id) for id in self.listEntryIds()]
+
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
