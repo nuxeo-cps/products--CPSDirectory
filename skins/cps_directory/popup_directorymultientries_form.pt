@@ -9,7 +9,7 @@
 <div style="float:right">
 <button onclick="window.close()">Fermer</button>
 </div>
-  <metal:block use-macro="here/navigation_lib/macros/multi_select_navigation">
+  <metal:block use-macro="here/navigation_lib_multi_select_navigation/macros/multi_select_navigation">
     <metal:block fill-slot="action">
 
  <script type="text/javascript"
