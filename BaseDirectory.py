@@ -101,6 +101,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         ('acl_access_roles_str', 'acl_access_roles', ',; '),
         ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
         ('acl_entry_delete_roles_str', 'acl_entry_delete_roles', ',; '),
+        ('acl_entry_edit_roles_str', 'acl_entry_edit_roles', ',; '),
         )
 
     def __init__(self, id, **kw):
