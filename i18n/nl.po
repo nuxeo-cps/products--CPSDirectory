@@ -12,61 +12,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "choose_a_directory"
-msgstr "Choose a directory"
+msgstr "Kies een map"
 
 msgid "button_edit"
-msgstr "Edit"
+msgstr "Wijzig"
 
 msgid "button_create_entry"
-msgstr "Create a new entry"
+msgstr "Maak een nieuw item aan"
 
 msgid "label_create_entry"
-msgstr "Create an entry"
+msgstr "Maak een item aan"
 
 msgid "psm_entry_created"
-msgstr "Entry created"
+msgstr "Item aangemaakt"
 
 msgid "label_groups"
-msgstr "Groups"
+msgstr "Groepen"
 
 msgid "label_members"
-msgstr "Members"
+msgstr "Leden"
 
 msgid "label_first_name"
-msgstr "First Name"
+msgstr "Voornaam"
 
 msgid "label_last_name"
-msgstr "Last Name"
+msgstr "Achternaam"
 
 msgid "label_full_name"
-msgstr "Full Name"
+msgstr "Volledige naam"
 
 msgid "label_no_results"
-msgstr "No results."
+msgstr "Geen resultaten."
 
 msgid "label_results"
-msgstr "Results"
+msgstr "Resultaten"
 
 msgid "cpsdir_label_upto_directories"
-msgstr "Up to Directories"
+msgstr "Naar mappen"
 
 msgid "cpsdir_label_search"
-msgstr "Search"
+msgstr "Zoeken"
 
 msgid "cpsdir_label_create_entry"
-msgstr "Create New Entry"
+msgstr "Maak een nieuw item aan"
 
 msgid "cpsdir_label_edit_entry"
-msgstr "Edit Entry"
+msgstr "Wijzig item"
 
 msgid "cpsdir_label_view_entry"
-msgstr "View Entry"
+msgstr "Weergave item"
 
 msgid "cpsdir_label_edit"
-msgstr "Edit"
+msgstr "Wijzig"
 
 msgid "cpsdir_label_view"
-msgstr "View"
+msgstr "Weergave"
 
 msgid "cpsdir_label_results"
-msgstr "Results"
+msgstr "Resultaten"
