@@ -346,22 +346,10 @@ def setMemberProperties(self, mapping):
     """Set the properties of the member."""
     # CPS: If the user object has a setProperties method, call it.
     user = aq_parent(self)
-    user_mapping = {} # The data tu be set on the user object.
-    member_mapping = mapping # The data to be set in the member tool.
     if hasattr(aq_base(user), 'setProperties'):
         LOG('setMemberProperties', DEBUG, 'calling setProperties on user')
-        props = user.listProperties()
-        if props:
-            member_mapping = {}
-            for key, value in mapping.items():
-                if key in props:
-                    user_mapping[key] = value
-                else:
-                    member_mapping[key] = value
-    if user_mapping:
-        user.setProperties(**user_mapping)
-    if member_mapping:
-        return self._old_cps_setMemberProperties(member_mapping)
+        user.setProperties(**mapping)
+    return self._old_cps_setMemberProperties(mapping)
 
 def setSecurityProfile(self, password=None, roles=None, domains=None):
     """Set the user's basic security profile."""
