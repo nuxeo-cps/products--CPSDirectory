@@ -12,6 +12,7 @@ Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
 - Correctly remove attributes from LDAP when they are empty.
+- Fix Roles directory when using LDAPUserGroupsFolder
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Search result fields can be customized using getCustomDirectoryResultFields
