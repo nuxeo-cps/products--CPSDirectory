@@ -38,7 +38,7 @@
   //-->
 </script>
 <button type="button"
-  tal:attributes="onclick string:popup_directorymultientries('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', 'DN Navigation', '${here/popup_mode}');">...</button><br>
+  tal:attributes="onclick string:popup_directorymultientries('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', 'DN Navigation', '${here/popup_mode}');">...</button><br />
 </tal:block>
 </tal:block>
 </tal:block>
