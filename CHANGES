@@ -12,6 +12,8 @@ Bug fixes:
   did not have a home folder (and thus did not have a personal directory)
 - Fixed some translation about groups.
 - Fixed initialization of IndirectDirectoryVocabulary.
+- Fix: multientry uwidget use an hard coded title for the navigation popup
+  fixed by using label_edit property
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - New Search tab on the directories.
