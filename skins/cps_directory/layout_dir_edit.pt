@@ -10,7 +10,7 @@
 <form action="." method="POST" name="form" enctype="multipart/form-data">
 <input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
 <input type="hidden" name="id" value="." tal:attributes="value request/id|nothing">
-<table cellpadding="0" cellspacing="2" border="0"
+<table cellpadding="0" cellspacing="2" border="0" summary="form layout"
   tal:define="global has_edits nothing">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">

@@ -4,7 +4,7 @@
                    id_field dir/id_field;
                    ">
 <div class="group">
-  <table cellpadding="2" cellspacing="2" border="0">
+  <table cellpadding="2" cellspacing="2" border="0" summary="layout">
     <tr tal:repeat="row layout/rows">
       <tal:block repeat="cell row">
       <tal:block define="widget cell/widget">
