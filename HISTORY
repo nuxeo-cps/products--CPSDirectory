@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.6.1 [R1 build 2004/02/03-10:31 by regebro]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- New directory type LocalDirectory, is used to redirect directory queries to
+  a directory located in the users home folder.
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- BaseDirectories __init__ now sets properties with the passed kw dictionary.
+
+*******************************************
 ** CPSDirectory V1.6.0 [R1 build 2004/02/02-16:26 by regebro]
 
 Requires:
