@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- search result list can be sorted (cf getDirectoryResultFields)
 Bug fixes:
 ~~~~~~~~~~
 - no widget help available on creation form
