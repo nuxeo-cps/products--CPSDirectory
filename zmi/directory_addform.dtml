@@ -1,6 +1,4 @@
-<dtml-let mt="REQUEST.other['traverse_subpath'][0]"
-          mt="getDirectoryMetaType(mt)"
-          >
+<dtml-let mt="getDirectoryMetaType(mt)">
 <dtml-var manage_page_header>
 
 <dtml-let form_title="'Add ' + mt">

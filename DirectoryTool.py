@@ -25,6 +25,7 @@ from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass, DTMLFile
 from AccessControl import ClassSecurityInfo
+from AccessControl.PermissionRole import PermissionRole
 
 from OFS.Folder import Folder
 
@@ -58,6 +59,8 @@ class DirectoryTool(UniqueObject, Folder):
         """
         res = []
         for dir_id, dir in self.objectItems():
+            if dir.meta_type == 'Broken Because Product is Gone':
+                continue
             if dir.isVisible():
                 res.append(dir_id)
         res.sort()
@@ -71,7 +74,9 @@ class DirectoryTool(UniqueObject, Folder):
         # Stripping is done to be able to pass a type in the URL.
         return [
             {'name': dt,
-             'action': 'manage_addCPSDirectoryForm/' + dt.replace(' ', ''),
+             # _verifyObjectPaste needs this to be traversable
+             # to a real object.
+             'action': 'manage_addForm_' + dt.replace(' ', ''),
              'permission': ManagePortal}
             for dt in DirectoryTypeRegistry.listTypes()]
 
@@ -114,6 +119,14 @@ class DirectoryTypeRegistry:
         """Register a directory type."""
         mt = cls.meta_type.replace(' ', '')
         self._types[mt] = cls
+        # Monkey-patch a new factory class into the tool
+        name = 'manage_addForm_' + mt
+        def manage_add(self, REQUEST=None, mt=mt):
+            """Add some meta_type directory."""
+            return self.manage_addCPSDirectoryForm(mt=mt, REQUEST=REQUEST)
+        perm = PermissionRole(ManagePortal)
+        setattr(DirectoryTool, name, manage_add)
+        setattr(DirectoryTool, name+'__roles__', perm)
 
     def listTypes(self):
         """List directory types."""
