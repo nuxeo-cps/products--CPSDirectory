@@ -11,6 +11,7 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
+- Correctly remove attributes from LDAP when they are empty.
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
