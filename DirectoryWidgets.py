@@ -48,21 +48,26 @@ class EntryMixin:
         """
         portal_directories = getToolByName(self, 'portal_directories')
         dir = getattr(portal_directories, self.directory)
-        if self.entry_type == 'id':
-            id = value
-            try:
-                title = dir.getEntry(id)[dir.title_field]
-            except (IndexError, ValueError, KeyError, TypeError, AttributeError):
-                title = None
-        else: # entry_type == 'dn':
-            try:
-                entry = dir.getEntryByDN(value)
-            except (IndexError, ValueError, KeyError):
-                id = None
-                title = None
-            else:
-                id = entry[dir.id_field]
-                title = entry[dir.title_field]
+        # If value is None or empty, do not query directories
+        if not value:
+            id = None
+            title = None
+        else:
+            if self.entry_type == 'id':
+                id = value
+                try:
+                    title = dir.getEntry(id, default=None)[dir.title_field]
+                except (IndexError, ValueError, KeyError, TypeError, AttributeError):
+                    title = None
+            else: # entry_type == 'dn':
+                try:
+                    entry = dir.getEntryByDN(value)
+                except (IndexError, ValueError, KeyError):
+                    id = None
+                    title = None
+                else:
+                    id = entry[dir.id_field]
+                    title = entry[dir.title_field]
         return (id, title)
 
     def getTagForValue(self, value):
@@ -287,11 +292,11 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             return meth(mode=mode, value=value, render=render)
         elif mode == 'edit':
             if value is None:
-                value = []                
+                value = []
             if (self.popup_mode == 'none'):
                 return CPSMultiSelectWidget.render(self, mode, datastructure, **kw)
-            display_attr = dir.title_field            
-            ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]            
+            display_attr = dir.title_field
+            ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]
             return meth(mode=mode, values=value, ids_and_titles=ids_and_titles,
                         display_attr=display_attr)
 
