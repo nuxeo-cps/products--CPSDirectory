@@ -32,10 +32,11 @@ from zLOG import LOG, TRACE, DEBUG
 
 from types import StringType
 
-from Acquisition import aq_base
+from Acquisition import aq_base, aq_parent, aq_inner
 
 from Products.CMFCore.MembershipTool import MembershipTool
 from Products.CMFCore.MemberDataTool import MemberDataTool
+from Products.CMFCore.MemberDataTool import MemberData
 
 _marker = []
 
@@ -315,9 +316,29 @@ memberdatatool_methods = (
 
 # MemberData
 
+from ZPublisher.Converters import type_converters
+
+def getProperty(self, id, default=_marker):
+    # CPS: Try to get the property directly from the user object.
+    user = aq_parent(self)
+    aclu = aq_parent(aq_inner(user))
+    if (hasattr(aq_base(aclu), 'listUserProperties') and
+        hasattr(aq_base(user), 'getProperty')):
+        if id in aclu.listUserProperties():
+            return user.getProperty(id)
+    if default is _marker:
+        return self._old_cps_getProperty(id)
+    else:
+        return self._old_cps_getProperty(id, default=default)
+
 def setMemberProperties(self, mapping):
     """Set the properties of the member."""
-    raise NotImplementedError
+    # CPS: If the user object has a setProperties method, call it.
+    user = aq_parent(self)
+    if hasattr(aq_base(user), 'setProperties'):
+        LOG('setMemberProperties', DEBUG, 'calling setProperties on user')
+        user.setProperties(**mapping)
+    return self._old_cps_setMemberProperties(mapping)
 
 def setSecurityProfile(self, password=None, roles=None, domains=None):
     """Set the user's basic security profile."""
@@ -327,6 +348,10 @@ def getPassword(self):
     """Return the password of the user."""
     raise NotImplementedError
 
+memberdata_methods = (
+    getProperty,
+    setMemberProperties,
+    )
 
 #
 # Patching
@@ -339,5 +364,13 @@ for meth in membershiptool_methods:
 
 for meth in memberdatatool_methods:
     setattr(MemberDataTool, meth.__name__, meth)
+
+for meth in memberdata_methods:
+    cls = MemberData
+    name = meth.__name__
+    oldname = '_old_cps_'+name
+    if not hasattr(cls, oldname):
+        setattr(cls, oldname, getattr(cls, name))
+    setattr(MemberData, name, meth)
 
 LOG('MemberToolsPatch', TRACE, 'Patching Member Tools')
