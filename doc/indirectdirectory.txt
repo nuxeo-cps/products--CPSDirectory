@@ -4,6 +4,9 @@ IndirectDirectory Design
 
 $Id$
 
+XXX  need to update information since it is now possible to store links
+     towards entries stored in several directories
+
 Introduction
 ============
 
