@@ -164,6 +164,15 @@ class GroupsDirectory(BaseDirectory):
         aclu.userFolderAddGroup(group)
         self.editEntry(entry)
 
+    security.declarePublic('deleteEntry')
+    def deleteEntry(self, id):
+        """Delete an entry in the directory."""
+        self.checkDeleteEntryAllowed()
+        if not self.hasEntry(id):
+            raise KeyError("Group '%s' does not exist" % id)
+        aclu = self.acl_users
+        aclu.userFolderDelGroups([id])
+
     security.declarePublic('hasSubGroupsSupport')
     def hasSubGroupsSupport(self):
         """Tells if the current acl_users has subgroups support.
