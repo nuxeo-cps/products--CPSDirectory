@@ -286,6 +286,17 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             else:
                 raise
 
+    security.declarePrivate('_getEntryFromDataModel')
+    def _getEntryFromDataModel(self, datamodel):
+        """Compute dict from datamodel."""
+        entry = {}
+        for key in datamodel.keys():
+            try:
+                entry[key] = datamodel[key]
+            except ReadAccessError:
+                pass
+        return entry
+
     security.declarePrivate('_getEntryKW')
     def _getEntryKW(self, id, **kw):
         """Get entry filtered by acls and processes.
@@ -293,23 +304,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Passes additional **kw to _getDataModel.
         """
         dm = self._getDataModel(id, **kw)
-        entry = {}
-        for key in dm.keys():
-            try:
-                entry[key] = dm[key]
-            except ReadAccessError:
-                pass
-        return entry
+        return self._getEntryFromDataModel(dm)
 
     security.declarePrivate('_getEntry')
     def _getEntry(self, id):
         """Get entry filtered by processes but not acls."""
         dm = self._getDataModel(id)
         dm._check_acls = 0 # XXX use API
-        entry = {}
-        for key in dm.keys():
-            entry[key] = dm[key]
-        return entry
+        return self._getEntryFromDataModel(dm)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -344,8 +346,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Edit an entry in the directory.
         """
         id = entry[self.id_field]
-        self.checkEditEntryAllowed(id)
         dm = self._getDataModel(id)
+        entry = _getEntryFromDataModel(dm)
+        self.checkEditEntryAllowed(id=id, entry=entry)
         for key in dm.keys():
             if not entry.has_key(key):
                 continue
@@ -380,6 +383,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         - datastructure is the resulting datastructure.
         """
         dm = self._getDataModel(id)
+        entry = _getEntryFromDataModel(dm)
+        self.checkViewEntryAllowed(id=id, entry=entry)
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
@@ -409,6 +414,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         - datastructure is the resulting datastructure.
         """
         dm = self._getDataModel(id)
+        entry = _getEntryFromDataModel(dm)
+        self.checkEditEntryAllowed(id=id, entry=entry)
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
@@ -426,8 +433,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 ds.setError(id_field, 'cpsschemas_err_readonly')
                 ok = 0
             if ok:
-                self.checkEditEntryAllowed(id)
-                # XXX do better error messages than raise Unauthorized!
                 dm._commit()
             else:
                 layout_mode = layout_mode_err
@@ -479,8 +484,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # Creation...
             # Compute new id.
             id = dm.data[self.id_field]
-            # XXX create
-            entry = dm.data.copy()
+            entry = _getEntryFromDataModel(dm)
+            self.checkCreateEntryAllowed(id=id, entry=entry)
             self.createEntry(entry)
             # Redirect/render
             created_func = getattr(self, created_callback, None)
@@ -583,11 +588,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Passes additional **kw to _getAdapters.
         """
         adapters = self._getAdapters(id, **kw)
-        add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
-        dm = DataModel(None, adapters, context=self, add_roles=add_roles)
+        dm = DataModel(None, adapters, context=self)
         dm._fetch()
+        # Now compute add_roles for entry
+        # XXX merge additionalRoles and entry_local_roles
+        entry = self._getEntryFromDataModel(dm)
+        add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
+        entry_local_roles = self.getEntryLocalRoles(entry)
+        add_roles = tuple(add_roles) + tuple(entry_local_roles)
+        dm._setAddRoles(add_roles)
         return dm
-
 
     security.declarePrivate('_getSearchAdapters')
     def _getSearchAdapters(self):
