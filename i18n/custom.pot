@@ -16,9 +16,6 @@ msgstr ""
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
 
-msgid "button_edit"
-msgstr ""
-
 msgid "psm_entry_created"
 msgstr ""
 

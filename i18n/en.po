@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2004-03-04 14:04default\n"
+"POT-Creation-Date: 2004-03-04 16:49default\n"
 "PO-Revision-Date: 2004-01-27 17:58+0100\n"
 "Last-Translator: ben <ben@nuxeo.com>\n"
 "Language-Team: ben\n"
@@ -95,9 +95,6 @@ msgstr "No match"
 msgid "no_dir_available"
 msgstr "No directory available"
 
-msgid "button_edit"
-msgstr "Edit"
-
 msgid "psm_entry_created"
 msgstr "Entry created"
 
@@ -121,6 +118,9 @@ msgstr "Full Name"
 
 msgid "cpsdir_label_delete_entry"
 msgstr "Delete entry"
+
+#~ msgid "button_edit"
+#~ msgstr "Edit"
 
 #~ msgid "Title"
 #~ msgstr "Title"

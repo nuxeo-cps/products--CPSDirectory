@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"POT-Creation-Date: 2004-03-04 14:04default\n"
+"POT-Creation-Date: 2004-03-04 16:49default\n"
 "PO-Revision-Date: 2004-02-27 15:24+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -93,9 +93,6 @@ msgstr "Nessun risultato"
 msgid "no_dir_available"
 msgstr "Nessun elenco disponibile"
 
-msgid "button_edit"
-msgstr "Modifica"
-
 msgid "psm_entry_created"
 msgstr "Crea nuovo elemento"
 
@@ -119,6 +116,9 @@ msgstr "Nome completo"
 
 msgid "cpsdir_label_delete_entry"
 msgstr "Elimina elemento"
+
+#~ msgid "button_edit"
+#~ msgstr "Modifica"
 
 #~ msgid "Title"
 #~ msgstr "Titolo"

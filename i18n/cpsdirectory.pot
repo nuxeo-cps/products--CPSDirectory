@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-03-04 14:04default\n"
+"POT-Creation-Date: 2004-03-04 16:49default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -91,9 +91,6 @@ msgstr ""
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr ""
-
-msgid "button_edit"
 msgstr ""
 
 msgid "psm_entry_created"
