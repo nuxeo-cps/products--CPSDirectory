@@ -206,21 +206,12 @@ class MetaDirectory(BaseDirectory):
         See API in the base class.
         """
         raise NotImplementedError
-        mdtool = getToolByName(self, 'portal_memberdata')
-        # Convert special fields id/roles/groups to known names.
-        for f, p in ((self.id_field, 'id'),
-                     (self.roles_field, 'roles'),
-                     (self.groups_field, 'groups')):
-            if f != p and kw.has_key(f):
-                kw[p] = kw[f]
-                del kw[f]
-            # XXX should also convert search_substring_fields
-        res = mdtool.searchForMembers(kw, props=return_fields,
-                                      options={'search_substring_props':
-                                               self.search_substring_fields,
-                                               })
-        # XXX if returning props, back-convert known names.
-        return res
+        #1. build queries for each backing dir
+        #2. find in what order to do search
+        #3. do searches
+        #4. intersect results
+        #5. merge entries from each backing dir
+
 
     #
     # Internal
