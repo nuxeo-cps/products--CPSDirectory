@@ -439,7 +439,7 @@ class LDAPDirectory(BaseDirectory):
                 % res['exception'])
             raise ValueError(res['exception']) # XXX do better ?
         if not res['size']:
-            raise ValueError("No user '%s'" % id)
+            raise ValueError("No entry '%s'" % id)
 
         return res['results'][0]
 
