@@ -25,6 +25,8 @@ from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
+from time import strftime, gmtime
+from DateTime.DateTime import DateTime, safegmtime
 from OFS.Image import File, Image
 
 from Products.CMFCore.utils import getToolByName
@@ -33,7 +35,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSCore.utils import _isinstance
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
-from Products.CPSSchemas.BasicFields import CPSStringListField
+from Products.CPSSchemas.BasicFields import CPSStringListField, CPSDateTimeField
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
@@ -316,6 +318,18 @@ class LDAPDirectory(BaseDirectory):
             # Convert field data to strings for LDAP
             if _isinstance(value, Image) or _isinstance(value, File):
                 value = str(value.data)
+            elif _isinstance(value, DateTime):
+                # The nicer ways of converting to strings does not work with
+                # dates before 1970.
+                # LDAP generalized time strongly recommends GMT, so it
+                # should be converted. But if a date is stored, ignore
+                # the timezone:
+                if value.Time() != "00:00:00":
+                    value = value.toZone('GMT')
+                value = '%d%02d%02d%02d%02d%02dZ' % (value.year(),
+                    value.month(), value.day(), value.hour(), value.minute(),
+                    value.second())
+
             # LDAP wants everything as lists
             if type(value) not in (ListType, TupleType):
                 value = [value]
@@ -441,6 +455,35 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         field_data = entry[field_id]
         if _isinstance(field, CPSStringListField):
             return field_data
+        if _isinstance(field, CPSDateTimeField):
+            # strptime is not available on Windows, so do this the
+            # hard way:
+            time = field_data[0]
+            value = DateTime()
+            value._year = int(time[0:4])
+            value._month = int(time[4:6])
+            value._day = int(time[6:8])
+            value._hour = int(time[8:10])
+            value._minute = int(time[10:12])
+            value._second = int(time[12:14])
+            # XXX I'm not sure what the LDAP TimeZone format looks like,
+            # since I can't find any specifications. I *think* it is
+            # Z[offset]. Examples:
+            # GMT: 'Z'
+            # CET: 'Z0100'
+            # EST: 'Z-0600'
+            # Please beware that this is a GUESS.
+            # We always store them in GMT with the timezone 'Z', as this
+            # is recommended in the specifications.
+            # As a result, this code is largely untested with "real" data,
+            # since we simply dont know how it looks.
+            tz = time[15:]
+            if tz: # There is a timezone specified.
+                if not tz[0] not in ('-', '+'):
+                    tz = '+' + tz
+                value._tz = 'GMT' + tz
+            return value
+
         return '; '.join(field_data) # Join multivalued fields.
 
     def _setData(self, data, **kw):
