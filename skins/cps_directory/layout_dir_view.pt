@@ -9,7 +9,7 @@
                        "
         condition="python: not widget.hidden_view and
                            (not widget.hidden_empty or wrender.strip())">
-      <td width="120" align="right"  bgcolor="#EEEEEE">
+      <td width="120" align="right" valign="top" bgcolor="#EEEEEE">
         <strong>
         <span i18n:translate="" tal:condition="widget/is_i18n"
           tal:content="widget/label">label</span
