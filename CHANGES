@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Empty fields are not updatable, this result of empty entry
+  under ldap
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
