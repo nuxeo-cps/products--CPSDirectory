@@ -391,14 +391,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
-        """ we want to protect public calls of search entries
-        """
-        self.checkSearchEntriesAllowed()
-
-        return self._searchEntries(return_fields, **kw)
-
-    security.declarePrivate('_searchEntries')
-    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
@@ -422,6 +414,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
           [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
 
         return_fields=['*'] means to return all available fields.
+        """
+        self.checkSearchEntriesAllowed()
+        return self._searchEntries(return_fields=return_fields, **kw)
+
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
+        """Search for entries in the directory, unrestricted.
+
+        See documentation on searchEntries().
+        This private method does not do ACL checks.
         """
         raise NotImplementedError
 
