@@ -66,6 +66,10 @@ class MembersDirectory(BaseDirectory):
     roles_field = 'roles'
     groups_field = 'groups'
 
+    # Provide more useful defaults for this directory.
+    acl_entry_edit_roles_str = 'Manager; Owner'
+    acl_entry_edit_roles = ['Manager', 'Owner']
+
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
         """Get the adapters for an entry."""
