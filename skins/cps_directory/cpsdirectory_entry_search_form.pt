@@ -9,7 +9,7 @@
   global ok python: res[1];
   ds python: res[2];
   global portal_status_message python: (validate and not ok and
-'psm_content_error') or request.form.get('portal_status_message', '');
+    'psm_content_error') or request.form.get('portal_status_message', '');
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="css_slot">
