@@ -59,4 +59,4 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
                 res.append(v)
         return res
 
-InitializeClass(DirectoryVocabulary)
+InitializeClass(IndirectDirectoryVocabulary)
