@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-24 17:37default\n"
+"POT-Creation-Date: 2004-05-28 17:58default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: French <cantact@nuxeo.com>\n"
@@ -62,6 +62,11 @@ msgstr "Naar mappen"
 msgid "cpsdir_label_view_entry"
 msgstr "Weergave item"
 
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr ""
+
 #.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
@@ -95,6 +100,9 @@ msgstr ""
 
 msgid "psm_entry_created"
 msgstr "Item aangemaakt"
+
+msgid "label_roles"
+msgstr "Rollen"
 
 msgid "label_groups"
 msgstr "Groepen"
@@ -149,9 +157,6 @@ msgstr "Resultaten"
 #, fuzzy
 #~ msgid "button_search"
 #~ msgstr "Wijzig"
-
-#~ msgid "label_roles"
-#~ msgstr "Rollen"
 
 #, fuzzy
 #~ msgid "cpsdir_label_create ${dirname}"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-03-24 17:37default\n"
+"POT-Creation-Date: 2004-05-28 17:58default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -64,6 +64,11 @@ msgstr ""
 msgid "cpsdir_label_view_entry"
 msgstr ""
 
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr ""
+
 #.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
@@ -95,6 +100,9 @@ msgid "no_dir_available"
 msgstr ""
 
 msgid "psm_entry_created"
+msgstr ""
+
+msgid "label_roles"
 msgstr ""
 
 msgid "label_groups"

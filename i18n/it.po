@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"POT-Creation-Date: 2004-03-24 17:37default\n"
+"POT-Creation-Date: 2004-05-28 17:58default\n"
 "PO-Revision-Date: 2004-05-10 12:28+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -14,49 +14,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #.   <em content="err" style="color:red">Error</em>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Errore"
 
 #.   <p>Choose a directory</p>
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Scegli un elenco"
 
 #    <span />
 #    <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crea un nuovo elemento"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica l'elemento"
 
 #    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Risultati della ricerca "
 
 #    <span condition="python: ok != 'results'" />
 #.   <span condition="python: ok != 'results'" />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
 
 #.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
@@ -64,21 +58,24 @@ msgid "cpsdir_label_upto_directories"
 msgstr "Risali agli elenchi"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizza l'elemento"
 
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr ""
+
 #    <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
 #    <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
 
 #.   <th content="field/title">id</th>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
 
@@ -86,29 +83,30 @@ msgstr "id"
 #    <span condition="widget/is_i18n" content="widget/label">label</span>
 #.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
 #.   <span condition="widget/is_i18n" content="widget/label">label</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
 msgstr "etichetta"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
 msgstr "Nessun risultato"
 
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Nessun elenco disponibile"
 
 msgid "psm_entry_created"
 msgstr "Elemento creato"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Gruppo(i)"
 
 msgid "label_groups"
 msgstr "Gruppo(i)"
@@ -133,9 +131,11 @@ msgstr "Elimina elemento"
 
 #    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 msgid "cpsdir_help_homeless"
-msgstr "Un'area privata fornisce accesso a:<br />- un'area di lavoro privata<br />- un  calendario personale<br />- un contenitore di segnalibri (bookmarks)<br />- la possibilità di chiudere/minimizzare contenitori<br />"
+msgstr ""
+"Un'area privata fornisce accesso a:<br />- un'area di lavoro privata<br />- "
+"un  calendario personale<br />- un contenitore di segnalibri (bookmarks)<br /"
+">- la possibilità di chiudere/minimizzare contenitori<br />"
 
 #    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 msgid "cpsdir_label_homeless"
 msgstr "Abilita area privata"
-
