@@ -136,8 +136,6 @@ class LocalDirectory(BaseDirectory):
     def listEntryIds(self):
         """List all the entry ids."""
         ob = self._getContent()
-        if not ob:
-            return []
         return ob.listEntryIds()
 
     security.declarePrivate('listEntryIdsAndTitles')
@@ -147,16 +145,12 @@ class LocalDirectory(BaseDirectory):
         Returns a list of tuples (id, title).
         """
         ob = self._getContent()
-        if not ob:
-            return []
         return ob.listEntryIdsAndTitles()
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
         ob = self._getContent()
-        if not ob:
-            return 0
         return ob.hasEntry(id)
 
     security.declarePublic('createEntry')
@@ -164,16 +158,14 @@ class LocalDirectory(BaseDirectory):
         """Create an entry in the directory.
         """
         ob = self._getContent()
-        if ob:
-            return ob.createEntry(entry)
+        return ob.createEntry(entry)
 
     security.declarePublic('getEntry')
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
         ob = self._getContent()
-        if ob:
-            return ob.getEntry(id)
+        return ob.getEntry(id)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -202,8 +194,6 @@ class LocalDirectory(BaseDirectory):
         return_fields=['*'] means to return all available fields.
         """
         ob = self._getContent()
-        if not ob:
-            return []
         return ob.searchEntries(return_fields, **kw)
 
     security.declarePublic('deleteEntry')
@@ -211,22 +201,19 @@ class LocalDirectory(BaseDirectory):
         """Delete an entry in the directory.
         """
         ob = self._getContent()
-        if ob:
-            return ob.deleteEntry(id)
+        return ob.deleteEntry(id)
 
     # These next two are probably not needed, since they are internal.
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
         """Get the adapters for an entry."""
         ob = self._getContent()
-        if ob:
-            return ob._getAdapters(id)
+        return ob._getAdapters(id)
 
     security.declarePrivate('_getAdditionalRoles')
     def _getAdditionalRoles(self, id):
         ob = self._getContent()
-        if ob:
-            return ob._getAdditionalRoles(id)
+        return ob._getAdditionalRoles(id)
     
 InitializeClass(LocalDirectory)
 
