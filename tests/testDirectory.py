@@ -165,7 +165,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         member_id = 'new_member'
         members.createEntry({'id': member_id})
         members.editEntry({'id': member_id, members.password_field: 'password'})
-        u = self.folder.acl_users.getUser(member_id)
+        u = self.portal.acl_users.getUser(member_id)
         self.assert_(u._getPassword() == 'password')
 
     def testMemberSearch(self):
