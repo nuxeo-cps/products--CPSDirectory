@@ -76,21 +76,23 @@ def toUTF8(s):
 # LDAP escaping
 #
 
-escape_ldap_values_chars = '\\;,+"<> \t\n\r'
-escape_ldap_values = {}
-for c in escape_ldap_values_chars:
-    escape_ldap_values[c] = '\\'+hex(ord(c))[2:].upper()
-del c
-
-def stringToLDAP(s):
-    """Convert a UTF-8 string to its LDAP escaped encoding."""
-    return ''.join([escape_ldap_values.get(c, c) for c in s])
-
 # These work on LDAP-formatted DNs encoded strings
+
+def _toSimpleHex(m):
+    v = m.group(0)[1:]
+    return chr(int(v, 16))
+
+_escapedHex = re.compile('(\\\\[89A-F][0-9A-F])')
+
+def _simpleEscaping(s):
+    if '\\' not in s:
+        return s
+    return _escapedHex.sub(_toSimpleHex, s)
 
 def explodeDN(dn):
     """Explode a dn into list of rdns."""
-    return ldap.explode_dn(dn)
+    rdns = ldap.explode_dn(dn)
+    return [_simpleEscaping(rdn) for rdn in rdns]
 
 def implodeDN(rdns):
     """Implode a sequence of rdns into a dn."""
@@ -125,9 +127,9 @@ class LDAPBackingDirectory(BaseDirectory):
     This directory has two special fields, 'dn' and 'base_dn'.
 
     - 'dn' is read-only and is always used as the id.
-      The dn is always in canonical LDAP form, that is, encoded in UTF-8
-      and further escaped for LDAP consumption.
-      Example: drink=caf\C3\A9,c=it
+      The dn is always in canonical LDAP UTF-8 form, modified so that
+      non-ASCII chars are encoded normally (non LDAP-escaped), but
+      special ASCII chars are LDAP escaped (ex '\\3D' for '=').
 
     - 'base_dn' is read-only.
     """
@@ -535,7 +537,6 @@ class LDAPBackingDirectory(BaseDirectory):
     def convertDataFromLDAP(self, dn, ldap_entry):
         """Convert LDAP values to a user data mapping."""
         entry = {}
-        ldap_entry['dn'] = [dn]
         for field_id, field in self._getSchemas()[0].items(): # XXX
             if not ldap_entry.has_key(field_id):
                 continue
@@ -546,6 +547,7 @@ class LDAPBackingDirectory(BaseDirectory):
                 # XXX
                 raise
             entry[field_id] = value
+        entry['dn'] = dn # Not converted, still UTF-8
         return entry
 
     security.declarePrivate('checkUnderBase')
