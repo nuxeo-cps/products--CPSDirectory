@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.6.5 [R1 build 2004/02/11-14:33 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- default for the fullname computation doesn't takes care of spaces.
+- widget contextual help is not nice
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.6.4 [R1 build 2004/02/10-13:29 by regebro]
 
 Bug fixes:
