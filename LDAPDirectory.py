@@ -336,7 +336,7 @@ class LDAPDirectory(BaseDirectory):
                              self.ldap_rdn_attr)
         id = entry[self.id_field]
         if self.hasEntry(id):
-            raise ValueError("Entry '%s' already exists" % id)
+            raise KeyError("Entry '%s' already exists" % id)
         rdn_attr = self.ldap_rdn_attr
         rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])
         # XXX check rdn value syntax better...

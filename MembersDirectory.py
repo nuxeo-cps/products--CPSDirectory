@@ -141,7 +141,7 @@ class MembersDirectory(BaseDirectory):
         self.checkCreateEntryAllowed()
         id = entry[self.id_field]
         if self.hasEntry(id):
-            raise ValueError("Member '%s' already exists" % id)
+            raise KeyError("Member '%s' already exists" % id)
         mtool = getToolByName(self, 'portal_membership')
         password = '38fnvas7ds' # XXX default password ???
         roles = ()

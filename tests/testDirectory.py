@@ -92,7 +92,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         members = self.pd.members
         member_id = 'new_membertwice'
         members.createEntry({'id': member_id})
-        self.assertRaises(ValueError, members.createEntry, {'id': member_id})
+        self.assertRaises(KeyError, members.createEntry, {'id': member_id})
 
     def testMemberSearch(self):
         members = self.pd.members
@@ -202,9 +202,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(search_result, [group_id])
         self.assert_(group_id in groups.listEntryIds())
 
-        self.assertRaises(ValueError, groups.createEntry, 
-            {'group': group_id})
-
         # XXX: not implemented yet
         #groups.deleteEntry(group_id)
         #self.assert_(not groups.hasEntry(group_id))
@@ -213,7 +210,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         groups = self.pd.groups
         group_id = 'new_grouptwice'
         groups.createEntry({'group': group_id})
-        self.assertRaises(ValueError, groups.createEntry, {'group': group_id})
+        self.assertRaises(KeyError, groups.createEntry, {'group': group_id})
 
     def testMemberQueryingOnGroups(self):
         groups = self.pd.groups
@@ -309,9 +306,9 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(search_result, default_roles)
 
         for role in default_roles:
-            self.assertRaises(ValueError, roles.createEntry, {'role': role})
+            self.assertRaises(KeyError, roles.createEntry, {'role': role})
         for role in ('Anonymous', 'Authenticated', 'Owner', ''):
-            self.assertRaises(ValueError, roles.createEntry, {'role': role})
+            self.assertRaises(KeyError, roles.createEntry, {'role': role})
 
     def testRoleCreation(self):
         roles = self.pd.roles
@@ -329,8 +326,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(search_result, [role_id])
         self.assert_(role_id in roles.listEntryIds())
 
-        self.assertRaises(ValueError, roles.createEntry, {'role': role_id})
-
         # XXX: not implemented yet
         #roles.deleteEntry(role_id)
         #self.assert_(not roles.hasEntry(role_id))
@@ -339,7 +334,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         roles = self.pd.roles
         role_id = 'new_roletwice'
         roles.createEntry({'role': role_id})
-        self.assertRaises(ValueError, roles.createEntry, {'role': role_id})
+        self.assertRaises(KeyError, roles.createEntry, {'role': role_id})
 
     def testRoleSearch(self):
         roles = self.pd.roles

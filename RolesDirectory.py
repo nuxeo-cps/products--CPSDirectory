@@ -145,7 +145,7 @@ class RolesDirectory(BaseDirectory):
         self.checkCreateEntryAllowed()
         role = entry[self.id_field]
         if self.hasEntry(role):
-            raise ValueError("Role '%s' already exists" % role)
+            raise KeyError("Role '%s' already exists" % role)
         if role in ('Anonymous', 'Authenticated', 'Owner', ''):
             raise ValueError("Role '%s' is invalid" % role)
         aclu = self.acl_users
