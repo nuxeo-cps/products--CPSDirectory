@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Fix copy/paste and rename of directories
+- Fix ZODBDirectory with computed title attribute
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
