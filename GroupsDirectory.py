@@ -114,16 +114,11 @@ class GroupsDirectory(BaseDirectory):
         if return_fields is None:
             return groups
         else:
+            # No fields are returned even if return_fields is set.
+            # This is for speed reasons, calling getEntry on each entry
+            # is too slow.
+            # XXX: implement optimized version.
             return [(g, {}) for g in groups]
-
-        res = []
-        for group in groups:
-            entry = self.getEntry(group)
-            ret_data = {}
-            for key in return_fields:
-                ret_data[key] = entry[key]
-            res.append((group, ret_data))
-        return res
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
