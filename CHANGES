@@ -10,3 +10,4 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Don't raise RuntimeError but ValueError.
+- LDAPBackingDirectory: raise ConfigurationError when the LDAP server is down.
