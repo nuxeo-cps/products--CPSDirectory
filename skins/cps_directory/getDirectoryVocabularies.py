@@ -22,8 +22,8 @@ global_roles_vocabulary = {
     'type': 'CPS Vocabulary',
     'data': {
         'tuples': (
-            ('Member', "Member"),
-            ('Manager', "Manager"),
+            ('Member', "Member", 'label_roles_Member'),
+            ('Manager', "Manager", 'labael_roles_Manager'),
             )
         },
     }
