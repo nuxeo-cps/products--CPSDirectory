@@ -81,8 +81,11 @@ def implodeDN(rdns):
     """Implode a sequence of rdns into a dn."""
     return ','.join(rdns)
 
+def makeCanonicalDN(dn):
+    return implodeDN(explodeDN(dn))
+
 def isCanonicalDN(dn):
-    return dn == implodeDN(explodeDN(dn))
+    return dn == makeCanonicalDN(dn)
 
 def explodeRDN(rdn):
     """Explode a rdn into a list of avas.
@@ -182,8 +185,8 @@ class LDAPBackingDirectory(BaseDirectory):
     def _postProcessProperties(self):
         """Post-processing after properties change."""
         BaseDirectory._postProcessProperties(self)
-        # Check no space in dns
-        self.ldap_base = re.sub(r'\s*,\s*', ',', self.ldap_base)
+        # Make dns canonical
+        self.ldap_base = makeCanonicalDN(self.ldap_base)
         # Convert string stuff
         conv = {'ONELEVEL': ldap.SCOPE_ONELEVEL,
                 'SUBTREE': ldap.SCOPE_SUBTREE,
@@ -311,17 +314,35 @@ class LDAPBackingDirectory(BaseDirectory):
     def createEntry(self, entry):
         """Create an entry in the directory."""
         self.checkCreateEntryAllowed(entry=entry)
-        if not entry.has_key('dn'):
-            raise ValueError("Missing value for 'dn' in entry")
-        if not entry.has_key(self.ldap_rdn_attr): # XXX
-            raise ValueError("Missing value for '%s' in entry" %
-                             self.ldap_rdn_attr)
-        dn = entry['dn']
-        self.checkUnderBase(dn)
+
+        ldap_attrs = self.convertDataToLDAP(entry)
+        if entry.get('dn'):
+            dn = entry['dn']
+            self.checkUnderBase(dn)
+        else:
+            # Synthesize a dn for creation
+            rdn_attr = ldap_attrs.get(self.ldap_rdn_attr, [])
+            if not rdn_attr:
+                raise ValueError("Missing rdn attribute '%s' in entry" %
+                                 self.ldap_rdn_attr)
+            rdn = rdn_attr[0].strip() # If multivalued, take the first one.
+            ava = '%s=%s' % (self.ldap_rdn_attr, rdn)
+            if self.ldap_scope_c == ldap.SCOPE_ONELEVEL:
+                base_dn = self.ldap_base
+            else: # ldap.SCOPE_SUBTREE
+                if not entry.has_key('base_dn'):
+                    raise ValueError("Missing base_dn in entry")
+                base_dn = entry['base_dn']
+                if not isCanonicalDN(base_dn):
+                    raise ValueError("base_dn '%s' is not canonical" % base_dn)
+                if not (','+base_dn).endswith(','+self.ldap_base):
+                    raise ValueError("base_dn '%s' must be under base '%s'" %
+                                     (base_dn, self.ldap_base))
+            dn = implodeDN((ava, base_dn))
+
         if self.hasEntry(dn):
             raise KeyError("Entry '%s' already exists" % dn)
 
-        ldap_attrs = self.convertDataToLDAP(entry)
         ldap_attrs['objectClass'] = list(self.ldap_object_classes_c)
         self.insertLDAP(dn, ldap_attrs)
 
