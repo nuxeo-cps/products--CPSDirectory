@@ -6,10 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- LDAP multivalue search is done using substring match
-- LocalDirectory "Recursion Depth Exceeded" bug fixed.
-- The tests if there is a local directory is no longer necessary.
-- LDAPDirectory didn't work with IntegerFields.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

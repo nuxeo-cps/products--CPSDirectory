@@ -1,4 +1,14 @@
 *******************************************
+** CPSDirectory V1.6.2 [R1 build 2004/02/03-15:13 by regebro]
+
+Bug fixes:
+~~~~~~~~~~
+- LDAP multivalue search is done using substring match
+- LocalDirectory "Recursion Depth Exceeded" bug fixed.
+- The tests if there is a local directory is no longer necessary.
+- LDAPDirectory didn't work with IntegerFields.
+
+*******************************************
 ** CPSDirectory V1.6.1 [R1 build 2004/02/03-10:31 by regebro]
 
 New internal features:
