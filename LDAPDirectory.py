@@ -381,7 +381,7 @@ class LDAPDirectory(BaseDirectory):
         data = adapter._getData(entry=entry)
         return data
 
-    def _makeAttrsFromData(self, data, ignore_attrs=[]):
+    def _makeAttrsFromData(self, data, ignore_attrs=[], keep_empty=0):
         # Make attributes. Skip ignore_attrs.
         attrs = {}
         for field_id, field in self._getSchemas()[0].items(): # XXX
@@ -393,8 +393,8 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if field_id in ignore_attrs:
                 continue
-            if not value:
-                continue # Skip empty values
+            if not value and not keep_empty:
+                continue
             # Convert field data to strings for LDAP
             if _isinstance(value, Image) or _isinstance(value, File):
                 value = str(value.data)
@@ -411,7 +411,11 @@ class LDAPDirectory(BaseDirectory):
                     value.second())
 
             # LDAP wants everything as lists
-            if type(value) not in (ListType, TupleType):
+            if not value:
+                value = [''] # Means 'delete' for modify operations.
+            elif isinstance(value, TupleType):
+                value = list(value)
+            elif not isinstance(value, ListType):
                 value = [value]
             attrs[field_id] = value
         return attrs
@@ -591,7 +595,9 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         # XXX treat change of rdn
 
         dir = self._dir
-        attrs = dir._makeAttrsFromData(data, ignore_attrs=[rdn_attr])
+        attrs = dir._makeAttrsFromData(data,
+                                       ignore_attrs=[rdn_attr],
+                                       keep_empty=1)
         if attrs:
             msg = dir._delegate.modify(user_dn, # to_utf8 done by backend
                                        attrs=attrs)
