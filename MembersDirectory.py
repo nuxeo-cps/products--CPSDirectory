@@ -103,7 +103,15 @@ class MembersDirectory(BaseDirectory):
         """Search for entries in the directory.
         """
         mdtool = getToolByName(self, 'portal_memberdata')
+        # Convert special fields id/roles/groups to known names.
+        for f, p in ((self.id_field, 'id'),
+                     (self.roles_field, 'roles'),
+                     (self.groups_field, 'groups')):
+            if f != p and kw.has_key(f):
+                kw[p] = kw[f]
+                del kw[f]
         res = mdtool.searchForMembers(kw, props=['*'])
+        # XXX if returning props, back-convert known names.
         return [id for id, d in res]
 
     security.declarePublic('hasEntry')
