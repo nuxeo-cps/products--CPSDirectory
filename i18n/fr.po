@@ -77,8 +77,8 @@ msgstr "Choix de l'annuaire"
 
 #.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create ${dirname}"
-msgstr "Créer dans ${dirname}"
+msgid "cpsdir_label_create"
+msgstr "Créer dans l'annuaire "
 
 #.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
 #.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>
@@ -100,12 +100,12 @@ msgstr "Editer l'entrée"
 #.   <span condition="python:ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
-msgstr "Résultats de la recherche dans "
+msgstr "Résultats de la recherche dans l'annuaire "
 
 #.   <span condition="python:ok != 'results'">cpsdir_label_search</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search"
-msgstr "Chercher dans "
+msgstr "Chercher dans l'annuaire"
 
 #.   <a attributes="href
 #.              string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname">cpsdir_label_search_entry</a>

@@ -72,8 +72,8 @@ msgstr "Scegli un elenco"
 
 #.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create ${dirname}"
-msgstr "Crea in ${dirname}"
+msgid "cpsdir_label_create"
+msgstr "Crea in "
 
 #.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
 #.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>

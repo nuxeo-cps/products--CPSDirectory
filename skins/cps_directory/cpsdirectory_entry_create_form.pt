@@ -24,8 +24,10 @@
            string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname"
          i18n:translate="">cpsdir_label_search_entry</a>
     </div>
-    <h1><span i18n:translate="">cpsdir_label_create <tal:block
-          i18n:name="dirname" tal:content="dirtitle" /></span></h1>
+
+    <h1><tal:block i18n:translate="">cpsdir_label_create</tal:block>
+        <tal:block i18n:translate="" tal:content="dirtitle" /></h1>
+
     <div class="description">
     </div>
   </metal:block>
