@@ -10,8 +10,8 @@
   <legend>Update MemberData from schema</legend>
 
   <p>You can synchronize the MemberData tool and the Members directory by
-  clicking on the button below. Fields defined in the <em>members</em> but not
-  in the memberdata properties will be added. These special fields are
+  clicking on the button below. Fields defined in the <em>members</em> schema
+  but not in the memberdata properties will be added. These special fields are
   ignored:</p>
 
   <ul>
