@@ -14,6 +14,7 @@ New features:
 - Implemented getting and setting properties on the member when the user
   folder supports it.
 - Enable empty search using '*' on field referenced in search_substring_fields
+- Finish implementing searchEntries, with return_fields support.
 Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
