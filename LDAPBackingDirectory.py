@@ -572,6 +572,9 @@ class LDAPBackingDirectory(BaseDirectory):
             if scope != ldap.SCOPE_BASE:
                 raise ValueError("Incorrect scope for authenticated search")
             try:
+                if ',' not in base:
+                    # Avoid doing an LDAP request if we know we'll fail.
+                    raise ldap.INVALID_DN_SYNTAX
                 conn = self.connectLDAP(base, password)
             except ldap.INVALID_CREDENTIALS:
                 LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
