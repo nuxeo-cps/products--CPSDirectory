@@ -34,6 +34,8 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     """Directory Vocabulary
 
     This vocabulary is built by listing all the entries of a directory.
+
+    The keys are the entry ids, and the values are the entry titles.
     """
 
     meta_type = "CPS Directory Vocabulary"
