@@ -8,6 +8,8 @@ New features:
   all directories.
 - Enable tooltip help in creation and edition using widget/help property.
 - Implemented ZODB Directory.
+- New navigation using action
+- Valid breadcrumbs
 Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
