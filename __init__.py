@@ -28,6 +28,7 @@ import DirectoryTool
 from DirectoryTool import DirectoryTypeRegistry
 from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
+from GroupsDirectory import GroupsDirectory
 
 tools = (DirectoryTool.DirectoryTool,
          )
@@ -43,3 +44,4 @@ def initialize(registrar):
         ).initialize(registrar)
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
+    DirectoryTypeRegistry.register(GroupsDirectory)
