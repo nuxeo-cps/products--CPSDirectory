@@ -1,0 +1,83 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Search'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<dtml-if "REQUEST.has_key('submit')">
+
+<h3>Search Results</h3>
+
+<dtml-let res="manage_searchDirectory(REQUEST.form)">
+
+<dtml-if res>
+<table cellspacing="0" cellpadding="2" border="0" width="100%">
+  <dtml-let fkeys="res[0][1].keys()" dummy="fkeys.sort()">
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;
+    </td>
+    <dtml-in fkeys prefix="f">
+      <td align="left" valign="top">
+         &dtml-f_item;
+      </td>
+    </dtml-in>
+  </tr>
+  <dtml-in res>
+  <dtml-let field_id=sequence-key values=sequence-item>
+  <tr>
+    <td align="left" valign="top">
+      &dtml-field_id;
+    </td>
+    <dtml-in fkeys prefix="f">
+      <td align="left" valign="top">
+          <dtml-var "values.get(f_item)" html_quote>
+      </td>
+    </dtml-in>
+  </tr>
+  </dtml-let>
+  </dtml-in>
+  </dtml-let>
+</table>
+<dtml-else>
+  <p>No result.</p>
+</dtml-if>
+
+</dtml-let>
+<dtml-else>
+
+<h3>Search</h3>
+
+<dtml-let infos="manage_getZMISearchFields">
+<form action="&dtml-URL0;" method="post">
+<table cellspacing="0" cellpadding="2" border="0" width="100%">
+  <dtml-in infos mapping>
+  <tr>
+    <td align="left" valign="top">
+      <div class="form-label">&dtml-field_id;</div>
+    </td>
+    <td align="left" valign="top">
+      <div class="form-element">
+        <input type="text" name="&dtml-field_id;" size="40" value=""/>
+        <dtml-if "field_type == 'CPS String List Field'">
+          (list)
+        </dtml-if>
+      </div>
+    </td>
+  </tr>
+  </dtml-in>
+  <tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">
+      <div class="form-element">
+        <input class="form-element" name="submit" type="submit"
+            value="Search" />
+      </div>
+    </td>
+  </tr>
+</table>
+</form>
+</dtml-let>
+
+</dtml-if>
+
+<dtml-var manage_page_footer>

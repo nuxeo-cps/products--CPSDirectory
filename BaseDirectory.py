@@ -863,14 +863,42 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         SimpleItemWithProperties.manage_options[:1] + (
         {'label': 'Entry Local Roles', 'action':'manage_entryLocalRoles'},) +
         SimpleItemWithProperties.manage_options[1:]+
-        ({'label': 'Export','action': 'manage_export'},))
-                                
+        ({'label': 'Search','action': 'manage_searchDirectoryForm'},
+         {'label': 'Export','action': 'manage_export'},
+         ))
     security.declareProtected(ManagePortal, 'manage_entryLocalRoles')
     manage_entryLocalRoles = DTMLFile('zmi/manageEntryLocalRoles', globals())
-                                
+
+    security.declareProtected(ManagePortal, 'manage_searchDirectoryForm')
+    manage_searchDirectoryForm = DTMLFile('zmi/directory_search', globals())
+
     security.declareProtected(ManagePortal, 'manage_export')
-    manage_export = DTMLFile('zmi/basedirectory_export', globals())      
-                         
+    manage_export = DTMLFile('zmi/basedirectory_export', globals())
+
+    security.declareProtected(ManagePortal, 'manage_searchDirectory')
+    def manage_searchDirectory(self, mapping):
+        """Search an entry (ZMI).
+
+        Returns the results, and a list of field ids to display.
+        """
+        mapping['return_fields'] = ['*']
+        res = self.searchEntries(**mapping)
+        
+        
+
+    security.declareProtected(ManagePortal, 'manage_getZMISearchFields')
+    def manage_getZMISearchFields(self):
+        """Find which fields we can easily search from ZMI."""
+        infos = []
+        for schema in self._getSchemas(search=1):
+            for field_id, field in schema.items():
+                mt = field.meta_type
+                if mt in ('CPS String Field',
+                          'CPS String List Field'):
+                    infos.append({'field_id': field_id,
+                                  'field_type': mt,
+                                  })
+        return infos
 
     security.declareProtected(ManagePortal, 'manage_addEntryLocalRole')
     def manage_addEntryLocalRole(self, role, expr, REQUEST):
