@@ -126,7 +126,7 @@ class MembersDirectory(BaseDirectory):
     def createEntry(self, entry):
         """Create an entry in the directory.
         """
-        self.checkCreateAllowed()
+        self.checkCreateEntryAllowed()
         id = entry[self.id_field]
         mtool = getToolByName(self, 'portal_membership')
         password = '38fnvas7ds' # XXX default password ???
