@@ -883,8 +883,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         mapping['return_fields'] = ['*']
         res = self.searchEntries(**mapping)
-        
-        
+        return res
 
     security.declareProtected(ManagePortal, 'manage_getZMISearchFields')
     def manage_getZMISearchFields(self):
