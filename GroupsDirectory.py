@@ -121,7 +121,7 @@ class GroupsDirectory(BaseDirectory):
         self.checkCreateEntryAllowed()
         group = entry[self.id_field]
         if self.hasEntry(group):
-            raise ValueError("Group '%s' already exists" % groups)
+            raise ValueError("Group '%s' already exists" % group)
         aclu = self.acl_users
         if not hasattr(aq_base(aclu), 'userFolderAddGroup'):
             return # XXX
