@@ -86,10 +86,6 @@ class DirectoryVocabulary(SimpleItemWithProperties):
         if self.add_empty_key and key == '':
             return self.empty_key_value
         dir = self._getDirectory()
-        # XXX getEntry may be too costly, we don't want to
-        # retrieve all the fields (may be a costly LDAP request
-        # for instance for members of a role), but only the
-        # title.
         title_field = dir.title_field
         entry = dir._getEntryKW(key, field_ids=[title_field])
         return entry[title_field]
