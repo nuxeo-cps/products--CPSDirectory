@@ -147,7 +147,7 @@ class RolesDirectory(BaseDirectory):
         if self.hasEntry(role):
             raise KeyError("Role '%s' already exists" % role)
         if role in ('Anonymous', 'Authenticated', 'Owner', ''):
-            raise ValueError("Role '%s' is invalid" % role)
+            raise KeyError("Role '%s' is invalid" % role)
         aclu = self.acl_users
         if hasattr(aq_base(aclu), 'userFolderAddRole'):
             aclu.userFolderAddRole(role)
