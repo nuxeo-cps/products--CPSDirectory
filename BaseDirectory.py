@@ -198,11 +198,17 @@ class BaseDirectory(SimpleItemWithProperties):
         """Get the adapters for an entry."""
         raise NotImplementedError
 
+    security.declarePrivate('_getAdditionalRoles')
+    def _getAdditionalRoles(self, id):
+        """Get additional user roles provided to ACLs."""
+        return ()
+
     security.declarePrivate('_getDataModel')
     def _getDataModel(self, id):
         """Get the datamodel for an entry."""
         adapters = self._getAdapters(id)
-        dm = DataModel(None, adapters, context=self)
+        add_roles = self._getAdditionalRoles(id)
+        dm = DataModel(None, adapters, context=self, add_roles=add_roles)
         dm._fetch()
         return dm
 

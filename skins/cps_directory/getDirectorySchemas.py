@@ -16,10 +16,11 @@ members_schema = {
             },
         },
     'password': {
-        'type': 'CPS String Field',
+        'type': 'CPS Password Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,
+                'acl_write_roles_str': 'Manager; Owner',
             },
         },
     'roles': {
@@ -27,6 +28,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
+                'acl_write_roles_str': 'Manager',
             },
         },
     'groups': {
@@ -34,6 +36,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
+                'acl_write_roles_str': 'Manager',
             },
         },
     'email': {
@@ -41,6 +44,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 1,
+                'acl_write_roles_str': 'Manager; Owner',
             },
         },
     }
@@ -61,6 +65,7 @@ roles_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
+                'acl_write_roles_str': 'Manager',
             },
         },
     }
@@ -81,6 +86,7 @@ groups_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
+                'acl_write_roles_str': 'Manager',
             },
         },
     }

@@ -17,7 +17,7 @@
     <tal:block define="widget cell/widget;
                        wid widget/getWidgetId;
                        err python: ds.getError(wid);
-                       is_required widget/is_required|nothing;
+                       is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
                        ">
       <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
         <div class="label" tal:condition="widget/label_edit"

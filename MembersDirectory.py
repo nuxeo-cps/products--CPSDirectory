@@ -24,6 +24,7 @@ from zLOG import LOG, DEBUG
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
 
 from Products.CMFCore.utils import getToolByName
 
@@ -71,6 +72,14 @@ class MembersDirectory(BaseDirectory):
         adapters = [MemberStorageAdapter(schema, id, dir)
                     for schema in self._getSchemas()]
         return adapters
+
+    security.declarePrivate('_getAdditionalRoles')
+    def _getAdditionalRoles(self, id):
+        """Get additional user roles provided to ACLs."""
+        if id == getSecurityManager().getUser().getId():
+            return ('Owner',)
+        else:
+            return ()
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
