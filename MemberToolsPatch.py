@@ -101,6 +101,13 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
     mdtool = self
     mdtool_props = mdtool.propertyIds()
     checked_props = [p for p in mdtool_props if query.has_key(p)]
+    if props == ['*']:
+        # all props known other than already fetched by the search
+        other_props = [p for p in mdtool_props if p not in checked_props]
+    elif props is not None:
+        # all props asked for other than already fetched by the search
+        other_props = [p for p in props if p not in checked_props]
+
     res = []
     for id, member in mdtool._members.items():
         base_member = aq_base(member)
@@ -108,10 +115,8 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
         for key in checked_props:
             searched = getattr(base_member, key, _marker)
             if searched is _marker:
-                searched = mdtool.getProperty(key, _marker)
-                if searched is _marker:
-                    # No value in tool?!
-                    continue
+                # default value
+                searched = mdtool.getProperty(key)
             entry[key] = searched
         if not _isEntryMatching(entry, search_types, query):
             continue
@@ -120,11 +125,13 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
         elif props == ['*']:
             res.append((id, entry))
         else:
-            d = {}
-            for key in props:
-                if entry.has_key(key):
-                    d[key] = entry[key]
-            res.append((id, d))
+            for key in other_props:
+                value = getattr(base_member, key, _marker)
+                if value is _marker:
+                    # default value
+                    value = mdtool.getProperty(key)
+                entry[key] = value
+            res.append((id, entry))
     return res
 
 #
