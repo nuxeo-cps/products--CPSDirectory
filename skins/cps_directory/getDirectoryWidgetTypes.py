@@ -17,10 +17,6 @@ widgets = {
         'type': 'CPS User Identifier Widget Type',
         'data': {},
         },
-    'Linked Directories Widget': {
-        'type': 'CPS Linked Directories Widget Type',
-        'data': {},
-        },
     }
 
 return widgets
