@@ -78,13 +78,15 @@ class RolesDirectory(BaseDirectory):
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
         kwrole = kw.get(self.id_field)
+        if kwrole:
+            kwrole = kwrole.lower()
         kwmembers = kw.get(self.members_field)
         user_roles = None # Lazily computed.
         roles = []
         for role in self.listEntryIds():
             if kwrole:
                 # XXX treat list
-                if role != kwrole:
+                if role.lower().find(kwrole) == -1:
                     continue
             if kwmembers:
                 if user_roles is None:
@@ -107,6 +109,10 @@ class RolesDirectory(BaseDirectory):
         if not return_fields:
             return roles
         else:
+            # No fields are returned even if return_fields is set.
+            # This is for speed reasons, calling getEntry on each entry
+            # is too slow.
+            # XXX: implement optimized version.
             return [ (role, {}) for role in roles]
 
     security.declarePublic('hasEntry')
