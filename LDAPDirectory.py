@@ -304,7 +304,6 @@ class LDAPStorageAdapter(BaseStorageAdapter):
             attrs[fieldid] = value
 
         if attrs:
-            LOG('LDAPDirectory.setData', DEBUG, 'sending attrs=%s' % (attrs,))
             msg = dir._delegate.modify(user_dn, attrs=attrs)
             if msg.startswith('STRONG_AUTH_REQUIRED'):
                 raise ValueError("Authentication required")
