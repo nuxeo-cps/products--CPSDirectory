@@ -533,11 +533,8 @@ class LDAPStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
         # Compute entry so that it is passed as kw to _getFieldData.
         field_ids = [field_id for field_id, field in self.getFieldItems()]
-        dir = self._dir
-        if self._id_is_dn:
-            entry = dir._getLDAPEntry(id, field_ids=field_ids, id_is_dn=1)
-        else:
-            entry = dir._getLDAPEntry(id, field_ids=field_ids)
+        entry = self._dir._getLDAPEntry(id, field_ids=field_ids,
+                                        id_is_dn=self._id_is_dn)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
