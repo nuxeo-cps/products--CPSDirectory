@@ -361,6 +361,8 @@ class LDAPDirectory(BaseDirectory):
                                     rdn=rdn,
                                     attrs=attrs)
         if msg:
+            if msg.startswith("ALREADY_EXISTS"):
+                raise KeyError("Entry '%s' already exists" % id)
             raise ValueError("LDAP error: %s" % msg)
 
         if not id and self.id_field == 'dn':
