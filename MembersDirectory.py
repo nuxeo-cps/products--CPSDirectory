@@ -176,11 +176,11 @@ class MembersDirectory(BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed()
+        self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Members '%s' does not exist" % id)
         mtool = getToolByName(self, 'portal_membership')
-        mtool.deleteMembers([id])
+        mtool.deleteMembers([id], check_permission=0)
 
 
     security.declareProtected(ManagePortal, 'manage_updateMemberDataFromSchema')
