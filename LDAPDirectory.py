@@ -88,13 +88,13 @@ class LDAPDirectory(BaseDirectory):
     ldap_port = 389
     ldap_use_ssl = 0
     ldap_base = ''
-    ldap_scope_str = 'BASE'
+    ldap_scope_str = 'SUBTREE'
     ldap_bind_dn = ''
     ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
     ldap_object_classes_str = 'top, person'
 
-    ldap_scope = ldap.SCOPE_BASE
+    ldap_scope = ldap.SCOPE_SUBTREE
     ldap_object_classes = ['top', 'person']
 
     all_ldap_scopes = ('BASE', 'ONELEVEL', 'SUBTREE')
@@ -273,11 +273,12 @@ class LDAPDirectory(BaseDirectory):
                 return [e[id_attr][0] for e in results]
 
     def objectClassFilter(self):
-        if self.ldap_object_classes:
-            res = '(|'
-            for each in self.ldap_object_classes:
-                res += ' (objectClass=%s)' % each
-            res += ')'
+        classes = self.ldap_object_classes
+        if classes:
+            res = ''.join(['(objectClass=%s)' % each
+                           for each in classes])
+            if len(classes) > 1:
+                res ='(|%s)' % res
             return res
         else:
             return '(objectClass=*)'
