@@ -44,21 +44,19 @@
       <p>
         <input type="hidden" name="dirname" tal:attributes="value dirname"/>
         <input type="hidden" name="ids:tokens:default" value=""/>
-
-        <input type="button" class="context" value="button_back"
-          onclick="javascript:history.back()" i18n:attributes="value"/>
-
         <tal:block condition="python:isAdmin and results">
-          <input type="submit" class="standalone" value="button_delete"
-            i18n:attributes="value"
-            tal:attributes="onclick python:'return window.confirm(\'%s\')'
-            % cpsmcat('description_confirm_delete')" />
-
           <input type="button" value="button_select_all" class="context"
             i18n:attributes="value"
             tal:attributes="onclick python:'toggleSelect(this, \'%s\', \'%s\')'
             % (cpsmcat('button_select_all'), cpsmcat('button_deselect_all'))" />
+          <input type="submit" class="destructive" value="button_delete"
+            i18n:attributes="value"
+            tal:attributes="onclick python:'return window.confirm(\'%s\')'
+            % cpsmcat('description_confirm_delete')" />
+
         </tal:block>
+        <input type="button" class="context" value="button_back"
+          onclick="javascript:history.back()" i18n:attributes="value"/>
       </p>
     </form>
   </div>
