@@ -94,7 +94,7 @@ class GroupsDirectory(BaseDirectory):
                 if not hasattr(aq_base(aclu), 'getGroupById'):
                     # No group support and want a member
                     continue
-                # XXX optimize for LDAP
+                # XXX optimize for LDAP, using a getGroupsWithUsers()
                 ok = 0
                 groupob = aclu.getGroupById(group, _marker)
                 if groupob is _marker:
@@ -107,6 +107,26 @@ class GroupsDirectory(BaseDirectory):
                     continue
             groups.append(group)
         return groups
+
+    security.declarePublic('hasEntry')
+    def hasEntry(self, id):
+        """Does the directory have a given entry?"""
+        # XXX check security?
+        # XXX optimize for LDAP
+        return id in self.listEntryIds()
+
+    security.declarePublic('createEntry')
+    def createEntry(self, entry):
+        """Create an entry in the directory."""
+        self.checkCreateEntryAllowed()
+        id = entry[self.id_field]
+        if self.hasEntry(id):
+            raise ValueError("Group '%s' already exists." % id)
+        aclu = self.acl_users
+        if not hasattr(aq_base(aclu), 'userFolderAddGroup'):
+            return # XXX
+        aclu.userFolderAddGroup(id)
+        self.writeEntry(entry)
 
 InitializeClass(GroupsDirectory)
 
@@ -147,6 +167,9 @@ class GroupStorageAdapter(BaseStorageAdapter):
         Fills default value from the field if the object has no attribute.
         """
         group = self._group
+        if group is None:
+            # Creation.
+            return self.getDefaultData()
         dir = self._dir
         members = self._getGroupMembers(group)
         data = {}
