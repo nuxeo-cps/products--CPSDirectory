@@ -7,8 +7,9 @@ New features:
 - Indirect directories can now store entries coming from different directories.
   (compatibility is broken with previous instances of Indirect directory if
   these instances are not empty)
-  Local directory 'directory_id' property has been changed from string to list
-  because it is used for indirect directories.
+- Local directory 'directory_id' property has been changed from string to list
+  because it is used for indirect directories, and new methods used for indirect
+  directories have been added in LocalDirectory.
 - A new type of vocabulary, indirect directory vocabulary, is used to get all
   the possible entries for an indirect directory.
 Bug fixes:
