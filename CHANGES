@@ -9,6 +9,8 @@ Bug fixes:
 - LDAPBackingDirectory: Fixed problem for DN with accented chars.
 - LDAPBackingDirectory: Correctly trap insufficient access errors.
 - LDAPBackingDirectory: When creating entry, return synthesized DN.
+- IndirectDirectoryVocabulary: items coming from the indirect directory are now
+  correctly retrieved (bug appeared in v.1.16.0)
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - LDAPBackingDirectory: Automatically reconnect to server.
