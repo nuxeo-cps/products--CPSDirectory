@@ -98,7 +98,10 @@ class RolesDirectory(BaseDirectory):
                 if not ok:
                     continue
             roles.append(role)
-        return roles
+        if not return_fields:
+            return roles
+        else:
+            return [ (role, {}) for role in roles]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
