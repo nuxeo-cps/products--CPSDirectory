@@ -89,7 +89,10 @@ class MemberStorageAdapter(BaseStorageAdapter):
         """
         id = self._id
         data = {'id': id}
-        data.update({'sn': id.upper(), 'givenName': 'Bob'})
+        data.update({
+            'password': 'this should be invisible',
+            'email': 'fg@nuxeo.com',
+            })
         return data
         # XXX
         for field_id, field in self._schema.items():
