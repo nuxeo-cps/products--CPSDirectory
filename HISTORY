@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.17.2 [R1 build 2004/08/23-05:51 by fermigier]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- LDAPBackingDirectory: Don't fail in some case of incorrect config of auth.
+- Use more semantical HTML markup
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Added an optional 'loadcustom' parameter to the getDirectoryVocabularies.py
+  method.
+
+*******************************************
 ** CPSDirectory V1.17.1 [R1 build 2004/08/16-15:23 by ben]
 
 Requires:
