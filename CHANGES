@@ -1,9 +1,11 @@
 Requires:
 ~~~~~~~~~
--
+- CPSNavigation >= 0.11.1 to be able to use "CPS Directory Entry Widget"
+  to create entries into indirect directories
 New features:
 ~~~~~~~~~~~~~
--
+- Added methods to be able to use a "CPS Directory Entry Widget" to create
+  entries into an Indirect directory, even through a Local Directory
 Bug fixes:
 ~~~~~~~~~~
 - LDAPBackingDirectory: Fixed problem for DN with accented chars.
@@ -14,3 +16,4 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - LDAPBackingDirectory: Automatically reconnect to server.
+- IndirectDirectory: added a stroage adapter
