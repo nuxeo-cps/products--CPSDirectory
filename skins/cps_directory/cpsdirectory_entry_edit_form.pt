@@ -68,7 +68,7 @@ actions['object'].append({'id':'delete_entry',
     <a tal:attributes="href string:${base_url}cpsdirectory_view">
       <img tal:replace="structure python:
         here.getImgTag('cpsdirectoryup_icon.gif', base_url=base_url)" />
-      <b i18n:translate="">cpsdir_label_upto_directories</b></a>
+      <strong i18n:translate="">cpsdir_label_upto_directories</strong></a>
     <h1><span i18n:translate="" tal:content="dirtitle" />:
         <span i18n:translate="cpsdir_label_edit_entry" /></h1>
     <div class="description">

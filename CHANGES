@@ -7,6 +7,7 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - LDAPBackingDirectory: Don't fail in some case of incorrect config of auth.
+- Use more semantical HTML markup
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Added an optional 'loadcustom' parameter to the getDirectoryVocabularies.py
