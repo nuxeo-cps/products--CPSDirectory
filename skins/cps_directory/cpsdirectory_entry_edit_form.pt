@@ -15,6 +15,14 @@
   global portal_status_message python: portal_status_message or (validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) or '';
   "/>
 <metal:block use-macro="here/main_template/macros/master">
+  <metal:block fill-slot="css_slot">
+    <script type="text/javascript"
+      tal:attributes="src string:${base_url}functions.js"></script>
+
+    <link rel="Stylesheet" type="text/css" href=""
+      tal:attributes="href string:${base_url}document.css">
+  </metal:block>
+
   <metal:block fill-slot="header">
     <a tal:attributes="href string:${base_url}cpsdirectory_view">
       <img tal:replace="structure python:
@@ -29,11 +37,6 @@
           i18n:translate="" tal:content="dirtitle" /></h1>
     <div class="description">
     </div>
-  </metal:block>
-
-  <metal:block fill-slot="css_slot">
-    <link rel="Stylesheet" type="text/css" href=""
-      tal:attributes="href string:${base_url}document.css">
   </metal:block>
 
   <metal:block fill-slot="main">
