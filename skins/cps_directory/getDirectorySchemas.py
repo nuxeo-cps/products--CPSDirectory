@@ -26,7 +26,6 @@ members_schema = {
         'data': {
             'default_expr': 'string:',
             'read_ignore_storage': 1,
-            'read_process_dependent_fields': ['password'],
             'write_ignore_storage': 1,
         },
     },
