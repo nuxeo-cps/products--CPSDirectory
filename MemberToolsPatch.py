@@ -115,6 +115,8 @@ def _searchInMemberData(self, query, props=None):
             continue
         if props is None:
             res.append(id)
+        elif props == ['*']:
+            res.append((id, entry))
         else:
             d = {}
             for key in props:
@@ -142,6 +144,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
     method will return a list of tuples containing the member id and a
     dictionary of available properties:
       [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
+
+    props=['*'] means to return all available properties.
     """
     query.update(kw)
     aclu = self.acl_users
@@ -158,6 +162,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
         aclu_props = aclu.listUserProperties()
         if props is None:
             user_props = None
+        elif props == ['*']:
+            user_props = list(aclu_props)
         else:
             user_props = [p for p in props if p in aclu_props]
         user_query = {}
@@ -184,6 +190,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
     mdtool_props = mdtool.propertyIds()
     if props is None:
         member_props = None
+    elif props == ['*']:
+        member_props = [p for p in mdtool_props if p not in done_props]
     else:
         member_props = [p for p in props
                         if p in mdtool_props and p not in done_props]
