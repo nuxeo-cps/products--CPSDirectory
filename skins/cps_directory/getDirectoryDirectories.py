@@ -50,7 +50,7 @@ groups_directory = {
         'group_field': 'group',
         'members_field': 'members',
         'title_field': 'group',
-        'search_substring_fields': ['groups'],
+        'search_substring_fields': ['group'],
         },
     }
 
