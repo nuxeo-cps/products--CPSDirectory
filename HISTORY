@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.6.3 [R1 build 2004/02/08-07:39 by fermigier]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- getEntry now has a default parameter, to prevent a raise of KeyError
+  if the entry does not exist.
+
+*******************************************
 ** CPSDirectory V1.6.2 [R1 build 2004/02/03-15:13 by regebro]
 
 Bug fixes:
