@@ -68,10 +68,9 @@ class EntryMixin:
 
     def getTagForValue(self, value):
         id, title = self.getIdAndTitle(value)
-        if id is None:
-            id = 'unknown'
-        if title is None:
-            title = '? (%s)' % value
+        if id is None or title is None:
+            return renderHtmlTag('span',
+                                 contents=escape('? (%s)' % value))
         portal_url = getToolByName(self, 'portal_url')()
         if self.directory_view:
             directory = self.directory_view
