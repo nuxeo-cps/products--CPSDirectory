@@ -12,14 +12,12 @@ members_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
             },
         },
     'password': {
         'type': 'CPS Password Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles': 'Manager; Owner',
             },
         },
@@ -27,7 +25,6 @@ members_schema = {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles': 'Manager',
             },
         },
@@ -35,7 +32,6 @@ members_schema = {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles': 'Manager',
             },
         },
@@ -43,7 +39,6 @@ members_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
                 'acl_write_roles': 'Manager; Owner',
             },
         },
@@ -51,7 +46,6 @@ members_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
                 'acl_write_roles': 'Manager; Owner',
             },
         },
@@ -59,7 +53,6 @@ members_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
                 'acl_write_roles': 'Nobody',
                 'read_ignore_storage': 1,
                 'read_process_expr': 'python: givenName+" "+sn',
@@ -71,7 +64,6 @@ members_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
                 'acl_write_roles': 'Manager; Owner',
             },
         },
@@ -82,42 +74,36 @@ members_search_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     'roles': {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     'groups': {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     'givenName': {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     'sn': {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     'email': {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
             },
         },
     }
@@ -130,14 +116,12 @@ roles_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
             },
         },
     'members': {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles': 'Manager',
             },
         },
@@ -151,14 +135,12 @@ groups_schema = {
         'type': 'CPS String Field',
         'data': {
                 'default': '',
-                'is_indexed': 1,
             },
         },
     'members': {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles': 'Manager',
             },
         },
@@ -166,7 +148,6 @@ groups_schema = {
         'type': 'CPS String List Field',
         'data': {
                 'default': '',
-                'is_indexed': 0,
                 'acl_write_roles_str': 'Manager',
                 'acl_write_expression_str':
                     'dir/hasSubGroupsSupport'
