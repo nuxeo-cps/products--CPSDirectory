@@ -1,18 +1,16 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
 -
-
 New features:
 ~~~~~~~~~~~~~
 - Directories can now specify which fields are searched with a substring
   search (the rest are searched with exact matches). Implemented for
   all directories.
-
+- Enable tooltip help in creation and edition using widget/help property.
 Bug fixes:
 ~~~~~~~~~~
 - Correctly fail when trying to create an already existing member.
 - Correctly remove attributes from LDAP when they are empty.
-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
