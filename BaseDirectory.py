@@ -21,13 +21,21 @@
 
 from zLOG import LOG, DEBUG
 
+from urllib import urlencode
+
 from Globals import InitializeClass
+from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
+from DateTime.DateTime import DateTime
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
+from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.Expression import Expression
+from Products.CMFCore.Expression import getEngine
+from Products.PageTemplates.TALES import CompilerError
 
 from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
@@ -64,6 +72,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "ACL: entry create roles"},
         {'id': 'acl_entry_delete_roles_str', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry delete roles"},
+        {'id': 'acl_entry_edit_roles_str', 'type': 'string', 'mode': 'w',
+         'label': "ACL: entry edit roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry id'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
@@ -77,12 +87,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     acl_access_roles_str = 'Manager; Member'
     acl_entry_create_roles_str = 'Manager'
     acl_entry_delete_roles_str = 'Manager'
+    acl_entry_edit_roles_str = 'Manager'
     id_field = ''
     title_field = ''
+    entry_roles = []
 
     acl_access_roles = ['Manager', 'Member']
     acl_entry_create_roles = ['Manager']
     acl_entry_delete_roles = ['Manager']
+    acl_entry_edit_roles = ['Manager']
 
     _properties_post_process_split = (
         ('acl_access_roles_str', 'acl_access_roles', ',; '),
@@ -121,6 +134,31 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return getSecurityManager().getUser().has_role(
             self.acl_entry_delete_roles)
 
+    security.declarePublic('isEditEntryAllowed')
+    def isEditEntryAllowed(self, id=None, entry=None):
+        """Check that user can edit a given entry.
+
+        Uses the computed entry local roles.
+        If no entry is passed, uses an empty one.
+
+        Returns a boolean.
+        """
+        if entry is None:
+            if id is not None:
+                entry = self._getEntry(id)
+            else:
+                entry = {}
+        else:
+            id = entry.get(self.id_field)
+        roles = getSecurityManager().getUser().getRolesInContext(self)
+        add_roles = self._getAdditionalRoles(id)
+        entry_local_roles = self.getEntryLocalRoles(entry)
+        all_roles = list(roles) + list(add_roles) + list(entry_local_roles)
+        for r in self.acl_entry_edit_roles:
+            if r in all_roles:
+                return 1
+        return 0
+
     security.declarePublic('checkCreateEntryAllowed')
     def checkCreateEntryAllowed(self):
         """Check that user can create an entry.
@@ -138,6 +176,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         if not self.isDeleteEntryAllowed():
             raise Unauthorized("No delete access to directory")
+
+    security.declarePublic('checkEditEntryAllowed')
+    def checkEditEntryAllowed(self, id):
+        """Check that user can edit a given entry.
+
+        Raises Unauthorized if not.
+        """
+        if not self.isEditEntryAllowed():
+            raise Unauthorized("No edit access to entry '%s'" % id)
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -177,6 +224,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 pass
         return entry
 
+    security.declarePrivate('_getEntry')
+    def _getEntry(self, id):
+        """Get entry filtered by processes but not acls."""
+        dm = self._getDataModel(id)
+        dm._check_acls = 0 # XXX use API
+        entry = {}
+        for key in dm.keys():
+            entry[key] = dm[key]
+        return entry
+
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
@@ -195,11 +252,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         raise NotImplementedError
 
-    security.declarePublic('writeEntry')
-    def writeEntry(self, entry):
-        """Write an entry in the directory.
+    security.declarePublic('editEntry')
+    def editEntry(self, entry):
+        """Edit an entry in the directory.
         """
         id = entry[self.id_field]
+        self.checkEditEntryAllowed(id)
         dm = self._getDataModel(id)
         for key in dm.keys():
             if not entry.has_key(key):
@@ -414,7 +472,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePrivate('_getAdditionalRoles')
     def _getAdditionalRoles(self, id):
-        """Get additional user roles provided to ACLs."""
+        """Get additional user roles provided to ACLs.
+
+        XXX merge this into the Entry Local Roles concept...
+        """
         return ()
 
     security.declarePrivate('_getDataModel')
@@ -437,7 +498,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Get the datamodel for a search rendering."""
         adapters = self._getSearchAdapters()
         dm = DataModel(None, adapters, context=self)
-        dm._check_acls = 0 # XXX
+        dm._check_acls = 0 # XXX use API
         dm._fetch()
         return dm
 
@@ -475,5 +536,158 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         rendered = layout.renderLayoutStyle(layout_structure, datastructure,
                                             context, **kw)
         return rendered
+
+    #
+    # Entry Local Roles
+    #
+
+    security.declarePrivate('getEntryLocalRoles')
+    def getEntryLocalRoles(self, entry):
+        """Get the effective entry local roles for an entry.
+
+        Returns the list of roles whose condition evaluates to true.
+        """
+        res = []
+        expr_context = self._createEntryLocalRoleExpressionContext(entry)
+        for role, e, compiled in self.entry_roles:
+            if not compiled:
+                continue
+            if compiled(expr_context):
+                res.append(role)
+        return res
+
+    def _createEntryLocalRoleExpressionContext(self, entry):
+        """Create an expression context for entry local roles conditions."""
+        user = getSecurityManager().getUser()
+        user_id = user.getId()
+        entry_id = entry.get(self.id_field)
+        # Get user entry lazily.
+        if self.getId() == 'members' and entry_id == user_id:
+            # Our own entry, just reuse it and avoid potential recursion.
+            def getUserEntry(entry=entry):
+                return entry
+        else:
+            # Get our entry from the members directory.
+            mdir = getToolByName(self, 'portal_directories').members
+            def getUserEntry(mdir=mdir, user_id=user_id):
+                return mdir._getEntry(user_id)
+        # Put all the names in the data in the namespace.
+        mapping = entry.copy()
+        mapping.update({
+            'entry': entry,
+            'entry_id': entry_id,
+            'user': user,
+            'user_id': user_id,
+            'getUserEntry': getUserEntry,
+            'portal': getToolByName(self, 'portal_url').getPortalObject(),
+            'DateTime': DateTime,
+            'nothing': None,
+            })
+        return getEngine().getContext(mapping)
+
+    security.declareProtected(ManagePortal, 'listEntryLocalRoles')
+    def listEntryLocalRoles(self):
+        """List entry local roles.
+
+        Returns a list of tuples (role, expr).
+        """
+        l = self.entry_roles
+        entry_roles = [(r, e) for (r, e, c) in l]
+        return entry_roles
+
+    security.declareProtected(ManagePortal, 'addEntryLocalRole')
+    def addEntryLocalRole(self, role, expr):
+        """Add an entry local role.
+
+        Returns '' if no error, 'exists' if the role already exists, or
+        the error text if a compilatione error occured.
+        """
+        # Test if already exists.
+        if [None for v in self.entry_roles if v[0] == role]:
+            return 'exists'
+        expr = expr.strip()
+        if expr:
+            try:
+                compiled = Expression(expr)
+            except CompilerError, e:
+                return str(e)
+        else:
+            compiled = None
+        self.entry_roles = self.entry_roles + [(role, expr, compiled)]
+        return ''
+
+    security.declareProtected(ManagePortal, 'delEntryLocalRole')
+    def delEntryLocalRole(self, role):
+        """Del an entry local role."""
+        self.entry_roles = [v for v in self.entry_roles
+                            if v[0] != role]
+
+    security.declareProtected(ManagePortal, 'changeEntryLocalRole')
+    def changeEntryLocalRole(self, role, expr):
+        """Change an entry local role.
+
+        Returns '' if no error, or the error text if a compilation
+        error occured.
+        """
+        expr = expr.strip()
+        if expr:
+            try:
+                compiled = Expression(expr)
+            except CompilerError, e:
+                return str(e)
+        else:
+            compiled = None
+        new_v = (role, expr, compiled)
+        self.entry_roles = [(v[0] == role and new_v or v)
+                            for v in self.entry_roles]
+        return ''
+
+    #
+    # ZMI
+    #
+
+    manage_options = (
+        SimpleItemWithProperties.manage_options[:1] + (
+        {'label': 'Entry Local Roles', 'action': 'manage_entryLocalRoles'},
+        ) + SimpleItemWithProperties.manage_options[1:]
+        )
+
+    security.declareProtected(ManagePortal, 'manage_entryLocalRoles')
+    manage_entryLocalRoles = DTMLFile('zmi/manageEntryLocalRoles', globals())
+
+    security.declareProtected(ManagePortal, 'manage_addEntryLocalRole')
+    def manage_addEntryLocalRole(self, role, expr, REQUEST):
+        """Add an entry local role (ZMI)."""
+        res = self.addEntryLocalRole(role, expr)
+        kw = {'role': role, 'expr': expr}
+        if not res:
+            msg = "Added."
+            kw = {}
+        elif res == 'exists':
+            msg = "Error: Role Entry '%s' already exists." % role
+        else:
+            msg = "Error: " + res
+        kw['manage_tabs_message'] = msg
+        args = urlencode(kw)
+        REQUEST.RESPONSE.redirect(self.absolute_url()+'/manage_entryLocalRoles?'+args)
+
+    security.declareProtected(ManagePortal, 'manage_delEntryLocalRole')
+    def manage_delEntryLocalRole(self, role, REQUEST):
+        """Delete an entry local role (ZMI)."""
+        self.delEntryLocalRole(role)
+        REQUEST.RESPONSE.redirect(self.absolute_url()+'/manage_entryLocalRoles'
+                                  '?manage_tabs_message=Deleted.')
+
+    security.declareProtected(ManagePortal, 'manage_changeEntryLocalRole')
+    def manage_changeEntryLocalRole(self, role, expr, REQUEST):
+        """Change an entry local role (ZMI)."""
+        res = self.changeEntryLocalRole(role, expr)
+        if not res:
+            msg = "Changed."
+        else:
+            msg = "Error: " + res
+        args = urlencode({'manage_tabs_message': msg})
+        # XXX should redisplay erroneous expression.
+        REQUEST.RESPONSE.redirect(self.absolute_url()+'/manage_entryLocalRoles?'+args)
 
 InitializeClass(BaseDirectory)
