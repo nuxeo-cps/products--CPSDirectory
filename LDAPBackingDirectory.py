@@ -519,6 +519,10 @@ class LDAPBackingDirectory(BaseDirectory):
                 pass
 
             #conn.manage_dsa_it(0)
+
+            conn._cps_bound_dn = None
+            conn._cps_bound_password = None
+
             self._v_conn = conn
 
         # Check how to bind
@@ -526,8 +530,7 @@ class LDAPBackingDirectory(BaseDirectory):
             bind_dn = self.ldap_bind_dn
             bind_password = self.ldap_bind_password
 
-        if (hasattr(conn, '_cps_bound_dn') and
-            conn._cps_bound_dn == bind_dn and
+        if (conn._cps_bound_dn == bind_dn and
             conn._cps_bound_password == bind_password):
             return conn
 
@@ -571,7 +574,10 @@ class LDAPBackingDirectory(BaseDirectory):
             try:
                 conn = self.connectLDAP(base, password)
             except ldap.INVALID_CREDENTIALS:
-                LOG('searchLDAP', TRACE, "invalid credentials for %s" % base)
+                LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
+                return []
+            except ldap.INVALID_DN_SYNTAX:
+                LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
                 return []
 
         LOG('searchLDAP', TRACE, "search_s base=%s scope=%s filter=%s attrs=%s" %
