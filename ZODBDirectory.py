@@ -162,13 +162,16 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         if return_fields is not None:
             if return_fields == ['*']:
                 return_fields = all_field_ids
+            ok_rf = []
             for field_id in return_fields:
                 if field_id not in all_field_ids:
                     continue
+                ok_rf.append(field_id)
                 field_ids_d[field_id] = None
                 dep_ids = schema[field_id].read_process_dependent_fields
                 for dep_id in dep_ids:
                     field_ids_d[dep_id] = None
+            return_fields = ok_rf
         # Also all fields the search is made on.
         for key in query.keys():
             field_ids_d[key] = None
