@@ -6,8 +6,7 @@
   formaction python: test(creation, 'cpsdirectory_entry_create_form',
                                     'cpsdirectory_entry_edit_form');
   ">
-<form action="." method="POST" name="form" enctype="multipart/form-data"
-  tal:attributes="action formaction">
+<form action="." method="POST" name="form" enctype="multipart/form-data">
 <input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
 <input type="hidden" name="id" value="." tal:attributes="value request/id|nothing">
 <table cellpadding="2" cellspacing="2" border="0"
@@ -49,10 +48,12 @@
   </tr>
 </table>
 <tal:block condition="has_edits">
-<input type="submit" class="standalone" name="cpsdirectory_edit_button"
+<input type="submit" class="standalone" name="cpsdirectory_entry_edit_form:method"
   value="button_change" i18n:attributes="value" tal:condition="not:creation">
-<input type="submit" class="standalone" name="cpsdirectory_create_button"
+<input type="submit" class="standalone" name="cpsdirectory_entry_create_form:method"
   value="button_create" i18n:attributes="value" tal:condition="creation">
+<input type="submit" class="standalone" name="cpsdirectory_entry_view:method"
+  value="button_view" i18n:attributes="value" tal:condition="not:creation">
 </tal:block>
 </form>
 </tal:block>

@@ -2,7 +2,7 @@
   dirname request/dirname|string:members;
   dir here/portal_directories/?dirname;
   dummy dir/checkCreateEntryAllowed;
-  validate python: request.has_key('cpsdirectory_create_button');
+  validate python: request.has_key('cpsdirectory_entry_create_form');
   create_request python: validate and request or nothing;
   res python: dir.renderCreateEntryDetailed(
     validate=validate, request=create_request,

@@ -3,7 +3,7 @@
                    dir here/portal_directories/?dirname;
                    id_field dir/id_field;
                    ">
-<form action="cpsdirectory_entry_edit_form" method="post">
+<form action="." method="post">
   <input type="hidden" name="dirname" value="." tal:attributes="value dirname" />
   <table cellpadding="2" cellspacing="2" border="0">
     <tr tal:repeat="row layout/rows">
@@ -31,8 +31,11 @@
       </tal:block>
     </tr>
   </table>
-    <input type="submit" class="standalone"
-      value="button_edit" i18n:attributes="value"
+    <input type="submit" name="cpsdirectory_entry_edit_form:method"
+      class="standalone" value="button_edit" i18n:attributes="value"
+      tal:condition="python: dir.isCreateEntryAllowed()" />
+    <input type="submit" name="cpsdirectory_entry_delete:method"
+      class="standalone" value="button_delete" i18n:attributes="value"
       tal:condition="python: dir.isCreateEntryAllowed()" />
 </form>
 </tal:block>
