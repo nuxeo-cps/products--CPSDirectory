@@ -25,9 +25,11 @@
 
 <script type="text/javascript">
   <!--
-     function popup_directorymultientries(destId, dirName, dispAttr, vocabulary, title) {
+     function popup_directorymultientries(destId, dirName, dispAttr, vocabulary, title, popupMode) {
        var args
        args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
+       if (popupMode == 'search')
+         args=args+'&search=1'
        popup = window.open('popup_directorymultientries_form'+args, 'DirectoryMultiEntryFinder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
        if(!popup.opener)
          popup.opener = window;
@@ -36,7 +38,7 @@
   //-->
 </script>
 <button type="button"
-  tal:attributes="onclick string:popup_directorymultientries('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', 'DN Navigation');">...</button><br>
+  tal:attributes="onclick string:popup_directorymultientries('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', 'DN Navigation', '${here/popup_mode}');">...</button><br>
 </tal:block>
 </tal:block>
 </tal:block>
