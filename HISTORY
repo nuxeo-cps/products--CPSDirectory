@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.10.3 [R1 build 2004/04/15-15:19 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- Don't update memberdata when not relevant for the directory.
+- Fix HTML in search results.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.10.2 [R1 build 2004/04/01-15:19 by ben]
 
 Requires:
