@@ -157,7 +157,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('isUserModified')
     def isUserModified(self):
-        """Return if the object has been modified by users.
+        """
+        @summary: Return if the object has been modified by users.
+        @rtype: @Boolean
         """
         if not hasattr(self, 'user_modified'):
             return 0
@@ -165,18 +167,21 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('setUserModified')
     def setUserModified(self, user_modified):
-        """Set if the object has been modified by users.
+        """
+        @summary: Set if the object has been modified by users.
+        @param user_modified: boolean value
+        @type user_modified: @Boolean
         """
         self.user_modified = user_modified
 
     security.declarePrivate('isEntryAclAllowed')
     def isEntryAclAllowed(self, acl_roles, id=None, entry=None):
-        """Check if the user has correct ACL on an entry.
+        """@summary: Check if the user has correct ACL on an entry.
 
         Uses the computed entry local roles.
         If no entry is passed, uses an empty one.
 
-        Returns a boolean.
+        @rtype: @Boolean
         """
         if entry is None:
             if id is not None:
