@@ -86,6 +86,10 @@ class DirectoryVocabulary(SimpleItemWithProperties):
         if self.add_empty_key and key == '':
             return self.empty_key_value
         dir = self._getDirectory()
+        # XXX getEntry may be too costly, we don't want to
+        # retrieve all the fields (may be a costly LDAP request
+        # for instance for members of a role), but only the
+        # title.
         return dir.getEntry(key)[dir.title_field]
 
     security.declareProtected(View, 'get')
