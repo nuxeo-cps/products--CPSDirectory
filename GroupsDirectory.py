@@ -154,7 +154,7 @@ class GroupsDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed()
+        self.checkCreateEntryAllowed(entry=entry)
         group = entry[self.id_field]
         if self.hasEntry(group):
             raise KeyError("Group '%s' already exists" % group)
@@ -167,7 +167,7 @@ class GroupsDirectory(BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed()
+        self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Group '%s' does not exist" % id)
         aclu = self.acl_users

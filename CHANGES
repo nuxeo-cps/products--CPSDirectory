@@ -11,7 +11,7 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - fix: deleteEntry raise error allowed pseudo role that are not manager
-- fix: delete entry checking don't use entry id
+- fix: Tightened up permission checks for entry creation or deletion.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Better internal API for no ACL checks on datamodel.

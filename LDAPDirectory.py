@@ -331,7 +331,7 @@ class LDAPDirectory(BaseDirectory):
         If a base_dn attribute is present, it is used to decide which
         subbranch to use.
         """
-        self.checkCreateEntryAllowed()
+        self.checkCreateEntryAllowed(entry=entry)
         if not entry.has_key(self.id_field):
             raise ValueError("Missing value for '%s' in entry" %
                              self.id_field)
@@ -365,7 +365,7 @@ class LDAPDirectory(BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed()
+        self.checkDeleteEntryAllowed(id=id)
         user_dn = self._getLDAPEntry(id)['dn']
         msg = self._delegate.delete(dn=to_utf8(user_dn))
         if msg:

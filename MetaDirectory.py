@@ -180,8 +180,8 @@ class MetaDirectory(BaseDirectory):
     def createEntry(self, entry):
         """Create an entry in the directory.
         """
+        self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
-        self.checkCreateEntryAllowed(id=id)
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
 
@@ -201,7 +201,7 @@ class MetaDirectory(BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed()
+        self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         dtool = getToolByName(self, 'portal_directories')

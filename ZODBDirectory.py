@@ -107,7 +107,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed()
+        self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
@@ -122,7 +122,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed()
+        self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         self._delObject(id)

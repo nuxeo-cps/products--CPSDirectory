@@ -186,7 +186,7 @@ class RolesDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed()
+        self.checkCreateEntryAllowed(entry=entry)
         role = entry[self.id_field]
         if self.hasEntry(role):
             raise KeyError("Role '%s' already exists" % role)
@@ -200,6 +200,7 @@ class RolesDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory.
         """
+        self.checkDeleteEntryAllowed(id=id)
         aclu = self.acl_users
         aclu.userFolderDelRoles( (id,))        
 
