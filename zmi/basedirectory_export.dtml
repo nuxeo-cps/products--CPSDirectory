@@ -1,0 +1,39 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Export'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<p>Directory export</p>
+
+<dtml-let cr="_.chr(13)"
+          squote="_.chr(39)"
+          squote="_.chr(39)"
+          dquote="_.chr(34)">
+<pre>
+<dtml-var id>_directory = {
+    'type': '<dtml-var meta_type>',
+    'data': {
+<dtml-in propertyItems>
+<dtml-if "_['sequence-key'] != 'getFieldIdProperty'">
+<dtml-if "_.same_type(_['sequence-item'], '')">
+<dtml-if "_['sequence-item'].find(dquote) != -1 or
+          _['sequence-item'].find(cr) != -1">
+        '<dtml-var sequence-key>': """<dtml-var sequence-item
+html_quote>""",
+<dtml-elif "_['sequence-item'].find(squote) != -1">
+        '<dtml-var sequence-key>': "<dtml-var sequence-item html_quote>",
+<dtml-else>
+        '<dtml-var sequence-key>': '<dtml-var sequence-item html_quote>',
+</dtml-if>
+<dtml-else>
+        '<dtml-var sequence-key>': <dtml-var sequence-item>,
+</dtml-if>
+</dtml-if>
+</dtml-in>
+        },
+    }
+</pre>
+</dtml-let>
+
+<dtml-var manage_page_footer>
+ 

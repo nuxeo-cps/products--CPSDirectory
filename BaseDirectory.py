@@ -847,15 +847,18 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     #
     # ZMI
     #
-
     manage_options = (
         SimpleItemWithProperties.manage_options[:1] + (
-        {'label': 'Entry Local Roles', 'action': 'manage_entryLocalRoles'},
-        ) + SimpleItemWithProperties.manage_options[1:]
-        )
-
+        {'label': 'Entry Local Roles', 'action':'manage_entryLocalRoles'},) +
+        SimpleItemWithProperties.manage_options[1:]+
+        ({'label': 'Export','action': 'manage_export'},))
+                                
     security.declareProtected(ManagePortal, 'manage_entryLocalRoles')
     manage_entryLocalRoles = DTMLFile('zmi/manageEntryLocalRoles', globals())
+                                
+    security.declareProtected(ManagePortal, 'manage_export')
+    manage_export = DTMLFile('zmi/basedirectory_export', globals())      
+                         
 
     security.declareProtected(ManagePortal, 'manage_addEntryLocalRole')
     def manage_addEntryLocalRole(self, role, expr, REQUEST):
