@@ -87,7 +87,13 @@ class DirectoryVocabulary(SimpleItemWithProperties):
             return self.empty_key_value
         dir = self._getDirectory()
         title_field = dir.title_field
-        entry = dir._getEntryKW(key, field_ids=[title_field])
+        field_ids_d = {title_field: None}
+        schema = dir._getSchemas()[0]
+        dep_ids = schema[title_field].read_process_dependent_fields
+        for dep_id in dep_ids:
+            field_ids_d[dep_id] = None
+        field_ids = field_ids_d.keys()
+        entry = dir._getEntryKW(key, field_ids=field_ids)
         return entry[title_field]
 
     security.declareProtected(View, 'get')

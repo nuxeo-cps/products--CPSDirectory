@@ -1,6 +1,8 @@
 # TODO: 
 # - don't depend on getDocumentSchemas / getDocumentTypes but is there
 #   an API for that ?
+# - XXX check that "hack" in __getitem__ for dealing with dependency
+#   between fields is ok
 
 import os, sys
 if __name__ == '__main__':
