@@ -52,7 +52,7 @@ actions['object'].append({'id':'edit_entry',
       <tal:block define="global actions python:
 actions['object'].append({'id':'delete_entry',
   'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
-  'onclick': 'return window.confirm(\''+ here.Localizer.default('description_confirm_delete') +'\')' ,
+  'onclick': 'return window.confirm(\''+ here.Localizer.default('description_confirm_delete')+'\')' ,
   'name': 'cpsdir_label_delete_entry',
   'category': 'object'})" />
     </tal:block>
