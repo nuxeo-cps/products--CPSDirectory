@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#?python encoding = 'iso8859-15'
+# -*- encoding: iso-8859-1 -*-
 # Author: Tarek Ziadé <tz@nuxeo.com>
 #
 #  split_tokens and extract_tokens are taken from python-ldap :
@@ -27,12 +27,11 @@
     see README file
 """
 
-import string
+import sys,string
+from os import path
 
-# see how to make relative path
-PATH = '/home/cvs/CPS3/CPSDirectory/tests/fakeldap/'
-
-CONF_FILE = PATH + 'fakeldap.conf'
+MODULE_DIR = path.dirname(__file__) + '/'
+CONF_FILE = MODULE_DIR + 'fakeldap.conf'
 
 
 class LogFile:
@@ -58,7 +57,7 @@ class LdifReader:
         self.owner = owner
 
         if filename == '':
-            filename = LDIF_FILENAME
+            filename = MODULE_DIR + LDIF_FILENAME
 
         self.ldif_file = open(filename, 'r')
         try:
@@ -304,8 +303,8 @@ class FakeLdap:
         try:
             lines = conffile.readlines()
             # we'll do better later
-            filename = lines[1].split('=')[1].strip()
-            logfilename =  lines[2].split('=')[1].strip()
+            filename = MODULE_DIR + lines[1].split('=')[1].strip()
+            logfilename =  MODULE_DIR + lines[2].split('=')[1].strip()
             self.logcalls =  lines[3].split('=')[1].strip()
         finally:
             conffile.close()
