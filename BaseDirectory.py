@@ -228,13 +228,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         A default argument can be specified so that KeyError is not
         raised if the entry does not exist.
         """
-        if default is _marker:
+        try:
             return self._getEntryKW(id)
-        else:
-            try:
-                return self._getEntryKW(id)
-            except KeyError:
+        except KeyError:
+            if default is not _marker:
                 return default
+            else:
+                raise
 
     security.declarePrivate('_getEntryKW')
     def _getEntryKW(self, id, **kw):
