@@ -172,6 +172,8 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
     options is a dictionnary with keys:
       - search_substring_props: the props where search has to be done
         by substring.
+      - search_restricted_member_list : list of members on wich we want to
+        perform the research.  Just a matter of optimisation in here.
 
     """
     kw.update(query)
