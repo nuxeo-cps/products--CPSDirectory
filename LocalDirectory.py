@@ -59,9 +59,9 @@ class LocalDirectory(BaseDirectory):
         return getattr(self.getProperty('layout_search', ''))
     layout_search = ComputedAttribute(_get_layout_search, 1)
 
-    def _get_acl_access_roles(self):
-        return getattr(self.getProperty('acl_access_roles', ''))
-    acl_access_roles = ComputedAttribute(_get_acl_access_roles, 1)
+    def _get_acl_directory_view_roles(self):
+        return getattr(self.getProperty('acl_directory_view_roles', ''))
+    acl_directory_view_roles = ComputedAttribute(_get_acl_directory_view_roles, 1)
 
     def _get_acl_entry_create_roles(self):
         return getattr(self.getProperty('acl_entry_create_roles', ''))
@@ -70,6 +70,10 @@ class LocalDirectory(BaseDirectory):
     def _get_acl_entry_create_roles(self):
         return getattr(self.getProperty('acl_entry_delete_roles', ''))
     acl_entry_delete_roles = ComputedAttribute(_get_acl_entry_create_roles, 1)
+
+    def _get_acl_entry_view_roles(self):
+        return getattr(self.getProperty('acl_entry_view_roles', ''))
+    acl_entry_view_roles = ComputedAttribute(_get_acl_entry_view_roles, 1)
 
     def _get_acl_entry_edit_roles(self):
         return getattr(self.getProperty('acl_entry_edit_roles', ''))

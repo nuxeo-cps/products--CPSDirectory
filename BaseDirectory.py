@@ -69,12 +69,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Layout"},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
          'label': "Layout for search"},
-        {'id': 'acl_access_roles', 'type': 'string', 'mode': 'w',
-         'label': "ACL: directory access roles"},
+        {'id': 'acl_directory_view_roles', 'type': 'string', 'mode': 'w',
+         'label': "ACL: directory view roles"},
         {'id': 'acl_entry_create_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry create roles"},
         {'id': 'acl_entry_delete_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry delete roles"},
+        {'id': 'acl_entry_view_roles', 'type': 'string', 'mode': 'w',
+         'label': "ACL: entry view roles"},
         {'id': 'acl_entry_edit_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry edit roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
@@ -89,9 +91,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     schema_search = ''
     layout = ''
     layout_search = ''
-    acl_access_roles = 'Manager; Member'
+    acl_directory_view_roles = 'Manager; Member'
     acl_entry_create_roles = 'Manager'
     acl_entry_delete_roles = 'Manager'
+    acl_entry_view_roles = 'Manager; Member'
     acl_entry_edit_roles = 'Manager'
     id_field = ''
     title_field = ''
@@ -99,17 +102,20 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     entry_roles = []
 
-    acl_access_roles_c = ['Manager', 'Member']
+    acl_directory_view_roles_c = ['Manager', 'Member']
     acl_entry_create_roles_c = ['Manager']
     acl_entry_delete_roles_c = ['Manager']
+    acl_entry_view_roles_c = ['Manager', 'Member']
     acl_entry_edit_roles_c = ['Manager']
 
     _properties_post_process_split = (
-        ('acl_access_roles', 'acl_access_roles_c', ',; '),
+        ('acl_directory_view_roles', 'acl_directory_view_roles_c', ',; '),
         ('acl_entry_create_roles', 'acl_entry_create_roles_c', ',; '),
         ('acl_entry_delete_roles', 'acl_entry_delete_roles_c', ',; '),
+        ('acl_entry_view_roles', 'acl_entry_view_roles_c', ',; '),
         ('acl_entry_edit_roles', 'acl_entry_edit_roles_c', ',; '),
         )
+    _properties_post_process_tales = ()
 
     def __init__(self, id, **kw):
         self.id = id
@@ -119,34 +125,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     # Usage API
     #
 
-    security.declarePublic('isVisible')
-    def isVisible(self):
-        """Is the directory visible by the current user?"""
-        return getSecurityManager().getUser().has_role(
-            self.acl_access_roles_c, object=self)
-
-    security.declarePublic('isCreateEntryAllowed')
-    def isCreateEntryAllowed(self):
-        """Check that user can create an entry.
-
-        Returns a boolean.
-        """
-        return getSecurityManager().getUser().has_role(
-            self.acl_entry_create_roles_c, object=self)
-
-    security.declarePublic('isDeleteEntryAllowed')
-    def isDeleteEntryAllowed(self):
-        """Check that user can delete an entry.
-
-        Returns a boolean.
-        """
-        return getSecurityManager().getUser().has_role(
-            self.acl_entry_delete_roles_c, object=self)
-
-    security.declarePublic('isEditEntryAllowed')
-    def isEditEntryAllowed(self, id=None, entry=None):
-        # XXX should also have a new_entry arg.
-        """Check that user can edit a given entry.
+    security.declarePrivate('isEntryAclAllowed')
+    def isEntryAclAllowed(self, acl_roles, id=None, entry=None):
+        """Check if the user has correct ACL on an entry.
 
         Uses the computed entry local roles.
         If no entry is passed, uses an empty one.
@@ -158,38 +139,107 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 entry = self._getEntry(id)
             else:
                 entry = {}
-        else:
+        if id is None:
             id = entry.get(self.id_field)
         roles = getSecurityManager().getUser().getRolesInContext(self)
         add_roles = self._getAdditionalRoles(id)
         entry_local_roles = self.getEntryLocalRoles(entry)
         all_roles = list(roles) + list(add_roles) + list(entry_local_roles)
-        for r in self.acl_entry_edit_roles_c:
+        for r in acl_roles:
             if r in all_roles:
                 return 1
         return 0
 
+    security.declarePublic('isVisible')
+    def isVisible(self):
+        """Check if the user can view the directory.
+
+        Uses the computed entry local roles.
+
+        Returns a boolean.
+        """
+        return self.isEntryAclAllowed(self.acl_directory_view_roles_c)
+
+    security.declarePublic('isCreateEntryAllowed')
+    def isCreateEntryAllowed(self, id=None, entry=None):
+        """Check if the user can create an entry.
+
+        Uses the computed entry local roles.
+
+        Returns a boolean.
+        """
+        if entry is None:
+            if id is not None:
+                entry = {self.id_field: id}
+            else:
+                entry = {}
+        return self.isEntryAclAllowed(self.acl_entry_create_roles_c,
+                                      id=id, entry=entry)
+
+    security.declarePublic('isDeleteEntryAllowed')
+    def isDeleteEntryAllowed(self, id=None, entry=None):
+        """Check if the user can delete an entry.
+
+        Uses the computed entry local roles.
+        If no entry is passed, uses an empty one.
+
+        Returns a boolean.
+        """
+        return self.isEntryAclAllowed(self.acl_entry_delete_roles_c,
+                                      id=id, entry=entry)
+
+    security.declarePublic('isViewEntryAllowed')
+    def isViewEntryAllowed(self, id=None, entry=None):
+        """Check if the user can view an entry.
+
+        Returns a boolean.
+        """
+        return self.isEntryAclAllowed(self.acl_entry_view_roles_c,
+                                      id=id, entry=entry)
+
+    security.declarePublic('isEditEntryAllowed')
+    def isEditEntryAllowed(self, id=None, entry=None):
+        # XXX should also have a new_entry arg.
+        """Check if the user can edit a given entry.
+
+        Uses the computed entry local roles.
+        If no entry is passed, uses an empty one.
+
+        Returns a boolean.
+        """
+        return self.isEntryAclAllowed(self.acl_entry_edit_roles_c,
+                                      id=id, entry=entry)
+
     security.declarePublic('checkCreateEntryAllowed')
-    def checkCreateEntryAllowed(self):
-        """Check that user can create an entry.
+    def checkCreateEntryAllowed(self, id=None, entry=None):
+        """Check that the user can create an entry.
 
         Raises Unauthorized if not.
         """
-        if not self.isCreateEntryAllowed():
+        if not self.isCreateEntryAllowed(id=id, entry=entry):
             raise Unauthorized("No create access to directory")
 
     security.declarePublic('checkDeleteEntryAllowed')
-    def checkDeleteEntryAllowed(self):
-        """Check that user can delete an entry.
+    def checkDeleteEntryAllowed(self, id=None, entry=None):
+        """Check that the user can delete a given entry.
 
         Raises Unauthorized if not.
         """
-        if not self.isDeleteEntryAllowed():
-            raise Unauthorized("No delete access to directory")
+        if not self.isDeleteEntryAllowed(id=id, entry=entry):
+            raise Unauthorized("No delete access to entry")
+
+    security.declarePublic('checkViewEntryAllowed')
+    def checkViewEntryAllowed(self, id=None, entry=None):
+        """Check that the user can view a given entry.
+
+        Raises Unauthorized if not.
+        """
+        if not self.isViewEntryAllowed(id=id, entry=entry):
+            raise Unauthorized("No view access to entry")
 
     security.declarePublic('checkEditEntryAllowed')
     def checkEditEntryAllowed(self, id=None, entry=None):
-        """Check that user can edit a given entry.
+        """Check that the user can edit a given entry.
 
         Raises Unauthorized if not.
         """
@@ -628,8 +678,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 except KeyError:
                     # We're not a member...
                     return {}
-        # Put all the names in the data in the namespace.
-        mapping = entry.copy()
+        mapping = {}
+        # Put None values by default for all schema items.
+        for field_id in self._getSchemas()[0].keys():
+            mapping[field_id] = None
+        # Put filled-in entry items in the namespace.
+        mapping.update(entry)
+        # Add basic namespace.
         mapping.update({
             'entry': entry,
             'entry_id': entry_id,

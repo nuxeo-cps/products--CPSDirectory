@@ -218,9 +218,103 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
+class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
+    # We test entry local roles on ZODB directory as this is the
+    # simplest form of directory with minimal dependencies.
+
+    def makeDir(self):
+        stool = self.portal.portal_schemas
+        schema = stool.manage_addCPSSchema('testzodb')
+        schema.manage_addField('id', 'CPS String Field')
+        schema.manage_addField('name', 'CPS String Field')
+
+        dir = self.pd.manage_addCPSDirectory('zodbdir',
+                                             'CPS ZODB Directory')
+        dir.manage_changeProperties(
+            schema='testzodb',
+            id_field='id',
+            acl_directory_view_roles='BigSmurf',
+            acl_entry_create_roles='BigSmurf; DoAlbator',
+            acl_entry_delete_roles='BigSmurf; DoChapi',
+            acl_entry_view_roles='BigSmurf; DoPeter',
+            acl_entry_edit_roles='BigSmurf; DoPeter',
+            )
+        self.dir = dir
+
+        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "root"')
+        self.assertEquals(res, '')
+        res = dir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
+        self.assertEquals(res, '')
+        res = dir.addEntryLocalRole('DoChapi', 'python:name == "ChapiChapo"')
+        self.assertEquals(res, '')
+        res = dir.addEntryLocalRole('DoPeter', 'python:name == "Peterpan"')
+        self.assertEquals(res, '')
+
+        e = {'id': 'peterpan', 'name': 'Peterpan'}
+        dir.createEntry(e)
+
+    def afterSetUp(self):
+        self.login('root')
+        self.ws = self.portal.workspaces
+        self.pd = self.portal.portal_directories
+        self.makeDir()
+
+    def beforeTearDown(self):
+        self.logout()
+
+    def testDirectoryView(self):
+        meth = self.dir.isVisible
+        self.assert_(meth())
+        self.logout()
+        self.assert_(not meth())
+
+    def testCreateEntry(self):
+        meth = self.dir.isCreateEntryAllowed
+        self.assert_(meth())
+        self.logout()
+        self.assert_(not meth())
+        self.assert_(not meth(id='brr'))
+        self.assert_(meth(id='albator'))
+        self.assert_(meth(entry={'id': 'albator', 'name': 'daffy'}))
+
+    def testDeleteEntry(self):
+        meth = self.dir.isDeleteEntryAllowed
+        self.assert_(meth())
+        self.assert_(meth(id='peterpan'))
+        self.logout()
+        self.assert_(not meth())
+        self.assert_(not meth(id='peterpan'))
+        self.assert_(meth(entry={'id': 'bzzzz', 'name': 'ChapiChapo'}))
+
+    def testViewEntry(self):
+        meth = self.dir.isViewEntryAllowed
+        self.assert_(meth())
+        self.assert_(meth(id='peterpan'))
+        self.assert_(meth(entry={'name': 'Peterpan'}))
+        self.assert_(meth(entry={'name': 'Blurp'}))
+        self.logout()
+        self.assert_(not meth())
+        self.assert_(not meth(entry={'name': 'Blurp'}))
+        self.assert_(meth(id='peterpan'))
+        self.assert_(meth(entry={'name': 'Peterpan'}))
+
+    def testEditEntry(self):
+        meth = self.dir.isEditEntryAllowed
+        self.assert_(meth())
+        self.assert_(meth(id='peterpan'))
+        self.assert_(meth(entry={'name': 'Peterpan'}))
+        self.assert_(meth(entry={'name': 'Blurp'}))
+        self.logout()
+        self.assert_(not meth())
+        self.assert_(not meth(entry={'name': 'Blurp'}))
+        self.assert_(meth(id='peterpan'))
+        self.assert_(meth(entry={'name': 'Peterpan'}))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestZODBDirectory))
+    suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
     return suite
 
 if __name__ == '__main__':

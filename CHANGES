@@ -10,4 +10,6 @@ Bug fixes:
   (ACL, when changed, were not correctly post-processed thus not used).
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Entry local roles are now usable for all directory ACLs.
+- In entry local roles namespace, all schema-defined fields are available
+  (may be None if not present in the given entry).

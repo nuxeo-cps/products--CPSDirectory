@@ -16,7 +16,7 @@
   All the values from the entry are also available directly.
 </p>
 <p class="form-help">
-  The entry local roles are available in the <b>ACL: entry edit roles</b>.
+  The entry local roles are available for all directory ACLs.
 </p>
 
 <dtml-in listEntryLocalRoles>
