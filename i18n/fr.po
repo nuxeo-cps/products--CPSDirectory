@@ -34,10 +34,13 @@ msgid "label_members"
 msgstr "Membres"
 
 msgid "label_first_name"
-msgstr "Prenom"
+msgstr "Prénom"
 
 msgid "label_last_name"
 msgstr "Nom"
+
+msgid "label_full_name"
+msgstr "Nom complet"
 
 msgid "label_no_results"
 msgstr "Aucun résultat."

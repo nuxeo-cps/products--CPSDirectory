@@ -38,6 +38,9 @@ msgstr "First Name"
 msgid "label_last_name"
 msgstr "Last Name"
 
+msgid "label_full_name"
+msgstr "Full Name"
+
 msgid "label_no_results"
 msgstr "No results."
 

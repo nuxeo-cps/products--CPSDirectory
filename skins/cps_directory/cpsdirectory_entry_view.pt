@@ -2,10 +2,11 @@
   id request/id;
   dirname request/dirname|string:members;
   dir here/portal_directories/?dirname;
+  title_field dir/title_field;
   res python: dir.renderEntryDetailed(id);
   global rendered_main python: res[0];
   ds python: res[1];
-  global title ds/sn|id;
+  global title ds/?title_field|id;
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="header">

@@ -91,6 +91,20 @@ members_layout = {
                 'size_max': 0,
             },
         },
+        'fullname': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['fullname'],
+                'label': "label_full_name",
+                'label_edit': "label_full_name",
+                'description': "Member full name",
+                'is_i18n': 1,
+                'css_class': '',
+                'display_width': 20,
+                'size_max': 0,
+                'hidden_layout_modes': ['create', 'edit'],
+            },
+        },
         'email': {
             'type': 'String Widget',
             'data': {
@@ -120,6 +134,8 @@ members_layout = {
             [{'ncols': 1, 'widget_id': 'givenName'},
                 ],
             [{'ncols': 1, 'widget_id': 'sn'},
+                ],
+            [{'ncols': 1, 'widget_id': 'fullname'},
                 ],
             [{'ncols': 1, 'widget_id': 'email'},
                 ],

@@ -55,6 +55,17 @@ members_schema = {
                 'acl_write_roles_str': 'Manager; Owner',
             },
         },
+    'fullname': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 1,
+                'acl_write_roles_str': 'Nobody',
+                'read_ignore_storage': 1,
+                'read_process_expression_str': 'python: givenName+" "+sn',
+                'write_ignore_storage': 1,
+            },
+        },
     'email': {
         'type': 'CPS String Field',
         'data': {

@@ -2,13 +2,14 @@
   id request/id;
   dirname request/dirname|string:members;
   dir here/portal_directories/?dirname;
+  title_field dir/title_field;
   validate python: request.has_key('cpsdirectory_edit_button');
   edit_request python: validate and request or nothing;
   res python: dir.renderEditEntryDetailed(id, request=edit_request);
   global rendered_main python: res[0];
   rendered_ok python: res[1];
   ds python: res[2];
-  global title ds/sn|id;
+  global title ds/?title_field|id;
   portal_status_message request/portal_status_message|nothing;
   global portal_status_message python: portal_status_message or (validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) or '';
   "/>
