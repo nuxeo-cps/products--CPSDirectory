@@ -75,6 +75,22 @@ class RolesDirectory(BaseDirectory):
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
+
+        A role or list of roles to search for can be specified using the id
+        field as a parameter.
+
+        A member or list of members to search for can be specified using the
+        members field as a parameter.
+        
+        If return_fields is None, return a list of role ids:
+          ['role1', 'role2']
+
+        If return_fields is not None, it must a sequence of property ids. The
+        method will return a list of tuples containing the role id and a
+        dictionary of available properties:
+          [('role1', {'id': 'role1', 'members': ('user1', 'user2')},)]
+
+        return_fields=['*'] means to return all available properties.
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
