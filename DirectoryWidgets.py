@@ -21,11 +21,11 @@
 Definition of directory-related widget types.
 """
 
-from zLOG import LOG, DEBUG
+from zLOG import LOG, DEBUG, TRACE
 from urllib import urlencode
 from cgi import escape
 from Globals import InitializeClass
-from types import ListType, TupleType
+from types import StringType, ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
@@ -121,6 +121,20 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     skin_name = 'cpsdirectory_entry_view'
     popup_mode = all_popup_modes[0]
 
+    def prepare(self, datastructure, **kw):
+        """Prepare datastructure from datamodel."""
+        datamodel = datastructure.getDataModel()
+        value = datamodel[self.fields[0]]
+        if (_isinstance(value, ListType) or
+            _isinstance(value, TupleType)):
+            LOG('CPSDirectoryEntryWidget.prepare', TRACE,
+                'expected String got Typle %s use first element' % value)
+            if len(value):
+                value = value[0]
+            else:
+                value = ''
+        datastructure[self.getWidgetId()] = value
+
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
         render_method = 'widget_directoryentry_render'
@@ -192,6 +206,20 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     skin_name = 'cpsdirectory_entry_view'
     popup_mode = all_popup_modes[0]
     separator = ', '
+
+
+    def prepare(self, datastructure, **kw):
+        """Prepare datastructure from datamodel."""
+        datamodel = datastructure.getDataModel()
+        value = datamodel[self.fields[0]]
+        if _isinstance(value, StringType):
+            LOG('CPSDirectoryMultiEntriesWidget.prepare', TRACE,
+                'expected List got String %s converting into list' % value)
+            if value:
+                value = ['value',]
+            else:
+                value = []
+        datastructure[self.getWidgetId()] = value
 
     def validate(self, datastructure, **kw):
         """Validate datastructure and update datamodel."""
