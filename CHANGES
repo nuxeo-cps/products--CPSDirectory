@@ -1,15 +1,17 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
--
+- Add specific schema and layout for search if needed.
 
 New features:
 ~~~~~~~~~~~~~
-- Implemented search for groups and roles.
+- Search for groups and roles.
+- Split search schemas and layouts so they can be customized independently.
 
 Bug fixes:
 ~~~~~~~~~~
--
+- Misc.
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Efficient search done on user folders that know about searchUsers().
+- New API on MemberDataTool to search members: searchForMembers().

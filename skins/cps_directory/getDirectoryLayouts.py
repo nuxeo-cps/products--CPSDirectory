@@ -97,6 +97,78 @@ members_layout = {
         },
     }
 
+members_search_layout = {
+    'widgets': {
+        'id': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['id'],
+                'label': "Id",
+                'label_edit': "Id",
+                'description': "Member login",
+                'is_i18n': 0,
+                'css_class': '',
+                'display_width': 20,
+                'size_max': 0,
+                'readonly_layout_modes': ['edit'],
+            },
+        },
+        'roles': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['roles'],
+                'label': "Roles",
+                'label_edit': "Roles",
+                'description': "Member roles",
+                'is_i18n': 0,
+                'css_class': '',
+                'vocabulary': 'roles',
+                'size': 7,
+            },
+        },
+        'groups': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['groups'],
+                'label': "Groups",
+                'label_edit': "Groups",
+                'description': "Member groups",
+                'is_i18n': 0,
+                'css_class': '',
+                'vocabulary': 'groups',
+                'size': 7,
+            },
+        },
+        'email': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['email'],
+                'label': "Email",
+                'label_edit': "Email",
+                'description': "Member email",
+                'is_i18n': 0,
+                'css_class': '',
+                'display_width': 20,
+                'size_max': 0,
+            },
+        },
+    },
+    'layout': {
+        'style_prefix': 'layout_dir_',
+        'ncols': 1,
+        'rows': [
+            [{'ncols': 1, 'widget_id': 'id'},
+                ],
+            [{'ncols': 1, 'widget_id': 'roles'},
+                ],
+            [{'ncols': 1, 'widget_id': 'groups'},
+                ],
+            [{'ncols': 1, 'widget_id': 'email'},
+                ],
+            ],
+        },
+    }
+
 #########################################################
 # roles
 
@@ -191,6 +263,7 @@ groups_layout = {
 
 layouts = {
     'members': members_layout,
+    'members_search': members_search_layout,
     'roles': roles_layout,
     'groups': groups_layout,
     }

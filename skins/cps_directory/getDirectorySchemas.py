@@ -49,6 +49,37 @@ members_schema = {
         },
     }
 
+members_search_schema = {
+    'id': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'roles': {
+        'type': 'CPS String List Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'groups': {
+        'type': 'CPS String List Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'email': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    }
+
 #########################################################
 # roles
 
@@ -95,6 +126,7 @@ groups_schema = {
 
 schemas = {
     'members': members_schema,
+    'members_search': members_search_schema,
     'roles': roles_schema,
     'groups': groups_schema,
     }

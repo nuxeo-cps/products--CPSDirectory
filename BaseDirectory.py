@@ -52,8 +52,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     _properties = SimpleItemWithProperties._properties + (
         {'id': 'schema', 'type': 'string', 'mode': 'w',
          'label': "Schema"},
+        {'id': 'schema_search', 'type': 'string', 'mode': 'w',
+         'label': "Schema for search"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
+        {'id': 'layout_search', 'type': 'string', 'mode': 'w',
+         'label': "Layout for search"},
         {'id': 'acl_access_roles_str', 'type': 'string', 'mode': 'w',
          'label': "ACL: directory access roles"},
         {'id': 'acl_entry_create_roles_str', 'type': 'string', 'mode': 'w',
@@ -65,7 +69,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         )
 
     schema = ''
+    schema_search = ''
     layout = ''
+    layout_search = ''
     acl_access_roles_str = 'Manager; Member'
     acl_entry_create_roles_str = 'Manager'
     id_field = ''
@@ -201,7 +207,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
+        layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
         mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
         layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
@@ -231,7 +237,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
+        layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
         if request is None:
             validate = 0
@@ -268,7 +274,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         dm = self._getDataModel(None)
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
+        layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
         if request is not None:
             ds.updateFromMapping(request.form)
@@ -318,7 +324,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         dm = self._getSearchDataModel()
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
+        layout = self._getLayout(search=1)
         layout.prepareLayoutWidgets(ds)
         if request is not None:
             ds.updateFromMapping(request.form)
@@ -352,14 +358,23 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     #
 
     security.declarePrivate('_getSchemas')
-    def _getSchemas(self):
+    def _getSchemas(self, search=0):
         """Get the schemas for this directory.
+
+        If search=1, get the schemas for a search.
 
         Returns a sequence of Schema objects.
         """
         stool = getToolByName(self, 'portal_schemas')
         schemas = []
-        for schema_id in [self.schema]:
+        if not search:
+            schema_ids = [self.schema]
+        else:
+            if self.schema_search:
+                schema_ids = [self.schema_search]
+            else:
+                schema_ids = [self.schema]
+        for schema_id in schema_ids:
             schema = stool._getOb(schema_id, None)
             if schema is None:
                 raise RuntimeError("Missing schema '%s' for directory  '%s'"
@@ -390,7 +405,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePrivate('_getSearchAdapters')
     def _getSearchAdapters(self):
         return [AttributeStorageAdapter(schema, None)
-                for schema in self._getSchemas()]
+                for schema in self._getSchemas(search=1)]
 
     security.declarePrivate('_getSearchDataModel')
     def _getSearchDataModel(self):
@@ -402,11 +417,19 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return dm
 
     security.declarePrivate('_getLayout')
-    def _getLayout(self, ob=None):
+    def _getLayout(self, search=0):
         """Get the layout for our type.
+
+        If search=1, get the search layout.
         """
         ltool = getToolByName(self, 'portal_layouts')
-        layout_id = self.layout
+        if not search:
+            layout_id = self.layout
+        else:
+            if self.layout_search:
+                layout_id = self.layout_search
+            else:
+                layout_id = self.layout
         layout = ltool._getOb(layout_id, None)
         if layout is None:
             raise ValueError("No layout '%s' for directory '%s'"
