@@ -33,8 +33,14 @@ except ImportError:
     except ImportError:
         LDAPDelegate = None
         import_errors.append(sys.exc_info())
-has_ldap = (LDAPDelegate is not None)
+has_ldap_delegate = (LDAPDelegate is not None)
 del LDAPDelegate
+
+try:
+    import ldap
+    has_ldap = 1
+except ImportError:
+    has_ldap = 0
 
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
@@ -51,7 +57,7 @@ from LocalDirectory import LocalDirectory
 from MetaDirectory import MetaDirectory
 from StackingDirectory import StackingDirectory
 
-if has_ldap:
+if has_ldap_delegate:
     from LDAPDirectory import LDAPDirectory
 else:
     LOG('LDAPDirectory', INFO, "Disabled (no LDAP user folder product found).")
@@ -60,9 +66,12 @@ else:
         LOG('LDAPDirectory', DEBUG, 'Import Traceback',
             error=error)
 
+if has_ldap:
+    from LDAPBackingDirectory import LDAPBackingDirectory
+
 from DirectoryVocabulary import DirectoryVocabulary
 from DirectoryEntryVocabulary import DirectoryEntryVocabulary
-if has_ldap:
+if has_ldap_delegate:
     from LDAPDirectoryVocabulary import LDAPDirectoryVocabulary
 else:
     LOG('LDAPDirectoryVocabulary', INFO,
@@ -91,6 +100,8 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(StackingDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
     VocabularyTypeRegistry.register(DirectoryEntryVocabulary)
-    if has_ldap:
+    if has_ldap_delegate:
         DirectoryTypeRegistry.register(LDAPDirectory)
         VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)
+    if has_ldap:
+        DirectoryTypeRegistry.register(LDAPBackingDirectory)
