@@ -264,6 +264,8 @@ class TestStackingDirectory(CPSDirectoryTestCase):
         ids = dir.searchEntries(foo='f1', glop='g2')
         self.assertEquals(ids, ['KKK'])
 
+        # XXX check with field_ids
+
         # XXX should test case where foodir has substring search
         # on id, and we searchEntries(uid='a_G')
 
