@@ -23,6 +23,7 @@ from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
@@ -52,6 +53,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Schema"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
+        {'id': 'acl_access_roles_str', 'type': 'string', 'mode': 'w',
+         'label': "ACL: directory access roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry id'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
@@ -60,15 +63,41 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     schema = ''
     layout = ''
+    acl_access_roles_str = 'Manager; Member'
     id_field = ''
     title_field = ''
+
+    acl_access_roles = ['Manager', 'Member']
 
     def __init__(self, id, **kw):
         self.id = id
 
+    def _postProcessProperties(self):
+        """Post-processing after properties change."""
+        # Split on ',' or ';' or ' '.
+        for attr_str, attr, seps in (
+            ('acl_access_roles_str', 'acl_access_roles', ',; '),
+            ):
+            v = [getattr(self, attr_str)]
+            for sep in seps:
+                vv = []
+                for s in v:
+                    vv.extend(s.split(sep))
+                v = vv
+            v = [s.strip() for s in v]
+            v = filter(None, v)
+            setattr(self, attr_str, '; '.join(v))
+            setattr(self, attr, v)
+
     #
     # Usage API
     #
+
+    security.declarePublic('isVisible')
+    def isVisible(self):
+        """Is the directory visible by the current user?"""
+        return getSecurityManager().getUser().has_role(
+            self.acl_access_roles)
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -98,7 +127,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def searchEntries(self, **kw):
         """Search for entries in the directory.
 
-        Returns a list of entry ids.
+        Returns a list of entry ids. # XXX more attrs needed...
         """
         raise NotImplementedError
 
