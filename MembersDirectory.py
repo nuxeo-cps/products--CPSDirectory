@@ -61,7 +61,7 @@ class MembersDirectory(BaseDirectory):
         )
 
     id_field = 'id'
-    title_field = 'id'
+    title_field = 'title'
     password_field = 'password'
     roles_field = 'roles'
     groups_field = 'groups'

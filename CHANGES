@@ -20,3 +20,4 @@ New internal features:
 - Raise KeyError instead of ValueError when it makes sense.
 - popup for Directory Entry Widget has a search mode in addition to the navigation mode.
 - fullname returns id if givenName and sn are both empty.
+- Title for a member entry is now the full name.
