@@ -59,6 +59,7 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     directory = ''
 
     def __init__(self, id, **kw):
+        self.id = id
         self.manage_changeProperties(**kw)
 
     def _getDirectory(self):
