@@ -11,7 +11,7 @@
                    vocabulary here/vocabulary;">
 <input tal:condition="python: not here.is_required and jsvalue"
   type="checkbox" tal:attributes="name string:${html_id}_set"
-  checked="checked" />
+  checked="checked" class="noborder" />
 <input tal:condition="not: jsvalue" type="hidden"
   tal:attributes="name string:${html_id}_set" value="checked" />
 <span tal:attributes="id html_id">
