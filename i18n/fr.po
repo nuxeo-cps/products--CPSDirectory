@@ -126,7 +126,7 @@ msgid "label_full_name"
 msgstr "Nom complet"
 
 msgid "cpsdir_label_delete_entry"
-msgstr "Supprimer l'entrée ..."
+msgstr "Supprimer l'entrée"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
