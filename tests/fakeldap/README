@@ -1,0 +1,53 @@
+FakeLdap
+
+
+What is it ?
+################################################################################
+
+this tool can be used with cps ldap directories
+to simulate access to a ldap server.
+This is useful to run tests in a light environment
+it's based on a ldif file you will have to provide.
+It has been tested with LDAPBAckingDirectory and a typical ldap
+structure
+
+
+How to Use it ?
+################################################################################
+
+1) Export a ldif file from your real ldap server
+   using a tool like GQ.
+
+2) Configure fakeldap.conf parameters (LDIF_FILENAME and LOG_FILENAME)
+
+3) change the call made to python-ldap library (import ldap) to
+   the fake library (import fakeldap)
+
+4) Your Portal now runs on the fake server
+
+
+Todos
+################################################################################
+
++ implement writing
+
++ exports filenames
+
++ get rid of ugly split calls
+
++ correctly parse multiline entries like images
+
++ correctly parse compressed fields (::)
+
++ code and bind "vislog" so it can be used
+  to log into zope environment
+
++ finish apis implementation
+
+
+
+
+
+
+
+
