@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Don't update memberdata when not relevant for the directory.
+- Fix HTML in search results.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
