@@ -27,6 +27,7 @@ import DirectoryTool
 
 from DirectoryTool import DirectoryTypeRegistry
 from MembersDirectory import MembersDirectory
+from RolesDirectory import RolesDirectory
 
 tools = (DirectoryTool.DirectoryTool,
          )
@@ -41,3 +42,4 @@ def initialize(registrar):
         icon = 'tool.gif',
         ).initialize(registrar)
     DirectoryTypeRegistry.register(MembersDirectory)
+    DirectoryTypeRegistry.register(RolesDirectory)
