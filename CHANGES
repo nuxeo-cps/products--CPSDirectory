@@ -11,3 +11,5 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - MultiEntries and Entry widget are compatible so we
   can switch from one to another
+- Tighter ACL checks for creation and rendering.
+- Entry local roles are passed to the datamodel so can be used by field ACLs.
