@@ -47,6 +47,23 @@ class DirectoryTool(UniqueObject, Folder):
         pass
 
     #
+    # API
+    #
+
+    security.declarePublic('listVisibleDirectories')
+    def listVisibleDirectories(self):
+        """List directories visible by the current user.
+
+        Returns a list of directory ids.
+        """
+        res = []
+        for dir_id, dir in self.objectItems():
+            if dir.isVisible():
+                res.append(dir_id)
+        res.sort()
+        return res
+
+    #
     # ZMI
     #
 
