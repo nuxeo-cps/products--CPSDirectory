@@ -606,7 +606,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             callback_func = getattr(self, callback, None)
             if callback_func is None:
                 raise ValueError("Unknown callback '%s'" % callback)
-            rendered, ok = callback_func(self, ds)
+            rendered, ok = callback_func(self, ds, **kw)
             if not rendered:
                 rendered = ''
         else:
