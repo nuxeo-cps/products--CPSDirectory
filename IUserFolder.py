@@ -26,7 +26,30 @@ __version__ = '$Revision$'[11:-2]
 import Interface
 
 class IUserFolder(Interface.Base):
-    # Part of the standard acl_users API:
+    # These methods are used by CPS in various ways, but are a part of
+    # The BasicUserFolder, and do not need overriding in the user folder itself:
+    def _addUser(self,name,password,confirm,roles,domains,REQUEST=None):
+        """Adds a user"""
+        # This is used when creating a portal and by MemberToolsPatch if
+        # userFolderAddUser doens't exist. Howvere, it awlays exists,
+        # (For Zope > 2.4) so that usage can be removed.
+
+        # It uses _doAddUser which LDAPUserFolder does NOT implement.
+        # However, when creating a portal we know we don't have an
+        # LDAPUserFolder, so it's OK.
+
+    def userFolderAddUser(self, name, password, roles, domains, **kw):
+        """API method for creating a new user object. Note that not all
+           user folder implementations support dynamic creation of user
+           objects."""
+        # This also calls _doAddUser, and LDAPUserFolder still does not
+        # implement it. This means that Adding users thrugh tge MemberTool
+        # does not work with LDAP at all. That needs to be fixed.
+        # I suggest adding _doAddUser to the LDAPUserGroupsFolder
+        # implementation.
+
+    # These are part of the BasicUserFolder API, but are not implemented
+    # in BasicUserFolder:
     def getUserNames(self):
         """Return a list of usernames"""
 
@@ -39,16 +62,8 @@ class IUserFolder(Interface.Base):
            original input password, unencrypted. The implementation of this
            method is responsible for performing any needed encryption."""
 
-    def _addUser(self,name,password,confirm,roles,domains,REQUEST=None):
-        """Adds a user"""
-        # This is used when creating a portal and by MemberToolsPatch if
-        # userFolderAddUser doens't exist. Howvere, it awlays exists,
-        # (For Zope > 2.4 so that usage can be removed.
-
-    def userFolderAddUser(self, name, password, roles, domains, **kw):
-        """API method for creating a new user object. Note that not all
-           user folder implementations support dynamic creation of user
-           objects."""
+        # This has been superceded by userFolderEditUser so I think we
+        # should change this. They do the same.
 
     # Local roles extensions
     def mergedLocalRoles(self, object, withgroups=0):
@@ -70,8 +85,9 @@ class IUserFolder(Interface.Base):
                     {'url':url, 'roles':[Role1]}],..}.
         """
 
-    #def _getAllowedRolesAndUsers()
-    # CPSCore.utils uses this if it exists. Funnily enough, it never does.
+    def _getAllowedRolesAndUsers(self, user)
+        """Returns a list with all roles this user has + the username"""
+        # CPSCore.utils uses this if it exists. Funnily enough, it never does.
 
     # Group support
     def setGroupsOfUser(self, groupnames, username):
@@ -122,6 +138,9 @@ class IUserFolder(Interface.Base):
     def getGroupedUsers(self, groups=None):
         """ Return all those users that are in a group """
 
+        # I suggest we implement the standardized methods above on
+        # LDAPUserGroupsFolder so we don't have to call these.
+
 
 class IUser(Interface.Base):
     # Part of the standard user API:
@@ -135,7 +154,7 @@ class IUser(Interface.Base):
         """Get the ID of the user. The ID can be used, at least from
         Python, to get the user from the user's
         UserDatabase"""
-        # Today this, and getId() is the same. It is my uderstanding that
+        # Today this, and getUserName() is the same. It is my uderstanding that
         # getUserName() is preferred. There is for example no getUserIds()
 
     def getRoles(self):
@@ -151,6 +170,10 @@ class IUser(Interface.Base):
     # Only on LDAPUsers:
     def getUserDN(self):
         """ Return the user's full Distinguished Name """
+        # This is used to get the DN so that the special user management
+        # methods on LDAP User Folder (see above) can be called.
+        # By implemnting the standard methods instead, the need for getUserDN
+        # automatically disappears.
 
 
 class IGroup(Interface.Base):
@@ -166,8 +189,11 @@ class IGroup(Interface.Base):
 
     def setGroups(self, groupids):
         """Sets the groups that are members of the group"""
+        # This functionality is currently only supported by PUF.
 
     # On non-PluggableUserFolders
     def getUsers(self):
         """Returns the users that are a members of the groups"""
 
+    # I suggest that we on the other folders implement a getMembers
+    # alias for getUsers so we don't have to test for it.
