@@ -39,10 +39,6 @@
             </a>
           </dt>
           <dd>
-            <p tal:condition="dir/description|nothing"
-               tal:content="dir/description">
-              Description
-            </p>
           </dd>
           </tal:block>
         </tal:block>

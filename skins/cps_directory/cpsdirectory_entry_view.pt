@@ -1,7 +1,7 @@
 <tal:block define="
-  id request/id;
-  dirname request/dirname|string:members;
-  dir here/portal_directories/?dirname;
+  global id request/id;
+  global dirname request/dirname|string:members;
+  global dir here/portal_directories/?dirname;
   title_field dir/title_field;
   res python: dir.renderEntryDetailed(id);
   global rendered_main python: res[0];
@@ -10,7 +10,17 @@
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="header">
-    <h1 tal:content="title">Entry title...</h1>
+    <a tal:attributes="href string:${base_url}cpsdirectory_view">
+      <img tal:replace="structure python:
+        here.getImgTag('cpsdirectoryup_icon.gif', base_url=base_url)" />
+      <b i18n:translate="">cpsdir_label_upto_directories</b></a>
+    <div class="documentActions">
+      <a tal:attributes="href
+        string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id"
+        i18n:translate="">cpsdir_label_edit_entry</a>
+    </div>
+    <h1><span i18n:translate="">cpsdir_label_view <tal:block
+          i18n:name="dirname" tal:content="dirname" /></span></h1>
     <div class="description">
     </div>
   </metal:block>

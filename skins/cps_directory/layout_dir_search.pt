@@ -3,10 +3,12 @@
   ds options/datastructure;
   formaction python: 'cpsdirectory_entry_search_form';
   ">
+<div class="group">
 <form action="." method="POST" name="form" enctype="multipart/form-data"
   tal:attributes="action formaction">
-<input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
-<table cellpadding="2" cellspacing="2" border="0">
+<input type="hidden" name="dirname" value="." tal:attributes="value
+request/dirname|string:members">
+<table cellpadding="0" cellspacing="2" border="0">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
     <tal:block define="widget cell/widget;
@@ -14,7 +16,7 @@
                        err python: ds.getError(wid);
                        is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
                        ">
-      <td align="right"  valign="top" bgcolor="#EEEEEE">
+      <td align="right"  valign="top">
         <div class="label" tal:condition="widget/label_edit">
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label_edit">label</span
@@ -38,16 +40,12 @@
     </tal:block>
     </tal:block>
   </tr>
+  <tr><td></td>
+    <td><input type="submit" class="standalone"
+          name="cpsdirectory_search_button" value="button_search"
+          i18n:attributes="value"></td>
+  </tr>
 </table>
-<input type="submit" class="standalone" name="cpsdirectory_search_button"
-  value="button_search" i18n:attributes="value">
 </form>
-<form action="cpsdirectory_entry_create_form" method="post"
-  tal:define="dirname request/dirname;
-              dir here/portal_directories/?dirname;">
-  <input type="hidden" name="dirname" value="." tal:attributes="value dirname" />
-  <input type="submit" class="standalone" name="cpsdirectory_search_button"
-    value="button_create_entry" i18n:attributes="value"
-    tal:condition="python: dir.isCreateEntryAllowed()" />
-</form>
+</div>
 </tal:block>

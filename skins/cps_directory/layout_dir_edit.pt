@@ -6,10 +6,11 @@
   formaction python: test(creation, 'cpsdirectory_entry_create_form',
                                     'cpsdirectory_entry_edit_form');
   ">
+<div class="group">
 <form action="." method="POST" name="form" enctype="multipart/form-data">
 <input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
 <input type="hidden" name="id" value="." tal:attributes="value request/id|nothing">
-<table cellpadding="2" cellspacing="2" border="0"
+<table cellpadding="0" cellspacing="2" border="0"
   tal:define="global has_edits nothing">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
@@ -20,7 +21,7 @@
                        is_required python: is_edit and widget.is_required;
                        global has_edits python: has_edits or is_edit;
                        ">
-      <td align="right"  valign="top" bgcolor="#EEEEEE">
+      <td align="right"  valign="top">
         <div class="label" tal:condition="widget/label_edit"
           tal:attributes="class python:is_required and 'label required'
                                                     or 'label'">
@@ -46,15 +47,22 @@
     </tal:block>
     </tal:block>
   </tr>
+  <tr>
+    <td></td>
+    <td>
+    <tal:block condition="has_edits">
+    <input type="submit" class="standalone"
+      name="cpsdirectory_entry_edit_form:method"
+      value="button_change" i18n:attributes="value"
+      tal:condition="not:creation">
+    <input type="submit" class="standalone"
+      name="cpsdirectory_entry_create_form:method"
+      value="button_create" i18n:attributes="value" tal:condition="creation">
+    </tal:block>
+    </td>
+  </tr>
 </table>
-<tal:block condition="has_edits">
-<input type="submit" class="standalone" name="cpsdirectory_entry_edit_form:method"
-  value="button_change" i18n:attributes="value" tal:condition="not:creation">
-<input type="submit" class="standalone" name="cpsdirectory_entry_create_form:method"
-  value="button_create" i18n:attributes="value" tal:condition="creation">
-<input type="submit" class="standalone" name="cpsdirectory_entry_view:method"
-  value="button_view" i18n:attributes="value" tal:condition="not:creation">
-</tal:block>
 </form>
+</div>
 </tal:block>
 </metal:block>

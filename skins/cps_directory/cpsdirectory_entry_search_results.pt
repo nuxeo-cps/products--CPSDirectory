@@ -2,14 +2,25 @@
                    portal_url here/portal_url;
                    dirname here/getId;
                    ">
-<ul tal:condition="ids">
+<div style="padding-left: 1.5em">
+<table tal:condition="ids">
+<tr>
+  <th i18n:translate="">id</th>
+</tr>
 <tal:block repeat="id ids">
-  <li>
-    <a href="." tal:content="id"
-      tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
->john</a>
-  </li>
+<tr  tal:attributes="class python:test(repeat['id'].even(),'even','odd')">
+  <td>
+    <a href="."
+    tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
+    ><b  tal:content="id">john</b></a>
+  </td>
+</tr>
 </tal:block>
-</ul>
-<p tal:condition="not:ids"><span i18n:translate="label_no_results">label_no_results</span></p>
+</table>
+<div tal:condition="not:ids">
+  <span i18n:translate="label_no_results" />
+</div>
+<br><br><input type="button" class="context" value="button_back"
+    onclick="javascript:history.back()" i18n:attributes="value">
+</div>
 </tal:block>
