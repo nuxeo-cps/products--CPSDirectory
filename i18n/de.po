@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"POT-Creation-Date: 2004-05-28 17:58default\n"
+"POT-Creation-Date: 2004-08-30 11:29default\n"
 "PO-Revision-Date: 2004-07-12 18:30+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: Francais <rheinland@dzug.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: KBabel 1.3.1\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
@@ -44,7 +44,6 @@ msgstr "Such Ergebnisse"
 msgid "cpsdir_label_search_entry"
 msgstr "Suche Eintrag"
 
-#.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -61,9 +60,11 @@ msgstr "Ansehen Eintrag"
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre Suchabfrage."
+msgstr ""
+"Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre "
+"Suchabfrage."
 
-#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
@@ -73,8 +74,8 @@ msgstr ""
 msgid "id"
 msgstr "id"
 
-#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
@@ -95,9 +96,6 @@ msgstr "Kein Verzeichnis verfügbar"
 
 msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
-
-msgid "label_roles"
-msgstr "Rolle(n)"
 
 msgid "label_groups"
 msgstr "Gruppe(n)"
@@ -122,12 +120,23 @@ msgstr "Lösche Eintrag"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Eine privater Bereich gibt Ihnen Zugang zu:<br />- einem privaten Arbeitsbereich<br />- einem "
-"privaten Kalender<br />- ihren Favoriten (Bookmarks)<br />- einigen Boxen Funktionen "
-"<br />"
+"Eine privater Bereich gibt Ihnen Zugang zu:<br />- einem privaten "
+"Arbeitsbereich<br />- einem privaten Kalender<br />- ihren Favoriten "
+"(Bookmarks)<br />- einigen Boxen Funktionen <br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Aktivieren privater Bereiche"
+
+#, fuzzy
+msgid "label_roles_Manager"
+msgstr "Rolle(n)"
+
+#, fuzzy
+msgid "label_roles_Member"
+msgstr "Rolle(n)"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"
@@ -167,4 +176,3 @@ msgstr "Aktivieren privater Bereiche"
 
 #~ msgid "button_delete"
 #~ msgstr "Löschen"
-

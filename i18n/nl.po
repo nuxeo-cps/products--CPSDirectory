@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-23 16:27default\n"
+"POT-Creation-Date: 2004-08-30 11:29default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: French <cantact@nuxeo.com>\n"
@@ -48,7 +48,6 @@ msgstr "Resultaten"
 msgid "cpsdir_label_search_entry"
 msgstr "Zoeken"
 
-#.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -101,9 +100,6 @@ msgstr ""
 msgid "psm_entry_created"
 msgstr "Item aangemaakt"
 
-msgid "label_roles"
-msgstr "Rollen"
-
 msgid "label_groups"
 msgstr "Groepen"
 
@@ -142,6 +138,12 @@ msgstr "Rollen"
 #, fuzzy
 msgid "label_roles_Member"
 msgstr "Leden"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+#~ msgid "label_roles"
+#~ msgstr "Rollen"
 
 #~ msgid "button_edit"
 #~ msgstr "Wijzig"

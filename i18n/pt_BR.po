@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2004-06-23 16:27default\n"
+"POT-Creation-Date: 2004-08-30 11:29default\n"
 "PO-Revision-Date: 2004-06-08 14:06-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@curiango.ipen.br>\n"
 "Language-Team: Português do Brasil <pt@li.org>\n"
@@ -49,7 +49,6 @@ msgstr "Resultados"
 msgid "cpsdir_label_search_entry"
 msgstr "Buscar entrada"
 
-#.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -101,10 +100,6 @@ msgstr "Nenhum diretório disponível"
 msgid "psm_entry_created"
 msgstr "Entrada criada"
 
-#, fuzzy
-msgid "label_roles"
-msgstr "Grupos"
-
 msgid "label_groups"
 msgstr "Grupos"
 
@@ -142,3 +137,10 @@ msgstr "Último Nome"
 #, fuzzy
 msgid "label_roles_Member"
 msgstr "Membros"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+#, fuzzy
+#~ msgid "label_roles"
+#~ msgstr "Grupos"

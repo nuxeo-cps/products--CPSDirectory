@@ -70,3 +70,6 @@ msgstr ""
 msgid "label_roles_Member"
 msgstr ""
 
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-06-23 16:27default\n"
+"POT-Creation-Date: 2004-08-30 11:29default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -50,7 +50,6 @@ msgstr ""
 msgid "cpsdir_label_search_entry"
 msgstr ""
 
-#.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -102,9 +101,6 @@ msgstr ""
 msgid "psm_entry_created"
 msgstr ""
 
-msgid "label_roles"
-msgstr ""
-
 msgid "label_groups"
 msgstr ""
 
@@ -136,4 +132,7 @@ msgid "label_roles_Manager"
 msgstr ""
 
 msgid "label_roles_Member"
+msgstr ""
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""

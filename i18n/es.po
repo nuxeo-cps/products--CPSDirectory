@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"POT-Creation-Date: 2004-06-23 16:27default\n"
+"POT-Creation-Date: 2004-08-30 11:29default\n"
 "PO-Revision-Date: 2004-03-27 20:59+0100\n"
 "Last-Translator: Álvaro Tejero Cantero <alvaro@antalia.com>\n"
 "Language-Team:  <es@li.org>\n"
@@ -54,7 +54,6 @@ msgid "cpsdir_label_search_entry"
 msgstr "Buscar una entrada"
 
 #    <b>cpsdir_label_upto_directories</b>
-#.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -117,10 +116,6 @@ msgstr "Ningún directorio disponible"
 msgid "psm_entry_created"
 msgstr "Entrada creada"
 
-#, fuzzy
-msgid "label_roles"
-msgstr "Grupo(s)"
-
 msgid "label_groups"
 msgstr "Grupo(s)"
 
@@ -159,3 +154,10 @@ msgstr "Grupo(s)"
 #, fuzzy
 msgid "label_roles_Member"
 msgstr "Miembros"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+#, fuzzy
+#~ msgid "label_roles"
+#~ msgstr "Grupo(s)"
