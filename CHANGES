@@ -7,7 +7,7 @@ New features:
   Requires CPSMembershipTool >= 1.46.
 Bug fixes:
 ~~~~~~~~~~
--
+- Delete Entry action displayed for non authorized user
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - MultiEntries and Entry widget are compatible so we
