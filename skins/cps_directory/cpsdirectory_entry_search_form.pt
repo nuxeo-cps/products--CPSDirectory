@@ -1,6 +1,7 @@
 <tal:block define="
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
+  global dirtitle dir/title_or_id;
   validate python: request.has_key('cpsdirectory_search_button');
   res python: dir.renderSearchDetailed(request=request, validate=validate,
                                     callback='cpsdirectory_entry_search_do');
@@ -25,8 +26,8 @@
       <span tal:condition="python:ok == 'results'"
         i18n:translate="">cpsdir_label_results</span>
       <span tal:condition="python:ok != 'results'"
-        i18n:translate="">cpsdir_label_search</span> <tal:block i18n:translate=""
-        tal:content="dirname" />
+        i18n:translate="">cpsdir_label_search</span>
+      <tal:block i18n:translate="" tal:content="dirtitle" />
     </h1>
     <div class="description">
     </div>

@@ -1,6 +1,7 @@
 <tal:block define="
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
+  global dirtitle dir/title_or_id;
   dummy dir/checkCreateEntryAllowed;
   validate python: request.has_key('cpsdirectory_entry_create_form');
   create_request python: validate and request or nothing;
@@ -24,7 +25,7 @@
          i18n:translate="">cpsdir_label_search_entry</a>
     </div>
     <h1><span i18n:translate="">cpsdir_label_create <tal:block
-          i18n:name="dirname" tal:content="dirname" /></span></h1>
+          i18n:name="dirname" tal:content="dirtitle" /></span></h1>
     <div class="description">
     </div>
   </metal:block>

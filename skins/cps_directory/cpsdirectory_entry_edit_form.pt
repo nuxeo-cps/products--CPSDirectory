@@ -2,6 +2,7 @@
   global id request/id;
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
+  global dirtitle dir/title_or_id;
   title_field dir/title_field;
   validate python: request.has_key('cpsdirectory_entry_edit_form');
   edit_request python: validate and request or nothing;
@@ -25,7 +26,7 @@
         i18n:translate="">cpsdir_label_view_entry</a>
     </div>
     <h1><span i18n:translate="">cpsdir_label_edit</span> <tal:block
-          i18n:translate="" tal:content="dirname" /></h1>
+          i18n:translate="" tal:content="dirtitle" /></h1>
     <div class="description">
     </div>
   </metal:block>
