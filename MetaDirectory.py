@@ -33,9 +33,7 @@ from Products.CMFCore.CMFCorePermissions import ManagePortal
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
-
-
-_marker = [] # XXX used?
+from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 
 class MetaDirectory(BaseDirectory):
@@ -52,18 +50,6 @@ class MetaDirectory(BaseDirectory):
 
     def __init__(self, *args, **kw):
         BaseDirectory.__init__(self, *args, **kw)
-        return
-        # XXX debug zmi
-        self.setBackingDirectories(
-            ({'dir_id': 'metafoo',
-              'id_conv': None,
-              'field_ignore': ('pasglop',),
-              },
-             {'dir_id': 'metabar',
-              'id_conv': None,
-              'field_rename': {'mail': 'email'}, # back_id:id
-              },
-             ))
 
     #
     # ZMI
@@ -185,10 +171,32 @@ class MetaDirectory(BaseDirectory):
             return 0
         return dir.hasEntry(id)
 
+    security.declarePublic('isAuthenticating')
+    def isAuthenticating(self):
+        """Check if this directory does authentication.
+
+        Returns a boolean.
+
+        Asks the backing directories, one of them must be authenticating.
+        """
+        for b_dir in self._getBackingDirs():
+            if b_dir.isAuthenticating():
+                return 1
+        return 0
+
+    security.declarePrivate('getEntryAuthenticated')
+    def getEntryAuthenticated(self, id, password, **kw):
+        """Get and authenticate an entry.
+
+        Returns the entry if authenticated.
+        Raises KeyError if the entry doesn't exist.
+        Raises AuthenticationFailed if authentication failed.
+        """
+        return self._getEntryKW(id, password=password, **kw)
+
     security.declarePublic('createEntry')
     def createEntry(self, entry):
-        """Create an entry in the directory.
-        """
+        """Create an entry in the directory."""
         self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
@@ -213,7 +221,6 @@ class MetaDirectory(BaseDirectory):
         self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
-        dtool = getToolByName(self, 'portal_directories')
         for info in self.getBackingDirectories():
             b_dir = info['dir']
             # Get id XXX maybe convert
@@ -289,7 +296,6 @@ class MetaDirectory(BaseDirectory):
         acc_res = None
         for info, b_return_fields, b_query in qs:
             b_dir = info['dir']
-            b_id_field = b_dir.id_field
 
             # Do query
             #print ' subquery dir=%s rf=%s query=%s' % ( # XXX
@@ -361,9 +367,8 @@ class MetaDirectory(BaseDirectory):
     # Internal
     #
 
-    def _getEntryFromBacking(self, id, field_ids):
+    def _getEntryFromBacking(self, id, field_ids, password=None):
         """Compute an entry from the backing directories."""
-        dtool = getToolByName(self, 'portal_directories')
         entry = {self.id_field: id}
         for info in self.getBackingDirectories():
             b_dir = info['dir']
@@ -386,9 +391,13 @@ class MetaDirectory(BaseDirectory):
                     continue
                 b_fids.append(b_fid)
             # Get entry (no acls checked)
-            if not b_fids:
-                continue
-            b_entry = b_dir._getEntry(b_id, fields_ids=b_fids)
+            if password is not None and b_dir.isAuthenticating():
+                b_entry = b_dir.getEntryAuthenticated(b_id, password,
+                                                      field_ids=b_fids)
+            else:
+                if not b_fids:
+                    continue
+                b_entry = b_dir._getEntry(b_id, fields_ids=b_fids)
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
@@ -405,13 +414,14 @@ class MetaStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from other backing directories.
     """
 
-    def __init__(self, schema, id, dir, **kw):
+    def __init__(self, schema, id, dir, password=None, **kw):
         """Create an Adapter for a schema.
 
         The id passed is the member id. It may be None for creation.
         """
         self._id = id
         self._dir = dir
+        self._password = password
         self._do_create = kw.get('do_create', 0)
         BaseStorageAdapter.__init__(self, schema, **kw)
 
@@ -428,10 +438,9 @@ class MetaStorageAdapter(BaseStorageAdapter):
         if id is None:
             # Creation.
             return self.getDefaultData()
-        # Compute entry so that it is passed as kw to _getFieldData.
         field_ids = [field_id for field_id, field in self.getFieldItems()]
-
-        entry = self._dir._getEntryFromBacking(id, field_ids)
+        entry = self._dir._getEntryFromBacking(id, field_ids,
+                                               password=self._password)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
@@ -446,7 +455,6 @@ class MetaStorageAdapter(BaseStorageAdapter):
 
         # Do we assume we want to write all fields ?
 
-        dtool = getToolByName(dir, 'portal_directories')
         for info in dir.getBackingDirectories():
             b_dir = info['dir']
             field_ignore = info['field_ignore']
