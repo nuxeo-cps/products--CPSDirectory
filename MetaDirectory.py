@@ -29,7 +29,7 @@ from DateTime.DateTime import DateTime
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getEngine
 

@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Used "Products.CMFCore.permissions" instead of deprecated
+  "Products.CMFCore.CMFCorePermissions".
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

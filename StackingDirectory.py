@@ -29,7 +29,7 @@ from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.permissions import ManagePortal
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 

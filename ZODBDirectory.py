@@ -31,7 +31,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Role import RoleManager
 from OFS.SimpleItem import Item_w__name__
 
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.permissions import ManagePortal
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 
 from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
