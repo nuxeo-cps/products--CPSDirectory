@@ -106,7 +106,10 @@ class GroupsDirectory(BaseDirectory):
                 if not ok:
                     continue
             groups.append(group)
-        return groups
+        if return_fields is None:
+            return groups
+        else:
+            return [(g, {}) for g in groups]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
