@@ -3,7 +3,8 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Delete member and its member area when deleting from members directory.
+  Requires CPSMembershipTool >= 1.46.
 Bug fixes:
 ~~~~~~~~~~
 -

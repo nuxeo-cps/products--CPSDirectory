@@ -168,8 +168,8 @@ class MembersDirectory(BaseDirectory):
         self.checkDeleteEntryAllowed()
         if not self.hasEntry(id):
             raise KeyError("Members '%s' does not exist" % id)
-        aclu = self.acl_users
-        aclu._doDelUsers([id])
+        mtool = getToolByName(self, 'portal_membership')
+        mtool.deleteMembers([id])
 
     security.declarePrivate('updateMemberDataFromSchema')
     def updateMemberDataFromSchema(self):
