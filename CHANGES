@@ -1,6 +1,6 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
-- DirectoryEntryWidget require CPSNavigation
+- widgets DirectoryEntry and MultiEntries require CPSNavigation
 New features:
 ~~~~~~~~~~~~~
 - Password widget uses a confirmation widget in edit mode.
