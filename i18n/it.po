@@ -1,120 +1,130 @@
+# ##########################################################
+# ################# DON'T EDIT THIS FILE! ##################
+# ##########################################################
 # Gettext Message File for default.
-# Paolo Dina <paolo@php3.it>, 2004.
-#
-#
+# Your Name <your@email>, Year
 msgid ""
 msgstr ""
-"Project-Id-Version: it\n"
+"Project-Id-Version: CPSDirectory\n"
 "POT-Creation-Date: 2004-08-30 12:18default\n"
-"PO-Revision-Date: 2004-05-10 12:28+0100\n"
-"Last-Translator: Paolo Dina <paolo@php3.it>\n"
-"Language-Team: Italian <it@li.org>\n"
+"PO-Revision-Date: 2004-09-30 16:16+0100\n"
+"Last-Translator: Fabio Nosari <fabnos@fastwebnet.it>\n"
+"Language-Team: Fabio Nosari <fabnos@fastwebnet.it>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language-code: it\n"
-"Language-name: Italiano\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: LL\n"
+"Language-name: Language\n"
+"Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
+#: from
+#: ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Errore"
 
 #.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr "Scegli un elenco"
+msgstr "Scegli un elenco:"
 
-#    <span />
-#    <span />
 #.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr "Crea un nuovo elemento"
+msgstr "Crea un elemento"
 
 #.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica l'elemento"
 
-#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
-msgstr "Risultati della ricerca "
+msgstr "Risultati della ricerca"
 
-#    <span condition="python: ok != 'results'" />
 #.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_upto_directories"
-msgstr "Risali agli elenchi"
+msgstr "Ritorna agli elenchi"
 
 #.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizza l'elemento"
 
 #.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr ""
+msgstr "La ricerca restituisce troppi risultati riferiti alla tua richiesta.<br> Ridefinisci la tua interrogazione."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
+#: from
+#: ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
 
 #.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
-msgstr "id"
+msgstr "Identificatore"
 
-#    <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#    <span condition="widget/is_i18n" content="widget/label">label</span>
 #.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
+#: from
+#: ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
 msgstr "etichetta"
 
 #.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
-msgstr "Nessun risultato"
+msgstr "Nessun risultato."
 
 #.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: from
+#: ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr "Nessun elenco disponibile"
+msgstr "Nessun elenco disponibile."
 
 msgid "psm_entry_created"
-msgstr "Elemento creato"
+msgstr "L'elemento è stato creato."
 
 msgid "label_groups"
-msgstr "Gruppi"
+msgstr "Gruppo (i)"
 
 msgid "label_subgroups"
-msgstr "Sottogruppi"
+msgstr "Sottogruppo (i)"
 
 msgid "label_members"
-msgstr "Collaboratori"
+msgstr "Collaboratore (i)"
 
 msgid "label_first_name"
-msgstr "Nome proprio"
+msgstr "Nome"
 
 msgid "label_last_name"
 msgstr "Cognome"
@@ -123,33 +133,23 @@ msgid "label_full_name"
 msgstr "Nome completo"
 
 msgid "cpsdir_label_delete_entry"
-msgstr "Elimina elemento"
+msgstr "Elimina l'elemento"
 
-#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 msgid "cpsdir_help_homeless"
-msgstr ""
-"Un'area privata fornisce accesso a:<br />- un'area di lavoro privata<br />- "
-"un  calendario personale<br />- un contenitore di segnalibri (bookmarks)<br /"
-">- la possibilità di chiudere/minimizzare contenitori<br />"
+msgstr "L'ambiente personale consente di accedere:<br />- all'ambiente di lavoro privato<br />- all'agenda personale<br />- alla cartella dei favoriti (bookmark)<br />- ed, infine, consente di chiudere o ridurre ad icona le caselle del portale.<br />"
 
-#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 msgid "cpsdir_label_homeless"
-msgstr "Abilita area privata"
+msgstr "Abilita ambiente personale"
 
-#, fuzzy
 msgid "label_roles_Manager"
-msgstr "Gruppo(i)"
+msgstr "Responsabile"
 
-#, fuzzy
 msgid "label_roles_Member"
-msgstr "Collaboratori"
+msgstr "Collaboratore"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
+msgstr "Attenzione, l'elemento non può essere eliminato.<br>Per effettuare questa azione devi prima cancellare tutti i sotto-elementi."
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr ""
+msgstr "Attenzione, un oggetto con lo stesso identificativo è già presente."
 
-#, fuzzy
-#~ msgid "label_roles"
-#~ msgstr "Gruppo(i)"
