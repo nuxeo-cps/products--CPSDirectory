@@ -170,6 +170,10 @@ def install(self):
         pr("  Installing.")
         directory = dirtool.manage_addCPSDirectory(id, info['type'])
         directory.manage_changeProperties(**info['data'])
+        for role, expr in info.get('entry_local_roles', ()):
+            res = directory.addEntryLocalRole(role, expr)
+            if res:
+                raise ValueError(res)
 
     # importing .po files
     mcat = portal['Localizer']['default']
