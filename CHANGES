@@ -20,3 +20,5 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - LDAPBackingDirectory: Automatically reconnect to server.
 - IndirectDirectory: added a storage adapter
+- ZODBDirectory: use IsUserModified interface to prevent updater cleaning
+- Begining of use of epydoc
