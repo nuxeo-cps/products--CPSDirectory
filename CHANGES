@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- Fixed problem in LDAPBackingDirectory for DN with accented chars.
+- LDAPBackingDirectory: Fixed problem for DN with accented chars.
+- LDAPBackingDirectory: Correctly trap insufficient access errors.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

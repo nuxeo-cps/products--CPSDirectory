@@ -30,6 +30,7 @@ import re
 import sys
 from types import ListType, TupleType, StringType, IntType, UnicodeType
 import ldap
+from ldap.ldapobject import ReconnectLDAPObject
 from ldap.filter import filter_format
 from ldap import SCOPE_BASE, SCOPE_ONELEVEL, SCOPE_SUBTREE
 from ldap import MOD_DELETE, MOD_REPLACE, MOD_ADD
@@ -44,6 +45,7 @@ from ldap import UNWILLING_TO_PERFORM
 from ldap import INVALID_DN_SYNTAX
 from ldap import NO_SUCH_OBJECT
 from ldap import SERVER_DOWN
+from ldap import INSUFFICIENT_ACCESS
 #from ldap import SIZELIMIT_EXCEEDED
 
 from Globals import InitializeClass
@@ -575,7 +577,7 @@ class LDAPBackingDirectory(BaseDirectory):
             conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
 
             LOG('connectLDAP', TRACE, 'initialize conn_str=%s' % conn_str)
-            conn = ldap.initialize(conn_str)
+            conn = ReconnectLDAPObject(conn_str)
             try:
                 conn.set_option(OPT_PROTOCOL_VERSION, VERSION3)
             except LDAPError:
@@ -673,13 +675,26 @@ class LDAPBackingDirectory(BaseDirectory):
         #except SIZELIMIT_EXCEEDED:
         return ldap_entries
 
+    def _insufficientAccess(self, e):
+        try:
+            info = e.args[0]['info']
+        except (AttributeError, KeyError, IndexError):
+            info = ''
+        else:
+            info = '('+info+')'
+        return ConfigurationError("Directory '%s': Insufficient access %s"
+                                  % (self.getId(), info))
+
     security.declarePrivate('deleteLDAP')
     def deleteLDAP(self, dn):
         """Delete an entry from LDAP."""
         # maybe check read_only
         conn = self.connectLDAP()
         LOG('deleteLDAP', TRACE, "delete_s dn=%s" % dn)
-        conn.delete_s(dn)
+        try:
+            conn.delete_s(dn)
+        except INSUFFICIENT_ACCESS, e:
+            raise self._insufficientAccess(e)
 
     security.declarePrivate('insertLDAP')
     def insertLDAP(self, dn, ldap_attrs):
@@ -688,7 +703,10 @@ class LDAPBackingDirectory(BaseDirectory):
         attrs_list = [(k, v) for k, v in ldap_attrs.items()]
         conn = self.connectLDAP()
         LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
-        conn.add_s(dn, attrs_list)
+        try:
+            conn.add_s(dn, attrs_list)
+        except INSUFFICIENT_ACCESS, e:
+            raise self._insufficientAccess(e)
 
     security.declarePrivate('modifyLDAP')
     def modifyLDAP(self, dn, ldap_attrs):
