@@ -93,7 +93,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
 
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
-         'label': 'Directory'},
+         'label': 'Directory','is_required' : 1},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
@@ -159,13 +159,13 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
             dir = getattr(portal_directories, self.directory)
             display_attr = dir.title_field
             id, title = self.getIdAndTitle(value)
-            
+
             if value:
                 jsvalue = value.replace("'", "\\'")
                 jsvalue = jsvalue.replace('"', '\\"')
             else:
                 jsvalue = ''
-                
+
             return meth(mode=mode, value=value, jsvalue=jsvalue, title=title,
                         display_attr=display_attr)
 
