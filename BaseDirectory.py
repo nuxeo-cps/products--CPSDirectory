@@ -110,6 +110,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     def __init__(self, id, **kw):
         self.id = id
+        self.manage_changeProperties(**kw)
 
     #
     # Usage API
