@@ -1,8 +1,6 @@
 Requires:
 ~~~~~~~~~
-- Synced with latest CPSSchemas, calling adapter.finalizeDefaults(entry) is
-  needed
-
+-
 New features:
 ~~~~~~~~~~~~~
 -
@@ -11,5 +9,4 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- 
-
+-

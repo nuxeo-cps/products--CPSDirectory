@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.15.1 [R1 build 2004/07/07-09:14 by madarche]
+
+Requires:
+~~~~~~~~~
+- Synced with latest CPSSchemas, calling adapter.finalizeDefaults(entry) is
+  needed
+
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- 
+
+
+*******************************************
 ** CPSDirectory V1.15.0 [R1 build 2004/07/06-08:52 by ben]
 
 Requires:
