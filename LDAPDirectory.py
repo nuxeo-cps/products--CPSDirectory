@@ -459,30 +459,32 @@ class LDAPStorageAdapter(BaseStorageAdapter):
             # strptime is not available on Windows, so do this the
             # hard way:
             time = field_data[0]
-            value = DateTime()
-            value._year = int(time[0:4])
-            value._month = int(time[4:6])
-            value._day = int(time[6:8])
-            value._hour = int(time[8:10])
-            value._minute = int(time[10:12])
-            value._second = int(time[12:14])
+            year = int(time[0:4])
+            month = int(time[4:6])
+            day = int(time[6:8])
+            hour = int(time[8:10])
+            minute = int(time[10:12])
+            second = int(time[12:14])
             # XXX I'm not sure what the LDAP TimeZone format looks like,
-            # since I can't find any specifications. I *think* it is
-            # Z[offset]. Examples:
+            # since I can't find any specifications. Let's assume it's
+            # The same is ISO. Examples:
             # GMT: 'Z'
-            # CET: 'Z0100'
-            # EST: 'Z-0600'
+            # CET: '+0100'
+            # EST: '-0600'
             # Please beware that this is a GUESS.
             # We always store them in GMT with the timezone 'Z', as this
             # is recommended in the specifications.
             # As a result, this code is largely untested with "real" data,
             # since we simply dont know how it looks.
-            tz = time[15:]
-            if tz: # There is a timezone specified.
-                if not tz[0] not in ('-', '+'):
-                    tz = '+' + tz
-                value._tz = 'GMT' + tz
-            return value
+            tz = time[14:]
+            if tz[0] in ('+', '-'): # There is a timezone specified.
+                tz = 'GMT' + tz
+            else:
+                tz = 'GMT'
+            value = DateTime(year, month, day, hour, minute, second, tz)
+            # Convert to local zone for correct display?
+            value = value.toZone(value.localZone())
+            return  value
 
         return '; '.join(field_data) # Join multivalued fields.
 
