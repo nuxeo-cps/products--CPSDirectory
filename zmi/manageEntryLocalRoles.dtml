@@ -15,6 +15,9 @@
     DateTime(), nothing</code>.
   All the values from the entry are also available directly.
 </p>
+<p class="form-help">
+  The entry local roles are available in the <b>ACL: entry edit roles</b>.
+</p>
 
 <dtml-in listEntryLocalRoles>
  <dtml-if sequence-start>
