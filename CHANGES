@@ -6,12 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- fix: when creating an entry with an already exising id you have a generic 
-  psm without any explanantion
-- fix: ldapdirectory deleting non leaf entry raise cps error
-  now it display a warning psm
-- fix: create entry raise a CPS Error on ldapdirectory if there is an already 
-  existing entry and if the new id is computed with a base_dn
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Added a TODO list.
+-

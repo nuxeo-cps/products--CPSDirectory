@@ -1,4 +1,25 @@
 *******************************************
+** CPSDirectory V1.17.3 [R1 build 2004/09/03-13:33 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- fix: when creating an entry with an already exising id you have a generic 
+  psm without any explanantion
+- fix: ldapdirectory deleting non leaf entry raise cps error
+  now it display a warning psm
+- fix: create entry raise a CPS Error on ldapdirectory if there is an already 
+  existing entry and if the new id is computed with a base_dn
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Added a TODO list.
+
+*******************************************
 ** CPSDirectory V1.17.2 [R1 build 2004/08/23-05:51 by fermigier]
 
 Requires:
