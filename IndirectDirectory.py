@@ -76,7 +76,7 @@ class IndirectDirectory(BaseDirectory):
     # list of directory ids
     directory_ids = []
     # list of strings directory_id/entry_id using '/' as a special character
-    object_ids = []
+    object_ids = ()
 
     def __init__(self, id, **kw):
         BaseDirectory.__init__(self, id, **kw)
