@@ -154,8 +154,10 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """@summary: Create an entry in the directory.
+
         Set the isUserModified flag
-        @param entry: dictonnary of entry values
+
+        @param entry: dictionnary of entry values
         @type: @Dict
         """
         self.checkCreateEntryAllowed(entry=entry)
@@ -181,7 +183,9 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """@summary: Delete an entry in the directory.
+
         Set the isUserModified flag
+
         @param id: entry identifiant
         @type id: @String
         """
