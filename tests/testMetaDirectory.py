@@ -73,12 +73,9 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         self.dirmeta = dirmeta
 
 
-    def test_getEntry_Fail(self):
-        id = '111'
-        self.assertRaises(KeyError, self.dirmeta.getEntry, id)
-
     def test_getEntry(self):
-        id = '111'
+        id = '000'
+        self.assertRaises(KeyError, self.dirmeta.getEntry, id)
         fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
         barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
         okentry = {'id': id, 'foo': 'ouah', 'bar': 'brr', 'email': 'me@here'}
@@ -103,36 +100,71 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         ids.sort()
         self.assertEquals(okids, tuple(ids))
 
-    def test_hasEntry_Fail(self):
-        id = '111'
-        self.failIf(self.dirmeta.hasEntry(id))
-
     def test_hasEntry(self):
-        id = '111'
+        id = '333'
+        self.failIf(self.dirmeta.hasEntry(id))
         fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
         barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
         self.dirfoo.createEntry(fooentry)
         self.dirbar.createEntry(barentry)
         self.assert_(self.dirmeta.hasEntry(id))
 
-    def xxxtest_createEntry(self):
-        id = '111'
-        entry = {'id': id, 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}
-        self.failIf(self.dirmeta.hasEntry(id))
-        self.failIf(self.dirfoo.hasEntry(id))
-        self.failIf(self.dirbar.hasEntry(id))
-        self.dirmeta.createEntry(entry)
-        self.assert_(self.dirmeta.hasEntry(id))
-        self.assert_(self.dirfoo.hasEntry(id))
-        self.assert_(self.dirbar.hasEntry(id))
+    def test_editEntry(self):
+        # Build previous entry in backing dir
+        id = '444'
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        # Now change it
+        entry = {'id': id, 'foo': 'FOO', 'bar': 'BAR', 'email': 'EMAIL@COM'}
+        self.dirmeta.editEntry(entry)
+        # Check changed
         entry2 = self.dirmeta.getEntry(id)
-        self.assertEquals(entry, entry2)
-        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': ''}
-        barentry = {'id': id, 'bar': 'rab', 'mail': 'lame@at'}
+        self.assertEquals(entry2, entry)
+        # Check backing dirs have changed
         fooentry2 = self.dirfoo.getEntry(id)
         barentry2 = self.dirbar.getEntry(id)
+        fooentry3 = {'idd': id, 'foo': 'FOO', 'pasglop': 'arg'}
+        barentry3 = {'id': id, 'bar': 'BAR', 'mail': 'EMAIL@COM'}
+        self.assertEquals(fooentry2, fooentry3)
+        self.assertEquals(barentry2, barentry3)
+
+    def test_createEntry(self):
+        id = '555'
+        self.failIf(self.dirfoo.hasEntry(id))
+        self.failIf(self.dirbar.hasEntry(id))
+        self.failIf(self.dirmeta.hasEntry(id))
+        entry = {'id': id, 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}
+        self.dirmeta.createEntry(entry)
+        self.assert_(self.dirfoo.hasEntry(id))
+        self.assert_(self.dirbar.hasEntry(id))
+        self.assert_(self.dirmeta.hasEntry(id))
+        # Check created
+        entry2 = self.dirmeta.getEntry(id)
+        self.assertEquals(entry2, entry)
+        # Check backing dirs
+        fooentry = self.dirfoo.getEntry(id)
+        barentry = self.dirbar.getEntry(id)
+        fooentry2 = {'idd': id, 'foo': 'oof', 'pasglop': ''}
+        barentry2 = {'id': id, 'bar': 'rab', 'mail': 'lame@at'}
         self.assertEquals(fooentry, fooentry2)
         self.assertEquals(barentry, barentry2)
+
+    def test_deleteEntry(self):
+        id = '666'
+        self.failIf(self.dirfoo.hasEntry(id))
+        self.failIf(self.dirbar.hasEntry(id))
+        self.failIf(self.dirmeta.hasEntry(id))
+        entry = {'id': id, 'foo': 'f', 'bar': 'b', 'email': 'e@m'}
+        self.dirmeta.createEntry(entry)
+        self.assert_(self.dirfoo.hasEntry(id))
+        self.assert_(self.dirbar.hasEntry(id))
+        self.assert_(self.dirmeta.hasEntry(id))
+        self.dirmeta.deleteEntry(id)
+        self.failIf(self.dirfoo.hasEntry(id))
+        self.failIf(self.dirbar.hasEntry(id))
+        self.failIf(self.dirmeta.hasEntry(id))
 
     def xxxtestSearch(self):
         dir = self.dir

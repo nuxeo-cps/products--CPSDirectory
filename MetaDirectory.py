@@ -162,44 +162,42 @@ class MetaDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory.
-
-        XXX: OK, but what exactly is an 'entry'?
         """
-        raise NotImplementedError
         id = entry[self.id_field]
         self.checkCreateEntryAllowed(id=id)
         if self.hasEntry(id):
-            raise KeyError("Member '%s' already exists" % id)
-        mtool = getToolByName(self, 'portal_membership')
-        password = '38fnvas7ds' # XXX default password ???
-        roles = ()
-        domains = []
-        mtool.addMember(id, password, roles, domains)
-        member = mtool.getMemberById(id)
-        if member is None or not hasattr(aq_base(member), 'getMemberId'):
-            raise ValueError("Cannot add member '%s'" % id)
-        member.setMemberProperties({}) # Trigger registration in memberdata.
+            raise KeyError("Entry '%s' already exists" % id)
 
-        # Edit the just-create entry.
-        # XXX this is basically editEntry without ACL checks
-        dm = self._getDataModel(id)
-        dm._check_acls = 0 # XXX use API
+        # Fetch a dm with default values
+        dm = self._getDataModel(None, check_acls=0, do_create=1)
+        # Set the values
         for key in dm.keys():
             if not entry.has_key(key):
                 continue
             dm[key] = entry[key]
+        # Now set datamodel's id
+        # XXX Should use better API
+        for adapter in dm._adapters:
+            adapter.setContextObject(id)
         dm._commit()
-
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
-        raise NotImplementedError
         self.checkDeleteEntryAllowed()
         if not self.hasEntry(id):
-            raise KeyError("Members '%s' does not exist" % id)
-        mtool = getToolByName(self, 'portal_membership')
-        mtool.deleteMembers([id])
+            raise KeyError("Entry '%s' does not exist" % id)
+        dtool = getToolByName(self, 'portal_directories')
+        for mapping in self.getBackingDirectoriesMappings():
+            # Get backing dir
+            try:
+                dir = getattr(dtool, mapping.dir_id)
+            except AttributeError:
+                raise ValueError("No backing directory '%s'" %
+                                 mapping.dir_id)
+            # Get id XXX maybe convert
+            b_id = id
+            dir.deleteEntry(b_id)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -228,7 +226,7 @@ class MetaDirectory(BaseDirectory):
     # Internal
     #
 
-    def _getBackingEntry(self, entry_id, field_ids):
+    def _getEntryFromBacking(self, entry_id, field_ids):
         """Compute an entry from the backing directories."""
         dtool = getToolByName(self, 'portal_directories')
         entry = {self.id_field: entry_id}
@@ -269,6 +267,7 @@ class MetaDirectory(BaseDirectory):
 
 InitializeClass(MetaDirectory)
 
+
 class MetaStorageAdapter(BaseStorageAdapter):
     """Meta Storage Adapter
 
@@ -282,7 +281,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
         """
         self._id = id
         self._dir = dir
+        self._do_create = kw.get('do_create', 0)
         BaseStorageAdapter.__init__(self, schema, **kw)
+
+    def setContextObject(self, context):
+        """Set a new underlying context for this adapter."""
+        self._id = context
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -296,7 +300,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
         # Compute entry so that it is passed as kw to _getFieldData.
         field_ids = [field_id for field_id, field in self.getFieldItems()]
 
-        entry = self._dir._getBackingEntry(id, field_ids)
+        entry = self._dir._getEntryFromBacking(id, field_ids)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
@@ -305,27 +309,46 @@ class MetaStorageAdapter(BaseStorageAdapter):
 
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
-        raise NotImplementedError
-
         data = self._setDataDoProcess(data, **kw)
-
         dir = self._dir
-        member = self._getMember()
-        mapping = {}
-        for field_id, value in data.items():
-            if field_id == dir.id_field:
-                pass
-                #raise ValueError("Can't write to id") # XXX
-            elif field_id == dir.password_field:
-                if value != NO_PASSWORD:
-                    self._setMemberPassword(member, value)
-            elif field_id == dir.roles_field:
-                self._setMemberRoles(member, value)
-            elif field_id == dir.groups_field:
-                self._setMemberGroups(member, value)
+        entry_id = self._id
+
+        # Do we assume we want to write all fields ?
+
+        dtool = getToolByName(dir, 'portal_directories')
+
+        for mapping in dir.getBackingDirectoriesMappings():
+            # Get backing dir
+            try:
+                dir = getattr(dtool, mapping.dir_id)
+            except AttributeError:
+                raise ValueError("No backing directory '%s'" %
+                                 mapping.dir_id)
+            # Get id XXX maybe convert
+            b_id = entry_id
+
+            # Build backing entry
+            b_entry = {}
+            for schema in dir._getSchemas():     # XXX
+                for b_fid in schema.keys(): # XXX need API for this
+                    if b_fid == dir.id_field:
+                        # Ignore id, already done.
+                        continue
+                    if b_fid in mapping.field_ignore:
+                        # Ignore fields ignored by mapping
+                        continue
+                    fid = mapping.field_rename.get(b_fid, b_fid)
+                    if not data.has_key(fid):
+                        # Skip fields missing in data
+                        continue
+                    b_entry[b_fid] = data[fid]
+            # Build id last to be sure it's there
+            b_entry[dir.id_field] = b_id
+
+            # Write or create to backing dir
+            if self._do_create:
+                dir.createEntry(b_entry)
             else:
-                mapping[field_id] = value
-        if mapping:
-            member.setMemberProperties(mapping)
+                dir.editEntry(b_entry)
 
 InitializeClass(MetaStorageAdapter)
