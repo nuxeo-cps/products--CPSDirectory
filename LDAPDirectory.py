@@ -434,7 +434,6 @@ class LDAPStorageAdapter(BaseStorageAdapter):
 
     def _getFieldData(self, field_id, field, entry=None):
         """Get data from one field."""
-        print "_getFieldData", field
         if not entry.has_key(field_id):
             return field.getDefault()
         if field_id == 'dn':
@@ -470,8 +469,8 @@ class LDAPStorageAdapter(BaseStorageAdapter):
                 raise ValueError("LDAP error: %s" % msg)
 
     def _getContentUrl(self, entry_id, field_id):
-        return '%s/getImageFieldData?entry_id=%s&field_id=%s' % (
-            self._dir.absolute_url(), entry_id, field_id)
+        return '/%s/getImageFieldData?entry_id=%s&field_id=%s' % (
+            self._dir.absolute_url(relative=1), entry_id, field_id)
 
 
 InitializeClass(LDAPStorageAdapter)
