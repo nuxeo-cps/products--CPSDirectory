@@ -102,7 +102,7 @@ class LDAPDirectory(BaseDirectory):
     ldap_rdn_attr = 'cn'
     ldap_object_classes = 'top, person'
 
-    ldap_scope_i = ldap.SCOPE_SUBTREE
+    ldap_scope_c = ldap.SCOPE_SUBTREE
     ldap_search_classes_c = ['person']
     ldap_object_classes_c = ['top', 'person']
 
@@ -121,7 +121,7 @@ class LDAPDirectory(BaseDirectory):
                 'ONELEVEL': ldap.SCOPE_ONELEVEL,
                 'SUBTREE': ldap.SCOPE_SUBTREE,
                 }
-        self.ldap_scope_i = conv.get(self.ldap_scope, ldap.SCOPE_BASE)
+        self.ldap_scope_c = conv.get(self.ldap_scope, ldap.SCOPE_BASE)
         # Split classes
         classes = self.ldap_search_classes
         classes = [x.strip() for x in classes.split(',')]
@@ -241,7 +241,7 @@ class LDAPDirectory(BaseDirectory):
         filter = ('(&%s(objectClass=*))' %
                   filter_format('(%s=%s)', (id_attr, id)))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope_i,
+                                    scope=self.ldap_scope_c,
                                     filter=filter,
                                     attrs=[id_attr])
         if res['exception']:
@@ -344,7 +344,7 @@ class LDAPDirectory(BaseDirectory):
         filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
                                                         (self.id_field, id))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope_i,
+                                    scope=self.ldap_scope_c,
                                     filter=filter,
                                     attrs=field_ids)
         if res['exception']:
@@ -369,7 +369,7 @@ class LDAPDirectory(BaseDirectory):
                 attrs.append(id_attr)
         LOG('_searchEntries', DEBUG, 'filter=%s attrs=%s' % (filter, attrs))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope_i,
+                                    scope=self.ldap_scope_c,
                                     filter=filter,
                                     attrs=attrs)
         if res['exception']:
