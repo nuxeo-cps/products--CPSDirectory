@@ -24,10 +24,9 @@ function updateParent() {
   <div id="divselection" style="display:none">
   <tal:block repeat="item selection">
     <div>
-      <input name="submit:list" type="checkbox"
-        checked="checked" class="noborder"
-        tal:attributes="value item/uid">
-      <tal:block replace="item/title" />
+      <input type="hidden"
+        tal:attributes="name input_id;value item/uid;">
+      <span tal:content="item/title" />
     </div>
   </tal:block>
   </div>
