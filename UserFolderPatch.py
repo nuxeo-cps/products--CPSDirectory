@@ -96,6 +96,8 @@ def searchUsers(self, query={}, props=None, options=None, **kw):
       [('user1', {'email': 'foo', 'age': 75}), ('user2', {'age': 5})]
 
     Options is used to specify the search type if possible. XXX
+
+    Special properties are 'id', 'roles', 'groups'.
     """
     # The basic implementation doesn't know about properties beside
     # roles and groups.
