@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.2.0 [R1 build 2003/12/10-18:17 by ben]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+-
+
+New features:
+~~~~~~~~~~~~~
+- The default schema now has a 'fullname' computed field.
+- Separation of entry creation and deletion roles.
+
+Bug fixes:
+~~~~~~~~~~
+- listEntryIds() returned all objects in the LDAP regardless of objectClass.
+- LDAPDirectory now converts Files, Images and 'None' to strings for
+  LDAP Storage.
+  
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- first step of cps default integration
+
+*******************************************
 ** CPSDirectory V1.1.0 [R1 build 2003/11/26-16:08 by regebro]
 
 New features:

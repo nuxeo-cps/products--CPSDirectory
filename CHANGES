@@ -4,15 +4,12 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
-- The default schema now has a 'fullname' computed field.
-- Separation of entry creation and deletion roles.
+-
 
 Bug fixes:
 ~~~~~~~~~~
-- listEntryIds() returned all objects in the LDAP regardless of objectClass.
-- LDAPDirectory now converts Files, Images and 'None' to strings for
-  LDAP Storage.
-  
+-
+
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
