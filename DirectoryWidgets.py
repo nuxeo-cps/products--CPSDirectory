@@ -73,8 +73,12 @@ class EntryMixin:
         if title is None:
             title = '? (%s)' % value
         portal_url = getToolByName(self, 'portal_url')()
+        if self.directory_view:
+            directory = self.directory_view
+        else:
+            directory = self.directory
         href = '%s/%s?%s' % (portal_url, self.skin_name,
-                             urlencode({'dirname': self.directory,
+                             urlencode({'dirname': directory,
                                         'id': id,
                                         }))
         return renderHtmlTag('a',
@@ -97,6 +101,8 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label': 'Directory'},
+        {'id': 'directory_view', 'type': 'string', 'mode': 'w',
+         'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
          'select_variable': 'all_entry_types',
          'label': 'Entry type'},
@@ -110,6 +116,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     all_popup_modes = ['browse', 'search']
 
     directory = ''
+    directory_view = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
     popup_mode = all_popup_modes[0]
@@ -164,6 +171,8 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     _properties = CPSMultiSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label': 'Directory'},
+        {'id': 'directory_view', 'type': 'string', 'mode': 'w',
+         'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
          'select_variable': 'all_entry_types',
          'label': 'Entry type'},
@@ -176,6 +185,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     all_entry_types = ['id', 'dn']
     all_popup_modes = ['browse', 'search']
     directory = ''
+    directory_view = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
     popup_mode = all_popup_modes[0]
