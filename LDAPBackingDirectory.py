@@ -96,9 +96,9 @@ def explodeDN(dn):
     try:
         rdns = ldap.explode_dn(dn)
     except LDAPError:
-        return []
-    else:
-        return [_simpleEscaping(rdn) for rdn in rdns]
+        # Bad syntax for dn, do simple split to avoid losing information
+        rdns = [rdn.strip() for rdn in dn.split(',')]
+    return [_simpleEscaping(rdn) for rdn in rdns]
 
 def implodeDN(rdns):
     """Implode a sequence of rdns into a dn."""
