@@ -28,7 +28,7 @@ APIs used are:
 
 """
 
-from zLOG import LOG, TRACE
+from zLOG import LOG, TRACE, DEBUG
 
 from types import StringType
 
@@ -100,7 +100,7 @@ def _searchInMemberData(self, query, props=None):
     mdtool = self
     mdtool_props = mdtool.propertyIds()
     res = []
-    for id, member in mdtool._members.values():
+    for id, member in mdtool._members.items():
         base_member = aq_base(member)
         entry = {'id': id}
         for key in mdtool_props:
@@ -149,6 +149,8 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
     done_props = []
     done_query_keys = []
 
+    LOG('searchForMembers', DEBUG, 'query=%s props=%s' % (query, props))
+
     # Do the search on the attributes known to the user object.
 
     if hasattr(aq_base(aclu), 'listUserProperties'):
@@ -159,9 +161,11 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
         else:
             user_props = [p for p in props if p in aclu_props]
         user_query = {}
-        for key, value in query:
+        for key, value in query.items():
             if key in aclu_props:
                 user_query[key] = value
+        LOG('searchForMembers', DEBUG, 'user_query=%s user_props=%s' %
+            (user_query, user_props))
         if user_query:
             users_res = aclu.searchUsers(user_query, props=user_props)
             done_props.extend(aclu_props)
@@ -172,6 +176,7 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
     else:
         # Not a user folder with search API, we can't search it.
         users_res = None
+    LOG('searchForMembers', DEBUG, "users_res=%s done_props=%s done_query_keys=%s" % (users_res, done_props, done_query_keys))
 
     # Do the search in the local MemberData.
 
@@ -183,16 +188,21 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
         member_props = [p for p in props
                         if p in mdtool_props and p not in done_props]
     member_query = {}
-    for key, value in query:
+    for key, value in query.items():
         if key in mdtool_props and key not in done_query_keys:
             member_query[key] = value
+    LOG('searchForMembers', DEBUG, 'member_query=%s member_props=%s' %
+        (member_query, member_props))
     if member_query:
         members_res = _searchInMemberData(self, member_query,
                                           props=member_props)
         done_props.extend(mdtool_props)
         done_query_keys.extend(member_query.keys())
     else:
-        member_res = None
+        members_res = None
+
+    LOG('searchForMembers', DEBUG, "members_res=%s done_props=%s done_query_keys=%s" % (members_res, done_props, done_query_keys))
+
 
     # Now merge the results
     # Keep members that are in both, and merge their info.
@@ -260,8 +270,7 @@ def addMember(self, id, password, roles, domains, properties=None,
             member.setMemberProperties(properties)
 
 membershiptool_methods = (
-    searchForMembers,
-    addMember,
+    #addMember,
     )
 
 # MemberDataTool
@@ -271,6 +280,10 @@ def wrapUser(self, user):
     to the given User object.
     """
     raise NotImplementedError
+
+memberdatatool_methods = (
+    searchForMembers,
+    )
 
 # MemberData
 
@@ -295,5 +308,8 @@ def getPassword(self):
 
 for meth in membershiptool_methods:
     setattr(MembershipTool, meth.__name__, meth)
+
+for meth in memberdatatool_methods:
+    setattr(MemberDataTool, meth.__name__, meth)
 
 LOG('MemberToolsPatch', TRACE, 'Patching Member Tools')
