@@ -45,8 +45,6 @@ except ImportError:
 ldap_scopes = (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
 
-_marker = []
-
 NO_PASSWORD = '__NO_PASSWORD__'
 
 
@@ -184,7 +182,7 @@ class LDAPDirectory(BaseDirectory):
             elif isinstance(value, StringType):
                 value = [value]
             else:
-                raise ValueError("Bad value %s for '%s'" % `value`, key)
+                raise ValueError("Bad value %s for '%s'" % (`value`, key))
             fl = []
             for v in value:
                 if v:
