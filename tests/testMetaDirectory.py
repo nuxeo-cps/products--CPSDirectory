@@ -407,6 +407,20 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
         entry = self.dirmeta.getEntry(id)
         self.assertEquals(entry, okentry)
 
+    def test_listEntryIds(self):
+        id = 'LDA'
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirbar.createEntry(barentry)
+        id = 'LDB'
+        fooentry = {'idd': id, 'foo': 'f', 'pasglop': 'p'}
+        barentry = {'id': id, 'bar': 'b', 'mail': 'm'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        ids = self.dirmeta.listEntryIds()
+        ids.sort()
+        okids = ['LDA', 'LDB']
+        self.assertEquals(okids, ids)
+
     def test_hasEntry(self):
         id = 'XOR'
         self.failIf(self.dirmeta.hasEntry(id))

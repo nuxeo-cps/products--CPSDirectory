@@ -202,24 +202,14 @@ class MetaDirectory(BaseDirectory):
     # API
     #
 
-    security.declarePrivate('_getFirstDirectory')
-    def _getFirstDirectory(self):
-        """Get the first directory."""
-        # XXX later: first directory that has no id conversion
-        infos = self.getBackingDirectories()
-        if not infos:
-            return None
-        return infos[0]['dir']
-
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        # We get the ids from the first directory.
-        # XXX later: first directory that has no id conversion
-        dir = self._getFirstDirectory()
-        if dir is None:
-            return []
-        return dir.listEntryIds()
+        # We get the ids from a directory with no missing entries.
+        for info in self.getBackingDirectories():
+            if info['missing_entry'] is None:
+                return info['dir'].listEntryIds()
+        return []
 
     security.declarePrivate('listEntryIdsAndTitles')
     def listEntryIdsAndTitles(self):
