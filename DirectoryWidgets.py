@@ -257,7 +257,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
         except AttributeError:
             err = 'Directory %s not available' % self.directory
             raise RuntimeError(err)
-            
+
         value = datastructure[self.getWidgetId()]
         if value:
             # sorting here because some storage (LDAP user group)
