@@ -163,7 +163,8 @@ class GroupsDirectory(BaseDirectory):
         """Tells if the current acl_users has subgroups support.
         """
         aclu = self.acl_users
-        supported_aclus = ('Pluggable User Folder',)
+        supported_aclus = ('Pluggable User Folder',
+                           'LDAPUserGroupsFolder')
         if aclu.meta_type in supported_aclus:
             return 1
         return 0
