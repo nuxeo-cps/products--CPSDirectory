@@ -17,11 +17,13 @@
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_view',
       'title': here.Localizer.default('Directories'),
+      'longtitle': here.Localizer.default('Directories'),
     },
     {
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
       'title': here.Localizer.default(dirtitle),
+      'longtitle': here.Localizer.default(dirtitle),
     }
    ]);" />
     <tal:block define="global actions python:
