@@ -290,6 +290,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         if not self.isEditEntryAllowed(id=id, entry=entry):
             raise Unauthorized("No edit access to entry '%s'" % id)
 
+    security.declarePublic('checkCreateEntryAllowed')
+    def checkSearchEntriesAllowed(self):
+        """Check that the user can search entries
+            by checking if he can view entries
+        Raises Unauthorized if not.
+        """
+        if not self.isViewEntryAllowed():
+            raise Unauthorized("No search access into this directory")
+
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
@@ -381,6 +390,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
+        """ we want to protect public calls of search entries
+        """
+        self.checkSearchEntriesAllowed()
+
+        return self._searchEntries(return_fields, **kw)
+
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
