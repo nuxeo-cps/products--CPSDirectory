@@ -178,6 +178,7 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
             done_props.extend(aclu_props)
             done_query_keys.extend(user_query.keys())
         else:
+            # XXX incorrect if user_props exists !!!
             users_res = None
 
     else:
@@ -208,6 +209,7 @@ def searchForMembers(self, query={}, props=None, options=None, **kw):
         done_props.extend(mdtool_props)
         done_query_keys.extend(member_query.keys())
     else:
+        # XXX incorrect if member_props exists !!!
         members_res = None
 
     LOG('searchForMembers', DEBUG, "members_res=%s done_props=%s done_query_keys=%s" % (members_res, done_props, done_query_keys))
