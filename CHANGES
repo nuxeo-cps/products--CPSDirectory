@@ -14,6 +14,8 @@ Bug fixes:
 - LDAPBackingDirectory: When creating entry, return synthesized DN.
 - IndirectDirectoryVocabulary: items coming from the indirect directory are now
   correctly retrieved (bug appeared in v.1.16.0)
+- LocalDirectory: it was not possible to provide a default value to method
+  getEntry
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - LDAPBackingDirectory: Automatically reconnect to server.
