@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Added the isUserModified() set of methods
 Bug fixes:
 ~~~~~~~~~~
 -

@@ -149,10 +149,23 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def __init__(self, id, **kw):
         self.id = id
         self.manage_changeProperties(**kw)
+        self.user_modified = 0
 
     #
     # Usage API
     #
+
+    security.declarePublic('isUserModified')
+    def isUserModified(self):
+        """Return if the object has been modified by users.
+        """
+        return self.user_modified
+
+    security.declarePublic('setUserModified')
+    def setUserModified(self, user_modified):
+        """Set if the object has been modified by users.
+        """
+        self.user_modified = user_modified
 
     security.declarePrivate('isEntryAclAllowed')
     def isEntryAclAllowed(self, acl_roles, id=None, entry=None):
