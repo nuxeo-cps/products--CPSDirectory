@@ -30,5 +30,5 @@ New internal features:
 - fullname returns id if givenName and sn are both empty.
 - Title for a member entry is now the full name.
 - use cpsdefault.pot as blacklist_pot 
-- Added LDAPUserGroupsFolder has a folder having subgroups support.
+- Added LDAPUserGroupsFolder as a folder having subgroups support.
 - Implemented group deletion by calling userFolderDelGroups.
