@@ -247,6 +247,8 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if key == 'dn': # XXX treat it
                 continue
+            if key == 'base_dn': # XXX treat it too !
+                continue
             if '_' in key:
                 # Invalid attribute for LDAP (Bad search filter (87)).
                 continue
