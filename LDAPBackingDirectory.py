@@ -388,6 +388,7 @@ class LDAPBackingDirectory(BaseDirectory):
 
         Returns converted values.
         """
+        self.checkUnderBase(id)
         filter = self.objectClassSearchFilter()
         try:
             results = self.searchLDAP(id, SCOPE_BASE, filter,
