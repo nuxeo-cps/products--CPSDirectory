@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.4.0 [R1 build 2004-01/06-15:09 by anguenot]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+-
+
+New features:
+~~~~~~~~~~~~~
+- A Directory Vocabulary backed by LDAP can now be used with the DN as the
+  key instead of the default Vocabulary's id field.
+
+Bug fixes:
+~~~~~~~~~~
+-
+
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+*******************************************
 ** CPSDirectory V1.3.0 [R1 build 2003/12/23-15:18 by ben]
 
 ZODB Requires:
