@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- fix tidy warning
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - splitting macro in progress
