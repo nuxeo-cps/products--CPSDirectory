@@ -1,4 +1,20 @@
 *******************************************
+** CPSDirectory V1.15.0 [R1 build 2004/07/06-08:52 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- search_results fields are render with structure to enable html rendering
+
+*******************************************
 ** CPSDirectory V1.14.0 [R1 build 2004/07/02-16:46 by anahide]
 
 Requires:
