@@ -95,7 +95,7 @@ msgid "no_dir_available"
 msgstr "Nessun elenco disponibile"
 
 msgid "psm_entry_created"
-msgstr "Crea nuovo elemento"
+msgstr "Elemento creato"
 
 msgid "label_groups"
 msgstr "Gruppo(i)"
