@@ -48,12 +48,6 @@ class MetaDirectory(BaseDirectory):
 
     security = ClassSecurityInfo()
 
-    _properties = BaseDirectory._properties + (
-        {'id': 'backing_dir_ids', 'type': 'tokens', 'mode': 'w',
-         'label': 'Backing directories'},
-        )
-    backing_dir_ids = ()
-
     backing_dir_infos = ()
 
     def __init__(self, *args, **kw):
@@ -61,11 +55,11 @@ class MetaDirectory(BaseDirectory):
         return
         # XXX debug zmi
         self.setBackingDirectories(
-            ({'dir_id': 'dirfoo',
+            ({'dir_id': 'metafoo',
               'id_conv': None,
               'field_ignore': ('pasglop',),
               },
-             {'dir_id': 'dirbar',
+             {'dir_id': 'metabar',
               'id_conv': None,
               'field_rename': {'mail': 'email'}, # back_id:id
               },
@@ -261,7 +255,7 @@ class MetaDirectory(BaseDirectory):
                 b_return_fields = []
                 for fid in return_fields:
                     if fid == id_field:
-                        # Won't contribute anything useful
+                        # Won't be useful, we want the minimum
                         continue
                     b_fid = field_rename_back.get(fid, fid)
                     if b_fid in field_ignore:
@@ -342,12 +336,15 @@ class MetaDirectory(BaseDirectory):
             if return_fields is None:
                 acc_res = ids
             else:
-                if id_field in return_fields:
-                    acc_res = [(id, {id_field: id}) for id in ids]
-                else:
-                    acc_res = [(id, {}) for id in ids]
+                acc_res = [(id, {}) for id in ids]
+
+        if return_fields is not None and id_field in return_fields:
+            # Re-add id if requested in return_fields
+            for id, entry in acc_res:
+                entry[id_field] = id
 
         #print '-> %s' % `acc_res`
+        LOG('searchEntries', DEBUG, 'rf=%s idf=%s sidf=%s res=%s' % (return_fields, id_field, self.id_field, acc_res))
         return acc_res
 
     #
