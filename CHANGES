@@ -7,6 +7,9 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - Invalid Entry in view mode is a link to a CPS Error page
+- The MemberTools patch now only sets the properties on the user that thes
+  user object claim to support. Other properties will be set in the
+  MemberTool.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

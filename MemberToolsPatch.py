@@ -350,19 +350,14 @@ def setMemberProperties(self, mapping):
     member_mapping = mapping # The data to be set in the member tool.
     if hasattr(aq_base(user), 'setProperties'):
         LOG('setMemberProperties', DEBUG, 'calling setProperties on user')
-        if hasattr(user, 'listProperties'):
-            props = user.listProperties()
-            if props:
-                member_mapping = {}
-                for key, value in mapping.items():
-                    if key in props:
-                        user_mapping[key] = value
-                    else:
-                        member_mapping[key] = value
-        else:
-            # Assume all data can be set.
-            user_mapping = mapping
+        props = user.listProperties()
+        if props:
             member_mapping = {}
+            for key, value in mapping.items():
+                if key in props:
+                    user_mapping[key] = value
+                else:
+                    member_mapping[key] = value
     if user_mapping:
         user.setProperties(**user_mapping)
     if member_mapping:
