@@ -63,6 +63,8 @@ class StackingDirectory(BaseDirectory):
     #    ('creation_dir_expr', 'creation_dir_expr_c'),
     #    )
 
+    backing_dir_infos = ()
+
     def __init__(self, *args, **kw):
         BaseDirectory.__init__(self, *args, **kw)
         #self.setBackingDirectories( # debug
@@ -91,7 +93,7 @@ class StackingDirectory(BaseDirectory):
 
     security.declareProtected(ManagePortal, 'getBackingDirectories')
     def getBackingDirectories(self):
-        """Get the list of backing directories and their info."""
+        """Get the list of backing directories and their infos."""
         return self.backing_dir_infos
         #return (
         #    # dir_id, style, prefix/suffix, strip
@@ -102,7 +104,7 @@ class StackingDirectory(BaseDirectory):
 
     security.declareProtected(ManagePortal, 'setBackingDirectories')
     def setBackingDirectories(self, backing_dir_infos):
-        """Set the list of backing directories and their info."""
+        """Set the list of backing directories and their infos."""
         infos = []
         for dir_id, style, fix, strip in backing_dir_infos:
             if style == 'none':
