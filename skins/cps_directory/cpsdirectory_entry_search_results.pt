@@ -2,11 +2,14 @@
                    portal_url here/portal_url;
                    dirname here/getId;
                    title_field here/title_field;
+                   fields python:here.getDirectoryResultFields(dirname);
                    ">
 <div style="padding-left: 1.5em">
 <table tal:condition="results">
 <tr>
-  <th i18n:translate="">id</th>
+  <tal:block repeat="field fields">
+    <th i18n:translate="" tal:content="field/title">id</th>
+  </tal:block>
 </tr>
 <tal:block repeat="result results">
   <tal:block define="id python:result[0];
@@ -14,11 +17,13 @@
                      even repeat/result/even;
                      ">
   <tr tal:attributes="class python:test(even, 'even', 'odd')">
+    <tal:block repeat="field fields">
     <td>
       <a href="."
         tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
-        ><b tal:content="data/?title_field|id">john</b></a>
+        ><b tal:content="python:data.get(field['id'])">john</b></a>
     </td>
+    </tal:block>
   </tr>
   </tal:block>
 </tal:block>
