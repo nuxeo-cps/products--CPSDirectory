@@ -10,3 +10,4 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Use a better default for the fullname computation that takes care of spaces.
+- improve widget contextual help
