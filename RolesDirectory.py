@@ -76,9 +76,10 @@ class RolesDirectory(BaseDirectory):
         """Search for entries in the directory.
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()
-        users = portal.acl_users.getUsers()
+        aclu = portal.acl_users
         kwrole = kw.get(self.id_field)
         kwmembers = kw.get(self.members_field)
+        user_roles = None # Lazily computed.
         roles = []
         for role in self.listEntryIds():
             if kwrole:
@@ -86,15 +87,20 @@ class RolesDirectory(BaseDirectory):
                 if role != kwrole:
                     continue
             if kwmembers:
-                # XXX optimize for LDAP, using a getRolesWithUsers()
+                if user_roles is None:
+                    # We'll have to search by users, build info on them.
+                    # XXX Optimize this using a new getRolesWithUsers() API.
+                    # XXX We cannot use getUsers because LDAPUserFolder and
+                    # PluggableUserFolder return only cached users.
+                    user_roles = {}
+                    for username in portal.acl_users.getUserNames():
+                        user = aclu.getUser(username)
+                        user_roles[username] = tuple(user.getRoles())
                 ok = 0
-                for user in users:
-                    # XXX we want members, not users...
-                    if role in user.getRoles():
-                        userid = user.getUserName()
-                        if userid in kwmembers:
-                            ok = 1
-                            break
+                for username in kwmembers:
+                    if role in user_roles.get(username, []):
+                        ok = 1
+                        break
                 if not ok:
                     continue
             roles.append(role)
@@ -153,23 +159,32 @@ class RoleStorageAdapter(BaseStorageAdapter):
         return self._portal.valid_roles()
 
     def _getRoleMembers(self, role):
-        # XXX Stupid slow search for now. Optimizable for LDAP.
         if role not in self._getValidRoles():
             raise KeyError("No role '%s'" % role)
         aclu = self._portal.acl_users
         members = []
-        # XXX with LDAP getUsers returns only cached users !!! XXX
-        for user in aclu.getUsers():
-            if role in user.getRoles():
+        if hasattr(aq_base(aclu), 'getLDAPSchema'):
+            # LDAPUserFolder XXX
+            # XXX can still be optimized if rdn is login_attr
+            users = aclu.getGroupedUsers([role])
+            for user in users:
                 members.append(user.getUserName())
+        else:
+            # With LDAP or PluggableUserFolder, getUsers returns only cached
+            # users, so we have to user getUserNames instead.
+            # XXX Invent a better API than this SLOW search.
+            for username in aclu.getUserNames():
+                user = aclu.getUser(username)
+                if role in user.getRoles():
+                    members.append(user.getUserName())
         return members
 
     def _setRoleMembers(self, role, members):
         # XXX treat LDAP
         aclu = self._portal.acl_users
-        # XXX with LDAP getUsers returns only cached users !!! XXX
-        for user in aclu.getUsers():
-            id = user.getUserName()
+        # XXX See above about getUsers vs. getUserNames.
+        for id in aclu.getUserNames():
+            user = aclu.getUser(id)
             roles = user.getRoles()
             changed = 0
             if id in members and role not in roles:
@@ -180,7 +195,13 @@ class RoleStorageAdapter(BaseStorageAdapter):
                 roles.remove(role)
                 changed = 1
             if changed:
-                aclu._doChangeUser(id, None, roles, user.getDomains())
+                try:
+                    aclu._doChangeUser(id, None, roles, user.getDomains())
+                except KeyError:
+                    # XXX PluggableUserFolder trying to change non-default
+                    LOG('_setRoleMembers', DEBUG, 'Attempted to change user '
+                        '%s but failed' % id)
+                    raise
 
     def getData(self):
         """Get data from an entry, returns a mapping.
