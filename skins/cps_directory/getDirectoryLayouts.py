@@ -334,7 +334,7 @@ groups_layout = {
                 'vocabulary': 'groups',
                 'size': 7,
                 'hidden_if_expr':
-                    'context/hasSubGroupsSupport',
+                    'not:context/hasSubGroupsSupport',
                 'hidden_layout_modes': 'search',
                 'hidden_readonly_layout_modes': 'edit create view'
             },
