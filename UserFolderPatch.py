@@ -57,7 +57,8 @@ def _isEntryMatching(entry, search_types, query):
     does an OR search on all the list elements.
     If the query value is a list, does OR search with exact match.
     If the query value is a string, does an case-independent match or a
-    substring case independent search depending on search_substring_props.
+    substring case independent search depending on search_substring_props,
+    searching a substring '*' always match.
     """
     for key, value in query.items():
         if not value:
@@ -75,7 +76,10 @@ def _isEntryMatching(entry, search_types, query):
             if search_types[key] == 'list':
                 matched = item in value
             elif search_types[key] == 'substring':
-                matched = item.lower().find(value) != -1
+                if value == '*':
+                    matched = 1
+                else:
+                    matched = item.lower().find(value) != -1
             else: # search_types[key] == 'exact':
                 matched = item == value
             if matched:
