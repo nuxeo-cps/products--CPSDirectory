@@ -36,10 +36,10 @@ except ImportError:
 has_ldap = (LDAPDelegate is not None)
 del LDAPDelegate
 
-
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 import DirectoryTool
+# Register widgets. Don't remove.
 import DirectoryWidgets
 
 from DirectoryTool import DirectoryTypeRegistry
@@ -65,13 +65,10 @@ else:
     LOG('LDAPDirectoryVocabulary', INFO,
         "Disabled (no LDAP user folder product found).")
 
-
 import UserFolderPatch
 import MemberToolsPatch
 
-
-tools = (DirectoryTool.DirectoryTool,
-         )
+tools = (DirectoryTool.DirectoryTool,)
 
 registerDirectory('skins/cps_directory', globals())
 
@@ -87,8 +84,7 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
     DirectoryTypeRegistry.register(LocalDirectory)
-    if has_ldap:
-        DirectoryTypeRegistry.register(LDAPDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
     if has_ldap:
+        DirectoryTypeRegistry.register(LDAPDirectory)
         VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)

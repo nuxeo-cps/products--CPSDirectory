@@ -35,7 +35,6 @@ from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
 
 
-
 class EntryMixin:
     """Mixin class that knows how to access id and title from
     and entry, even if it's LDAP keyed by dn.
@@ -69,20 +68,15 @@ class EntryMixin:
     def getTagForValue(self, value):
         id, title = self.getIdAndTitle(value)
         if id is None or title is None:
-            return renderHtmlTag('span',
-                                 contents=escape('? (%s)' % value))
+            return renderHtmlTag('span', contents=escape('? (%s)' % value))
         portal_url = getToolByName(self, 'portal_url')()
         if self.directory_view:
             directory = self.directory_view
         else:
             directory = self.directory
         href = '%s/%s?%s' % (portal_url, self.skin_name,
-                             urlencode({'dirname': directory,
-                                        'id': id,
-                                        }))
-        return renderHtmlTag('a',
-                             href=href,
-                             contents=escape(title))
+                             urlencode({'dirname': directory, 'id': id,}))
+        return renderHtmlTag('a', href=href, contents=escape(title))
 
 
 ##################################################
@@ -142,7 +136,6 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
             raise RuntimeError("Unknown Render Method %s for widget type %s"
                                % (render_method, self.getId()))
         value = datastructure[self.getWidgetId()]
-
 
         if mode == 'view':
             render = ''
@@ -206,7 +199,6 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     popup_mode = all_popup_modes[0]
     separator = ', '
 
-
     def prepare(self, datastructure, **kw):
         """Prepare datastructure from datamodel."""
         datamodel = datastructure.getDataModel()
@@ -252,7 +244,6 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
 
         return not err
 
-
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
         render_method = 'widget_directorymultientries_render'
@@ -279,7 +270,6 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]
             return meth(mode=mode, values=value, ids_and_titles=ids_and_titles,
                         display_attr=display_attr)
-
 
 InitializeClass(CPSDirectoryMultiEntriesWidget)
 

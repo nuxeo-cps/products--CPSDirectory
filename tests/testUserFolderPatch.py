@@ -11,7 +11,6 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase
 from Testing.ZopeTestCase import ZopeLite
-from AccessControl import Unauthorized
 
 ZopeLite.installProduct('CPSDirectory')
 

@@ -1,7 +1,5 @@
 ##parameters=dir, datastructure, **kw
 
-from cgi import escape
-
 datamodel = datastructure.getDataModel()
 
 mapping = {}

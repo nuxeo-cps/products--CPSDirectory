@@ -27,7 +27,6 @@ from types import StringType
 
 from Acquisition import aq_base
 from AccessControl.User import UserFolder, User
-from Products.CMFCore.utils import getToolByName
 
 #
 # Helpers

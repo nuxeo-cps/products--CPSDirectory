@@ -23,7 +23,6 @@ from zLOG import LOG, DEBUG
 
 from types import ListType, TupleType, StringType
 from Globals import InitializeClass
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import getToolByName
