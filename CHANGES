@@ -9,6 +9,8 @@ New features:
 - updateMemberDataFromSchema renamed to manage_(...) and associated to a ZMI
   tab so you can click a button to sync it afterwards (closes #310)
 - New LDAPBackingDirectory. Has only been very lightly tested.
+- StackingDirectory can work with a different id than the ones in the backing
+  directories.
 Bug fixes:
 ~~~~~~~~~~
 - fix: deleteEntry raise error allowed pseudo role that are not manager
