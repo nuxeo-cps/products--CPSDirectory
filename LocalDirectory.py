@@ -224,7 +224,10 @@ class LocalDirectory(BaseDirectory):
         """Get entry filtered by acls and processes.
         """
         ob = self._getContent()
-        return ob.getEntry(id, default)
+        if default is _marker:
+            return ob.getEntry(id)
+        else:
+            return ob.getEntry(id, default=default)
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
