@@ -12,9 +12,7 @@ members_directory = {
     'data': {
         'title': 'label_members',
         'schema': 'members',
-        'schema_search': 'members_search',
         'layout': 'members',
-        'layout_search': 'members_search',
         'id_field': 'id',
         'password_field': 'password',
         'roles_field': 'roles',
