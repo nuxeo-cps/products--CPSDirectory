@@ -1,0 +1,21 @@
+Migrating from NuxMetaDirectory
+===============================
+
+Context
+-------
+
+NuxMetaDirectories has been deprecated in CPS3 in favor of CPSDirectories
+(cleaner architecture, based on CPSSchemas).
+
+Changes
+-------
+
+1. Change all references to 'portal_metadirectories'
+(portal.portal_metadirectories, context.portal_metadirectories,
+getToolByName('portal_metadirectories' ...)) to 'portal_directories'.
+
+2. Replace 'display_prop' (property of portal_metadirectories) with
+'title_field'.
+
+3. Replace getSearchableSchemaKeys by ???
+
