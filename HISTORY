@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.21.0 [R1 build 2005/01/20-11:29 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- fix tidy warning
+- disallow empty password strings for getEntryAthenticated in
+  LDAPBackingDirectory (bug with Sun iPlanet server)
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- macro lib splitted
+
+*******************************************
 ** CPSDirectory V1.20.0 [R1 build 2004/12/21-09:20 by ben]
 
 Requires:
