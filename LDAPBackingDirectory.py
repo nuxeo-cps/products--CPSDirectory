@@ -655,7 +655,14 @@ class LDAPBackingDirectory(BaseDirectory):
 
         LOG('searchLDAP', TRACE, "search_s base=%s scope=%s filter=%s attrs=%s" %
             (base, scope, filter, attrs))
-        ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
+        try:
+            ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
+        except NO_SUCH_OBJECT:
+            raise ConfigurationError("Directory '%s': Invalid search base "
+                                     "'%s'" % (self.getId(), base))
+        except SERVER_DOWN:
+            raise ConfigurationError("Directory '%s': LDAP server is down"
+                                     % self.getId())
         LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
         #except NO_SUCH_OBJECT:
         #except SIZELIMIT_EXCEEDED:
