@@ -29,6 +29,8 @@ from Products.CMFCore.utils import SimpleItemWithProperties
 
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
+from Products.CPSSchemas.Field import ReadAccessError
+from Products.CPSSchemas.Field import WriteAccessError
 
 
 class BaseDirectory(SimpleItemWithProperties):
@@ -47,13 +49,16 @@ class BaseDirectory(SimpleItemWithProperties):
          'label': "Schema"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
-        {'id': 'layout_style_prefix', 'type': 'string', 'mode': 'w',
-         'label': "Layout style prefix"},
+        {'id': 'id_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for entry id'},
+        {'id': 'title_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for entry title'},
         )
 
     schema = ''
     layout = ''
-    layout_style_prefix = ''
+    id_field = ''
+    title_field = ''
 
     def __init__(self, id, **kw):
         self.id = id
@@ -77,7 +82,14 @@ class BaseDirectory(SimpleItemWithProperties):
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
-        raise NotImplementedError
+        dm = self._getDataModel(id)
+        entry = {}
+        for key in dm.keys():
+            try:
+                entry[key] = dm[key]
+            except ReadAccessError:
+                pass
+        return entry
 
     security.declarePublic('searchEntry')
     def searchEntry(self, **kw):
@@ -89,7 +101,16 @@ class BaseDirectory(SimpleItemWithProperties):
     def writeEntry(self, entry):
         """Write an entry in the directory.
         """
-        raise NotImplementedError
+        id = entry[self.id_field]
+        dm = self._getDataModel(id)
+        for key in dm.keys():
+            if not entry.has_key(key):
+                continue
+            try:
+                dm[key] = entry[key]
+            except WriteAccessError:
+                pass
+        dm._commit()
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):

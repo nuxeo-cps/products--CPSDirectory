@@ -46,17 +46,13 @@ class RolesDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'role_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for role'},
         {'id': 'members_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for members'},
-        {'id': 'title_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for entry title'},
         )
 
-    role_field = 'role'
-    members_field = 'members'
+    id_field = 'role'
     title_field = 'role'
+    members_field = 'members'
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
@@ -66,6 +62,10 @@ class RolesDirectory(BaseDirectory):
                     for schema in self._getSchemas()]
         return adapters
 
+    #
+    # API
+    #
+
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
@@ -73,15 +73,6 @@ class RolesDirectory(BaseDirectory):
         roles = [r for r in portal.valid_roles()
                  if r not in ('Anonymous', 'Authenticated', 'Owner')]
         return roles
-
-    security.declarePublic('getEntry')
-    def getEntry(self, id):
-        """Get entry filtered by acls and processes.
-        """
-        return {
-            'role': id,
-            'members': ('Raoul', 'XXX')
-            }
 
 InitializeClass(RolesDirectory)
 
@@ -146,7 +137,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
         members = self._getRoleMembers(role)
         data = {}
         for fieldid, field in self._schema.items():
-            if fieldid == dir.role_field:
+            if fieldid == dir.id_field:
                 value = role
             elif fieldid == dir.members_field:
                 value = members

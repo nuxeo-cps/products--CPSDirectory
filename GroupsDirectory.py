@@ -46,17 +46,13 @@ class GroupsDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'group_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for group'},
         {'id': 'members_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for members'},
-        {'id': 'title_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for entry title'},
         )
 
-    group_field = 'group'
-    members_field = 'members'
+    id_field = 'group'
     title_field = 'group'
+    members_field = 'members'
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
@@ -65,6 +61,10 @@ class GroupsDirectory(BaseDirectory):
         adapters = [GroupStorageAdapter(schema, id, dir)
                     for schema in self._getSchemas()]
         return adapters
+
+    #
+    # API
+    #
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -75,15 +75,6 @@ class GroupsDirectory(BaseDirectory):
             return tuple(aclu.getGroupNames())
         else:
             return ()
-
-    security.declarePublic('getEntry')
-    def getEntry(self, id):
-        """Get entry filtered by acls and processes.
-        """
-        return {
-            'group': id,
-            'members': ('Bobby', 'XXX')
-            }
 
 InitializeClass(GroupsDirectory)
 
@@ -128,7 +119,7 @@ class GroupStorageAdapter(BaseStorageAdapter):
         members = self._getGroupMembers(group)
         data = {}
         for fieldid, field in self._schema.items():
-            if fieldid == dir.group_field:
+            if fieldid == dir.id_field:
                 value = group
             elif fieldid == dir.members_field:
                 value = members

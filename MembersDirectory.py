@@ -52,23 +52,19 @@ class MembersDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'id_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for id'},
         {'id': 'password_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for password'},
         {'id': 'roles_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for roles'},
         {'id': 'groups_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for groups'},
-        {'id': 'title_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for entry title'},
         )
 
     id_field = 'id'
+    title_field = 'id'
     password_field = 'password'
     roles_field = 'roles'
     groups_field = 'groups'
-    title_field = 'id'
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
@@ -86,23 +82,21 @@ class MembersDirectory(BaseDirectory):
         else:
             return ()
 
+    #
+    # API
+    #
+
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
-        # Note: LDAPUserFolder's getUsers only returns cached users.
-        return tuple(aclu.getUserNames())
-
-    security.declarePublic('getEntry')
-    def getEntry(self, id):
-        """Get entry filtered by acls and processes.
-        """
-        return {
-            'id': id,
-            'givenName': 'Raoul',
-            'sn': id.upper(),
-            }
+        ids = list(aclu.getUserNames())
+        ids.sort()
+        return ids
+        # Note: LDAPUserFolder's getUsers only returns cached users,
+        # and the following would call it so isn't correct.
+        #ids = getToolByName(dir, 'portal_membership').listMemberIds()
 
 InitializeClass(MembersDirectory)
 
