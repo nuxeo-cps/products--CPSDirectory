@@ -106,7 +106,8 @@ class LocalDirectory(BaseDirectory):
         tool = getToolByName(self, 'portal_membership', None)
         folder = tool.getHomeFolder()
         try:
-            return folder._getOb(self.directory_id)
+            ob = folder._getOb(self.directory_id)
+            return getattr(ob, id, d)
         except AttributeError:
             if id in self.__dict__.keys():
                 return self.__dict__[id]
