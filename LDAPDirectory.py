@@ -225,6 +225,7 @@ class LDAPDirectory(BaseDirectory):
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
         # Find attrs needed to compute returned fields.
+        # XXX this code is also in ZODBDirectory and should be factored out
         if return_fields is None:
             attrs = None
         else:

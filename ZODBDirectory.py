@@ -157,6 +157,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
 
         # Compute needed fields from object.
         # All fields we need to return.
+        # XXX this code is also in LDAPDirectory and should be factored out
         field_ids_d = {self.id_field: None}
         if return_fields is not None:
             if return_fields == ['*']:
