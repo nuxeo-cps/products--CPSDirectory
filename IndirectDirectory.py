@@ -293,7 +293,11 @@ class IndirectStorageAdapter(BaseStorageAdapter):
     def getData(self):
         """Get data from an entry, returns a mapping.
 
-        Fills default value from the field if the object has no attribute.
+        Fills default data if the id is None.
+        The mapping comes from the adapter adapted to the entry,
+        but the id is modified to keep the entry id within the indirect
+        directory (keeping the information of the directory that actually
+        holds the entry.
         """
         if self._id is None:
             data = self.getDefaultData()
