@@ -47,7 +47,7 @@ def install(self):
         # Update the member data from the schema if we are
         # using a CPS Members Directory
         #
-        mdir.updateMemberDataFromSchema()
+        mdir.manage_updateMemberDataFromSchema()
     except AttributeError:
         #
         # Here, CPS LDAP Directory for members
