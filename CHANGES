@@ -6,9 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- Empty fields are not updatable, this result of empty entry
-  under ldap
-- LDAP entry could fail to update if not all the schema fields were passed.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.10.2 [R1 build 2004/04/01-15:19 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- Empty fields are not updatable, this result of empty entry
+  under ldap
+- LDAP entry could fail to update if not all the schema fields were passed.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.10.1 [R1 build 2004/03/25-16:55 by ben]
 
 Requires:
