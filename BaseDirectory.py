@@ -610,9 +610,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return keys
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id, **kw):
+    def _getAdapters(self, id, search=0, **kw):
         """Get the adapters for an entry.
 
+        If search is true, return the search adapters.
         Passes additional **kw to the adapters.
         """
         raise NotImplementedError
@@ -648,15 +649,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             dm._setAddRoles(add_roles)
         return dm
 
-    security.declarePrivate('_getSearchAdapters')
-    def _getSearchAdapters(self):
-        return [AttributeStorageAdapter(schema, None)
-                for schema in self._getSchemas(search=1)]
-
     security.declarePrivate('_getSearchDataModel')
     def _getSearchDataModel(self):
         """Get the datamodel for a search rendering."""
-        adapters = self._getSearchAdapters()
+        adapters = self._getAdapters(None, search=1)
         dm = DataModel(None, adapters, context=self)
         dm._check_acls = 0 # XXX use API
         dm._fetch()

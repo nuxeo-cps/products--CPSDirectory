@@ -260,7 +260,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     #
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id, **kw):
+    def _getAdapters(self, id, search=0, **kw):
         """Get the adapters for an entry."""
         if id is not None:
             ob = self._getOb(id)
@@ -268,7 +268,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             # Creation
             ob = None
         adapters = [AttributeStorageAdapter(schema, ob, **kw)
-                    for schema in self._getSchemas()]
+                    for schema in self._getSchemas(search=search)]
         return adapters
 
     security.declarePrivate('_checkPassword')

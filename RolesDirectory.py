@@ -52,11 +52,11 @@ class RolesDirectory(BaseDirectory):
     members_field = 'members'
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id, **kw):
+    def _getAdapters(self, id, search=0, **kw):
         """Get the adapters for an entry."""
         dir = self
         adapters = [RoleStorageAdapter(schema, id, dir, **kw)
-                    for schema in self._getSchemas()]
+                    for schema in self._getSchemas(search=search)]
         return adapters
 
     #
