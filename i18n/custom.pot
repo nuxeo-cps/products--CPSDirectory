@@ -28,6 +28,9 @@ msgstr ""
 msgid "label_groups"
 msgstr ""
 
+msgid "label_subgroups"
+msgstr ""
+
 msgid "label_members"
 msgstr ""
 

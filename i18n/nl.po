@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-28 10:13default\n"
+"POT-Creation-Date: 2004-02-06 12:32default\n"
 "Last-Translator: Lennart Regebro <regebro@nuxeo.com>\n"
 "Language-Team: Nuxeo <info@nuxeo.com>\n"
 "MIME-Version: 1.0\n"
@@ -31,14 +31,6 @@ msgstr ""
 #, fuzzy
 msgid "button_create"
 msgstr "Maak een nieuw item aan"
-
-#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
-#.       </input>
-#: from ../skins/cps_directory/popup_directoryentry_form.pt
-#: ../skins/cps_directory/popup_directorymultientries_form.pt
-#, fuzzy
-msgid "button_update"
-msgstr "Wijzig"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -119,6 +111,10 @@ msgstr "Item aangemaakt"
 msgid "label_groups"
 msgstr "Groepen"
 
+#, fuzzy
+msgid "label_subgroups"
+msgstr "Groepen"
+
 msgid "label_members"
 msgstr "Leden"
 
@@ -134,6 +130,10 @@ msgstr "Volledige naam"
 #, fuzzy
 msgid "cpsdir_label_delete_entry"
 msgstr "Maak een nieuw item aan"
+
+#, fuzzy
+#~ msgid "button_update"
+#~ msgstr "Wijzig"
 
 #, fuzzy
 #~ msgid "button_back"

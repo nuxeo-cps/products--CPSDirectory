@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-28 10:13default\n"
+"POT-Creation-Date: 2004-02-06 12:32default\n"
 "PO-Revision-Date: 2004-01-07 12:22+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -31,14 +31,6 @@ msgstr "Titolo"
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
-msgstr "Crea"
-
-#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
-#.       </input>
-#: from ../skins/cps_directory/popup_directoryentry_form.pt
-#: ../skins/cps_directory/popup_directorymultientries_form.pt
-#, fuzzy
-msgid "button_update"
 msgstr "Crea"
 
 #.   <p>Choose a directory</p>
@@ -118,6 +110,10 @@ msgstr "Crea nuovo elemento"
 msgid "label_groups"
 msgstr "Gruppo(i)"
 
+#, fuzzy
+msgid "label_subgroups"
+msgstr "Gruppo(i)"
+
 msgid "label_members"
 msgstr "Collaboratori"
 
@@ -133,6 +129,10 @@ msgstr "Nome completo"
 #, fuzzy
 msgid "cpsdir_label_delete_entry"
 msgstr "Crea un nuovo elemento"
+
+#, fuzzy
+#~ msgid "button_update"
+#~ msgstr "Crea"
 
 #~ msgid "Directories"
 #~ msgstr "Elenchi"

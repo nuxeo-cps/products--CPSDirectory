@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-01-28 10:13default\n"
+"POT-Creation-Date: 2004-02-06 12:32default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -36,13 +36,6 @@ msgstr ""
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
-msgstr ""
-
-#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
-#.       </input>
-#: from ../skins/cps_directory/popup_directoryentry_form.pt
-#: ../skins/cps_directory/popup_directorymultientries_form.pt
-msgid "button_update"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -120,6 +113,9 @@ msgid "psm_entry_created"
 msgstr ""
 
 msgid "label_groups"
+msgstr ""
+
+msgid "label_subgroups"
 msgstr ""
 
 msgid "label_members"

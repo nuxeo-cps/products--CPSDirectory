@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2004-01-28 10:13default\n"
+"POT-Creation-Date: 2004-02-06 12:32default\n"
 "PO-Revision-Date: 2004-01-27 17:58+0100\n"
 "Last-Translator: ben <ben@nuxeo.com>\n"
 "Language-Team: ben\n"
@@ -38,14 +38,6 @@ msgstr "Title"
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
-msgstr "Create"
-
-#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
-#.       </input>
-#: from ../skins/cps_directory/popup_directoryentry_form.pt
-#: ../skins/cps_directory/popup_directorymultientries_form.pt
-#, fuzzy
-msgid "button_update"
 msgstr "Create"
 
 #.   <p>Choose a directory</p>
@@ -125,6 +117,9 @@ msgstr "Entry created"
 msgid "label_groups"
 msgstr "Group(s)"
 
+msgid "label_subgroups"
+msgstr "Subgroup(s)"
+
 msgid "label_members"
 msgstr "Members"
 
@@ -139,6 +134,9 @@ msgstr "Full Name"
 
 msgid "cpsdir_label_delete_entry"
 msgstr "Delete entry"
+
+#~ msgid "button_update"
+#~ msgstr "Create"
 
 #~ msgid "Directories"
 #~ msgstr "Directories"
