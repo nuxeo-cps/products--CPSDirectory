@@ -4,16 +4,11 @@
                    id_field dir/id_field;
                    ">
 <div class="group">
-<form action="." method="post">
-  <input type="hidden" name="dirname" value="." tal:attributes="value dirname" />
   <table cellpadding="2" cellspacing="2" border="0">
     <tr tal:repeat="row layout/rows">
       <tal:block repeat="cell row">
       <tal:block define="widget cell/widget">
         <td align="right" valign="top">
-          <input type="hidden" name="id" value="."
-            tal:condition="python: cell['widget_id']==id_field"
-            tal:attributes="value cell/widget_rendered" />
           <span class="dlabel">
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label">label</span
@@ -31,18 +26,6 @@
       </tal:block>
       </tal:block>
     </tr>
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" value="button_delete"
-          name="cpsdirectory_entry_delete:method"
-          class="destructive" i18n:attributes="value"
-          tal:condition="dir/isDeleteEntryAllowed"
-          tal:attributes="onclick python:'return window.confirm(\'%s\')' %
-            (here.Localizer.default('description_confirm_delete'), )">
-      </td>
-    </tr>
   </table>
-</form>
 </div>
 </tal:block>
