@@ -18,3 +18,4 @@ New internal features:
 - Search result fields can be customized using getCustomDirectoryResultFields
 - Filter out invalid LDAP attribute names (containing '_') for the filter.
 - Raise KeyError instead of ValueError when it makes sense.
+- popup for Directory Entry Widget has a search mode in addition to the navigation mode.
