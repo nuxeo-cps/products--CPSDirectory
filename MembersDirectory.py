@@ -102,17 +102,7 @@ class MembersDirectory(BaseDirectory):
     def searchEntries(self, return_attrs=None, **kw):
         """Search for entries in the directory.
 
-        The keyword arguments specify the search to be done.
-
-        If return_attrs is None, returns a list of ids:
-          ['member1', 'member2']
-
-        If return_attrs is not None, it must be sequence of property
-        ids. The method will return a list of tuples containing the
-        member id and a dictionary of available properties:
-          [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
-
-        return_attrs=['*'] means to return all available properties.
+        See API in the base class.
         """
         mdtool = getToolByName(self, 'portal_memberdata')
         # Convert special fields id/roles/groups to known names.
