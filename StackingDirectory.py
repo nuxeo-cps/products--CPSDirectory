@@ -27,6 +27,7 @@ from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_base
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ManagePortal
@@ -122,6 +123,14 @@ class StackingDirectory(BaseDirectory):
                     return 1
         return 0
 
+    security.declarePrivate('getEntryAuthenticated')
+    def getEntryAuthenticated(self, id, password):
+        """Get and authenticate an entry."""
+        try:
+            return self._getEntryKW(id, password=password)
+        except KeyError:
+            return None
+
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
@@ -216,7 +225,7 @@ class StackingDirectory(BaseDirectory):
             res.append(b_dir)
         return res
 
-    def _getEntryFromBacking(self, id):
+    def _getEntryFromBacking(self, id, password=None):
         """Get the entry from the appropriate backing directory.
 
         Returns the entry and its backing dir.
@@ -226,10 +235,19 @@ class StackingDirectory(BaseDirectory):
             # Get entry (no acls checked)
             if id_field == b_dir.id_field:
                 # Use primary id
-                try:
-                    entry = b_dir._getEntry(id) # XXX kw?
-                except KeyError:
-                    continue
+                if password is None:
+                    try:
+                        entry = b_dir._getEntryKW(id)
+                    except KeyError:
+                        continue
+                else:
+                    if hasattr(aq_base(b_dir), 'getEntryAuthenticated'):
+                        entry = b_dir.getEntryAuthenticated(id, password)
+                        if entry is None:
+                            continue
+                    else:
+                        raise ValueError("Backing dir '%s' cannot authenticate"
+                                         % b_dir.getId())
             else:
                 # Use secondary id
                 # XXX don't check acls on search
@@ -242,9 +260,16 @@ class StackingDirectory(BaseDirectory):
                         "Got several entries when asking %s about %s=%s" %
                         (b_dir.getId(), id_field, id))
                 primary_id, entry = entries[0]
-            # Back-convert id
-            # XXX we cannot do much if there are other dependent fields
-            entry[id_field] = id
+                if password is not None:
+                    # Check authentication
+                    if hasattr(aq_base(b_dir), 'getEntryAuthenticated'):
+                        entry = b_dir.getEntryAuthenticated(primary_id,
+                                                            password)
+                        if entry is None:
+                            continue
+                    else:
+                        raise ValueError("Backing dir '%s' cannot authenticate"
+                                         % b_dir.getId())
             return entry, b_dir
         raise KeyError(id)
 
@@ -302,13 +327,14 @@ class StackingStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from other backing directories.
     """
 
-    def __init__(self, schema, id, dir, **kw):
+    def __init__(self, schema, id, dir, password=None, **kw):
         """Create an Adapter for a schema.
 
         The id passed is the member id. It may be None for creation.
         """
         self._id = id
         self._dir = dir
+        self._password = password
         BaseStorageAdapter.__init__(self, schema, **kw)
 
     def setContextObject(self, context):
@@ -324,7 +350,9 @@ class StackingStorageAdapter(BaseStorageAdapter):
         if id is None:
             # Creation.
             return self.getDefaultData()
-        entry, b_dir = self._dir._getEntryFromBacking(id)
+        # XXX use field_ids here
+        entry, b_dir = self._dir._getEntryFromBacking(id,
+                                                      password=self._password)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
