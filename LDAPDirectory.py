@@ -25,8 +25,11 @@ from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
+from OFS.Image import File, Image
 
 from Products.CMFCore.utils import getToolByName
+
+from Products.CPSCore.utils import _isinstance
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
@@ -263,6 +266,12 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if field_id in ignore_attrs:
                 continue
+            # Convert field data to strings for LDAP
+            if _isinstance(value, Image) or _isinstance(value, File):
+                value = str(value.data)
+            elif value is None:
+                value = ''
+            # LDAP wants everything as lists
             if type(value) not in (ListType, TupleType):
                 value = [value]
             attrs[field_id] = value
@@ -319,6 +328,14 @@ class LDAPDirectory(BaseDirectory):
             return res
         else:
             return '(objectClass=*)'
+
+    def getImageFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
+        """Gets the raw data from a non ZODB image field"""
+        entry = self.getEntry(entry_id)
+        field = entry[field_id]
+        if type(field) is StringType:
+            field = Image(entry_id, '', field)
+        return field.index_html(REQUEST, RESPONSE)
 
 InitializeClass(LDAPDirectory)
 
