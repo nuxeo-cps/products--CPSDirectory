@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- LDAPBackingDirectory: Made entry creation work if the dn is not present.
 Bug fixes:
 ~~~~~~~~~~
 -
