@@ -1,36 +1,12 @@
 Requires:
 ~~~~~~~~~
-- i18n: require cpsdefault i18n into default mcat
+-
 New features:
 ~~~~~~~~~~~~~
-- Directories can now specify which fields are searched with a substring
-  search (the rest are searched with exact matches). Implemented for
-  all directories.
-- Enable tooltip help in creation and edition using widget/help property.
-- Implemented ZODB Directory.
-- New navigation using action
-- Valid breadcrumbs
-- improve Members layout
-- Implemented getting and setting properties on the member when the user
-  folder supports it.
-- Enable empty search using '*' on field referenced in search_substring_fields
-- #289: Finish implementing searchEntries, with return_fields support.
+-
 Bug fixes:
 ~~~~~~~~~~
-- Correctly fail when trying to create an already existing member.
-- Correctly remove attributes from LDAP when they are empty.
-- Fix Roles directory when using LDAPUserGroupsFolder
-- Fix fetching return_fields in the members directory.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Search result fields can be customized using getCustomDirectoryResultFields
-- Filter out invalid LDAP attribute names (containing '_') for the filter.
-- Raise KeyError instead of ValueError when it makes sense.
-- popup for Directory Entry Widget has a search mode in addition to the navigation mode.
-- fullname returns id if givenName and sn are both empty.
-- Title for a member entry is now the full name.
-- use cpsdefault.pot as blacklist_pot 
-- Added LDAPUserGroupsFolder as a folder having subgroups support.
-- Implemented group deletion by calling userFolderDelGroups.
-- Role directory is hidden by default
-- Implemented updateMemberDataFromSchema as found in NuxMetaDirectories.
+-
