@@ -74,6 +74,8 @@ actions['object'].append({'id':'delete_entry',
 
   <metal:block fill-slot="main">
     <div tal:replace="structure rendered_main">Rendered main...</div>
+    <input type="submit" name="back" i18n:attributes="value"
+      class="standalone" value="button_back" onClick="history.back()" />
   </metal:block>
 
 </metal:block>
