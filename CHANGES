@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Made LDAPBackingDirectory work with non-ascii chars (convert to UTF-8).
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
