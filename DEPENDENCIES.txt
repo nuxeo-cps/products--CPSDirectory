@@ -1,4 +1,4 @@
 # $Id$
 
 # CPS --------------------
-CPSSchema
+CPSSchemas
