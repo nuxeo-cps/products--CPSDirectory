@@ -8,25 +8,25 @@
   The Meta Directory can map fields from backing directories to other fields.
 </p>
 
-<dtml-in getBackingDirectoriesMappings mapping>
-  <h2>&dtml-dir_id;</h2>
+<dtml-in "getBackingDirectories(no_dir=1)" mapping>
+  <h3>&dtml-dir_id;</h3>
   <p>
-    Id conversion:
-      <input name="id_conv" value="&dtml-id_conv;" />
+    Id conversion: &dtml-id_conv;
   </p>
-  <p>Field conversions:
-     <dtml-in "field_conv.items()">
-     <dtml-let backing_id=sequence-key
-               meta_id=sequence-item>
-       <br />&nbsp;&nbsp;&dtml-backing_id;:
-       <dtml-if "meta_id is None">
-         Ignored
-       <dtml-else>
-         &dtml-meta_id;
-       </dtml-if>
-     </dtml-let>
-     </dtml-in>
-  </p>
+  <dtml-if field_ignore>
+    <p>
+      Ignored fields: <dtml-var "', '.join(field_ignore)" html_quote>
+    </p>
+  </dtml-if>
+  <dtml-if field_rename>
+    <p>Field renamings:
+       <dtml-in "field_rename.items()">
+       <dtml-let b_id=sequence-key id=sequence-item>
+         <br />&nbsp;&nbsp;&dtml-b_id;: &dtml-id;
+       </dtml-let>
+       </dtml-in>
+    </p>
+  </dtml-if>
 </dtml-in>
 
 <dtml-comment>
