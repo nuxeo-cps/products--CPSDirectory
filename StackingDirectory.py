@@ -27,7 +27,6 @@ from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_base
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ManagePortal
@@ -35,6 +34,7 @@ from Products.CMFCore.CMFCorePermissions import ManagePortal
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 
 class StackingDirectory(BaseDirectory):
@@ -123,13 +123,28 @@ class StackingDirectory(BaseDirectory):
                     return 1
         return 0
 
+    security.declarePublic('isAuthenticating')
+    def isAuthenticating(self):
+        """Check if this directory does authentication.
+
+        Returns a boolean.
+
+        Asks the backing directories, all of them must be authenticating.
+        """
+        for b_dir in self._getBackingDirs():
+            if not b_dir.isAuthenticating():
+                return 0
+        return 1
+
     security.declarePrivate('getEntryAuthenticated')
-    def getEntryAuthenticated(self, id, password):
-        """Get and authenticate an entry."""
-        try:
-            return self._getEntryKW(id, password=password)
-        except KeyError:
-            return None
+    def getEntryAuthenticated(self, id, password, **kw):
+        """Get and authenticate an entry.
+
+        Returns the entry if authenticated.
+        Raises KeyError if the entry doesn't exist.
+        Raises AuthenticationFailed if authentication failed.
+        """
+        return self._getEntryKW(id, password=password, **kw)
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
@@ -241,13 +256,11 @@ class StackingDirectory(BaseDirectory):
                     except KeyError:
                         continue
                 else:
-                    if hasattr(aq_base(b_dir), 'getEntryAuthenticated'):
+                    try:
                         entry = b_dir.getEntryAuthenticated(id, password)
-                        if entry is None:
-                            continue
-                    else:
-                        raise ValueError("Backing dir '%s' cannot authenticate"
-                                         % b_dir.getId())
+                        # may raise AuthenticationFailed
+                    except KeyError:
+                        continue
             else:
                 # Use secondary id
                 # XXX don't check acls on search
@@ -261,15 +274,8 @@ class StackingDirectory(BaseDirectory):
                         (b_dir.getId(), id_field, id))
                 primary_id, entry = entries[0]
                 if password is not None:
-                    # Check authentication
-                    if hasattr(aq_base(b_dir), 'getEntryAuthenticated'):
-                        entry = b_dir.getEntryAuthenticated(primary_id,
-                                                            password)
-                        if entry is None:
-                            continue
-                    else:
-                        raise ValueError("Backing dir '%s' cannot authenticate"
-                                         % b_dir.getId())
+                    entry = b_dir.getEntryAuthenticated(primary_id, password)
+                    # may raise AuthenticationFailed
             return entry, b_dir
         raise KeyError(id)
 
