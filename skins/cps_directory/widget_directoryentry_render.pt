@@ -5,27 +5,28 @@
   tal:content="structure options/render" />
 <tal:block condition="python: mode == 'edit'">
 <tal:block define="display_attr options/display_attr;
+                   jsvalue options/jsvalue;
                    title options/title;
                    directory here/directory;
                    vocabulary here/vocabulary;">
-<div tal:attributes="id html_id">
+<span tal:attributes="id html_id">
   <input type="hidden" tal:condition="value"
     tal:attributes="name html_id;value value;">
   <span tal:content="title" />
 <script type="text/javascript">
   <!--
-     function popup_directoryentry(destId, dirName, dispAttr, vocabulary, title) {
+     function popup_directoryentry(destId, dirName, dispAttr, vocabulary, title, value) {
        var args
-       args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
+       args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary+'&current_uid='+escape(value);
        popup = window.open('popup_directoryentry_form'+args, 'DirectoryEntry', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
        if(!popup.opener)
          popup.opener = window;
        return false;
    }
   //-->
-</script></div>
+</script></span>
 <button type="button"
-  tal:attributes="onclick string:popup_directoryentry('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', '${here/label_edit}');">...</button><br>
+  tal:attributes="onclick string:popup_directoryentry('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', '${here/label_edit}', '${jsvalue}');">...</button><br>
 </tal:block>
 </tal:block>
 </tal:block>
