@@ -10,8 +10,11 @@ Bug fixes:
 - Fix ZODBDirectory with computed title attribute
 - LocalDirectory method "isVisible" did not return 0 if user
   did not have a home folder (and thus did not have a personal directory)
+- Fixed some translation about groups.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - New Search tab on the directories.
 - Trying to access to a personal directory now raises an Unauthorized error
   instead of a KeyError (LocalDirectory).
+- Added headers in .po files to make them recognized by
+  PlacelessTranslationService

@@ -86,6 +86,7 @@ import MemberToolsPatch
 tools = (DirectoryTool.DirectoryTool,)
 
 registerDirectory('skins/cps_directory', globals())
+registerDirectory('skins/cps_directory_plone', globals())
 
 def initialize(registrar):
     ToolInit(

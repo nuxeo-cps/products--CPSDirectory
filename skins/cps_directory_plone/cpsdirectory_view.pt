@@ -1,0 +1,49 @@
+<tal:block define="
+  portal here/portal_url/getPortalObject;
+  portal_title portal/title;
+  portal_url here/portal_url;
+  dummy python:request.set('breadcrumb_set',
+    [{
+      'id': 'directories',
+      'url': portal_url+'/cpsdirectory_view',
+      'longtitle': here.Localizer.default('Directories'),
+      'title': here.Localizer.default('Directories'),
+    }]);
+  dirtool here/portal_directories;
+  directories dirtool/listVisibleDirectories;
+  base_url string:${here/absolute_url}/;
+  ">
+<metal:block use-macro="here/main_template/macros/master"
+  i18n:domain="default">
+  <metal:main fill-slot="main">
+
+    <h1 i18n:translate="">
+      Directories
+    </h1>
+    <tal:block condition="directories">
+      <p i18n:translate="choose_a_directory">Choose a directory</p>
+      <dl>
+        <tal:block repeat="dirname directories">
+          <tal:block define="dir dirtool/?dirname">
+          <dt>
+            <img tal:replace="structure python:here.getImgTag('UserFolder_icon.png', base_url=base_url)">
+            <a href=""  i18n:translate=""
+               tal:attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}"
+               tal:content="dir/title_or_id">
+              Title
+            </a>
+          </dt>
+          <dd>
+          </dd>
+          </tal:block>
+        </tal:block>
+      </dl>
+    </tal:block>
+    <p tal:condition="not:directories"
+       i18n:translate="no_dir_available">
+      No directory available
+    </p>
+
+  </metal:main>
+</metal:block>
+</tal:block>

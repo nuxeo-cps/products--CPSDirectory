@@ -1,0 +1,63 @@
+<tal:block define="
+  global dirname request/dirname|string:members;
+  global dir here/portal_directories/?dirname;
+  global dirtitle dir/title_or_id;
+  dummy dir/checkCreateEntryAllowed;
+  validate python: request.has_key('cpsdirectory_entry_create_form');
+  create_request python: validate and request or nothing;
+  res python: dir.renderCreateEntryDetailed(
+    validate=validate, request=create_request,
+    created_callback='cpsdirectory_entry_created');
+  global rendered_main python: res[0];
+  rendered_ok python: res[1];
+  ds python: res[2];
+  global portal_status_message python: validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error') or '';
+  global base_url string:${here/absolute_url}/;
+  "/>
+<metal:block use-macro="here/main_template/macros/master">
+  <metal:block fill-slot="css_slot">
+    <tal:block define="dummy python:request.set('breadcrumb_set',
+    [{
+      'id': 'directories',
+      'url': here.portal_url() + '/cpsdirectory_view',
+      'title': here.Localizer.default('Directories'),
+    },
+    {
+      'id': 'directories',
+      'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
+      'title': here.Localizer.default(dirtitle),
+    }
+   ]);" />
+    <tal:block define="global dummy python:
+actions.update({'object': [{'id':'search_entry',
+  'url':base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
+  'name': 'cpsdir_label_search_entry',
+  'category': 'object'}]})" />
+    <tal:block condition="python: dir.isCreateEntryAllowed()">
+      <tal:block define="global dummy python:
+actions['object'].append({'id':'new_entry',
+  'url':base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
+  'name': 'cpsdir_label_create_entry',
+  'category': 'object'})" />
+    </tal:block>
+
+    <link rel="Stylesheet" type="text/css" href=""
+      tal:attributes="href string:${base_url}document.css" />
+  </metal:block>
+
+  <metal:block fill-slot="header">
+    <a tal:attributes="href string:${base_url}cpsdirectory_view">
+      <img tal:replace="structure python:
+        here.getImgTag('cpsdirectoryup_icon.png', base_url=base_url)" />
+      <strong i18n:translate="">cpsdir_label_upto_directories</strong></a>
+    <h1><span i18n:translate="" tal:content="dirtitle" />:
+        <span i18n:translate="cpsdir_label_create_entry" /></h1>
+    <div class="description">
+    </div>
+  </metal:block>
+
+  <metal:block fill-slot="main">
+    <div tal:replace="structure rendered_main">Rendered main...</div>
+  </metal:block>
+
+</metal:block>
