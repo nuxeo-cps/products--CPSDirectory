@@ -126,7 +126,7 @@ class RolesDirectory(BaseDirectory):
             # Basic folder... add the role by hand on the portal.
             portal = getToolByName(self, 'portal_url').getPortalObject()
             portal._addRole(role)
-        self.writeEntry(entry)
+        self.editEntry(entry)
 
 InitializeClass(RolesDirectory)
 

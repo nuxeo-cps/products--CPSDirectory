@@ -141,7 +141,7 @@ class MembersDirectory(BaseDirectory):
         member = mtool.getMemberById(id)
         if member is None or not hasattr(aq_base(member), 'getMemberId'):
             raise ValueError("Cannot add member '%s'" % id)
-        self.writeEntry(entry)
+        self.editEntry(entry)
 
 InitializeClass(MembersDirectory)
 

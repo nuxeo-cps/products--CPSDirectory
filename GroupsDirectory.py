@@ -126,7 +126,7 @@ class GroupsDirectory(BaseDirectory):
         if not hasattr(aq_base(aclu), 'userFolderAddGroup'):
             return # XXX
         aclu.userFolderAddGroup(group)
-        self.writeEntry(entry)
+        self.editEntry(entry)
 
 InitializeClass(GroupsDirectory)
 
