@@ -6,7 +6,8 @@ New features:
 ~~~~~~~~~~~~~
 - Added methods to be able to use a "CPS Directory Entry Widget" to create
   entries into an Indirect directory, even through a Local Directory
-- Added security level to searchEntries access, using entry view authorization
+- Added security level to searchEntries access, using directory view
+  authorization
 Bug fixes:
 ~~~~~~~~~~
 - LDAPBackingDirectory: Fixed problem for DN with accented chars.
@@ -22,3 +23,7 @@ New internal features:
 - IndirectDirectory: added a storage adapter
 - ZODBDirectory: use IsUserModified interface to prevent updater cleaning
 - Begining of use of epydoc
+- BaseDirectory: adding method isSearchEntriesAllowed, equivalent to isVisible,
+  and use it in checkSearchEntriesAllowed
+- cpsdirectory_entry_* templates: make them call setDirectoryBreadCrumbs and
+  getDirectoryActions when setting fake breadcrumbs and actions on directories
