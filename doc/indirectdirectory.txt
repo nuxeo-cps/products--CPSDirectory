@@ -66,9 +66,13 @@ directories it refers to.
 The layout used should also be the same, except that:
 - All widgets, except the one storing the id should be hidden in layout
   modes create and edit.
-- The better way to set the widget storing the id is to set it as a 'Select
-  Widget', using a vocabulary with type 'CPS Indirect Directory Vocabulary',
-  that would only present the ids accepted in the directory. It should also
-  be 'read only' in edit mode to prevent errors.
+
+- The better way to set the widget storing the id is to set it as a
+  'CPS Directory Entry Widget', using a vocabulary with type 'CPS Indirect
+  Directory Vocabulary', with the name of the indirect directory in the
+  'directory' property, and with popup mode 'seach'. This widget will
+  present the entries accepted in the directory. It should also
+  be 'read only' in edit mode to prevent errors - there is no point in
+  editing a reference to the actual entry.
   It would be even better if this widget, in create mode, would not present
   to the user entries that are already stored in the indirect directory.
