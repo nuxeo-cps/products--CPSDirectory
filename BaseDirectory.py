@@ -259,6 +259,18 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return self.isEntryAclAllowed(self.acl_entry_edit_roles_c,
                                       id=id, entry=entry)
 
+    security.declarePublic('isSearchEntriesAllowed')
+    def isSearchEntriesAllowed(self):
+        # XXX should also have a new_entry arg.
+        """Check if the user can search entries within the directory.
+
+        Equivalent to isVisible, because it uses directory view roles.
+        Uses the computed entry local roles.
+
+        Returns a boolean.
+        """
+        return self.isEntryAclAllowed(self.acl_directory_view_roles_c)
+
     security.declarePublic('checkCreateEntryAllowed')
     def checkCreateEntryAllowed(self, id=None, entry=None):
         """Check that the user can create an entry.
@@ -302,7 +314,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Actually checks if the user can view entries.
         Raises Unauthorized if not.
         """
-        if not self.isViewEntryAllowed():
+        if not self.isSearchEntriesAllowed():
             raise Unauthorized("No search access to directory")
 
     security.declarePrivate('listEntryIds')
