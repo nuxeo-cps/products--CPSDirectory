@@ -5,6 +5,8 @@
               res python:here.getNavigation(finder='ldap',
                 root_uid=root_uid, REQUEST=request);
               type string:ldap;">
+<div style="margin: 1em;">
+<div class="document">
 <div style="float:right">
 <button onclick="window.close()">Fermer</button>
 </div>
@@ -35,6 +37,7 @@ function updateParent() {
     onclick="updateParent();" i18n:attributes="value">
     </metal:block>
   </metal:block>
+</div></div>
 </metal:block>
 </metal:block>
 </tal:block>
