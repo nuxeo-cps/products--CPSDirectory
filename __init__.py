@@ -18,9 +18,21 @@
 """CPSDirectory init.
 """
 
+from zLOG import LOG, INFO
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CMFCore.CMFCorePermissions import ManagePortal
+
+try:
+    from Products.LDAPUserGroupsFolder import LDAPDelegate
+except ImportError:
+    try:
+        from Products.LDAPUserFolder import LDAPDelegate
+    except ImportError:
+        LDAPDelegate = None
+has_ldap = (LDAPDelegate is not None)
+del LDAPDelegate
+
 
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
@@ -30,6 +42,11 @@ from DirectoryTool import DirectoryTypeRegistry
 from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
+
+if has_ldap:
+    from LDAPDirectory import LDAPDirectory
+else:
+    LOG('LDAPDirectory', INFO, "Disabled (no LDAP user folder product found).")
 
 from DirectoryVocabulary import DirectoryVocabulary
 
@@ -49,4 +66,6 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
+    if has_ldap:
+        DirectoryTypeRegistry.register(LDAPDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
