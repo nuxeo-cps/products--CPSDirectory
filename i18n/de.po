@@ -101,10 +101,10 @@ msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
 
 msgid "label_groups"
-msgstr "Gruppe(n)"
+msgstr "Gruppen"
 
 msgid "label_subgroups"
-msgstr "Sub-Gruppe(n)"
+msgstr "Sub-Gruppen"
 
 msgid "label_members"
 msgstr "Teilnehmer"

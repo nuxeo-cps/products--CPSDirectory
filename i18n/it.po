@@ -105,10 +105,10 @@ msgid "psm_entry_created"
 msgstr "Elemento creato"
 
 msgid "label_groups"
-msgstr "Gruppo(i)"
+msgstr "Gruppi"
 
 msgid "label_subgroups"
-msgstr "Sottogruppo(i)"
+msgstr "Sottogruppi"
 
 msgid "label_members"
 msgstr "Collaboratori"

@@ -117,10 +117,10 @@ msgid "psm_entry_created"
 msgstr "Entrada creada"
 
 msgid "label_groups"
-msgstr "Grupo(s)"
+msgstr "Grupos"
 
 msgid "label_subgroups"
-msgstr "Subgrupo(s)"
+msgstr "Subgrupos"
 
 msgid "label_members"
 msgstr "Miembros"
