@@ -13,10 +13,6 @@ Parameters are:
 Return the updated actions
 """
 
-from zLOG import LOG, DEBUG
-
-LOG("getDirectoryActions", DEBUG, "before object actions=%s"%(actions['object'],))
-
 base_url = context.getBaseUrl(utool=context.portal_url)
 
 create_action = {
@@ -71,8 +67,5 @@ if mode in ['view', 'edit']:
         actions['object'].append(edit_action)
     if dir.isDeleteEntryAllowed(id):
         actions['object'].append(delete_action)
-
-
-LOG("getDirectoryActions", DEBUG, "after object actions=%s"%(actions['object'],))
 
 return actions
