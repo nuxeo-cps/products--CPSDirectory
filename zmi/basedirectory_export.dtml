@@ -15,11 +15,11 @@
     <dtml-in propertyItems>
 <dtml-let key=sequence-key
           item=sequence-item>          
-<dtml-if "_['key'] != 'getFieldIdProperty'">
-<dtml-if "_.same_type(_['item'], '')">
-<dtml-if "_['item'].find(dquote) != -1 or _['item'].find(cr) != -1">
+<dtml-if "key != 'getFieldIdProperty'">
+<dtml-if "_.same_type(item, '')">
+<dtml-if "item.find(dquote) != -1 or item.find(cr) != -1">
     '<dtml-var key>': """&dtml-item;""",
-<dtml-elif "_['item'].find(squote) != -1">
+<dtml-elif "item.find(squote) != -1">
     '<dtml-var key>': "&dtml-item;",
 <dtml-else>
     '<dtml-var key>': '&dtml-item;',
