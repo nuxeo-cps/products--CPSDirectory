@@ -428,7 +428,6 @@ class StackingDirectory(BaseDirectory):
             else:
                 # Only keep ids that have correct prefix
                 for b_entry in b_res:
-                    print 'entry %s' % `b_entry`
                     id = b_entry[b_id_field]
                     if not id.startswith(fix):
                         continue
