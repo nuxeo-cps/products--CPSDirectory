@@ -103,6 +103,7 @@ class StackingDirectory(BaseDirectory):
         title_field = self.title_field
         if title_field == self.id_field:
             return [(id, id) for id in self.listEntryIds()]
+        # XXX should try to call listEntryIdsAndTitles on the backing dirs.
         results = self.searchEntries(return_fields=[title_field])
         return [(id, entry[title_field]) for id, entry in results]
 
