@@ -85,7 +85,7 @@ class IUserFolder(Interface.Base):
                     {'url':url, 'roles':[Role1]}],..}.
         """
 
-    def _getAllowedRolesAndUsers(self, user)
+    def _getAllowedRolesAndUsers(self, user):
         """Returns a list with all roles this user has + the username"""
         # CPSCore.utils uses this if it exists. Funnily enough, it never does.
 
