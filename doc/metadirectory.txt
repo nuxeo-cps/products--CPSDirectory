@@ -37,31 +37,10 @@ For each backing directory, the following must be specified:
 
 - what fields are renamed from the backing directory.
 
-Secondary id field for id conversion
-------------------------------------
-
-Sometimes the "real" value for the id of an entry in the backing
-directory cannot be used directly as a value for the id of the
-meta-directory. In this case, the backing directory must have a
-canonical "secondary" id attribute and the means to convert between the
-real and secondary id.
-
-When the backing directory is LDAP, its id is the dn. This is usually
-never an acceptable value for the id of the meta-directory. In this case
-a conversion from the dn to the secondary attribute must be performed.
-For LDAP the conversions are performed as followed, using 'uid' as an
-example for the secondary attribute:
-
-- dn to uid: if the rdn of the dn is uid, then extract its value,
-  otherwise lookup the entry and get the value for the uid.
-
-- uid to dn: if the rdn of the directory is uid and the directory is
-  ONELEVEL, then build the dn using the base_dn, otherwise do a search
-  of all the entries for the uid, and return the dn of the result
-  (assuming there is exactly one result).
-
 Cross-references
 ----------------
+
+(not implemented)
 
 Some fields of the meta-directory that are lists can be computed as
 cross-references to other directories. When these fields read, they are
