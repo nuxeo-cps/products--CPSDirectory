@@ -66,7 +66,8 @@ class TestMetaDirectory(CPSDirectoryTestCase):
 
         dirmeta = self.pd.manage_addCPSDirectory('dirmeta',
                                                  'CPS Meta Directory')
-        dirmeta.manage_changeProperties(schema='smeta', id_field='id')
+        dirmeta.manage_changeProperties(schema='smeta', id_field='id',
+                                        title_field='bar')
         dirmeta.setBackingDirectories(
             ({'dir_id': 'dirfoo',
               'id_conv': None,
@@ -109,6 +110,22 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         ids = self.dirmeta.listEntryIds()
         ids.sort()
         self.assertEquals(okids, tuple(ids))
+
+    def test_listEntryIdsAndTitles(self):
+        id = '111'
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        id = '222'
+        fooentry = {'idd': id, 'foo': 'f', 'pasglop': 'p'}
+        barentry = {'id': id, 'bar': 'b', 'mail': 'm'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        res = self.dirmeta.listEntryIdsAndTitles()
+        okres = [('111', 'brr'), ('222', 'b')]
+        res.sort()
+        self.assertEquals(okres, res)
 
     def test_hasEntry(self):
         id = '333'

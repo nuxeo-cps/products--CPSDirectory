@@ -165,7 +165,17 @@ class MetaDirectory(BaseDirectory):
             return []
         return dir.listEntryIds()
 
-    #def listEntryIdsAndTitles(self): XXX
+    security.declarePrivate('listEntryIdsAndTitles')
+    def listEntryIdsAndTitles(self):
+        """List all the entry ids and titles.
+
+        Returns a list of tuples (id, title).
+        """
+        title_field = self.title_field
+        if title_field == self.id_field:
+            return [(id, id) for id in self.listEntryIds()]
+        results = self.searchEntries(return_fields=[title_field])
+        return [(id, entry[title_field]) for id, entry in results]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
