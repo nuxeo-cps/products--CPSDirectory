@@ -166,8 +166,8 @@ class IndirectDirectory(BaseDirectory):
         object_ids_list.remove(id)
         self.object_ids = tuple(object_ids_list)
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the indirect directory.
 
         Return entries matching the following criteria:
@@ -191,7 +191,7 @@ class IndirectDirectory(BaseDirectory):
                 entries = []
             else:
                 new_kw[id_field] = indirect_ids
-                real_entries = directory.searchEntries(return_fields, **new_kw)
+                real_entries = directory._searchEntries(return_fields, **new_kw)
                 entries = self.formatSearchResults(return_fields,
                                                    directory_id,
                                                    real_entries)

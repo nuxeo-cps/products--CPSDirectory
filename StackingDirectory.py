@@ -89,7 +89,7 @@ class StackingDirectory(BaseDirectory):
             else:
                 # Use secondary id
                 # XXX disable acls
-                results = b_dir.searchEntries(return_fields=[id_field])
+                results = b_dir._searchEntries(return_fields=[id_field])
                 b_ids = [b_entry[id_field] for primary_id, b_entry in results]
             uids = self._uniqueIdsFromBacking(b_ids, ids_d)
             ids.extend(uids)
@@ -105,7 +105,7 @@ class StackingDirectory(BaseDirectory):
         if title_field == self.id_field:
             return [(id, id) for id in self.listEntryIds()]
         # XXX should try to call listEntryIdsAndTitles on the backing dirs.
-        results = self.searchEntries(return_fields=[title_field])
+        results = self._searchEntries(return_fields=[title_field])
         return [(id, entry[title_field]) for id, entry in results]
 
     security.declarePublic('hasEntry')
@@ -176,7 +176,7 @@ class StackingDirectory(BaseDirectory):
             else:
                 # Use secondary id
                 # XXX don't check acls on search
-                b_ids = b_dir.searchEntries(**{id_field: [id]})
+                b_ids = b_dir._searchEntries(**{id_field: [id]})
                 if len(b_ids):
                     if len(b_ids) > 1:
                         LOG('StackingDirectory', WARNING,
@@ -188,8 +188,8 @@ class StackingDirectory(BaseDirectory):
         if not done:
             raise KeyError(id)
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('deleteEntry')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory."""
         id_field = self.id_field
         ids_d = {}
@@ -205,7 +205,7 @@ class StackingDirectory(BaseDirectory):
                 if id_field not in b_return_fields:
                     b_return_fields.append(id_field)
 
-            b_res = b_dir.searchEntries(return_fields=b_return_fields, **kw)
+            b_res = b_dir._searchEntries(return_fields=b_return_fields, **kw)
 
             if return_fields is None:
                 if b_return_fields is None:
@@ -260,8 +260,8 @@ class StackingDirectory(BaseDirectory):
             else:
                 # Use secondary id
                 # XXX don't check acls on search
-                entries = b_dir.searchEntries(return_fields=['*'],
-                                              **{id_field: [id]})
+                entries = b_dir._searchEntries(return_fields=['*'],
+                    **{id_field: [id]})
                 if not entries:
                     continue
                 if len(entries) > 1:

@@ -174,8 +174,8 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             raise KeyError("Entry '%s' does not exist" % id)
         self._delObject(id)
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
         schema = self._getSchemas()[0]

@@ -249,22 +249,23 @@ class LDAPBackingDirectory(BaseDirectory):
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        return self.searchEntries()
+        return self._searchEntries()
 
     security.declarePrivate('listEntryIdsAndTitles')
     def listEntryIdsAndTitles(self):
         """List all the entry ids and titles."""
         title_field = self.title_field
         if title_field == 'dn':
-            results = self.searchEntries()
+            results = self._searchEntries()
             res = [(id, id) for id in results]
         else:
-            results = self.searchEntries(return_fields=[title_field])
+            results = self._searchEntries(return_fields=[title_field])
             res = [(id, entry[title_field]) for id, entry in results]
         return res
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
@@ -295,7 +296,7 @@ class LDAPBackingDirectory(BaseDirectory):
             attrs = attrsd.keys()
 
         filter = self._buildFilter(kw)
-        res = self._searchEntries(filter, attrs)
+        res = self._searchEntriesFiltered(filter, attrs)
         return res
 
     security.declarePublic('hasEntry')
@@ -466,7 +467,7 @@ class LDAPBackingDirectory(BaseDirectory):
             filter = '(&%s)' % filter
         return filter
 
-    def _searchEntries(self, filter, return_attrs):
+    def _searchEntriesFiltered(self, filter, return_attrs):
         """Search entries according to filter."""
         if return_attrs is None:
             attrs = ['dn']

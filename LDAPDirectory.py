@@ -167,7 +167,7 @@ class LDAPDirectory(BaseDirectory):
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        return self.searchEntries()
+        return self._searchEntries()
 
     security.declarePrivate('listEntryDNs')
     def listEntryDNs(self):
@@ -175,7 +175,7 @@ class LDAPDirectory(BaseDirectory):
 
         This is LDAP-specific and assumes that 'dn' is in the schema.
         """
-        res = self.searchEntries(return_fields=['dn'])
+        res = self._searchEntries(return_fields=['dn'])
         return [data['dn'] for id, data in res]
 
     security.declarePrivate('listEntryIdsAndTitles')
@@ -183,10 +183,10 @@ class LDAPDirectory(BaseDirectory):
         """List all the entry ids and titles."""
         title_field = self.title_field
         if self.id_field == title_field:
-            res = self.searchEntries()
+            res = self._searchEntries()
             return [(id, id) for id in res]
         else:
-            res = self.searchEntries(return_fields=[title_field])
+            res = self._searchEntries(return_fields=[title_field])
             return [(id, data[title_field]) for id, data in res]
 
     security.declarePrivate('listEntryDNsAndTitles')
@@ -196,7 +196,7 @@ class LDAPDirectory(BaseDirectory):
         This is LDAP-specific and assumes that 'dn' is in the schema.
         """
         title_field = self.title_field
-        res = self.searchEntries(return_fields=['dn', title_field])
+        res = self._searchEntries(return_fields=['dn', title_field])
         return [(data['dn'], data[title_field]) for id, data in res]
 
     security.declarePrivate('getEntryByDN')
@@ -211,8 +211,8 @@ class LDAPDirectory(BaseDirectory):
                              (dn, self.ldap_base))
         return self._getEntryKW(dn, id_is_dn=1)
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
@@ -282,7 +282,7 @@ class LDAPDirectory(BaseDirectory):
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter
-        return self._searchEntries(filter=filter, return_attrs=attrs)
+        return self._filteredSearchEntries(filter=filter, return_attrs=attrs)
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
@@ -465,7 +465,7 @@ class LDAPDirectory(BaseDirectory):
 
         return res['results'][0]
 
-    def _searchEntries(self, filter=None, return_attrs=None):
+    def _filteredSearchEntries(self, filter=None, return_attrs=None):
         """Search entries according to filter."""
         if not filter:
             filter = '(objectClass=*)'
@@ -476,7 +476,7 @@ class LDAPDirectory(BaseDirectory):
             attrs = list(return_attrs)
             if id_attr not in return_attrs:
                 attrs.append(id_attr)
-        LOG('_searchEntries', DEBUG, 'base=%s scope=%s filter=%s attrs=%s' %
+        LOG('_filteredSearchEntries', DEBUG, 'base=%s scope=%s filter=%s attrs=%s' %
             (self.ldap_base, self.ldap_scope_c, filter, attrs))
         res = self._delegate.search(base=to_utf8(self.ldap_base),
                                     scope=self.ldap_scope_c,

@@ -220,7 +220,7 @@ class MetaDirectory(BaseDirectory):
         title_field = self.title_field
         if title_field == self.id_field:
             return [(id, id) for id in self.listEntryIds()]
-        results = self.searchEntries(return_fields=[title_field])
+        results = self._searchEntries(return_fields=[title_field])
         return [(id, entry[title_field]) for id, entry in results]
 
     security.declarePublic('hasEntry')
@@ -293,8 +293,8 @@ class MetaDirectory(BaseDirectory):
                     raise
                 pass
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
@@ -401,7 +401,7 @@ class MetaDirectory(BaseDirectory):
             # Do query
             #print ' subquery dir=%s rf=%s query=%s' % ( # XXX
             #    info['dir_id'], b_return_fields, b_query)
-            b_res = b_dir.searchEntries(return_fields=b_return_fields,
+            b_res = b_dir._searchEntries(return_fields=b_return_fields,
                                         **b_query)
             #print ' res=%s' % `b_res`
 
@@ -616,12 +616,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
                     if info['missing_entry'] is None:
                         raise
                     b_dir.createEntry(b_entry)
-                    
+
     def _getContentUrl(self, entry_id, field_id):
         """ giving content url if backing has it"""
         result = None
         entry, b_dir = self._dir._getEntryFromBacking(self._id)
-        
+
         if b_dir is not None:
             # we need to check for ids
             if b_dir.id_field <> self._dir.id_field:
@@ -629,6 +629,6 @@ class MetaStorageAdapter(BaseStorageAdapter):
             child_adapter = b_dir._getAdapters(id)[0]
             if getattr(child_adapter, '_getContentUrl', None) is not None:
                 result = child_adapter._getContentUrl(entry_id, field_id)
-        return result                    
+        return result
 
 InitializeClass(MetaStorageAdapter)

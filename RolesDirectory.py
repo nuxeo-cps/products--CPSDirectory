@@ -71,8 +71,8 @@ class RolesDirectory(BaseDirectory):
                  if r not in ('Anonymous', 'Authenticated', 'Owner')]
         return roles
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         A role or list of roles to search for can be specified using the id
@@ -80,7 +80,7 @@ class RolesDirectory(BaseDirectory):
 
         A member or list of members to search for can be specified using the
         members field as a parameter.
-        
+
         If return_fields is None, return a list of role ids:
           ['role1', 'role2']
 
@@ -124,7 +124,7 @@ class RolesDirectory(BaseDirectory):
                 for role in u.getRoles():
                     if role not in user_roles:
                         user_roles.append(role)
-                        
+
         # fields asked for
         if return_fields is not None:
             if isinstance(return_fields, StringType):
@@ -202,7 +202,7 @@ class RolesDirectory(BaseDirectory):
         """
         self.checkDeleteEntryAllowed(id=id)
         aclu = self.acl_users
-        aclu.userFolderDelRoles( (id,))        
+        aclu.userFolderDelRoles( (id,))
 
 InitializeClass(RolesDirectory)
 

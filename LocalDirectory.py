@@ -224,8 +224,8 @@ class LocalDirectory(BaseDirectory):
         ob = self._getContent()
         return ob.getEntry(id)
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
@@ -251,7 +251,7 @@ class LocalDirectory(BaseDirectory):
         return_fields=['*'] means to return all available fields.
         """
         ob = self._getContent()
-        return ob.searchEntries(return_fields, **kw)
+        return ob._searchEntries(return_fields, **kw)
 
     security.declarePublic('searchPossibleEntries')
     def searchPossibleEntries(self, return_fields=None, **kw):

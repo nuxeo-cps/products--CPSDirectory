@@ -115,8 +115,8 @@ class MembersDirectory(BaseDirectory):
         # and the following would call it so isn't correct.
         #ids = getToolByName(dir, 'portal_membership').listMemberIds()
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.

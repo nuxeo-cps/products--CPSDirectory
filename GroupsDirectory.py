@@ -80,8 +80,8 @@ class GroupsDirectory(BaseDirectory):
         else:
             return ()
 
-    security.declarePublic('searchEntries')
-    def searchEntries(self, return_fields=None, **kw):
+    security.declarePrivate('_searchEntries')
+    def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()
