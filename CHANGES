@@ -9,6 +9,7 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Precompute objectClass search filter, use it for all searches.
-- Treat ldap.UNWILLING_TO_PERFORM (happens when password is empty).
+- LDAPBackingDirectory: Precompute objectClass search filter, used it for all
+  searches.
+- LDAPBackingDirectory: Treat ldap.UNWILLING_TO_PERFORM (empty password)
 - Small refactoring to simplify getting of search adapters.
