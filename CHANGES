@@ -1,17 +1,14 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
--
-
+- DirectoryEntryWidget require CPSNavigation
 New features:
 ~~~~~~~~~~~~~
 - Password widget uses a confirmation widget in edit mode.
 - New DirectoryEntry and DirectoryMultiEntries widgets. Nice in view mode, but in edit
   mode they'll have to use a navigator instead of the current select widgets.
-
 Bug fixes:
 ~~~~~~~~~~
 -
-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
