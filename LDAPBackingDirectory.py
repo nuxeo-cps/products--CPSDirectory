@@ -367,6 +367,7 @@ class LDAPBackingDirectory(BaseDirectory):
 
         ldap_attrs['objectClass'] = list(self.ldap_object_classes_c)
         self.insertLDAP(dn, ldap_attrs)
+        return dn
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
