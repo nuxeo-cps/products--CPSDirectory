@@ -22,6 +22,20 @@ members_schema = {
                 'is_indexed': 0,
             },
         },
+    'roles': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    'groups': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
     'email': {
         'type': 'CPS String Field',
         'data': {
