@@ -35,6 +35,7 @@ roles_directory = {
         'members_field': 'members',
         'title_field': 'role',
         'search_substring_fields': ['role'],
+        'acl_access_roles': 'Manager',
         },
     }
 
