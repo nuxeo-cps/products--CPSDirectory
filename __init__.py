@@ -48,6 +48,7 @@ from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
 from LocalDirectory import LocalDirectory
+from MetaDirectory import MetaDirectory
 
 if has_ldap:
     from LDAPDirectory import LDAPDirectory
@@ -85,6 +86,7 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
     DirectoryTypeRegistry.register(LocalDirectory)
+    DirectoryTypeRegistry.register(MetaDirectory)
     VocabularyTypeRegistry.register(DirectoryVocabulary)
     VocabularyTypeRegistry.register(DirectoryEntryVocabulary)
     if has_ldap:

@@ -1,0 +1,110 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Mappings'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<h2>Mappings</h2>
+<p class="form-help">
+  The Meta Directory can map fields from backing directories to other fields.
+</p>
+
+<dtml-in getBackingDirectoriesMappings mapping>
+  <h2>&dtml-dir_id;</h2>
+  <p>
+    Id conversion:
+      <input name="id_conv" value="&dtml-id_conv;" />
+  </p>
+  <p>Field conversions:
+     <dtml-in "field_conv.items()">
+     <dtml-let backing_id=sequence-key
+               meta_id=sequence-item>
+       <br />&nbsp;&nbsp;&dtml-backing_id;:
+       <dtml-if "meta_id is None">
+         Ignored
+       <dtml-else>
+         &dtml-meta_id;
+       </dtml-if>
+     </dtml-let>
+     </dtml-in>
+  </p>
+</dtml-in>
+
+<dtml-comment>
+ <dtml-if sequence-start>
+   <h2>Edit Entry Local Roles</h2>
+   <table cellspacing="0" cellpadding="0" border="0">
+ </dtml-if>
+ <dtml-let role=sequence-key
+           expr=sequence-item>
+   <tr valign="top">
+     <td align="left">
+       <form action="&dtml-URL1;" method="POST">
+         <input type="hidden" name="role" value="&dtml-role;">
+         <table>
+           <dtml-if sequence-start>
+             <tr valign="top">
+               <th align="left">Role</th>
+               <th align="left">Condition</th>
+             </tr>
+           </dtml-if>
+           <tr valign="top">
+             <td>&dtml-role;</td>
+             <td>
+               <textarea name="expr" rows="5" cols="60"
+                 >&dtml-expr;</textarea>
+             </td>
+           </tr>
+           <tr valign="top">
+             <td>&nbsp;</td>
+             <td>
+               <input type="submit" name="manage_changeEntryLocalRole:method" value="Change">
+               <input type="submit" name="manage_delEntryLocalRole:method" value="Delete">
+             </td>
+           </tr>
+         </table>
+       </form>
+     </td>
+   </tr>
+  </dtml-let>
+  <dtml-if sequence-end>
+    </table>
+  </dtml-if>
+
+<h2>Add an Entry Local Role</h2>
+
+<dtml-let role="REQUEST.get('role', '')"
+          expr="REQUEST.get('expr', '')">
+<form action="&dtml-URL1;" method="POST">
+<table>
+<tr>
+  <td align="left">
+    <div class="form-label">Role</div>
+  </td>
+  <td align="left">
+    <div class="form-label">Condition</div>
+  </td>
+</tr>
+<tr valign="top">
+  <td align="left">
+    <div class="form-item">
+      <input type="text" name="role" size="20" value="&dtml-role;">
+    </div>
+  </td>
+  <td align="left">
+    <div class="form-item">
+      <textarea name="expr" rows="5" cols="60">&dtml-expr;</textarea>
+    </div>
+  </td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td align="left">
+    <input type="submit" name="manage_addEntryLocalRole:method" value="Add">
+  </td>
+</tr>
+</table>
+</form>
+</dtml-let>
+</dtml-comment>
+
+<dtml-var manage_page_footer>

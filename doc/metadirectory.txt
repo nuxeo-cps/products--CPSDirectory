@@ -1,0 +1,62 @@
+====================
+MetaDirectory Design
+====================
+
+Introduction
+============
+
+A meta-directory is a directory whose purpose is to link and redirect to
+other directories, doing some conversions in the process.
+
+Its first use is to provide a synthesized 'users' directory for the
+CPSUserFolder, using one or several backing directories for the user
+properties, and also optionaly separate directories for the groups and
+roles.
+
+Reading, writing, creating and searches are all dispatched appropriately
+to the backing directories.
+
+Features
+========
+
+Multiple backing directories for one entry
+------------------------------------------
+
+An entry of a meta-directory can be built from the corresponding entries
+of several other directories, called the backing directories.
+
+For each backing directory, the following must be specified:
+
+- how the id of the meta-directory is converted into the id of the
+  backing directory,
+
+- what fields from the backing directory are used,
+
+- what fields are renamed from the backing directory.
+
+Cross-references
+----------------
+
+Some fields of the meta-directory that are lists can be computed as
+cross-references to other directories. When these fields read, they are
+computed from a search in cross-referenced directory; when they are
+written to it's actually several entries of the cross-referenced
+directory that can be modified.
+
+For each cross-referenced field must be specified:
+
+- to what directory and field is the cross-reference.
+
+
+
+Other features
+==============
+
+(Not yet implemented.)
+
+Different backing directories depending on the entry
+----------------------------------------------------
+
+If an entry has to be stored into different directories (ex: LDAP or
+ZODB) depending on some criterion, it is possible to specify this.
+
