@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"POT-Creation-Date: 2004-05-28 17:58default\n"
+"POT-Creation-Date: 2004-06-23 16:27default\n"
 "PO-Revision-Date: 2004-03-27 20:59+0100\n"
 "Last-Translator: Álvaro Tejero Cantero <alvaro@antalia.com>\n"
 "Language-Team:  <es@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: KBabel 1.0.2\n"
 
 #    <em content="err" style="color:red">Error</em>
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
@@ -76,7 +76,7 @@ msgid "description_too_many_results_refine_query"
 msgstr ""
 
 #    <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
-#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
@@ -89,8 +89,8 @@ msgstr "id"
 
 #    <span condition="widget/is_i18n" content="widget/label_edit">label</span>
 #    <span condition="widget/is_i18n" content="widget/label">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
@@ -151,3 +151,11 @@ msgstr "Resultados de la búsqueda"
 #, fuzzy
 msgid "cpsdir_label_homeless"
 msgstr "Resultados de la búsqueda"
+
+#, fuzzy
+msgid "label_roles_Manager"
+msgstr "Grupo(s)"
+
+#, fuzzy
+msgid "label_roles_Member"
+msgstr "Miembros"

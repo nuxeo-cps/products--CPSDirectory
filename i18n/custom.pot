@@ -63,3 +63,10 @@ msgstr ""
 
 msgid "cpsdir_label_homeless"
 msgstr ""
+
+msgid "label_roles_Manager"
+msgstr ""
+
+msgid "label_roles_Member"
+msgstr ""
+

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2004-03-24 17:37default\n"
+"POT-Creation-Date: 2004-06-23 16:27default\n"
 "PO-Revision-Date: 2004-06-08 14:06-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@curiango.ipen.br>\n"
 "Language-Team: Português do Brasil <pt@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
@@ -63,7 +63,12 @@ msgstr "Subir para"
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
-#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr ""
+
+#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr "Tecla de ajuda i18 para este campo"
@@ -73,8 +78,8 @@ msgstr "Tecla de ajuda i18 para este campo"
 msgid "id"
 msgstr "id"
 
-#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
@@ -95,6 +100,10 @@ msgstr "Nenhum diretório disponível"
 
 msgid "psm_entry_created"
 msgstr "Entrada criada"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Grupos"
 
 msgid "label_groups"
 msgstr "Grupos"
@@ -125,3 +134,11 @@ msgstr ""
 
 msgid "cpsdir_label_homeless"
 msgstr "Habilitar área particular"
+
+#, fuzzy
+msgid "label_roles_Manager"
+msgstr "Último Nome"
+
+#, fuzzy
+msgid "label_roles_Member"
+msgstr "Membros"

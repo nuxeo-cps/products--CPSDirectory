@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"POT-Creation-Date: 2004-05-28 17:58default\n"
+"POT-Creation-Date: 2004-06-23 16:27default\n"
 "PO-Revision-Date: 2004-05-10 12:28+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
@@ -69,7 +69,7 @@ msgstr ""
 
 #    <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
 #    <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
-#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
@@ -81,8 +81,8 @@ msgstr "id"
 
 #    <span condition="widget/is_i18n" content="widget/label_edit">label</span>
 #    <span condition="widget/is_i18n" content="widget/label">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
@@ -139,3 +139,11 @@ msgstr ""
 #    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 msgid "cpsdir_label_homeless"
 msgstr "Abilita area privata"
+
+#, fuzzy
+msgid "label_roles_Manager"
+msgstr "Gruppo(i)"
+
+#, fuzzy
+msgid "label_roles_Member"
+msgstr "Collaboratori"
