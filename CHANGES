@@ -10,4 +10,4 @@ Bug fixes:
   "Products.CMFCore.CMFCorePermissions".
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- manage_addCPSDirectory() takes a **kw args that is propagated to the cls constructor
