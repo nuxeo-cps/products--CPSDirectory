@@ -612,7 +612,9 @@ class LDAPBackingDirectory(BaseDirectory):
         except SERVER_DOWN:
             raise ConfigurationError("Directory '%s': LDAP server is down"
                                      % self.getId())
-        # may raise INVALID_CREDENTIALS
+        except INVALID_CREDENTIALS:
+            raise ConfigurationError("Directory '%s': Invalid credentials"
+                                     % self.getId())
         conn._cps_bound_dn = bind_dn
         conn._cps_bound_password = bind_password
 
