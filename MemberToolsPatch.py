@@ -19,7 +19,7 @@
 """MemberToolsPatch
 
 Patches CMF's Membership and MemberData tools to make them access
-userfolders using a standard API.
+user folders using a standard API.
 """
 
 from zLOG import LOG, DEBUG
@@ -33,13 +33,51 @@ from Products.CMFCore.utils import getToolByName
 
 
 #
-# Patch of existing APIs
+# New APIs
+#
+
+# MembershipTool
+def hasMember(self, member_id):
+    pass
+
+# MemberDataTool
+def searchForMembers(mapping, attributes=(), options=None, **kw):
+    pass
+
+#
+# Existing APIs made more generic
 #
 
 # MembershipTool
 
-def addMember(self):
-    pass
+def addMember(self, id, password, roles, domains, properties=None,
+              groups=None):
+    """Add a new member.
+
+    The member is created with the specified id, password, roles,
+    domains, groups. The specified properties are assigned to it.
+    """
+    # XXX Should we optimize to create and set props in one step if
+    # possible (think LDAP) ? Is it worth it ?
+
+    acl_users = self.acl_users
+    props = properties or {}
+    if groups is not None:
+        props = props.copy()
+        props['groups'] = groups
+
+    if hasattr(aq_base(acl_users), 'userFolderAddUser'):
+        # Standardized user folder API.
+        acl_users.userFolderAddUser(id, password, roles, domains, **props)
+    elif hasattr(aq_base(acl_users), '_addUser'):
+        acl_users._addUser(id, password, password, roles, domains, **props)
+    else:
+        raise ValueError("Can't add Member, unsupported user folder")
+
+    if properties:
+        member = self.getMemberById(id)
+        if hasattr(aq_base(member), 'setMemberProperties'):
+            member.setMemberProperties(properties)
 
 # MemberDataTool
 
@@ -62,17 +100,3 @@ def setSecurityProfile(self, password=None, roles=None, domains=None):
 def getPassword(self):
     """Return the password of the user."""
     pass
-
-
-#
-# New APIs
-#
-
-# MembershipTool
-def memberExists(self):
-    pass
-
-# MemberDataTool
-def searchForMembers(self):
-    pass
-
