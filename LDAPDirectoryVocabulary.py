@@ -51,12 +51,23 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
          'label':'Description'},
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label':'LDAP Directory'},
+        {'id': 'add_empty_key', 'type': 'boolean', 'mode': 'w',
+         'label':'Add an empty key'},
+        {'id': 'empty_key_pos', 'type': 'select', 'mode': 'w',
+         'select_variable': 'empty_key_pos_select',
+         'label':'Empty key position'},
+        {'id': 'empty_key_value', 'type': 'string', 'mode': 'w',
+         'label':'Empty key value'},
         )
 
     title = ''
     title_msgid = ''
     description = ''
     directory = ''
+    add_empty_key = 0
+    empty_key_pos_select = ('first', 'last')
+    empty_key_pos = empty_key_pos_select[0]
+    empty_key_value = ''
 
     def __init__(self, id, **kw):
         self.id = id
@@ -69,6 +80,8 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
 
     security.declareProtected(View, '__getitem__')
     def __getitem__(self, key):
+        if self.add_empty_key and key == '':
+            return self.empty_key_value
         dir = self._getDirectory()
         return dir.getEntryByDN(key)[dir.title_field]
 
@@ -87,12 +100,28 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
     security.declareProtected(View, 'keys')
     def keys(self):
         dir = self._getDirectory()
-        return dir.listEntryDNs()
+        res = dir.listEntryDNs()
+        if self.add_empty_key:
+            v = ''
+            res = list(res)
+            if self.empty_key_pos == 'first':
+                res.insert(0, v)
+            else:
+                res.append(v)
+        return res
 
     security.declareProtected(View, 'items')
     def items(self):
         dir = self._getDirectory()
-        return dir.listEntryDNsAndTitles()
+        res = dir.listEntryDNsAndTitles()
+        if self.add_empty_key:
+            v = ('', self.empty_key_value)
+            res = list(res)
+            if self.empty_key_pos == 'first':
+                res.insert(0, v)
+            else:
+                res.append(v)
+        return res
 
     security.declareProtected(View, 'values')
     def values(self):
@@ -100,6 +129,8 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
 
     security.declareProtected(View, 'has_key')
     def has_key(self, key):
+        if self.add_empty_key and key == '':
+            return 1
         dir = self._getDirectory()
         return dir.hasEntryByDN(key)
 
