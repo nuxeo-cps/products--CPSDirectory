@@ -36,11 +36,11 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 try:
     from Products.LDAPUserGroupsFolder.LDAPDelegate import \
-         LDAPDelegate, ldap
+         LDAPDelegate, ldap, to_utf8
     from Products.LDAPUserGroupsFolder.utils import filter_format
 except ImportError:
     from Products.LDAPUserFolder.LDAPDelegate import \
-         LDAPDelegate, ldap
+         LDAPDelegate, ldap, to_utf8
     from Products.LDAPUserFolder.utils import filter_format
 
 ldap_scopes = (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
@@ -304,7 +304,7 @@ class LDAPDirectory(BaseDirectory):
             scope = self.ldap_scope_c
             filter = ('(&%s%s)' % (self.objectClassFilter(),
                                    filter_format('(%s=%s)', (id_attr, id))))
-        res = self._delegate.search(base=base,
+        res = self._delegate.search(base=to_utf8(base),
                                     scope=scope,
                                     filter=filter,
                                     attrs=[id_attr])
@@ -347,7 +347,9 @@ class LDAPDirectory(BaseDirectory):
             base = base_dn
         attrs = self._makeAttrsFromData(entry)
         attrs['objectClass'] = self.ldap_object_classes_c
-        msg = self._delegate.insert(base=base, rdn=rdn, attrs=attrs)
+        msg = self._delegate.insert(base=base, # to_utf8 done by backend
+                                    rdn=rdn,
+                                    attrs=attrs)
         if msg:
             raise ValueError("LDAP error: %s" % msg)
 
@@ -356,7 +358,7 @@ class LDAPDirectory(BaseDirectory):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed()
         user_dn = self._getLDAPEntry(id)['dn']
-        msg = self._delegate.delete(dn=user_dn)
+        msg = self._delegate.delete(dn=to_utf8(user_dn))
         if msg:
             raise ValueError("LDAP error: %s" % msg)
 
@@ -427,7 +429,7 @@ class LDAPDirectory(BaseDirectory):
             filter = ('(&%s%s)' % (self.objectClassFilter(),
                                    filter_format('(%s=%s)', (id_attr, id))))
 
-        res = self._delegate.search(base=base,
+        res = self._delegate.search(base=to_utf8(base),
                                     scope=scope,
                                     filter=filter,
                                     attrs=field_ids)
@@ -453,7 +455,7 @@ class LDAPDirectory(BaseDirectory):
             if id_attr not in return_attrs:
                 attrs.append(id_attr)
         LOG('_searchEntries', DEBUG, 'filter=%s attrs=%s' % (filter, attrs))
-        res = self._delegate.search(base=self.ldap_base,
+        res = self._delegate.search(base=to_utf8(self.ldap_base),
                                     scope=self.ldap_scope_c,
                                     filter=filter,
                                     attrs=attrs)
@@ -591,7 +593,8 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         dir = self._dir
         attrs = dir._makeAttrsFromData(data, ignore_attrs=[rdn_attr])
         if attrs:
-            msg = dir._delegate.modify(user_dn, attrs=attrs)
+            msg = dir._delegate.modify(user_dn, # to_utf8 done by backend
+                                       attrs=attrs)
             if msg.startswith('STRONG_AUTH_REQUIRED'):
                 raise ValueError("Authentication required")
             elif msg:
