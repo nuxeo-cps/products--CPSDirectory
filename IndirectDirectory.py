@@ -71,8 +71,9 @@ class IndirectDirectory(BaseDirectory):
 
         Returns a list of tuples (id, title).
         """
-        ob = self._getContent()
-        return ob.listEntryIdsAndTitles()
+        # Default dummy implementation.
+        # To be implemented
+        return [(id, id) for id in self.listEntryIds()]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
