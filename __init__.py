@@ -63,9 +63,9 @@ if has_ldap_delegate:
 else:
     LOG('LDAPDirectory', INFO, "Disabled (no LDAP user folder product found).")
     # Display the tracebacks for further info in DEBUG mode.
-    for error in import_errors:
-        LOG('LDAPDirectory', DEBUG, 'Import Traceback',
-            error=error)
+    #for error in import_errors:
+    #    LOG('LDAPDirectory', DEBUG, 'Import Traceback',
+    #        error=error)
 
 if has_ldap:
     from LDAPBackingDirectory import LDAPBackingDirectory
