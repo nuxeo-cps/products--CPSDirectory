@@ -25,7 +25,7 @@ if __name__ == '__main__':
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
-
+from AccessControl import Unauthorized
 
 class TestStackingDirectory(CPSDirectoryTestCase):
 
@@ -74,6 +74,7 @@ class TestStackingDirectory(CPSDirectoryTestCase):
         self.dirbar = dirbar
         self.dirbaz = dirbaz
         self.dirstack = dirstack
+        self.dirs = [dirfoo, dirbar, dirbaz ]
 
     def test_getEntry(self):
         id1 = '111'
@@ -278,6 +279,11 @@ class TestStackingDirectory(CPSDirectoryTestCase):
         self.assertEquals(res, [('HHH', entry2),
                                 ('JJJ', entry4),
                                 ('LLL', entry6)])
+
+    def testBasicSecurity(self):
+        self.assert_(self.dirstack.searchEntries() is not None)
+        self.logout()
+        self.assertRaises(Unauthorized, self.dirstack.searchEntries)
 
 def test_suite():
     suite = unittest.TestSuite()

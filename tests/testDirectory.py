@@ -9,7 +9,7 @@ if __name__ == '__main__':
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
-
+from AccessControl import Unauthorized
 
 class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
@@ -76,8 +76,8 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assert_(member_id in members.listEntryIds())
 
         entry = members.getEntry(member_id)
-        self.assertEquals(entry, {'password': '__NO_PASSWORD__', 
-            'id': member_id, 'roles': [], 'givenName': '', 'groups': (), 
+        self.assertEquals(entry, {'password': '__NO_PASSWORD__',
+            'id': member_id, 'roles': [], 'givenName': '', 'groups': (),
             'sn': '', 'email': '', 'fullname': member_id, 'confirm': '',
             'homeless': '0'})
 
@@ -481,6 +481,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(res, [role_id])
         res = roles.searchEntries(role=['new_rol']) # list implies exact match
         self.assertEquals(res, [])
+
 
     #
     # TODO: add a more complex scenario here

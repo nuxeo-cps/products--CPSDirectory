@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- encoding: iso-8859-1 -*-
+# -*- encoding: iso-8859-15 -*-
 import os, sys
 
 if __name__ == '__main__':
@@ -9,6 +9,9 @@ from zLOG import LOG, DEBUG, TRACE, ERROR, INFO
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
+
+from AccessControl import Unauthorized
+
 
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
@@ -57,9 +60,11 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
     def testBasicSecurity(self):
         self.assert_(self.dir.isVisible())
         self.assert_(self.dir.isCreateEntryAllowed())
+        self.assert_(self.dir.searchEntries() is not None)
         self.logout()
         self.assert_(not self.dir.isVisible())
         self.assert_(not self.dir.isCreateEntryAllowed())
+        self.assertRaises(Unauthorized, self.dir.searchEntries)
 
     def testEmpty(self):
         dir = self.dir

@@ -25,7 +25,7 @@ if __name__ == '__main__':
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
-
+from AccessControl import Unauthorized
 
 class TestMetaDirectory(CPSDirectoryTestCase):
 
@@ -562,6 +562,15 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
         res.sort()
         self.assertEquals(res, [('BBB', {'foo': 'oo', 'email': 'evil@hell'}),
                                 ('CCC', {'foo': 'oo', 'email': 'yo@mama'})])
+
+    def testBasicSecurity(self):
+        self.assert_(self.dirmeta.isVisible())
+        self.assert_(self.dirmeta.isCreateEntryAllowed())
+        self.assert_(self.dirmeta.searchEntries() is not None)
+        self.logout()
+        self.assert_(not self.dirmeta.isVisible())
+        self.assert_(not self.dirmeta.isCreateEntryAllowed())
+        self.assertRaises(Unauthorized, self.dirmeta.searchEntries)
 
 def test_suite():
     suite = unittest.TestSuite()

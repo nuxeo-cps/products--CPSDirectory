@@ -1,4 +1,4 @@
-# TODO: 
+# TODO:
 # - don't depend on getDocumentSchemas / getDocumentTypes but is there
 #   an API for that ?
 
@@ -9,7 +9,7 @@ if __name__ == '__main__':
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
-
+from AccessControl import Unauthorized
 
 class TestZODBDirectory(CPSDirectoryTestCase):
 
@@ -346,6 +346,14 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
         self.assert_(meth(id='peterpan'))
         self.assert_(meth(entry={'name': 'Peterpan'}))
 
+    def testBasicSecurity(self):
+        self.assert_(self.dir.isVisible())
+        self.assert_(self.dir.isCreateEntryAllowed())
+        self.assert_(self.dir.searchEntries() is not None)
+        self.logout()
+        self.assert_(not self.dir.isVisible())
+        self.assert_(not self.dir.isCreateEntryAllowed())
+        self.assertRaises(Unauthorized, self.dir.searchEntries)
 
 def test_suite():
     suite = unittest.TestSuite()
