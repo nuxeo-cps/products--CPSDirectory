@@ -149,15 +149,13 @@ class StackingDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
-        
         self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
-        
-        # XXX : adapter now does all the work        
-        adapter = self._getAdapters(id, creation=1)[0]                
-        adapter._setData(data=entry) 
+        # Adapter now does all the work
+        adapter = self._getAdapters(id, creation=1)[0]
+        adapter._setData(data=entry)
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
