@@ -72,6 +72,27 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         self.assert_(not dir.hasEntry(id))
         self.assertRaises(KeyError, dir.getEntry, id)
 
+
+    def testFetchWithComputedValues(self):
+        dir = self.dir
+        dir.title_field = 'baz'
+        schema = self.portal.portal_schemas.testzodb
+        schema.manage_addField('baz', 'CPS String Field',
+                               read_ignore_storage=1,
+                               read_process_expr='python: foo+"_yo"',
+                               read_process_dependent_fields='foo',
+                               )
+        id = 'chien'
+        entry = {'idd': id, 'foo': 'ouah', 'bar': ['4']}
+        dir.createEntry(entry)
+
+        e = dir.getEntry(id)
+        ok = {'idd': id, 'foo': 'ouah', 'bar': ['4'], 'baz': 'ouah_yo'}
+        self.assertEquals(e, ok)
+
+        ids_titles = dir.listEntryIdsAndTitles()
+        self.assertEquals(ids_titles, [(id, 'ouah_yo')])
+
     def testSearch(self):
         dir = self.dir
 

@@ -98,9 +98,15 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         title_field = self.title_field
         if title_field == self.id_field:
             return [(id, id) for id in self.objectIds()]
+
+        # Get all the fields that title may depend on
+        field_ids_d = {title_field: None}
         schema = self._getSchemas()[0]
-        adapter = AttributeStorageAdapter(schema, None,
-                                          field_ids=[title_field])
+        dep_ids = schema[title_field].read_process_dependent_fields
+        for dep_id in dep_ids:
+            field_ids_d[dep_id] = None
+        field_ids = field_ids_d.keys()
+        adapter = AttributeStorageAdapter(schema, None, field_ids=field_ids)
         res = []
         for id, ob in self.objectItems():
             adapter.setContextObject(ob)
