@@ -80,19 +80,11 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
             'id': member_id, 'roles': [], 'givenName': '', 'groups': (), 
             'sn': '', 'email': '', 'fullname': ' ', 'confirm': ''})
 
-        # XXX: this shouldn't succeed
-        #self.assertRaises(ValueError, members.createEntry, 
-        #    {'id': member_id})
+        self.assertRaises(KeyError, members.createEntry, {'id': member_id})
 
         # XXX: not implemented yet
         #members.deleteEntry(member_id)
         #self.assert_(not members.hasEntry(member_id))
-
-    def testMemberCreateTwice(self):
-        members = self.pd.members
-        member_id = 'new_membertwice'
-        members.createEntry({'id': member_id})
-        self.assertRaises(KeyError, members.createEntry, {'id': member_id})
 
     def testMemberSearch(self):
         members = self.pd.members
@@ -202,15 +194,11 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(search_result, [group_id])
         self.assert_(group_id in groups.listEntryIds())
 
+        self.assertRaises(KeyError, groups.createEntry, {'group': group_id})
+
         # XXX: not implemented yet
         #groups.deleteEntry(group_id)
         #self.assert_(not groups.hasEntry(group_id))
-
-    def testGroupCreateTwice(self):
-        groups = self.pd.groups
-        group_id = 'new_grouptwice'
-        groups.createEntry({'group': group_id})
-        self.assertRaises(KeyError, groups.createEntry, {'group': group_id})
 
     def testMemberQueryingOnGroups(self):
         groups = self.pd.groups
@@ -326,15 +314,11 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(search_result, [role_id])
         self.assert_(role_id in roles.listEntryIds())
 
+        self.assertRaises(KeyError, roles.createEntry, {'role': role_id})
+
         # XXX: not implemented yet
         #roles.deleteEntry(role_id)
         #self.assert_(not roles.hasEntry(role_id))
-
-    def testRoleCreateTwice(self):
-        roles = self.pd.roles
-        role_id = 'new_roletwice'
-        roles.createEntry({'role': role_id})
-        self.assertRaises(KeyError, roles.createEntry, {'role': role_id})
 
     def testRoleSearch(self):
         roles = self.pd.roles
