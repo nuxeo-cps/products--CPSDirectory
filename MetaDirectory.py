@@ -299,6 +299,11 @@ class MetaDirectory(BaseDirectory):
 
         See API in the base class.
         """
+        # This search method has to take into account backing directories
+        # that have a missing_entry property. There are several problems:
+        # 1. generating missing entries in the result set when intersecting
+        # 2. search on an attribute that's in a missing entry: FIXME not done.
+
         #print 'dir=%s rf=%s query=%s' % (self.id, return_fields, kw)
 
         schema = self._getSchemas()[0]
@@ -359,19 +364,39 @@ class MetaDirectory(BaseDirectory):
 
             b_queries.append((info, b_return_fields, b_query))
 
-        # Optimizations: find in what order to do the searches
+        # Find in what order to do the searches.
+        # Search backing dirs with a missing_entry last so that we can intersect
+        # with a fixed base.
         qs = []
-        for info, b_return_fields, b_query in b_queries:
-            if not b_return_fields and not b_query:
+        for qt in b_queries:
+            info, b_return_fields, b_query = qt
+            t = (int(info['missing_entry'] is not None), qt)
+            qs.append(t)
+        qs.sort()
+        b_queries = [t[1] for t in qs]
+
+        # Remove useless queries.
+        qs = []
+        has_b_with_all_entries = 0
+        for qt in b_queries:
+            info, b_return_fields, b_query = qt
+            if not b_return_fields and not b_query and has_b_with_all_entries:
                 # This query gets us no info and returns everything
+                # We must not skip it though if there would be no normal backing
+                # directories left to get a base list of entries.
                 #print ' ignoring query on %s' % info['dir_id']
                 continue
-            qs.append((info, b_return_fields, b_query))
+            if info['missing_entry'] is None:
+                has_b_with_all_entries = 1
+            qs.append(qt)
+        b_queries = qs
 
         # Do searches
         acc_res = None
-        for info, b_return_fields, b_query in qs:
+        for info, b_return_fields, b_query in b_queries:
             b_dir = info['dir']
+            missing_entry = info['missing_entry']
+            has_missing_entries = missing_entry is not None
 
             # Do query
             #print ' subquery dir=%s rf=%s query=%s' % ( # XXX
@@ -397,16 +422,21 @@ class MetaDirectory(BaseDirectory):
             if acc_res is None:
                 acc_res = res
             else:
-                # Do intelligent intersection
-                if len(acc_res) > len(res):
-                    acc_res, res = res, acc_res
-                    # acc_res is now always smaller
+                if not has_missing_entries:
+                    # If we don't care about ordering, do intelligent intersection
+                    if len(acc_res) > len(res):
+                        # Make acc_res be always the smaller one
+                        acc_res, res = res, acc_res
                 resids_d = {}
                 if return_fields is None:
-                    # Intersect
-                    for id in res:
-                        resids_d[id] = None
-                    acc_res = [id for id in acc_res if resids_d.has_key(id)]
+                    if has_missing_entries:
+                        # Keep all the ids we already have
+                        pass
+                    else:
+                        # Intersect
+                        for id in res:
+                            resids_d[id] = None
+                        acc_res = [id for id in acc_res if resids_d.has_key(id)]
                 else:
                     # Intersect and merge values for matching
                     for id, d in res:
@@ -416,7 +446,11 @@ class MetaDirectory(BaseDirectory):
                     for id, old_d in old_res:
                         new_d = resids_d.get(id)
                         if new_d is None:
-                            continue
+                            if has_missing_entries:
+                                new_d = missing_entry
+                            else:
+                                # Not present in both sets.
+                                continue
                         old_d.update(new_d)
                         acc_res.append((id, old_d))
             #print ' now acc_res=%s' % `acc_res`

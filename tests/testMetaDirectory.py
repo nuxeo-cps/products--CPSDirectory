@@ -475,6 +475,31 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
         self.assertEquals(fooentry2, fooentry3)
         self.assertEquals(barentry2, barentry3)
 
+    def test_searchEntries_missing(self):
+        dir = self.dirmeta
+        fooentry1 = {'idd': 'DDD', 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry1 = {'id': 'DDD', 'bar': 'thebar', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry1)
+        self.dirbar.createEntry(barentry1)
+        barentry2 = {'id': 'EEE', 'bar': 'thebar', 'mail': 'ba@ba'}
+        self.dirbar.createEntry(barentry2)
+
+        ids = dir.searchEntries(bar='thebar')
+        ids.sort()
+        self.assertEquals(ids, ['DDD', 'EEE'])
+
+        res = dir.searchEntries(bar='thebar', return_fields=['foo'])
+        res.sort()
+        self.assertEquals(res, [('DDD', {'foo': 'ouah'}),
+                                ('EEE', {'foo': 'defaultfoo'})])
+
+        res = dir.searchEntries(return_fields=['foo'])
+        res.sort()
+        self.assertEquals(res, [('DDD', {'foo': 'ouah'}),
+                                ('EEE', {'foo': 'defaultfoo'})])
+
+    # XXX must have test with a search on a field from a missing entry
+
     def XXXXXXXXXXXtest_searchEntries(self):
         # TODO FIXME: the code doesn't treat the case where we
         # do a search on an attribute that's in the missing entry.

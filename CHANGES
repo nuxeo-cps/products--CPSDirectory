@@ -7,6 +7,8 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - Made LDAPBackingDirectory work with non-ascii passwords (convert to UTF-8).
+- Fixed MetaDirectory incorrect search results case when missing entries
+  are expected in the result.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
