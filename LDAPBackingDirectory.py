@@ -530,7 +530,7 @@ class LDAPBackingDirectory(BaseDirectory):
             conn = self.connectLDAP()
             LOG('existsLDAP', TRACE, "search_s dn=%s" % (dn,))
             res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)', ['dn'])
-            LOG('existsLDAP', TRACE, " -> results=%s" % (ldap_entries,))
+            LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
         except ldap.NO_SUCH_OBJECT:
             return 0
         return len(res) != 0
