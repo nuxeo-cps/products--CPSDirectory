@@ -144,6 +144,8 @@ members_layout = {
                 ],
             [{'ncols': 1, 'widget_id': 'password'},
                 ],
+            [{'ncols': 1, 'widget_id': 'confirm'},
+                ],
             [{'ncols': 1, 'widget_id': 'roles'},
                 ],
             [{'ncols': 1, 'widget_id': 'groups'},
