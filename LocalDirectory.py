@@ -108,6 +108,9 @@ class LocalDirectory(BaseDirectory):
         """Get the content object, maybe editable."""
         tool = getToolByName(self, 'portal_membership', None)
         folder = tool.getHomeFolder()
+        if folder is None:
+            raise KeyError("Home folder could not be found. " \
+                "Maybe you are not a member of this portal?")
         try:
             return folder._getOb(self.directory_id)
         except AttributeError:
