@@ -4,7 +4,8 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
--
+- Added isEditEntryAllowed to check for entry edit permission.
+- Added Entry Local Roles, a way for ACLs to get additional computed roles.
 
 Bug fixes:
 ~~~~~~~~~~
@@ -13,4 +14,5 @@ Bug fixes:
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Renamed writeEntry to editEntry.
+- isDeleteEntryAllowed now takes an id argument.
