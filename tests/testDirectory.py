@@ -8,20 +8,14 @@ if __name__ == '__main__':
 
 import unittest
 from Testing import ZopeTestCase
-import CPSDirectoryTestCase
+from CPSDirectoryTestCase import CPSDirectoryTestCase
 
 
-class TestDirectoryWithDefaultUserFolder(
-        CPSDirectoryTestCase.CPSDirectoryTestCase):
+class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
     def afterSetUp(self):
         self.login('root')
         self.ws = self.portal.workspaces
-
-        # Add directory
-        from Products.CPSDirectory.Extensions.install import install
-        install(self.portal)
-
         self.pd = self.portal.portal_directories
 
     def beforeTearDown(self):
