@@ -39,6 +39,9 @@ actions['object'].append({'id':'new_entry',
   'name': 'cpsdir_label_create_entry',
   'category': 'object'})" />
     </tal:block>
+    <script type="text/javascript"
+      tal:attributes="src string:${base_url}functions.js"></script>
+
     <link rel="Stylesheet" type="text/css" href=""
       tal:attributes="href string:${base_url}document.css">
   </metal:block>
