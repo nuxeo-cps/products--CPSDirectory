@@ -77,7 +77,7 @@ members_schema = {
         },
     'homeless': {
         'type': 'CPS Int Field',
-        'data': {'default_expr': 'python:0',
+        'data': {'default_expr': 'python: 0',
                  'acl_write_roles': 'Manager',
                  },
         }
