@@ -169,13 +169,16 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
          'label': 'Entry type'},
         {'id': 'skin_name', 'type': 'string', 'mode': 'w',
          'label': 'Skin name'},
+        {'id': 'popup_mode', 'type': 'selection', 'mode': 'w',
+         'select_variable': 'all_popup_modes',
+         'label': 'browse or search'},
         )
     all_entry_types = ['id', 'dn']
-
+    all_popup_modes = ['browse', 'search']
     directory = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
-
+    popup_mode = all_popup_modes[0]
 
     def validate(self, datastructure, **kw):
         """Validate datastructure and update datamodel."""
