@@ -5,6 +5,7 @@ New features:
 ~~~~~~~~~~~~~
 - Delete member and its member area when deleting from members directory.
   Requires CPSMembershipTool >= 1.46.
+- use Identifiant widget for member, group and role Id
 Bug fixes:
 ~~~~~~~~~~
 - Delete Entry action displayed for non authorized user
@@ -14,3 +15,4 @@ New internal features:
   can switch from one to another
 - Tighter ACL checks for creation and rendering.
 - Entry local roles are passed to the datamodel so can be used by field ACLs.
+- duplicate layout for search on members/groups/roles
