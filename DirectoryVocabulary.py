@@ -90,7 +90,9 @@ class DirectoryVocabulary(SimpleItemWithProperties):
         # retrieve all the fields (may be a costly LDAP request
         # for instance for members of a role), but only the
         # title.
-        return dir.getEntry(key)[dir.title_field]
+        title_field = dir.title_field
+        entry = dir._getEntryKW(key, field_ids=[title_field])
+        return entry[title_field]
 
     security.declareProtected(View, 'get')
     def get(self, key, default=None):
