@@ -76,6 +76,38 @@ class GroupsDirectory(BaseDirectory):
         else:
             return ()
 
+    security.declarePublic('searchEntries')
+    def searchEntries(self, **kw):
+        """Search for entries in the directory.
+        """
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        aclu = portal.acl_users
+        kwgroup = kw.get(self.id_field)
+        kwmembers = kw.get(self.members_field)
+        groups = []
+        for group in self.listEntryIds():
+            if kwgroup:
+                # XXX treat list
+                if group != kwgroup:
+                    continue
+            if kwmembers:
+                if not hasattr(aq_base(aclu), 'getGroupById'):
+                    # No group support and want a member
+                    continue
+                # XXX optimize for LDAP
+                ok = 0
+                groupob = aclu.getGroupById(group, _marker)
+                if groupob is _marker:
+                    raise KeyError("No group '%s'" % group)
+                for userid in groupob.getUsers():
+                    if userid in kwmembers:
+                        ok = 1
+                        break
+                if not ok:
+                    continue
+            groups.append(group)
+        return groups
+
 InitializeClass(GroupsDirectory)
 
 

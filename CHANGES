@@ -4,7 +4,7 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
--
+- Implemented search for groups and roles.
 
 Bug fixes:
 ~~~~~~~~~~

@@ -74,6 +74,45 @@ class RolesDirectory(BaseDirectory):
                  if r not in ('Anonymous', 'Authenticated', 'Owner')]
         return roles
 
+    security.declarePublic('searchEntries')
+    def searchEntries(self, **kw):
+        """Search for entries in the directory.
+        """
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        users = portal.acl_users.getUsers()
+        kwrole = kw.get(self.id_field)
+        kwmembers = kw.get(self.members_field)
+        roles = []
+        for role in self.listEntryIds():
+            if kwrole:
+                # XXX treat list
+                if role != kwrole:
+                    continue
+            if kwmembers:
+                # XXX optimize for LDAP
+                ok = 0
+                for user in users:
+                    # XXX we want members, not users...
+                    if role in user.getRoles():
+                        userid = user.getUserName()
+                        if userid in kwmembers:
+                            ok = 1
+                            break
+                if not ok:
+                    continue
+            roles.append(role)
+        return roles
+
+    security.declarePublic('hasEntry')
+    def hasEntry(self, id):
+        """Does the directory have a given entry?"""
+        # XXX check security?
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        aclu = portal.acl_users
+        return id in aclu.getUserNames()
+
+
+
 InitializeClass(RolesDirectory)
 
 
