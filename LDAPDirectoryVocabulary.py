@@ -25,7 +25,7 @@ from zLOG import LOG, DEBUG
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 
-from Products.CMFCore.CMFCorePermissions import View
+from Products.CMFCore.CMFCorePermissions import View, ManagePortal
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
@@ -133,5 +133,11 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
             return 1
         dir = self._getDirectory()
         return dir.hasEntryByDN(key)
+
+    security.declareProtected(ManagePortal, 'isUserModified')
+    def isUserModified(self):
+        """Tell if the vocabulary has been modified by a user.
+        """
+        return 0
 
 InitializeClass(LDAPDirectoryVocabulary)
