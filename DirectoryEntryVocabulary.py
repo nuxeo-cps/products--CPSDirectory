@@ -21,7 +21,7 @@
 This vocabulary is built by looking for an entry, defined by entry_id, within a
 directory.  The vocabulary is an element of the entry defined by voc_entry_id.
 
-In here, the key and the items is the same for convenience.
+In here, the key and the items are the same for convenience.
 
 You may use DirectoryEntryVocabulary with whatever sort of directory (LDAP or
 whatever)
@@ -41,7 +41,7 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
     within a directory.  The vocabulary is an element of the entry defined by
     voc_entry_id.
 
-    In here, the key and the items is the same for convenience.
+    In here, the key and the items are the same for convenience.
 
     You may use DirectoryEntryVocabulary with whatever sort of directory (LDAP
     or whatever)
