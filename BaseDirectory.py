@@ -118,8 +118,9 @@ class BaseDirectory(SimpleItemWithProperties):
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
         layoutob = self._getLayout(self.layout)
+        layoutob.prepareLayoutWidgets(ds)
         mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
-        layoutdata = layoutob.getLayoutData(ds, mode_chooser)
+        layoutdata = layoutob.computeLayout(ds, mode_chooser)
         rendered = self._renderLayoutStyle(layout_mode, layout=layoutdata,
                                            datastructure=ds, **kw)
         return rendered, ds
@@ -147,10 +148,15 @@ class BaseDirectory(SimpleItemWithProperties):
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
         layoutob = self._getLayout(self.layout)
-        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
-        layoutdata = layoutob.getLayoutData(ds, mode_chooser)
-        if request is not None:
+        layoutob.prepareLayoutWidgets(ds)
+        if request is None:
+            validate = 0
+        else:
+            validate = 1
             ds.updateFromMapping(request.form)
+        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
+        layoutdata = layoutob.computeLayout(ds, mode_chooser)
+        if validate:
             ok = layoutob.validateLayout(layoutdata, ds)
             if ok:
                 dm._commit()
@@ -196,7 +202,7 @@ class BaseDirectory(SimpleItemWithProperties):
     def _getDataModel(self, id):
         """Get the datamodel for an entry."""
         adapters = self._getAdapters(id)
-        dm = DataModel(None, adapters)
+        dm = DataModel(None, adapters, context=self)
         dm._fetch()
         return dm
 

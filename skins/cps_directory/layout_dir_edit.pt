@@ -18,10 +18,7 @@
                        wid widget/getWidgetId;
                        err python: ds.getError(wid);
                        is_required widget/is_required|nothing;
-                       wrender python:widget.render('edit', ds);
-                       "
-        condition="python: not widget.hidden_edit and
-                           (not widget.hidden_empty or wrender.strip())">
+                       ">
       <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
         <div class="label" tal:condition="widget/label_edit"
           tal:attributes="class python:is_required and 'label required'
@@ -37,7 +34,7 @@
         tal:attributes="colspan python:cell['ncols']*2-1">
         <div tal:attributes="class python:err and 'error' or nothing">
           <div tal:attributes="class widget/css_class|nothing">
-            <tal:block replace="structure wrender" />
+            <tal:block replace="structure cell/widget_rendered" />
           </div>
           <div tal:condition="err">
             <em style="color:red" tal:content="err"
