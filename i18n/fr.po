@@ -47,3 +47,19 @@ msgstr "Aucun résultat."
 
 msgid "label_results"
 msgstr "Resultats"
+
+#Still untranslated:
+#msgid "cpsdir_label_upto_directories"
+#msgstr "Up to Directories"
+
+#msgid "cpsdir_label_search"
+#msgstr "Search"
+
+#msgid "cpsdir_label_create_entry"
+#msgstr "Create New Entry"
+
+#msgid "cpsdir_label_edit_entry"
+#msgstr "Edit Entry"
+
+#msgid "cpsdir_label_view_entry"
+#msgstr "View Entry"
