@@ -10,6 +10,7 @@ Bug fixes:
 - Made LDAPBackingDirectory work with non-ascii passwords (convert to UTF-8).
 - Fixed MetaDirectory incorrect search results case when missing entries
   are expected in the result.
+- If LDAPBackingDirectory looks up an entry it must check it's under the base.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - widget directory entry use default function.js for javascript
