@@ -254,18 +254,19 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if not value:
                 continue
+            if key in self.search_substring_fields:
+                fmt = '(%s=*%s*)'
+            else:
+                fmt = '(%s=%s)'
             if isinstance(value, StringType):
                 if value == '*':
                     f = filter_format('(%s=*)', (key,))
-                elif key in self.search_substring_fields:
-                    f = filter_format('(%s=*%s*)', (key, value))
-                else:
-                    f = filter_format('(%s=%s)', (key, value))
+                f = filter_format(fmt, (key, value))
             elif isinstance(value, ListType) or isinstance(value, TupleType):
                 fl = []
                 for v in value:
                     if v:
-                        fv = filter_format('(%s=*%s*)', (key, v))
+                        fv = filter_format(fmt, (key, v))
                         fl.append(fv)
                 f = ''.join(fl)
                 if len(fl) > 1:
