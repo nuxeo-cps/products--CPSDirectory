@@ -271,14 +271,6 @@ class IndirectDirectory(BaseDirectory):
         return directory_id+'/'+entry_id
 
     security.declarePrivate('_getDirectoryIdForId')
-    def _getEntryIdForId(self, id):
-        try:
-            res = id.split('/')[1]
-        except IndexError:
-            res = None
-        return res
-
-    security.declarePrivate('_getDirectoryIdForId')
     def _getDirectoryIdForId(self, id):
         try:
             res = id.split('/')[0]
@@ -286,7 +278,7 @@ class IndirectDirectory(BaseDirectory):
             res = None
         return res
 
-    security.declarePrivate('_getDirectoryIdForId')
+    security.declarePrivate('_getEntryIdForId')
     def _getEntryIdForId(self, id):
         try:
             res = id.split('/')[1]
