@@ -204,6 +204,8 @@ class StackingDirectory(BaseDirectory):
             b_id_field = b_dir.id_field
             if id_field == b_id_field:
                 b_return_fields = return_fields
+            elif return_fields == ['*']:
+                b_return_fields = return_fields
             else:
                 b_return_fields = list(return_fields or ())
                 if id_field not in b_return_fields:

@@ -9,7 +9,7 @@ rendering in edit mode without using the popup window selection
 system (using CPSMultiSelectWidget rendering instead)
 Bug fixes:
 ~~~~~~~~~~
--
+- Fix: searchEntries on a StackingDirectory with return_fields=['*']
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

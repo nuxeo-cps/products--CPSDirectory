@@ -272,6 +272,13 @@ class TestStackingDirectory(CPSDirectoryTestCase):
                                 ('KKK', {'uid': 'KKK', 'glop': 'g1'}),
                                 ('LLL', {'uid': 'LLL', 'glop': 'g2'})])
 
+        # With all return fields
+        res = dir.searchEntries(glop='g2', return_fields=['*'])
+        res.sort()
+        self.assertEquals(res, [('HHH', entry2),
+                                ('JJJ', entry4),
+                                ('LLL', entry6)])
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestStackingDirectory))
