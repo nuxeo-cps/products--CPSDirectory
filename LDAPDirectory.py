@@ -267,11 +267,11 @@ class LDAPDirectory(BaseDirectory):
                 continue
             if field_id in ignore_attrs:
                 continue
+            if not value:
+                continue # Skip empty values
             # Convert field data to strings for LDAP
             if _isinstance(value, Image) or _isinstance(value, File):
                 value = str(value.data)
-            elif value is None:
-                value = ''
             # LDAP wants everything as lists
             if type(value) not in (ListType, TupleType):
                 value = [value]
