@@ -148,14 +148,31 @@ class StackingDirectory(BaseDirectory):
                 b_dir = getattr(dtool, dir_id)
             except AttributeError:
                 raise ValueError("No backing directory '%s'" % dir_id)
-            # Find and convert ids
-            b_ids = b_dir.listEntryIds()
-            uids = self._uniqueIdsFromBacking(b_ids, ids_d, dir_id, style, fix,
-                                              strip)
+            id_field = self.id_field
+            if id_field == b_dir.id_field:
+                # Use primary id
+                # Find and convert ids
+                b_ids = b_dir.listEntryIds()
+            else:
+                # Use secondary id
+                # XXX disable acls
+                results = b_dir.searchEntries(return_fields=[id_field])
+                b_ids = [b_entry[id_field] for primary_id, b_entry in results]
+            uids = self._uniqueIdsFromBacking(b_ids, ids_d, style, fix, strip)
             ids.extend(uids)
         return ids
 
-    #def listEntryIdsAndTitles(self): XXX
+    security.declarePrivate('listEntryIdsAndTitles')
+    def listEntryIdsAndTitles(self):
+        """List all the entry ids and titles.
+
+        Returns a list of tuples (id, title).
+        """
+        title_field = self.title_field
+        if title_field == self.id_field:
+            return [(id, id) for id in self.listEntryIds()]
+        results = self.searchEntries(return_fields=[title_field])
+        return [(id, entry[title_field]) for id, entry in results]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
@@ -172,8 +189,14 @@ class StackingDirectory(BaseDirectory):
             if b_id is None:
                 continue
             # Test presence
-            if b_dir.hasEntry(b_id):
-                return 1
+            if self.id_field == b_dir.id_field:
+                # Use primary id
+                if b_dir.hasEntry(b_id):
+                    return 1
+            else:
+                # Use secondary id
+                if b_dir.searchEntries(**{self.id_field: [b_id]}):
+                    return 1
         return 0
 
     security.declarePublic('createEntry')
@@ -186,7 +209,7 @@ class StackingDirectory(BaseDirectory):
             raise KeyError("Entry '%s' already exists" % id)
         b_dir, b_id = self._getBackingForId(id)
         b_entry = entry.copy()
-        b_entry[b_dir.id_field] = b_id
+        b_entry[self.id_field] = b_id
         b_dir.createEntry(b_entry)
 
     security.declarePublic('deleteEntry')
@@ -196,7 +219,21 @@ class StackingDirectory(BaseDirectory):
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         b_dir, b_id = self._getBackingForId(id)
-        b_dir.deleteEntry(b_id)
+        if self.id_field == b_dir.id_field:
+            # Use primary id
+            b_dir.deleteEntry(b_id)
+        else:
+            # Use secondary id
+            # XXX don't check acls on search
+            b_ids = b_dir.searchEntries(**{self.id_field: [b_id]})
+            if not b_ids:
+                raise KeyError(id)
+            if len(b_ids) > 1:
+                LOG('StackingDirectory.deleteEntry', WARNING,
+                    "Got several entries when asking %s about %s=%s" %
+                    (b_dir.getId(), self.id_field, b_id))
+            primary_id = b_ids[0]
+            b_dir.deleteEntry(primary_id)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -207,6 +244,7 @@ class StackingDirectory(BaseDirectory):
         dtool = getToolByName(self, 'portal_directories')
         ids_d = {}
         res = []
+        id_field = self.id_field
         for dir_id, style, fix, strip in self.getBackingDirectories():
             # Get backing dir
             try:
@@ -215,11 +253,10 @@ class StackingDirectory(BaseDirectory):
                 raise ValueError("No backing directory '%s'" % dir_id)
             # Do search
             b_kw = kw.copy()
-            b_id_field = b_dir.id_field
             postfilter_id = None
-            if b_kw.has_key(b_id_field) and style in ('prefix', 'suffix'):
+            if b_kw.has_key(id_field) and style in ('prefix', 'suffix'):
                 # Query on id and prefix/suffix.
-                value = b_kw[b_id_field]
+                value = b_kw[id_field]
                 if isinstance(value, ListType) or isinstance(value, TupleType):
                     oldvalue = value
                     value = []
@@ -243,9 +280,9 @@ class StackingDirectory(BaseDirectory):
                     if not value:
                         # Won't match in this directory
                         continue
-                    b_kw[b_id_field] = value
+                    b_kw[id_field] = value
                 elif isinstance(value, StringType):
-                    if b_id_field not in b_dir.search_substring_fields:
+                    if id_field not in b_dir.search_substring_fields:
                         # Exact match
                         if style == 'prefix':
                             if not value.startswith(fix):
@@ -257,20 +294,32 @@ class StackingDirectory(BaseDirectory):
                                 continue
                             if strip:
                                 value = value[:-len(fix)]
-                        b_kw[b_id_field] = value
+                        b_kw[id_field] = value
                     else:
                         # Substring match
                         # XXX we cannot do it all from here, so postfilter
                         raise NotImplementedError
                         postfilter_id = value
 
-            b_res = b_dir.searchEntries(return_fields=return_fields, **b_kw)
+            b_id_field = b_dir.id_field
+            if id_field == b_id_field:
+                b_return_fields = return_fields
+            else:
+                b_return_fields = list(return_fields or ())
+                if id_field not in b_return_fields:
+                    b_return_fields.append(id_field)
+
+            b_res = b_dir.searchEntries(return_fields=b_return_fields, **b_kw)
+
             if return_fields is None:
-                uids = self._uniqueIdsFromBacking(b_res, ids_d, dir_id, style,
-                                                  fix, strip)
+                if b_return_fields is None:
+                    ids = b_res
+                else:
+                    ids = [b_entry[id_field] for primary_id, b_entry in b_res]
+                uids = self._uniqueIdsFromBacking(ids, ids_d, style, fix, strip)
                 res.extend(uids)
             else:
-                ures = self._uniqueEntriesFromBacking(b_res, ids_d, dir_id,
+                ures = self._uniqueEntriesFromBacking(b_res, ids_d, b_id_field,
                                                       style, fix, strip)
                 res.extend(ures)
         return res
@@ -318,12 +367,27 @@ class StackingDirectory(BaseDirectory):
             if b_id is None:
                 continue
             # Get entry (no acls checked)
-            try:
-                entry = b_dir._getEntry(b_id) # XXX kw?
-            except KeyError:
-                continue
+            if self.id_field == b_dir.id_field:
+                # Use primary id
+                try:
+                    entry = b_dir._getEntry(b_id) # XXX kw?
+                except KeyError:
+                    continue
+            else:
+                # Use secondary id
+                # XXX don't check acls on search
+                entries = b_dir.searchEntries(return_fields=['*'],
+                                              **{self.id_field: [b_id]})
+                if not entries:
+                    continue
+                if len(entries) > 1:
+                    LOG('StackingDirectory._getEntryFromBacking', WARNING,
+                        "Got several entries when asking %s about %s=%s" %
+                        (dir_id, self.id_field, b_id))
+                primary_id, entry = entries[0]
             # Back-convert id
-            entry[b_dir.id_field] = id
+            # XXX we cannot do much if there are other dependent fields
+            entry[self.id_field] = id
             return entry
         raise KeyError(id)
 
@@ -346,7 +410,7 @@ class StackingDirectory(BaseDirectory):
             return b_dir, b_id
         raise KeyError(id)
 
-    def _uniqueIdsFromBacking(self, b_ids, ids_d, dir_id, style, fix, strip):
+    def _uniqueIdsFromBacking(self, b_ids, ids_d, style, fix, strip):
         """Return the back-converted ids from a backing directory.
 
         Ensures they are unique in dict ids_d.
@@ -387,15 +451,16 @@ class StackingDirectory(BaseDirectory):
 
         return ids
 
-    def _uniqueEntriesFromBacking(self, b_res, ids_d, dir_id, style, fix,
+    def _uniqueEntriesFromBacking(self, b_res, ids_d, b_id_field, style, fix,
                                   strip):
         """Return the back-converted entries from a backing directory.
 
         Ensures their ids are unique in dict ids_d.
         """
         res = []
+        id_field = self.id_field
 
-        def maybe_add(id, entry, ids_d=ids_d, res=res, id_field=self.id_field):
+        def maybe_add(id, entry, ids_d=ids_d, res=res, id_field=id_field):
             if not ids_d.has_key(id):
                 ids_d[id] = None
                 if entry.has_key(id_field):
@@ -404,31 +469,63 @@ class StackingDirectory(BaseDirectory):
                 res.append((id, entry))
             # XXX else warn
 
-        if style == 'none':
-            for b_id, b_entry in b_res:
-                maybe_add(b_id, b_entry)
-        elif style == 'prefix':
-            if strip:
+        if id_field == b_id_field:
+            if style == 'none':
                 for b_id, b_entry in b_res:
-                    maybe_add(fix + b_id, b_entry)
-            else:
-                # Only keep ids that have correct prefix
-                for b_id, b_entry in b_res:
-                    if not b_id.startswith(fix):
-                        continue
                     maybe_add(b_id, b_entry)
-        elif style == 'suffix':
-            if strip:
-                for b_id, b_entry in b_res:
-                    maybe_add(b_id + fix, b_entry)
+            elif style == 'prefix':
+                if strip:
+                    for b_id, b_entry in b_res:
+                        maybe_add(fix + b_id, b_entry)
+                else:
+                    # Only keep ids that have correct prefix
+                    for b_id, b_entry in b_res:
+                        if not b_id.startswith(fix):
+                            continue
+                        maybe_add(b_id, b_entry)
+            elif style == 'suffix':
+                if strip:
+                    for b_id, b_entry in b_res:
+                        maybe_add(b_id + fix, b_entry)
+                else:
+                    # Only keep ids that have correct suffix
+                    for b_id, b_entry in b_res:
+                        if not b_id.endswith(fix):
+                            continue
+                        maybe_add(b_id, b_entry)
             else:
-                # Only keep ids that have correct suffix
-                for b_id, b_entry in b_res:
-                    if not b_id.endswith(fix):
-                        continue
-                    maybe_add(b_id, b_entry)
+                raise ValueError(style)
         else:
-            raise ValueError(style)
+            if style == 'none':
+                for b_id, b_entry in b_res:
+                    id = b_entry[id_field]
+                    maybe_add(id, b_entry)
+            elif style == 'prefix':
+                if strip:
+                    for b_id, b_entry in b_res:
+                        id = fix + b_entry[id_field]
+                        maybe_add(id, b_entry)
+                else:
+                    # Only keep ids that have correct prefix
+                    for b_id, b_entry in b_res:
+                        id = b_entry[id_field]
+                        if not id.startswith(fix):
+                            continue
+                        maybe_add(id, b_entry)
+            elif style == 'suffix':
+                if strip:
+                    for b_id, b_entry in b_res:
+                        id = b_entry[id_field] + fix
+                        maybe_add(id, b_entry)
+                else:
+                    # Only keep ids that have correct suffix
+                    for b_id, b_entry in b_res:
+                        id = b_entry[id_field]
+                        if not id.endswith(fix):
+                            continue
+                        maybe_add(id, b_entry)
+            else:
+                raise ValueError(style)
 
         return res
 
@@ -477,7 +574,11 @@ class StackingStorageAdapter(BaseStorageAdapter):
         id = self._id
 
         b_dir, b_id = dir._getBackingForId(id)
-        data[b_dir.id_field] = b_id
+        data[dir.id_field] = b_id
+        # XXX Note: if we attempt to change the backing id here, we get
+        # a KeyError. Unless an entry with the new backing id already exists,
+        # in which case, it would be overwritten...
+        # An explicit test would be better.
         b_dir.editEntry(data)
 
 InitializeClass(StackingStorageAdapter)
