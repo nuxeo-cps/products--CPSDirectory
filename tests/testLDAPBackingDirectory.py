@@ -1,6 +1,7 @@
+#!/usr/bin/python
+# -*- encoding: iso-8859-1 -*-
 # uses fakeldap for tests
 import os, sys
-
 
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
@@ -11,8 +12,6 @@ from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
 from Products.CPSDirectory import LDAPBackingDirectory
 import Products.CPSDirectory.tests.fakeldap.fakeldap as ldap
-
-
 
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
