@@ -47,9 +47,8 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
 
     security.declareProtected(View, 'items')
     def items(self):
-        dir = self._getDirectory()
         # this is the only change
-        res = dir.listAllPossibleEntriesIdsAndTitles()
+        res = self.listAllPossibleEntriesIdsAndTitles()
         if self.add_empty_key:
             v = ('', self.empty_key_value)
             res = list(res)
