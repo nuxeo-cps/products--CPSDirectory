@@ -74,9 +74,9 @@ class LDAPDirectory(BaseDirectory):
          'label': 'LDAP use ssl'},
         {'id': 'ldap_base', 'type': 'string', 'mode': 'w',
          'label': 'LDAP base'},
-        {'id': 'ldap_scope_str', 'type': 'selection', 'mode': 'w',
+        {'id': 'ldap_scope', 'type': 'selection', 'mode': 'w',
          'label': 'LDAP scope', 'select_variable': 'all_ldap_scopes'},
-        {'id': 'ldap_search_classes_str', 'type': 'string', 'mode': 'w',
+        {'id': 'ldap_search_classes', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes (search)'},
         {'id': 'ldap_bind_dn', 'type': 'string', 'mode': 'w',
          'label': 'LDAP bind dn'},
@@ -84,7 +84,7 @@ class LDAPDirectory(BaseDirectory):
          'label': 'LDAP bind password'},
         {'id': 'ldap_rdn_attr', 'type': 'string', 'mode': 'w',
          'label': 'LDAP rdn attribute (create)'},
-        {'id': 'ldap_object_classes_str', 'type': 'string', 'mode': 'w',
+        {'id': 'ldap_object_classes', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes (create)'},
         )
 
@@ -95,16 +95,16 @@ class LDAPDirectory(BaseDirectory):
     ldap_port = 389
     ldap_use_ssl = 0
     ldap_base = ''
-    ldap_scope_str = 'ONELEVEL'
-    ldap_search_classes_str = 'person'
+    ldap_scope = 'ONELEVEL'
+    ldap_search_classes = 'person'
     ldap_bind_dn = ''
     ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
-    ldap_object_classes_str = 'top, person'
+    ldap_object_classes = 'top, person'
 
-    ldap_scope = ldap.SCOPE_SUBTREE
-    ldap_search_classes = ['person']
-    ldap_object_classes = ['top', 'person']
+    ldap_scope_i = ldap.SCOPE_SUBTREE
+    ldap_search_classes_l = ['person']
+    ldap_object_classes_l = ['top', 'person']
 
     all_ldap_scopes = ('BASE', 'ONELEVEL', 'SUBTREE')
 
@@ -121,22 +121,22 @@ class LDAPDirectory(BaseDirectory):
                 'ONELEVEL': ldap.SCOPE_ONELEVEL,
                 'SUBTREE': ldap.SCOPE_SUBTREE,
                 }
-        self.ldap_scope = conv.get(self.ldap_scope_str, ldap.SCOPE_BASE)
+        self.ldap_scope_i = conv.get(self.ldap_scope, ldap.SCOPE_BASE)
         # Split classes
-        classes = self.ldap_search_classes_str
+        classes = self.ldap_search_classes
         classes = [x.strip() for x in classes.split(',')]
-        self.ldap_search_classes = filter(None, classes)
-        self.ldap_search_classes_str = ', '.join(self.ldap_search_classes)
-        classes = self.ldap_object_classes_str
-        self.ldap_object_classes = [x.strip() for x in classes.split(',')]
-        self.ldap_object_classes_str = ', '.join(self.ldap_object_classes)
+        self.ldap_search_classes_l = filter(None, classes)
+        self.ldap_search_classes = ', '.join(self.ldap_search_classes_l)
+        classes = self.ldap_object_classes
+        self.ldap_object_classes_l = [x.strip() for x in classes.split(',')]
+        self.ldap_object_classes = ', '.join(self.ldap_object_classes_l)
         # Update delegate
         login_attr = '' # Not used
         rdn_attr = '' # Not used
         binduid_usage = 1 # 0=never, 1=always (on connect)
         read_only = 0
         self._delegate.edit(login_attr, self.ldap_base, rdn_attr,
-                            self.ldap_object_classes,
+                            self.ldap_object_classes_l,
                             self.ldap_bind_dn, self.ldap_bind_password,
                             binduid_usage, read_only)
         self._delegate.deleteServers([0])
@@ -241,7 +241,7 @@ class LDAPDirectory(BaseDirectory):
         filter = ('(&%s(objectClass=*))' %
                   filter_format('(%s=%s)', (id_attr, id)))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope,
+                                    scope=self.ldap_scope_i,
                                     filter=filter,
                                     attrs=[id_attr])
         if res['exception']:
@@ -269,7 +269,7 @@ class LDAPDirectory(BaseDirectory):
         rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])
         base = self.ldap_base
         attrs = self._makeAttrsFromData(entry)
-        attrs['objectClass'] = self.ldap_object_classes
+        attrs['objectClass'] = self.ldap_object_classes_l
         msg = self._delegate.insert(base=base, rdn=rdn, attrs=attrs)
         if msg:
             raise ValueError("LDAP error: %s" % msg)
@@ -340,11 +340,11 @@ class LDAPDirectory(BaseDirectory):
     def _getLDAPEntry(self, id, field_ids=['dn']):
         """Get LDAP entry for a user."""
         # XXX treat case where id_field == 'dn' (use base=dn)
-        # XXX use self.ldap_search_classes here too
+        # XXX use self.ldap_search_classes_l here too
         filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
                                                         (self.id_field, id))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope,
+                                    scope=self.ldap_scope_i,
                                     filter=filter,
                                     attrs=field_ids)
         if res['exception']:
@@ -369,7 +369,7 @@ class LDAPDirectory(BaseDirectory):
                 attrs.append(id_attr)
         LOG('_searchEntries', DEBUG, 'filter=%s attrs=%s' % (filter, attrs))
         res = self._delegate.search(base=self.ldap_base,
-                                    scope=self.ldap_scope,
+                                    scope=self.ldap_scope_i,
                                     filter=filter,
                                     attrs=attrs)
         if res['exception']:
@@ -399,7 +399,7 @@ class LDAPDirectory(BaseDirectory):
 
     security.declarePrivate('objectClassFilter')
     def objectClassFilter(self):
-        classes = self.ldap_search_classes
+        classes = self.ldap_search_classes_l
         if classes:
             res = ''.join(['(objectClass=%s)' % each
                            for each in classes])

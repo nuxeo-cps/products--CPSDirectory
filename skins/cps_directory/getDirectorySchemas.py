@@ -20,7 +20,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
-                'acl_write_roles_str': 'Manager; Owner',
+                'acl_write_roles': 'Manager; Owner',
             },
         },
     'roles': {
@@ -28,7 +28,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
-                'acl_write_roles_str': 'Manager',
+                'acl_write_roles': 'Manager',
             },
         },
     'groups': {
@@ -36,7 +36,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
-                'acl_write_roles_str': 'Manager',
+                'acl_write_roles': 'Manager',
             },
         },
     'givenName': {
@@ -44,7 +44,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 1,
-                'acl_write_roles_str': 'Manager; Owner',
+                'acl_write_roles': 'Manager; Owner',
             },
         },
     'sn': {
@@ -52,7 +52,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 1,
-                'acl_write_roles_str': 'Manager; Owner',
+                'acl_write_roles': 'Manager; Owner',
             },
         },
     'fullname': {
@@ -60,7 +60,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 1,
-                'acl_write_roles_str': 'Nobody',
+                'acl_write_roles': 'Nobody',
                 'read_ignore_storage': 1,
                 'read_process_expression_str': 'python: givenName+" "+sn',
                 'read_process_dependent_fields': ['givenName', 'sn'],
@@ -72,7 +72,7 @@ members_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 1,
-                'acl_write_roles_str': 'Manager; Owner',
+                'acl_write_roles': 'Manager; Owner',
             },
         },
     }
@@ -138,7 +138,7 @@ roles_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
-                'acl_write_roles_str': 'Manager',
+                'acl_write_roles': 'Manager',
             },
         },
     }
@@ -159,7 +159,7 @@ groups_schema = {
         'data': {
                 'default': '',
                 'is_indexed': 0,
-                'acl_write_roles_str': 'Manager',
+                'acl_write_roles': 'Manager',
             },
         },
     }

@@ -1,6 +1,6 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
--
+- Re-enter all properties whose names used to be *_str.
 
 New features:
 ~~~~~~~~~~~~~
@@ -15,3 +15,4 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Renamed writeEntry to editEntry.
+- Renamed *_str properties to simpler names without _str suffix.

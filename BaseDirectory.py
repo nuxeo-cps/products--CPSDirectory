@@ -66,13 +66,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Layout"},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
          'label': "Layout for search"},
-        {'id': 'acl_access_roles_str', 'type': 'string', 'mode': 'w',
+        {'id': 'acl_access_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: directory access roles"},
-        {'id': 'acl_entry_create_roles_str', 'type': 'string', 'mode': 'w',
+        {'id': 'acl_entry_create_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry create roles"},
-        {'id': 'acl_entry_delete_roles_str', 'type': 'string', 'mode': 'w',
+        {'id': 'acl_entry_delete_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry delete roles"},
-        {'id': 'acl_entry_edit_roles_str', 'type': 'string', 'mode': 'w',
+        {'id': 'acl_entry_edit_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: entry edit roles"},
         {'id': 'id_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry id'},
@@ -84,24 +84,24 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     schema_search = ''
     layout = ''
     layout_search = ''
-    acl_access_roles_str = 'Manager; Member'
-    acl_entry_create_roles_str = 'Manager'
-    acl_entry_delete_roles_str = 'Manager'
-    acl_entry_edit_roles_str = 'Manager'
+    acl_access_roles = 'Manager; Member'
+    acl_entry_create_roles = 'Manager'
+    acl_entry_delete_roles = 'Manager'
+    acl_entry_edit_roles = 'Manager'
     id_field = ''
     title_field = ''
     entry_roles = []
 
-    acl_access_roles = ['Manager', 'Member']
-    acl_entry_create_roles = ['Manager']
-    acl_entry_delete_roles = ['Manager']
-    acl_entry_edit_roles = ['Manager']
+    acl_access_roles_l = ['Manager', 'Member']
+    acl_entry_create_roles_l = ['Manager']
+    acl_entry_delete_roles_l = ['Manager']
+    acl_entry_edit_roles_l = ['Manager']
 
     _properties_post_process_split = (
-        ('acl_access_roles_str', 'acl_access_roles', ',; '),
-        ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
-        ('acl_entry_delete_roles_str', 'acl_entry_delete_roles', ',; '),
-        ('acl_entry_edit_roles_str', 'acl_entry_edit_roles', ',; '),
+        ('acl_access_roles', 'acl_access_roles_l', ',; '),
+        ('acl_entry_create_roles', 'acl_entry_create_roles_l', ',; '),
+        ('acl_entry_delete_roles', 'acl_entry_delete_roles_l', ',; '),
+        ('acl_entry_edit_roles', 'acl_entry_edit_roles_l', ',; '),
         )
 
     def __init__(self, id, **kw):
@@ -115,7 +115,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def isVisible(self):
         """Is the directory visible by the current user?"""
         return getSecurityManager().getUser().has_role(
-            self.acl_access_roles)
+            self.acl_access_roles_l)
 
     security.declarePublic('isCreateEntryAllowed')
     def isCreateEntryAllowed(self):
@@ -124,7 +124,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_create_roles)
+            self.acl_entry_create_roles_l)
 
     security.declarePublic('isDeleteEntryAllowed')
     def isDeleteEntryAllowed(self):
@@ -133,7 +133,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns a boolean.
         """
         return getSecurityManager().getUser().has_role(
-            self.acl_entry_delete_roles)
+            self.acl_entry_delete_roles_l)
 
     security.declarePublic('isEditEntryAllowed')
     def isEditEntryAllowed(self, id=None, entry=None):
@@ -156,7 +156,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         add_roles = self._getAdditionalRoles(id)
         entry_local_roles = self.getEntryLocalRoles(entry)
         all_roles = list(roles) + list(add_roles) + list(entry_local_roles)
-        for r in self.acl_entry_edit_roles:
+        for r in self.acl_entry_edit_roles_l:
             if r in all_roles:
                 return 1
         return 0
