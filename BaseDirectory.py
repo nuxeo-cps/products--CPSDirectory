@@ -307,9 +307,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return self._getEntryFromDataModel(dm)
 
     security.declarePrivate('_getEntry')
-    def _getEntry(self, id):
+    def _getEntry(self, id, **kw):
         """Get entry filtered by processes but not acls."""
-        dm = self._getDataModel(id)
+        dm = self._getDataModel(id, **kw)
         dm._check_acls = 0 # XXX use API
         return self._getEntryFromDataModel(dm)
 
