@@ -56,6 +56,7 @@ escape_ldap_values_chars = '\\;,+"<> \t\n\r'
 escape_ldap_values = {}
 for c in escape_ldap_values_chars:
     escape_ldap_values[c] = '\\'+hex(ord(c))[2:].upper()
+del c
 
 def stringToLDAP(s):
     """Convert a UTF-8 string to its LDAP escaped encoding."""
@@ -212,7 +213,7 @@ class LDAPBackingDirectory(BaseDirectory):
             results = self.searchEntries()
             res = [(id, id) for id in results]
         else:
-            res = self.searchEntries(return_fields=[title_field])
+            results = self.searchEntries(return_fields=[title_field])
             res = [(id, entry[title_field]) for id, entry in results]
         return res
 
