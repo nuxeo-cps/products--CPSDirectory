@@ -596,8 +596,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         for schema_id in schema_ids:
             schema = stool._getOb(schema_id, None)
             if schema is None:
-                raise RuntimeError("Missing schema '%s' for directory  '%s'"
-                                   % (schema_id, self.getId()))
+                raise ValueError("Missing schema '%s' for directory  '%s'"
+                                 % (schema_id, self.getId()))
             schemas.append(schema)
         return schemas
 
