@@ -59,8 +59,6 @@ actions['object'].append({'id':'delete_entry',
   'name': 'cpsdir_label_delete_entry',
   'category': 'object'})" />
     </tal:block>
-    <script type="text/javascript"
-      tal:attributes="src string:${base_url}functions.js"></script>
 
     <link rel="Stylesheet" type="text/css" href=""
       tal:attributes="href string:${base_url}document.css">
