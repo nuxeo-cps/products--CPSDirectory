@@ -21,11 +21,21 @@
 Patches CMF's Membership and MemberData tools to make them access
 user folders using a standard API.
 
-APIs used are:
+New APIs provided are:
+- MemberDataTool.searchForMembers
+
+Member methods enhanced to use better user APIs:
+- MemberData.getProperty
+- MemberData.setMemberProperties
+
+APIs used on the user folder are:
 - userFolderAddUser
-- listUserProperties
+- listUserProperties (New)
 - searchUsers
 
+New APIs used on the user:
+- getProperty
+- setProperties
 """
 
 from zLOG import LOG, TRACE, DEBUG
@@ -142,9 +152,8 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
 # New APIs
 #
 
-# MembershipTool
-def hasMember(self, member_id):
-    raise NotImplementedError
+## MembershipTool
+#def hasMember(self, member_id):
 
 # MemberDataTool
 def searchForMembers(self, query={}, props=None, options={}, **kw):
@@ -276,10 +285,6 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
 
     return res
 
-#
-# Existing APIs made more generic
-#
-
 # MemberDataTool
 
 memberdatatool_methods = (
@@ -289,6 +294,10 @@ memberdatatool_methods = (
 # MemberData
 
 from ZPublisher.Converters import type_converters
+
+#
+# Existing APIs made more generic
+#
 
 def getProperty(self, id, default=_marker):
     # CPS: Try to get the property directly from the user object.
@@ -312,13 +321,8 @@ def setMemberProperties(self, mapping):
         user.setProperties(**mapping)
     return self._old_cps_setMemberProperties(mapping)
 
-def setSecurityProfile(self, password=None, roles=None, domains=None):
-    """Set the user's basic security profile."""
-    raise NotImplementedError
-
-def getPassword(self):
-    """Return the password of the user."""
-    raise NotImplementedError
+#def setSecurityProfile(self, password=None, roles=None, domains=None):
+#def getPassword(self):
 
 memberdata_methods = (
     getProperty,
