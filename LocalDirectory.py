@@ -39,8 +39,8 @@ class LocalDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'directory_id', 'type': 'string', 'mode': 'w',
-         'label': 'Id of the directory it refers to (for an Indirect Directory)'},
+        {'id': 'directories_ids', 'type': 'tokens', 'mode': 'w',
+         'label': 'Id of the directories it refers to (for an Indirect Directory)'},
         {'id': 'directory_type', 'type': 'selection',
          'select_variable': 'supported_directories', 'mode': 'w',
          'label': 'Type of local directory'},
@@ -100,7 +100,7 @@ class LocalDirectory(BaseDirectory):
         # No need to call BaseDirectory.__init__(self, id, **kw)
         # because attributes are already set above?
         self.id = id
-        self.directory_id = kw.get('directory_id', '')
+        self.directories_ids = kw.get('directories_ids', '')
         self.directory_type = kw.get('directory_type', 'CPS ZODB Directory')
 
     def getProperty(self, id, d=None):
@@ -110,7 +110,7 @@ class LocalDirectory(BaseDirectory):
         # created in the home folder, as it is not a Local Directory
         directory_type = getattr(self, 'directory_type', 'CPS ZODB Directory')
         if (((directory_type == 'CPS ZODB Directory') and
-             id not in ['directory_id', 'directory_type']) or
+             id not in ['directories_ids', 'directory_type']) or
             ((directory_type == 'CPS Indirect Directory') and
              id != 'directory_type')):
             tool = getToolByName(self, 'portal_membership', None)
@@ -154,7 +154,7 @@ class LocalDirectory(BaseDirectory):
         for prop in self.propertyIds():
             # AT: among props:
             # directory_type won't be useful
-            # directory_id will be useful only with indirect directories
+            # directories_ids will be useful only with indirect directories
             props[prop] = self.getProperty(prop)
         if directory_type == 'CPS Indirect Directory':
             new_dir = IndirectDirectory(self.id, **props)
