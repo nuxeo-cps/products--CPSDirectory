@@ -32,6 +32,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSCore.utils import _isinstance
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.BasicFields import CPSStringListField
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
@@ -367,11 +368,15 @@ class LDAPStorageAdapter(BaseStorageAdapter):
 
     def _getFieldData(self, field_id, field, entry=None):
         """Get data from one field."""
+        print "_getFieldData", field
         if not entry.has_key(field_id):
             return field.getDefault()
         if field_id == 'dn':
             return entry['dn']
-        return entry[field_id][0] # XXX multi-valued args!!!
+        field_data = entry[field_id]
+        if _isinstance(field, CPSStringListField):
+            return field_data
+        return '; '.join(field_data) # Join multivalued fields.
 
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
