@@ -19,10 +19,6 @@
 """SQLDirectory
 
 This is a directory backed by a table in an SQL database.
-
-XXX TODO:
-- creation
-- deletion
 """
 
 from zLOG import LOG, DEBUG, TRACE
@@ -196,19 +192,59 @@ class SQLDirectory(BaseDirectory):
         Raises KeyError if the entry doesn't exist.
         Raises AuthenticationFailed if authentication failed.
         """
-        raise NotImplementedError
+        entry = self._getEntryKW(id, **kw) # may raise KeyError
+        password_field = self.password_field
+        cur_password = entry.get(password_field)
+        if cur_password is None:
+            LOG('getEntryAuthenticated', TRACE, "No field '%s' for %s in %s" %
+                (password_field, id, self.getId()))
+            raise AuthenticationFailed
+        if not self._checkPassword(password, cur_password):
+            LOG('getEntryAuthenticated', TRACE,
+                "Authentication failed for %s in %s" % (id, self.getId()))
+            raise AuthenticationFailed
+        return entry
+
+    # XXX put this into base class, it's duplicated in ZODBDirectory
+    def _checkPassword(self, candidate, password):
+        """Check that a password is correct.
+
+        Returns a boolean.
+        """
+        return (candidate == password)
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
+        id = entry[self.id_field]
+        if self.hasEntry(id):
+            raise KeyError("Entry %s already exists" % `id`)
         self.checkCreateEntryAllowed(entry=entry)
-        raise NotImplementedError
+
+        sql_data = self._convertDataToQuotedSQL(entry)
+        sql = "INSERT INTO %(table)s (%(fields)s) VALUES (%(vals)s)" % {
+            'table': self.sql_table,
+            'fields': ', '.join(sql_data.keys()),
+            'vals': ', '.join(sql_data.values()),
+            }
+        self._execute(sql)
+
+        # XXX should be a way to use autoincrement ids and return it
+        # XXX depends on SQL dialect
+        return None
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        raise NotImplementedError
+        if not self.hasEntry(id):
+            raise KeyError("No entry %s" % `id`)
+        sql = "DELETE FROM %(table)s WHERE %(idf)s = %(id)s" % {
+            'table': self.sql_table,
+            'idf': self.getSQLField(self.id_field),
+            'id': self.getSQLValue(id),
+            }
+        self._execute(sql)
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
@@ -411,10 +447,10 @@ class SQLDirectory(BaseDirectory):
             # XXX conversions !
         return entry
 
-    def _convertDataToQuotedSQL(self, data):
+    def _convertDataToQuotedSQL(self, data, skip_id=False):
         """Convert a data mapping into a correct quoted SQL one.
 
-        Skips the id field.
+        Skips the id field if skip_id.
         Uses the schema to decide how conversion is done.
         """
         quoter = self._getSQLQuoter()
@@ -424,11 +460,11 @@ class SQLDirectory(BaseDirectory):
                 continue
             if not data.has_key(field_id):
                 continue
-            if field_id == self.id_field:
+            if skip_id and field_id == self.id_field:
                 continue
             value = data[field_id]
             sql_value = self.getSQLValue(value, quoter=quoter)
-            sql_data[field_id] = sql_value
+            sql_data[self.getSQLField(field_id)] = sql_value
         return sql_data
 
     def _updateDataInSQL(self, id, sql_data):
@@ -485,7 +521,7 @@ class SQLStorageAdapter(BaseStorageAdapter):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data)
         dir = self._dir
-        sql_data = dir._convertDataToQuotedSQL(data)
+        sql_data = dir._convertDataToQuotedSQL(data, skip_id=True)
         dir._updateDataInSQL(self._id, sql_data)
 
     def _getContentUrl(self, entry_id, field_id):
