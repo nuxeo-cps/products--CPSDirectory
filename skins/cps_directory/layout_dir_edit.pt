@@ -20,11 +20,25 @@
                        is_edit python: cell['widget_mode'] == 'edit';
                        is_required python: is_edit and widget.is_required;
                        global has_edits python: has_edits or is_edit;
+                       tooltip_id python:wid + '_help';
                        ">
       <td align="right"  valign="top">
         <div class="label" tal:condition="widget/label_edit"
           tal:attributes="class python:is_required and 'label required'
                                                     or 'label'">
+          <button type="button" class="tooltipControl"
+            tal:condition="widget/help"
+            tal:attributes="onclick python:'toggleFormTooltip(\'%s\')' % tooltip_id;"> ? </button>
+          <div
+            style="background: #ffffe1; border: 1px solid #000000; padding: 0.8em;font-size: 80%; position: absolute; visibility: hidden; zIndex: 1000;"
+            tal:condition="widget/help"
+            tal:attributes="id tooltip_id;
+              onclick python:'showFormTooltip(false, \'%s\')' % tooltip_id;">
+            <span i18n:translate="" tal:condition="widget/is_i18n"
+              tal:content="widget/help">i18_key-help_for_this_field</span>
+            <span tal:condition="not:widget/is_i18n"
+              tal:content="widget/help">This is the help for this field</span>
+          </div>
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label_edit">label</span
           ><span tal:condition="not:widget/is_i18n"
