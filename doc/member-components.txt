@@ -1,0 +1,47 @@
+ CPS Directory components related to members
+
+  $Id$
+
+  CPS Directory, when used for members, provides indirections to two
+  basic components:
+
+  - The User Folder for basic user information (user id, password, role,
+    groups). It will be accessed directly to get the relevant
+    information. As there is no standardized API for everything, we must
+    take into account:
+
+    - Basic User Folder
+
+    - User Folder With Groups
+
+    - LDAP User Folder
+
+    - Pluggable User Folder
+
+    - GRUF
+
+  - the MemberData Tool for access to member properties. This is dealt
+    with differently according to the user folder:
+
+    - Basic User Folder: standard CMF MemberData Tool
+
+    - User Folder With Groups: standard CMF MemberData Tool
+
+    - LDAP User Folder: CMFLDAP
+
+    - Pluggable User Folder: tool to do
+
+    - GRUF: ?
+
+    The access needed includes searching members. As there is no
+    standard (or sufficiently powerful) API to do a multi-field search,
+    it must be implemented for each kind of user folder as an addon
+    (probably a monkey-patch XXX) which I'll call the search component.
+
+  When searching for multiple field, for instance email='foo' and
+  groups='bar', the work has to be done by the search component which
+  means that the search component must *also* know about roles and
+  groups. The CMF MemberData Tool doesn't know how to do that. Plone has
+  extended the Membership Tool to give it a searchForMembers method that
+  know about name, email, roles, last_login_time. It could be extended
+  to do more.
