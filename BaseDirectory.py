@@ -123,6 +123,42 @@ class BaseDirectory(SimpleItemWithProperties):
                                            datastructure=ds, **kw)
         return rendered, ds
 
+    # XXX security ?
+    security.declarePublic('renderEditEntryDetailed')
+    def renderEditEntryDetailed(self, id, request=None,
+                                mode='edit', errmode='edit', **kw):
+        """Modify the entry from request, returns detailed information
+        about the rendering.
+
+        If request is None, the entry is not modified and is rendered
+        in the specified mode.
+
+        If request is not None, the parameters are validated and the
+        entry modified, and rendered in the specified mode. If there is
+        a validation error, the entry is rendered in mode errmode.
+
+        Returns (rendered, ok, datastructure):
+        - rendered is the rendered HTML,
+        - ok is the result of the validation,
+        - datastructure is the resulting datastructure.
+        """
+        dm = self._getDataModel(id)
+        ds = DataStructure(datamodel=dm)
+        layout = self._getLayout(self.layout)
+        layoutdata = layout.getLayoutData(ds)
+        if request is not None:
+            ds.updateFromMapping(request.form)
+            ok = layout.validateLayout(layoutdata, ds)
+            if ok:
+                dm._commit()
+            else:
+                mode = errmode
+        else:
+            ok = 1
+        rendered = self._renderLayoutStyle(mode, layout=layoutdata,
+                                           datastructure=ds, ok=ok, **kw)
+        return rendered, ok, ds
+
     #
     # Management API
     #
