@@ -1,4 +1,28 @@
 *******************************************
+** CPSDirectory V1.17.1 [R1 build 2004/08/16-15:23 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- Updated doc about MetaDirectory's missing entries management.
+- Updated doc about how StackingDirectory and MetaDirectory deal with id fields.
+Bug fixes:
+~~~~~~~~~~
+- Made LDAPBackingDirectory work with non-ascii passwords (convert to UTF-8).
+- Fixed MetaDirectory incorrect search results case when missing entries
+  are expected in the result.
+- LDAPBackingDirectory: Don't raise an LDAP exception in searches when
+  the site is down or incorrectly configured.
+- LDAPBackingDirectory: looking up an entry must check it's under the base.
+- fix: DirectoryEntryWidget impossible to delete a selected value,
+  it was only possible to change a value not to reset the value
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- widget directory entry use default function.js for javascript
+
+*******************************************
 ** CPSDirectory V1.17.0 [R1 build 2004/07/22-13:45 by ben]
 
 Requires:
