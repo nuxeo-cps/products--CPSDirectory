@@ -53,7 +53,7 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
          'label':'LDAP Directory'},
         {'id': 'add_empty_key', 'type': 'boolean', 'mode': 'w',
          'label':'Add an empty key'},
-        {'id': 'empty_key_pos', 'type': 'select', 'mode': 'w',
+        {'id': 'empty_key_pos', 'type': 'selection', 'mode': 'w',
          'select_variable': 'empty_key_pos_select',
          'label':'Empty key position'},
         {'id': 'empty_key_value', 'type': 'string', 'mode': 'w',
