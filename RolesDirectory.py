@@ -189,7 +189,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
         if hasattr(aq_base(aclu), 'getLDAPSchema'):
             # LDAPUserFolder XXX
             # XXX can still be optimized if rdn is login_attr
-            users = aclu.getGroupedUsers([role])
+            users = aclu.getGroupedUsers([(role, 'dummy_dn')])
             for user in users:
                 members.append(user.getUserName())
         else:
