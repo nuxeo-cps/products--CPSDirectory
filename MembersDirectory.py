@@ -134,6 +134,8 @@ class MembersDirectory(BaseDirectory):
             res = mdtool.searchForMembers(kw, props=return_fields,
                                           options={'search_substring_props':
                                                    self.search_substring_fields,
+                                                   'search_restricted_member_list':
+                                                   kw.get('search_restricted_member_list', []),
                                                    })
         except ValueError, e:
             if str(e) == 'Too many results for this query':
