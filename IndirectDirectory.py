@@ -34,9 +34,9 @@ import re
 def match_pattern(pattern, value):
     """Tells whether value matches pattern.
 
-    Returns 1 pattern is a substring of value, considering that the '*'
+    Returns 1 if pattern is a substring of value, considering that the '*'
     character matches any character string.
-    '*' is the only special character accpeted.
+    '*' is the only special character accepted.
     """
     pattern = pattern.lower()
     value = value.lower()
