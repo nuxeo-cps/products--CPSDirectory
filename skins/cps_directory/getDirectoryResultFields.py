@@ -1,4 +1,4 @@
-##parameters=directory_id, default_field=None
+##parameters=directory_id, default_field='id'
 """
 Get the list of fields to be displayed in the search result list.
 
