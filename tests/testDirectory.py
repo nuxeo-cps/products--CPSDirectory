@@ -126,6 +126,20 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         #groups.deleteEntry(group_id)
         #self.assert_(not groups.hasEntry(group_id))
 
+    def testMemberQueryingOnGroups(self):
+        groups = self.pd.groups
+        group_id = 'new_group2'
+        groups.createEntry({'group': group_id})
+        search_result = groups.searchEntries(id=group_id)
+
+        members = self.pd.members
+        member_id = 'new_member2'
+        members.createEntry({'id': member_id, 'groups': [group_id,]})
+
+        search_result = members.searchEntries(groups=group_id)
+        #print "testMemberQueryingOnGroups search_result = %s" % str(search_result)
+        self.assertEquals(search_result, [member_id])
+
     #
     # Roles
     #
