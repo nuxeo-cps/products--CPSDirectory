@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- ZODBDirectory must inherit correctly PropertiesPostProcessor
+  (ACL, when changed, were not correctly post-processed thus not used).
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
