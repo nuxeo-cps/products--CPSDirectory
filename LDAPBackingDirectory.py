@@ -687,16 +687,6 @@ class LDAPBackingDirectory(BaseDirectory):
         conn = self.connectLDAP()
         LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
         conn.add_s(dn, attrs_list)
-        
-    security.declarePublic('editEntry')
-    def editEntry(self, entry):
-        """ modifies the entry"""        
-        id = entry['dn']
-        self.checkEditEntryAllowed(id=id, entry=entry)        
-        
-        # XXX : adapter now does all the work        
-        adapter = self._getAdapters(id, creation=0)[0]                
-        adapter._setData(data=entry)        
 
     security.declarePrivate('modifyLDAP')
     def modifyLDAP(self, dn, ldap_attrs):

@@ -158,16 +158,6 @@ class StackingDirectory(BaseDirectory):
         # XXX : adapter now does all the work        
         adapter = self._getAdapters(id, creation=1)[0]                
         adapter._setData(data=entry) 
-        
-    security.declarePublic('editEntry')
-    def editEntry(self, entry):
-        """ modifies the entry"""
-        id = entry[self.id_field]
-        self.checkEditEntryAllowed(id=id, entry=entry)        
-        
-        # XXX : adapter now does all the work        
-        adapter = self._getAdapters(id, creation=0)[0]                
-        adapter._setData(data=entry)         
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
