@@ -116,11 +116,7 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
 
     res = []
     for id, member in mdtool._members.items():
-        # XXX herve: I guess you remove the acquisition wrapper to get back the
-        # original user object in the context of acl_users?
-        # XXX herve: But you prefer using the member list in cache rather that
-        # accessing acl_users in case it's a big and slow directory.
-        base_member = aq_base(member)
+        base_member = aq_base(member) # We don't want to acquire props
         entry = {'id': id}
         for key in checked_props:
             searched = getattr(base_member, key, _marker)
