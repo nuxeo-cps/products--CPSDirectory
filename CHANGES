@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- mutlivalue search is done using substring match
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
