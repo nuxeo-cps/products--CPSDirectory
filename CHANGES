@@ -9,6 +9,4 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- LDAPBackingDirectory: raise AuthenticationFailed instead of
-  ConfigurationError when doing a search with invalid user credentials.
-- Use python isinstance instead of old _isinstance.
+-
