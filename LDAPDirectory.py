@@ -396,6 +396,8 @@ class LDAPDirectory(BaseDirectory):
         for field_id, field in self._getSchemas()[0].items(): # XXX
             if field.write_ignore_storage:
                 continue
+            if not data.has_key(field_id):
+                continue
             value = data[field_id]
             if field_id in ('dn', 'base_dn'):
                 # Never modifiable directly.
