@@ -1,17 +1,10 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
-- Install the default setup using the external method CPSDirectory.install
-- NuxUserGroups
-- LDAPUserGroupsFolder-2.3.0
-- CPSSchemas-0.6.0
+-
 
 New features:
 ~~~~~~~~~~~~~
-- First packaged release.
-- Allows view, edit and search of members / roles / groups / ldap
-  directories. Allows creation of entry in members directory. Works well
-  with UserFolderWithGroups, untested with LDAPUserGroupsFolder.
-- No i18n.
+-
 
 Bug fixes:
 ~~~~~~~~~~
