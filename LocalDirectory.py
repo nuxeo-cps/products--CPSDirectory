@@ -67,9 +67,9 @@ class LocalDirectory(BaseDirectory):
         return getattr(self.getProperty('acl_entry_create_roles', ''))
     acl_entry_create_roles = ComputedAttribute(_get_acl_entry_create_roles, 1)
 
-    def _get_acl_entry_create_roles(self):
+    def _get_acl_entry_delete_roles(self):
         return getattr(self.getProperty('acl_entry_delete_roles', ''))
-    acl_entry_delete_roles = ComputedAttribute(_get_acl_entry_create_roles, 1)
+    acl_entry_delete_roles = ComputedAttribute(_get_acl_entry_delete_roles, 1)
 
     def _get_acl_entry_view_roles(self):
         return getattr(self.getProperty('acl_entry_view_roles', ''))
