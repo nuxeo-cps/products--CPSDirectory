@@ -22,6 +22,7 @@ from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 
+from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 import DirectoryTool
 
@@ -29,6 +30,9 @@ from DirectoryTool import DirectoryTypeRegistry
 from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
+
+from DirectoryReferenceVocabulary import DirectoryReferenceVocabulary
+
 
 tools = (DirectoryTool.DirectoryTool,
          )
@@ -45,3 +49,4 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
+    VocabularyTypeRegistry.register(DirectoryReferenceVocabulary)
