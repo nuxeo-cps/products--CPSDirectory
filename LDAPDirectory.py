@@ -21,6 +21,8 @@
 
 from zLOG import LOG, DEBUG, ERROR
 
+import re
+
 from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -59,6 +61,13 @@ class LDAPDirectory(BaseDirectory):
     """LDAP Directory.
 
     A directory that connects to an LDAP server.
+
+    This directory has two special fields, 'dn' and 'base_dn'.
+
+    - 'dn' is always read-only.
+
+    - 'base_dn' is read-only except during creation where it can be used
+    to specify a subbranch.
     """
 
     meta_type = 'CPS LDAP Directory'
@@ -253,7 +262,11 @@ class LDAPDirectory(BaseDirectory):
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
-        """Create an entry in the directory."""
+        """Create an entry in the directory.
+
+        If a base_dn attribute is present, it is used to decide which
+        subbranch to use.
+        """
         self.checkCreateEntryAllowed()
         if not entry.has_key(self.id_field):
             raise ValueError("Missing value for '%s' in entry" %
@@ -264,10 +277,19 @@ class LDAPDirectory(BaseDirectory):
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise ValueError("Entry '%s' already exists" % id)
-        # XXX check rdn value syntax...
         rdn_attr = self.ldap_rdn_attr
         rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])
+        # XXX check rdn value syntax better...
+        if ',' in rdn:
+            raise ValueError("Illegal character ',' in rdn %s" % rdn)
         base = self.ldap_base
+        # Maybe create in a subbranch.
+        base_dn = entry.get('base_dn', '').strip()
+        if base_dn:
+            base_dn = re.sub(r',\s+', ',', base_dn)
+            if not (','+base_dn).endswith(','+base):
+                raise ValueError("Base DN must be under %s" % base)
+            base = base_dn
         attrs = self._makeAttrsFromData(entry)
         attrs['objectClass'] = self.ldap_object_classes_c
         msg = self._delegate.insert(base=base, rdn=rdn, attrs=attrs)
@@ -303,13 +325,13 @@ class LDAPDirectory(BaseDirectory):
         return data
 
     def _makeAttrsFromData(self, data, ignore_attrs=[]):
-        # Make attributes. Skip rdn_attr
+        # Make attributes. Skip ignore_attrs.
         attrs = {}
         for field_id, field in self._getSchemas()[0].items(): # XXX
             if field.write_ignore_storage:
                 continue
             value = data[field_id]
-            if field_id == 'dn':
+            if field_id in ('dn', 'base_dn'):
                 # Never modifiable directly.
                 continue
             if field_id in ignore_attrs:
@@ -449,10 +471,13 @@ class LDAPStorageAdapter(BaseStorageAdapter):
 
     def _getFieldData(self, field_id, field, entry=None):
         """Get data from one field."""
-        if not entry.has_key(field_id):
-            return field.getDefault()
         if field_id == 'dn':
             return entry['dn']
+        elif field_id == 'base_dn':
+            dn = entry['dn']
+            return dn[dn.find(',')+1:].strip()
+        if not entry.has_key(field_id):
+            return field.getDefault()
         field_data = entry[field_id]
         if _isinstance(field, CPSStringListField):
             return field_data

@@ -6,6 +6,8 @@ New features:
 ~~~~~~~~~~~~~
 - Added isEditEntryAllowed to check for entry edit permission.
 - Added Entry Local Roles, a way for ACLs to get additional computed roles.
+- Added a 'base_dn' field to the LDAP directory that can be used during
+  creation to specify a subbranch.
 
 Bug fixes:
 ~~~~~~~~~~
