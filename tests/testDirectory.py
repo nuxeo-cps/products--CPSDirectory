@@ -84,7 +84,7 @@ class TestDirectoryWithDefaultUserFolder(
         entry = members.getEntry(member_id)
         self.assertEquals(entry, {'password': '__NO_PASSWORD__', 
             'id': member_id, 'roles': [], 'givenName': '', 'groups': (), 
-            'sn': '', 'email': ''})
+            'sn': '', 'email': '', 'fullname': ''})
 
         # XXX: this shouldn't succeed
         #self.assertRaises(ValueError, members.createEntry, 
@@ -136,6 +136,7 @@ class TestDirectoryWithDefaultUserFolder(
     # Roles
     #
     def testDefaultRoles(self):
+        # XXX this test assumes too much about existing roles.
         roles = self.pd.roles
         default_roles = [
             'ForumModerator', 'ForumPoster', 'Manager', 'Member', 'Reviewer',
