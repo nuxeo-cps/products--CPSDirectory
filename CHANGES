@@ -9,5 +9,4 @@ Bug fixes:
 - 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- getEntry have a accept_invalid_id parameter that prevent to raise a KeyError
-  if id is invalid this is usefull in zpt.
+- getEntry have a default parameter, this prevent to raise a KeyError

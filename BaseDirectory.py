@@ -45,6 +45,9 @@ from Products.CPSSchemas.Field import ReadAccessError
 from Products.CPSSchemas.Field import WriteAccessError
 
 
+_marker = []
+
+
 class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     """Base Directory.
 
@@ -219,20 +222,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         raise NotImplementedError
 
     security.declarePublic('getEntry')
-    def getEntry(self, id, accept_invalid_id=0):
+    def getEntry(self, id, default=_marker):
         """Get entry filtered by acls and processes.
-
-        If accept_invalid_id and the entry id is not found,
-        return None instead of raising a KeyError,
-        this is a zpt facility.
         """
-        if not accept_invalid_id:
+        if default is _marker:
             return self._getEntryKW(id)
         else:
             try:
                 return self._getEntryKW(id)
             except KeyError:
-                return None
+                return default
 
     security.declarePrivate('_getEntryKW')
     def _getEntryKW(self, id, **kw):
