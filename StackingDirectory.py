@@ -265,6 +265,7 @@ class StackingDirectory(BaseDirectory):
                     **{id_field: [id]})
                 # Make sure search didn't return alternate casing,
                 # this could be the case for LDAP.
+                # XXX This should probably be in the LDAP dir search code.
                 entries = [e for e in entries if e[1][id_field] == id]
                 if not entries:
                     continue
