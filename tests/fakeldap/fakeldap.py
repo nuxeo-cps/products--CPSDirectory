@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#?python encoding = 'iso8859-15'
 # Author: Tarek Ziadé <tz@nuxeo.com>
 #
 #  split_tokens and extract_tokens are taken from python-ldap :
@@ -19,16 +21,18 @@
 # 02111-1307, USA.
 #
 """
-FakeLdap
+    FakeLdap
 
-A fake ldap server for testing purpose.
-see README file
-
+    A fake ldap server for testing purpose.
+    see README file
 """
+
 import string
 
+# see how to make relative path
+PATH = '/home/cvs/CPS3/CPSDirectory/tests/fakeldap/'
 
-CONF_FILE = 'fakeldap.conf'
+CONF_FILE = PATH + 'fakeldap.conf'
 
 
 class LogFile:
@@ -103,6 +107,7 @@ class LdifReader:
           i +=1
         return result # split_tokens()
 
+
     def load_ldif(self):
         """ load ldif file onto memory """
         self.ldif_entries = []
@@ -135,21 +140,80 @@ class LdifReader:
                     else:
                         element[key] = [value]
                 step +=1
-                currentline = content[step].strip()
+                if step < length :
+                    currentline = content[step].strip()
 
             ldif_entries.append(element)
             #self.vislog(str(element))
             step+=1
+
+
+    def addEntry(self,lines):
+        content = self.ldif_content
+
+        # adding empty line
+        last_line = len(content) - 1
+
+        if last_line >= 0:
+            if content[last_line].strip() <> '':
+                content.append('\n')
+
+        # adding entry
+        # no control is made at all here
+        content = content + lines
+
+        # resync memory
+        self.ldif_content = content
+        self.load_ldif()
+        # XXX see if we want to resync file
+        #print str(self.ldif_entries)
+
+
+    def render_entries(self,entries):
+        content = ''
+        for entry in entries:
+            for line in entry:
+                line = line['key'] + ': '+ line['value']
+                content += line+'\n'
+            content += '\n'
+
+        return content
+
+    def deleteEntry(self,dn):
+        entry = self._findEntry(dn)
+        if entry is not None:
+            self.ldif_entries.remove(entry)
+            # we need to resync the content
+            self.ldif_content = self.render_entries(self.ldif_entries)
+
+    def _findEntry(self,dn):
+        item_number = 0
+        for ldif_entry in self.ldif_entries:
+            current_dn = ldif_entry['dn'][0]
+            if dn.find(',') >= 0:
+                found = current_dn == dn
+            else:
+                part_dn = current_dn.split(',')[0]
+                explode_dn = part_dn.split('=')[1]
+                found = explode_dn == dn
+
+            if found:
+                return ldif_entry
+
+        return None
 
     def search(self, base, scope, filter, attributes):
         """ let's try to find the entry using the dn
             no regexpr, we will use sequential search
             using empty lines it will be faster
         """
+
         content = self.ldif_content
         base = string.lower(base)
 
         ldif_entries = self.ldif_entries
+
+
         filtered_entries = []
 
         # filtering entries with base
@@ -168,9 +232,10 @@ class LdifReader:
                     made_dn = made_dn + ','
                 step += 1
 
-            #self.vislog(str(made_dn)+' <--> '+base)
 
+            #print made_dn + ' <--> ' + base
             if made_dn == base:
+
                 # we don't use scope
                 # filtering entry if it has the filter
                 # each filter is separated by ( )
@@ -178,15 +243,17 @@ class LdifReader:
                 # self.owner.ldap_logcall(str(self.split_tokens(filter)))
                 filters = []
 
+                # XXXX this is not parsing the search query
+                # at all
+                # with all options (wild chars, etc..)
+                # needs to be done
                 for item in self.split_tokens(filter):
-                    if (item <> '(') and (item <> ')') and (item <> '&'):
+                    if (item <> '(') and (item <> ')') and (item <> '&')\
+                        and (item <> '|') :
                         cfilter = {}
                         sitem = item.split('=')
-                        try:
-                            cfilter['key'] = sitem[0]
-                            cfilter['value'] = sitem[1]
-                        except:
-                            raise(str(sitem))
+                        cfilter['key'] = sitem[0]
+                        cfilter['value'] = sitem[1]
                         filters.append(cfilter)
 
                 # we want to find the object class
@@ -194,19 +261,21 @@ class LdifReader:
                 numpoints = 0
 
                 for cfilter in filters:
-                    for lfilter in ldif_entry[cfilter['key']]:
-                        if cfilter['value'] == lfilter:
-                            numpoints += 1
-                            break
+                    if ldif_entry.has_key(cfilter['key']):
+                        for lfilter in ldif_entry[cfilter['key']]:
+                            if cfilter['value'] == lfilter:
+                                numpoints += 1
+                                break
 
 
                 if numpoints>=len(filters):
-                    self.vislog('found entry : %s' %str(ldif_entry))
+                    #self.vislog('found entry : %s' %str(ldif_entry))
                     filtered_entries.append(ldif_entry)
 
         results = []
         for filtered_entry in filtered_entries:
             # adding fields
+
             result_entry = {}
             for attribute in attributes:
                 if filtered_entry.has_key(attribute):
@@ -214,6 +283,11 @@ class LdifReader:
 
             result = (filtered_entry['dn'][0], result_entry)
             results.append(result)
+
+
+        #print('base %s scope %s filter %s attributes %s results %s'
+         #   %(base, scope, str(filter), str(attributes), str(results)))
+
         return results
 
 class FakeLdap:
@@ -239,11 +313,31 @@ class FakeLdap:
         self.dif_reader = LdifReader(self, filename)
         self.logger = LogFile(logfilename)
 
+
+    def delete_s(self,dn):
+        self.dif_reader.deleteEntry(dn)
+
+
+    def add_s(self,dn,attrs_list):
+        """ adds an entry
+        """
+        self.ldap_logcall('add_ds')
+        entry = ['dn: '+ dn ]
+        for attribute in attrs_list:
+            line = attribute[0]+': '
+            for element in attribute[1]:
+                entry.append(line+element+'\n')
+
+        self.dif_reader.addEntry(entry)
+
+
     def ldap_logcall(self, msg):
         self.logger.write(msg)
 
+
     def search_s(self, base, scope, filterstr='(objectClass=*)',
         attrlist=None, attrsonly=0):
+
 
         results =  self.dif_reader.search(base, scope, filterstr, attrlist)
 
@@ -313,6 +407,8 @@ class FakeLdap:
 
     def abandon(self, msgid):
         self.ldap_logcall('abandon')
+
+
 
 def initialize(connectionstring):
     ob = FakeLdap()
