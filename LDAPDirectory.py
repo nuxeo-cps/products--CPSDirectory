@@ -240,18 +240,10 @@ class LDAPDirectory(BaseDirectory):
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
-        """Delete an entry in the directory.
-        """
+        """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed()
-        if not self.hasEntry(id):
-            raise ValueError("Entry '%s' does not exist and can't be deleted " % id)
-        # XXX must get the real dn like in _setData (think of the
-        # case where of field_id != rdn_attr, or of subbranches)
-        # XXX check rdn value syntax...
-        rdn_attr = self.ldap_rdn_attr
-        base = self.ldap_base
-        rdn = '%s=%s,%s' % (rdn_attr, id, base)
-        msg = self._delegate.delete(dn=rdn)
+        user_dn = self._getLDAPEntry(id)['dn']
+        msg = self._delegate.delete(dn=user_dn)
         if msg:
             raise ValueError("LDAP error: %s" % msg)
 
@@ -276,6 +268,25 @@ class LDAPDirectory(BaseDirectory):
             attrs[field_id] = value
         return attrs
 
+    def _getLDAPEntry(self, id, field_ids=['dn']):
+        """Get LDAP entry for a user."""
+        # XXX treat case where id_field == 'dn' (use base=dn)
+        # XXX use self.ldap_search_classes here too
+        filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
+                                                        (self.id_field, id))
+        res = self._delegate.search(base=self.ldap_base,
+                                    scope=self.ldap_scope,
+                                    filter=filter,
+                                    attrs=field_ids)
+        if res['exception']:
+            LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
+                % res['exception'])
+            raise ValueError(res['exception']) # XXX do better ?
+        if not res['size']:
+            raise ValueError("No user '%s'" % id)
+
+        return res['results'][0]
+
     def _searchEntries(self, filter=None):
         """Search entries according to filter."""
         if not filter:
@@ -297,6 +308,7 @@ class LDAPDirectory(BaseDirectory):
             else:
                 return [e[id_attr][0] for e in results]
 
+    security.declarePrivate('objectClassFilter')
     def objectClassFilter(self):
         classes = self.ldap_search_classes
         if classes:
@@ -324,36 +336,16 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         BaseStorageAdapter.__init__(self, schema)
 
-    def _getEntry(self, field_ids=['dn']):
-        """Get entry for current user."""
-        dir = self._dir
-        id = self._id
-        # XXX treat case where id_field == 'dn' (use base=dn)
-        # XXX use self.ldap_search_classes here too
-        filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
-                                                        (dir.id_field, id))
-        res = dir._delegate.search(base=dir.ldap_base,
-                                   scope=dir.ldap_scope,
-                                   filter=filter,
-                                   attrs=field_ids)
-        if res['exception']:
-            LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
-                % res['exception'])
-            raise ValueError(res['exception']) # XXX do better ?
-        if not res['size']:
-            raise ValueError("No user '%s'" % id)
-
-        return res['results'][0]
-
     def getData(self):
         """Get data from an entry, returns a mapping.
 
         Fills default value from the field if the object has no attribute.
         """
-        if self._id is None:
+        id = self._id
+        if id is None:
             # Creation.
             return self.getDefaultData()
-        entry = self._getEntry(self._schema.keys())
+        entry = self._dir._getLDAPEntry(id, self._schema.keys())
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
@@ -372,7 +364,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
                 del data[field_id]
 
         # Get dn by doing a lookup on the current entry.
-        user_dn = self._getEntry()['dn']
+        user_dn = self._dir._getLDAPEntry(self._id)['dn']
 
         # Find the rdn attr.
         rdn = user_dn.split(',')[0]
