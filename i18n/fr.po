@@ -63,3 +63,9 @@ msgstr "Resultats"
 
 #msgid "cpsdir_label_view_entry"
 #msgstr "View Entry"
+
+#msgid "cpsdir_label_edit"
+#msgstr "Edit"
+
+#msgid "cpsdir_label_view"
+#msgstr "View"
