@@ -285,15 +285,27 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     def testDefaultRoles(self):
         # XXX this test assumes too much about existing roles.
         roles = self.pd.roles
-        default_roles = [
-            'ForumModerator', 'ForumPoster', 'Manager', 'Member', 'Reviewer',
-            'SectionManager', 'SectionReader', 'SectionReviewer',
-            'WorkspaceManager', 'WorkspaceMember', 'WorkspaceReader']
-        self.assertEquals(roles.listEntryIds(), default_roles)
-        search_result = roles.searchEntries()
-        self.assertEquals(search_result, default_roles)
 
-        for role in default_roles:
+        okroles1 = ['Manager', 'Member', 'Reviewer',
+                    'SectionManager', 'SectionReader', 'SectionReviewer',
+                    'WorkspaceManager', 'WorkspaceMember', 'WorkspaceReader']
+        okroles2 = okroles1[:] + ['ForumModerator', 'ForumPoster']
+        okroles1.sort()
+        okroles2.sort()
+
+        res = roles.listEntryIds()
+        res.sort()
+        if res == okroles2:
+            okroles = okroles2
+        else:
+            okroles = okroles1
+        self.assertEquals(res, okroles)
+
+        res = roles.searchEntries()
+        res.sort()
+        self.assertEquals(res, okroles)
+
+        for role in okroles:
             self.assertRaises(KeyError, roles.createEntry, {'role': role})
         for role in ('Anonymous', 'Authenticated', 'Owner', ''):
             self.assertRaises(KeyError, roles.createEntry, {'role': role})
