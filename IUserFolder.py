@@ -89,6 +89,9 @@ class IUserFolder(Interface.Base):
     def userFolderAddRole(self, role):
         """Add a new role."""
 
+    def userFolderDelRoles(self, rolenames):
+        """Delete roles."""
+
     #
     # CPS Group support
     #
@@ -109,6 +112,10 @@ class IUserFolder(Interface.Base):
     def userFolderAddGroup(self, groupname, **kw):
         """Create a group"""
 
+    def userFolderDelGroups(self, groupnames):
+        """Delete groups"""
+    
+    
     #
     # Extended search API
     #
