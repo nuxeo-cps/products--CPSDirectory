@@ -97,7 +97,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     def testMemberSearch(self):
         members = self.pd.members
         member_id1 = 'new_member5'
-        member_email1 = 'example@mail'
+        member_email1 = 'exAMple@mail'
         member_sn1 = 'MemberFive'
         members.createEntry({'id': member_id1,
                              'email': member_email1,
@@ -136,6 +136,8 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assertEquals(res, [])
         res = members.searchEntries(email='exam')
         self.assertEquals(res, [])
+        res = members.searchEntries(email='example@mail') # different case
+        self.assertEquals(res, [])
 
 
         ### With substrings
@@ -160,10 +162,12 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         # Substring searches
         res = members.searchEntries(id='new_mem')
         self.assertEquals(res, member_ids)
-        res = members.searchEntries(email='exam')
+        res = members.searchEntries(email='EXAM')
         self.assertEquals(res, member_ids)
         res = members.searchEntries(email='spam')
         self.assertEquals(res, [member_id2])
+        res = members.searchEntries(email='aM')
+        self.assertEquals(res, member_ids)
         res = members.searchEntries(email=['@']) # list implies exact match
         self.assertEquals(res, [])
 
