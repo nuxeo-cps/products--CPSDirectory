@@ -9,13 +9,13 @@
       <tal:block repeat="cell row">
       <tal:block define="widget cell/widget">
         <td align="right" valign="top">
-          <span class="dlabel">
+          <div class="dlabel">
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label">label</span
           ><span tal:condition="not:widget/is_i18n"
             tal:content="widget/label">label</span
           >&nbsp;:
-          </span>
+          </div>
         </td>
         <td valign="top" colspan="1"
           tal:attributes="colspan python:cell['ncols']*2-1">
