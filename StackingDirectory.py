@@ -18,7 +18,7 @@
 # $Id$
 """Stacking Directory
 
-A directory redirects requests to other backing directories.
+A directory that redirects requests to other backing directories.
 """
 
 from zLOG import LOG, DEBUG, WARNING
@@ -53,12 +53,9 @@ class StackingDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'backing_dir_ids', 'type': 'tokens', 'mode': 'w',
-         'label': 'Backing directories'},
         {'id': 'creation_dir_expr', 'type': 'string', 'mode': 'w',
          'label': "Directory used for creation (TALES)"},
         )
-    backing_dir_ids = ()
     creation_dir_expr = ''
 
     creation_dir_expr_c = None
@@ -87,16 +84,37 @@ class StackingDirectory(BaseDirectory):
     # Management API
     #
 
-    security.declareProtected(ManagePortal, 'getBackingDirectoriesInfo')
-    def getBackingDirectoriesInfo(self):
+    security.declareProtected(ManagePortal, 'getBackingDirectories')
+    def getBackingDirectories(self):
         """Get the list of backing directories and their info."""
-        # XXX
-        return (
-            # dir_id, style, prefix/suffix, strip
-            ('dirfoo', 'prefix', 'a_', 0),
-            ('dirbar', 'suffix', '_b', 1),
-            ('dirbaz', 'none', '', 0), # strip must be 0 when 'none'
-            )
+        return self.backing_dir_infos
+        #return (
+        #    # dir_id, style, prefix/suffix, strip
+        #    ('dirfoo', 'prefix', 'a_', 0),
+        #    ('dirbar', 'suffix', '_b', 1),
+        #    ('dirbaz', 'none', None, 0),
+        #    )
+
+    security.declareProtected(ManagePortal, 'setBackingDirectories')
+    def setBackingDirectories(self, backing_dir_infos):
+        """Set the list of backing directories and their info."""
+        infos = []
+        for dir_id, style, fix, strip in backing_dir_infos:
+            if style == 'none':
+                if fix or strip:
+                    raise ValueError("Bad info for dir '%s'" % dir_id)
+            elif style in ('prefix', 'suffix'):
+                if not fix:
+                    raise ValueError("Bad info for dir '%s': needs a %s"
+                                     % (dir_id, style))
+            else:
+                raise ValueError("Bad info for dir '%s': unknown style '%s'"
+                                 % (dir_id, style))
+            infos.append((str(dir_id),
+                          style,
+                          fix or None,
+                          not not strip))
+        self.backing_dir_infos = tuple(infos)
 
     #
     # Internal API
@@ -120,7 +138,7 @@ class StackingDirectory(BaseDirectory):
         dtool = getToolByName(self, 'portal_directories')
         ids = []
         ids_d = {}
-        for dir_id, style, fix, strip in self.getBackingDirectoriesInfo():
+        for dir_id, style, fix, strip in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, dir_id)
@@ -180,7 +198,7 @@ class StackingDirectory(BaseDirectory):
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
         dtool = getToolByName(self, 'portal_directories')
-        for dir_id, style, fix, strip in self.getBackingDirectoriesInfo():
+        for dir_id, style, fix, strip in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, dir_id)
@@ -261,7 +279,7 @@ class StackingDirectory(BaseDirectory):
     def _getEntryFromBacking(self, id):
         """Get the entry from the appropriate backing directory."""
         dtool = getToolByName(self, 'portal_directories')
-        for dir_id, style, fix, strip in self.getBackingDirectoriesInfo():
+        for dir_id, style, fix, strip in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, dir_id)
@@ -287,7 +305,7 @@ class StackingDirectory(BaseDirectory):
         Returns a dir and the backing entry id.
         """
         dtool = getToolByName(self, 'portal_directories')
-        for dir_id, style, fix, strip in self.getBackingDirectoriesInfo():
+        for dir_id, style, fix, strip in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, dir_id)

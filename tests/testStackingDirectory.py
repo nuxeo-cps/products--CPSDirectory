@@ -59,22 +59,18 @@ class TestStackingDirectory(CPSDirectoryTestCase):
 
         dirstack = self.pd.manage_addCPSDirectory('dirstack',
                                                   'CPS Stacking Directory')
-        dirstack.manage_changeProperties(schema='sfoo', id_field='uid',
-                                         backing_dir_ids=('dirfoo',
-                                                          'dirbar',
-                                                          'dirbaz'))
+        dirstack.manage_changeProperties(schema='sfoo', id_field='uid')
+        dirstack.setBackingDirectories(
+            (# dir_id, style, prefix/suffix, strip
+            ('dirfoo', 'prefix', 'a_', 0),
+            ('dirbar', 'suffix', '_b', 1),
+            ('dirbaz', 'none', None, 0),
+            ))
 
         self.dirfoo = dirfoo
         self.dirbar = dirbar
         self.dirbaz = dirbaz
         self.dirstack = dirstack
-
-##         return (
-##             # dir_id, style, prefix/suffix, strip
-##             ('dirfoo', 'prefix', 'a_', 0),
-##             ('dirbar', 'suffix', '_b', 1),
-##             ('dirbaz', 'none', '', 0),
-##             )
 
     def test_getEntry(self):
         id1 = 'a_111'
