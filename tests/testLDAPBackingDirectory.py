@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- encoding: iso-8859-1 -*-
-# uses fakeldap for tests
 import os, sys
 
 if __name__ == '__main__':
@@ -10,8 +9,6 @@ from zLOG import LOG, DEBUG, TRACE, ERROR, INFO
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
-from Products.CPSDirectory import LDAPBackingDirectory
-import Products.CPSDirectory.tests.fakeldap.fakeldap as ldap
 
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
@@ -389,70 +386,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
     return suite
 
-def connectLDAP(self, bind_dn=None, bind_password=None):
-    """ this is a workaround
-        for linking to fake ldap
-        it's not very reliable in case of code changing
-        XXX need to find a better way
-    """
-    conn = self._v_conn
-
-    if conn is None:
-        if self.ldap_use_ssl:
-            proto = 'ldaps'
-        else:
-            proto = 'ldap'
-        conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
-
-        LOG('connectLDAP', TRACE, 'initialize conn_str=%s' % conn_str)
-
-        conn = ldap.initialize(conn_str)
-
-        conn.set_option(1, 2)
-
-        conn.set_option(1, 2)
-
-        # Auto-chase referrals.
-        conn.set_option(1, 1)
-
-
-        #conn.manage_dsa_it(0)
-
-        conn._cps_bound_dn = None
-        conn._cps_bound_password = None
-
-        self._v_conn = conn
-
-    # Check how to bind
-    if bind_dn is None:
-        bind_dn = self.ldap_bind_dn
-        bind_password = self.ldap_bind_password
-
-    if (conn._cps_bound_dn == bind_dn and
-        conn._cps_bound_password == bind_password):
-        return conn
-
-    # Bind with authentication
-    conn._cps_bound_dn = None
-    conn._cps_bound_password = None
-    LOG('connectLDAP', TRACE, "bind_s dn=%s" % bind_dn)
-    try:
-        conn.simple_bind_s(bind_dn, bind_password)
-    except SERVER_DOWN:
-        raise ConfigurationError("Directory '%s': LDAP server is down"
-                                % self.getId())
-    except INVALID_CREDENTIALS:
-        raise ConfigurationError("Directory '%s': Invalid credentials"
-                                % self.getId())
-    conn._cps_bound_dn = bind_dn
-    conn._cps_bound_password = bind_password
-
-    return conn
-
-
-# patch used to link the directory to fake ldap
-setattr(LDAPBackingDirectory, 'connectLDAP', connectLDAP)
 
 if __name__ == '__main__':
     TestRunner().run(test_suite())
+
 
