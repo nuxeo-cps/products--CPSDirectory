@@ -4,7 +4,7 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
--
+- The default schema now has a 'fullname' computed field.
 
 Bug fixes:
 ~~~~~~~~~~
