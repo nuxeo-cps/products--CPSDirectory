@@ -105,6 +105,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         for id, ob in self.objectItems():
             adapter.setContextObject(ob)
             entry = adapter.getData()
+            adapter.finalizeDefaults(entry)
             res.append((id, entry[title_field]))
         return res
 
@@ -225,6 +226,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         for id, ob in self.objectItems():
             adapter.setContextObject(ob)
             entry = adapter.getData()
+            adapter.finalizeDefaults(entry)
             ok = 1
             for key, value in query.items():
                 searched = entry[key]
