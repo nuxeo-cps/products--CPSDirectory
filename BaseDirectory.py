@@ -540,8 +540,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             id = dm.data[self.id_field]
             if id and self.hasEntry(id):
                 ok = 0
-                widget_id = 'widget__'+self.id_field # XXX hack!
-                ds.setError(widget_id, 'cpsdirectory_err_entry_already_exists')
+                widget_id = self.id_field # XXX hack!
+                ds.setError(widget_id, 'cpsdir_err_entry_already_exists')
 
         if not validate or not ok:
             rendered = self._renderLayout(layout_structure, ds,
