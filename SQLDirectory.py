@@ -245,14 +245,19 @@ class SQLDirectory(BaseDirectory):
                 continue
             sqlfield = self.getSQLField(key)
             if isinstance(value, str):
+                if not value:
+                    # For string match, we ignore empty values,
+                    # they likely come from unfilled html input fields.
+                    continue
                 if value == '*':
                     continue
                 if key in self.search_substring_fields:
+                    # Note: LIKE is not supported by Gadfly
                     op = 'LIKE'
                     val = self.getSQLValue('%'+value+'%', quoter=quoter)
                 else:
                     op = '='
-                    val = self.getSQLValue('%'+value+'%', quoter=quoter)
+                    val = self.getSQLValue(value, quoter=quoter)
             elif isinstance(value, (int, long)):
                 op = '='
                 val = str(value)
@@ -283,6 +288,15 @@ class SQLDirectory(BaseDirectory):
                 entry[field_id] = result.pop(0)
                 # XXX conversions !
             res.append((id, entry))
+
+        # Now we must compute a partial datamodel for each result,
+        # to get correct computed fields.
+        # XXX FIXME: do it!
+        # XXX this should be factored out in a common implementation
+        #     as LDAPBackingDirectory also does it
+        # Note: search should be done on computed fields!
+        #       That's what ZODBDirectory correctly does, but not LDAP.
+        #       This needs a second pass of search on partial datamodel.
 
         return res
 
