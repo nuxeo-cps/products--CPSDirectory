@@ -15,3 +15,5 @@ New internal features:
   (may be None if not present in the given entry).
 - MultiEntriesWidget enable customization of view separator
 - MultiEntriesWidget sort entries by default
+- field can be processed for display in the search result list
+  see getCustomDirectoryResultList for more information
