@@ -39,6 +39,7 @@ from ldap import VERSION2, VERSION3
 # Exceptions
 from ldap import LDAPError
 from ldap import INVALID_CREDENTIALS
+from ldap import INAPPROPRIATE_AUTH
 from ldap import UNWILLING_TO_PERFORM
 from ldap import INVALID_DN_SYNTAX
 from ldap import NO_SUCH_OBJECT
@@ -389,7 +390,9 @@ class LDAPBackingDirectory(BaseDirectory):
         try:
             results = self.searchLDAP(id, SCOPE_BASE, filter,
                                       field_ids, password=password)
-        except (INVALID_CREDENTIALS, UNWILLING_TO_PERFORM):
+        except (INVALID_CREDENTIALS, INAPPROPRIATE_AUTH,
+                UNWILLING_TO_PERFORM):
+            # INAPPROPRIATE_AUTH: tried auth on entry without userPassword
             # UNWILLING_TO_PERFORM: unauthenticated bind (DN with no password)
             # disallowed
             if password is None:
