@@ -1,0 +1,17 @@
+<tal:block define="ids options/ids;
+                   portal_url here/portal_url;
+                   dirname here/getId;
+                   ">
+<ul tal:condition="ids">
+<tal:block repeat="id ids">
+  <li>
+    <a href="." tal:content="id"
+      tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
+>john</a>
+  </li>
+</tal:block>
+</ul>
+<p tal:condition="not:ids">
+  Aucun résultat.
+</p>
+</tal:block>

@@ -27,6 +27,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
+from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
 from Products.CPSSchemas.Field import ReadAccessError
@@ -91,9 +92,11 @@ class BaseDirectory(SimpleItemWithProperties):
                 pass
         return entry
 
-    security.declarePublic('searchEntry')
-    def searchEntry(self, **kw):
+    security.declarePublic('searchEntries')
+    def searchEntries(self, **kw):
         """Search for entries in the directory.
+
+        Returns a list of entry ids.
         """
         raise NotImplementedError
 
@@ -140,7 +143,7 @@ class BaseDirectory(SimpleItemWithProperties):
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout(self.layout)
         layout.prepareLayoutWidgets(ds)
-        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
+        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
         layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
         rendered = self._renderLayout(layout_structure, ds,
                                       layout_mode=layout_mode, **kw)
@@ -191,6 +194,40 @@ class BaseDirectory(SimpleItemWithProperties):
 
         return rendered, ok, ds
 
+    security.declarePublic('renderSearchDetailed')
+    def renderSearchDetailed(self, request=None, validate=0,
+                             layout_mode='search', callback=None,
+                             **kw):
+        """Rendering for search.
+
+        Calls callback when data has been validated.
+        """
+        dm = self._getSearchDataModel()
+        ds = DataStructure(datamodel=dm)
+        layout = self._getLayout(self.layout)
+        layout.prepareLayoutWidgets(ds)
+        if request is not None:
+            ds.updateFromMapping(request.form)
+        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
+        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        if validate:
+            ok = layout.validateLayoutStructure(layout_structure, ds,
+                                                layout_mode=layout_mode, **kw)
+        else:
+            ok = 1
+        if validate and ok:
+            # Call callback.
+            callback_func = getattr(self, callback, None)
+            if callback_func is None:
+                raise ValueError("Unknown callback '%s'" % callback)
+            rendered, ok = callback_func(self, ds)
+            if not rendered:
+                rendered = ''
+        else:
+            rendered = self._renderLayout(layout_structure, ds,
+                                          layout_mode=layout_mode, ok=ok, **kw)
+        return rendered, ok, ds
+
     #
     # Management API
     #
@@ -232,6 +269,21 @@ class BaseDirectory(SimpleItemWithProperties):
         adapters = self._getAdapters(id)
         add_roles = self._getAdditionalRoles(id)
         dm = DataModel(None, adapters, context=self, add_roles=add_roles)
+        dm._fetch()
+        return dm
+
+
+    security.declarePrivate('_getSearchAdapters')
+    def _getSearchAdapters(self):
+        return [AttributeStorageAdapter(schema, None)
+                for schema in self._getSchemas()]
+
+    security.declarePrivate('_getSearchDataModel')
+    def _getSearchDataModel(self):
+        """Get the datamodel for a search rendering."""
+        adapters = self._getSearchAdapters()
+        dm = DataModel(None, adapters, context=self)
+        dm._check_acls = 0 # XXX
         dm._fetch()
         return dm
 

@@ -1,0 +1,46 @@
+<tal:block define="
+  layout options/layout;
+  ds options/datastructure;
+  formaction python: 'cpsdirectory_entry_search_form';
+  ">
+<form action="." method="POST" name="form" enctype="multipart/form-data"
+  tal:attributes="action formaction">
+<input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
+<table cellpadding="2" cellspacing="2" border="0">
+  <tr tal:repeat="row layout/rows">
+    <tal:block repeat="cell row">
+    <tal:block define="widget cell/widget;
+                       wid widget/getWidgetId;
+                       err python: ds.getError(wid);
+                       is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
+                       ">
+      <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
+        <div class="label" tal:condition="widget/label_edit"
+          class="label">
+          <span i18n:translate="" tal:condition="widget/is_i18n"
+            tal:content="widget/label_edit">label</span
+          ><span tal:condition="not:widget/is_i18n"
+            tal:content="widget/label_edit">label</span
+          >&nbsp;:
+        </div>
+      </td>
+      <td valign="top" colspan="1"
+        tal:attributes="colspan python:cell['ncols']*2-1">
+        <div tal:attributes="class python:err and 'error' or nothing">
+          <div tal:attributes="class widget/css_class|nothing">
+            <tal:block replace="structure cell/widget_rendered" />
+          </div>
+          <div tal:condition="err">
+            <em style="color:red" tal:content="err"
+              i18n:translate="">Error</em>
+          </div>
+        </div>
+      </td>
+    </tal:block>
+    </tal:block>
+  </tr>
+</table>
+<input type="submit" class="standalone" name="cpsdirectory_search_button"
+  value="button_search" i18n:attributes="value">
+</form>
+</tal:block>
