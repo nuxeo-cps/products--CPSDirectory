@@ -106,7 +106,8 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
         other_props = [p for p in mdtool_props if p not in checked_props]
     elif props is not None:
         # all props asked for other than already fetched by the search
-        other_props = [p for p in props if p not in checked_props]
+        other_props = [p for p in props if p not in checked_props\
+                                        and p in mdtool_props]
 
     res = []
     for id, member in mdtool._members.items():
@@ -122,8 +123,6 @@ def _searchInMemberData(self, query, props=None, search_substring_props=[]):
             continue
         if props is None:
             res.append(id)
-        elif props == ['*']:
-            res.append((id, entry))
         else:
             for key in other_props:
                 value = getattr(base_member, key, _marker)
