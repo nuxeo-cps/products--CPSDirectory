@@ -249,19 +249,18 @@ class MetaDirectory(BaseDirectory):
             b_id = id
             # Get field ids we want
             b_fids = []
-            for schema in b_dir._getSchemas():     # XXX
-                for b_fid in schema.keys(): # XXX need API for this
-                    if b_fid == b_dir.id_field:
-                        # Ignore id
-                        continue
-                    if b_fid in mapping.field_ignore:
-                        # Ignore fields ignored by mapping
-                        continue
-                    fid = mapping.field_rename.get(b_fid, b_fid)
-                    if fid not in field_ids:
-                        # Ignore fields unwanted in arguments
-                        continue
-                    b_fids.append(b_fid)
+            for b_fid in b_dir._getFieldIds():
+                if b_fid == b_dir.id_field:
+                    # Ignore id
+                    continue
+                if b_fid in mapping.field_ignore:
+                    # Ignore fields ignored by mapping
+                    continue
+                fid = mapping.field_rename.get(b_fid, b_fid)
+                if fid not in field_ids:
+                    # Ignore fields unwanted in arguments
+                    continue
+                b_fids.append(b_fid)
             # Get entry (no acls checked)
             if not b_fids:
                 continue
@@ -336,19 +335,18 @@ class MetaStorageAdapter(BaseStorageAdapter):
 
             # Build backing entry
             b_entry = {}
-            for schema in b_dir._getSchemas():     # XXX
-                for b_fid in schema.keys(): # XXX need API for this
-                    if b_fid == b_dir.id_field:
-                        # Ignore id, already done.
-                        continue
-                    if b_fid in mapping.field_ignore:
-                        # Ignore fields ignored by mapping
-                        continue
-                    fid = mapping.field_rename.get(b_fid, b_fid)
-                    if not data.has_key(fid):
-                        # Skip fields missing in data
-                        continue
-                    b_entry[b_fid] = data[fid]
+            for b_fid in b_dir._getFieldIds():
+                if b_fid == b_dir.id_field:
+                    # Ignore id, already done.
+                    continue
+                if b_fid in mapping.field_ignore:
+                    # Ignore fields ignored by mapping
+                    continue
+                fid = mapping.field_rename.get(b_fid, b_fid)
+                if not data.has_key(fid):
+                    # Skip fields missing in data
+                    continue
+                b_entry[b_fid] = data[fid]
             # Build id last to be sure it's there
             b_entry[b_dir.id_field] = b_id
 
