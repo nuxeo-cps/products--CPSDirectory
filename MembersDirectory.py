@@ -40,6 +40,9 @@ class MembersDirectory(BaseDirectory):
     """Members Directory.
 
     A directory that know how to deal with members.
+
+    In the role ACLs for the fields of this directory, the role "Owner"
+    is set when you edit your own entry.
     """
 
     meta_type = 'CPS Members Directory'
