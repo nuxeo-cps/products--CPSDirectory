@@ -1,8 +1,8 @@
-##parameters=
+##parameters=loadcustom=1
+# $Id$
 """
 Get the layouts used for the directories.
 """
-# $Id$
 
 #########################################################
 # members
@@ -269,7 +269,8 @@ layouts = {
     'groups': groups_layout,
     }
 
-clayouts = context.getCustomDirectoryLayouts()
-layouts.update(clayouts)
+if loadcustom:
+    clayouts = context.getCustomDirectoryLayouts()
+    layouts.update(clayouts)
 
 return layouts
