@@ -1,0 +1,170 @@
+# translation of en.po to German
+# Georg Hennemann <georg.hennemann@dhl.com>, 2004.
+msgid ""
+msgstr ""
+"Project-Id-Version: de\n"
+"POT-Creation-Date: 2004-05-28 17:58default\n"
+"PO-Revision-Date: 2004-07-12 18:30+0200\n"
+"Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
+"Language-Team: Francais <rheinland@dzug.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: KBabel 1.3.1\n"
+
+#.   <em content="err" style="color:red">Error</em>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+msgid "Error"
+msgstr "Fehler"
+
+#.   <p>Choose a directory</p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "choose_a_directory"
+msgstr "Wähle ein Verzeichnis"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_create_entry"
+msgstr "Neuer Eintrag"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_edit_entry"
+msgstr "Bearbeite Eintrag"
+
+#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Such Ergebnisse"
+
+#.   <span condition="python: ok != 'results'" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_search_entry"
+msgstr "Suche Eintrag"
+
+#.   <b>cpsdir_label_upto_directories</b>
+#.   <strong>cpsdir_label_upto_directories</strong>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_upto_directories"
+msgstr "Zurück zu Verzeichnissen"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view_entry"
+msgstr "Ansehen Eintrag"
+
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr "Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre Suchabfrage."
+
+#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr ""
+
+#.   <th content="field/title">id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "id"
+msgstr "id"
+
+#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
+#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+#: ../skins/cps_directory/layout_dir_view.pt
+msgid "label"
+msgstr "Label"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_no_results"
+msgstr "Kein Treffer"
+
+#.   <p condition="not:directories">
+#.         No directory available
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "no_dir_available"
+msgstr "Kein Verzeichnis verfügbar"
+
+msgid "psm_entry_created"
+msgstr "Eintrag erstellt"
+
+msgid "label_roles"
+msgstr "Rolle(n)"
+
+msgid "label_groups"
+msgstr "Gruppe(n)"
+
+msgid "label_subgroups"
+msgstr "Sub-Gruppe(n)"
+
+msgid "label_members"
+msgstr "Teilnehmer"
+
+msgid "label_first_name"
+msgstr "Vorname"
+
+msgid "label_last_name"
+msgstr "Nachname"
+
+msgid "label_full_name"
+msgstr "Voller Name"
+
+msgid "cpsdir_label_delete_entry"
+msgstr "Lösche Eintrag"
+
+msgid "cpsdir_help_homeless"
+msgstr ""
+"Eine privater Bereich gibt Ihnen Zugang zu:<br />- einem privaten Arbeitsbereich<br />- einem "
+"privaten Kalender<br />- ihren Favoriten (Bookmarks)<br />- einigen Boxen Funktionen "
+"<br />"
+
+msgid "cpsdir_label_homeless"
+msgstr "Aktivieren privater Bereiche"
+
+#~ msgid "button_edit"
+#~ msgstr "Bearbeiten"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "button_create"
+#~ msgstr "Erstellen"
+
+#~ msgid "button_update"
+#~ msgstr "Update"
+
+#~ msgid "Directories"
+#~ msgstr "Verzeichnisse"
+
+#~ msgid "button_back"
+#~ msgstr "Zurück"
+
+#~ msgid "button_change"
+#~ msgstr "Sichern"
+
+#~ msgid "button_search"
+#~ msgstr "Suchen"
+
+#~ msgid "cpsdir_label_create ${dirname}"
+#~ msgstr "Erstelle in ${dirname}"
+
+#~ msgid "cpsdir_label_edit"
+#~ msgstr "Bearbeiten"
+
+#~ msgid "cpsdir_label_search"
+#~ msgstr "Suche"
+
+#~ msgid "cpsdir_label_view"
+#~ msgstr "Ansehen"
+
+#~ msgid "button_delete"
+#~ msgstr "Löschen"
+
