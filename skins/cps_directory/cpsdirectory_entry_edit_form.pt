@@ -1,0 +1,30 @@
+<tal:block define="
+  id request/id;
+  dirname request/dirname|string:members;
+  dir here/portal_directories/?dirname;
+  validate python: request.has_key('cpsdirectory_edit_button');
+  edit_request python: validate and request or nothing;
+  res python: dir.renderEditEntryDetailed(id, request=edit_request);
+  global rendered_main python: res[0];
+  rendered_ok python: res[1];
+  ds python: res[2];
+  global title ds/sn|id;
+  global portal_status_message python: validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error') or '';
+  "/>
+<metal:block use-macro="here/main_template/macros/master">
+  <metal:block fill-slot="header">
+    <h1 tal:content="title">Entry title...</h1>
+    <div class="description">
+    </div>
+  </metal:block>
+
+  <metal:block fill-slot="css_slot">
+    <link rel="Stylesheet" type="text/css" href=""
+      tal:attributes="href string:${base_url}document.css">
+  </metal:block>
+
+  <metal:block fill-slot="main">
+    <div tal:replace="structure rendered_main">Rendered main...</div>
+  </metal:block>
+
+</metal:block>

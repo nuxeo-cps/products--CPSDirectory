@@ -1,0 +1,57 @@
+<tal:block define="
+  layout options/layout;
+  ds options/datastructure;
+  creation creation|nothing;
+  formaction python: test(creation, 'cpsdirectory_entry_create_form',
+                                    'cpsdirectory_entry_edit_form');
+  ">
+<form action="." method="POST" name="form" enctype="multipart/form-data"
+  tal:attributes="action formaction">
+<input type="hidden" name="type_name" value="." tal:condition="creation"
+  tal:attributes="value request/type_name">
+<input type="hidden" name="dirname" value="." tal:attributes="value request/dirname">
+<input type="hidden" name="id" value="." tal:attributes="value request/id">
+<table cellpadding="2" cellspacing="2" border="0">
+  <tr tal:repeat="row layout/rows">
+    <tal:block repeat="cell row">
+    <tal:block define="widget cell/widget;
+                       wid widget/getWidgetId;
+                       err python: ds.getError(wid);
+                       is_required widget/is_required|nothing;
+                       wrender python:widget.render('edit', ds);
+                       "
+        condition="python: not widget.hidden_view and
+                           (not widget.hidden_empty or wrender.strip())">
+      <td width="120" align="right"  valign="top" bgcolor="#EEEEEE">
+        <div class="label" tal:condition="widget/label_edit"
+          tal:attributes="class python:is_required and 'label required'
+                                                    or 'label'">
+          <span i18n:translate="" tal:condition="widget/is_i18n"
+            tal:content="widget/label_edit">label</span
+          ><span tal:condition="not:widget/is_i18n"
+            tal:content="widget/label_edit">label</span
+          >&nbsp;:
+        </div>
+      </td>
+      <td valign="top" colspan="1"
+        tal:attributes="colspan python:cell['ncols']*2-1">
+        <div tal:attributes="class python:err and 'error' or nothing">
+          <div tal:attributes="class widget/css_class|nothing">
+            <tal:block replace="structure wrender" />
+          </div>
+          <div tal:condition="err">
+            <em style="color:red" tal:content="err"
+              i18n:translate="">Error</em>
+          </div>
+        </div>
+      </td>
+    </tal:block>
+    </tal:block>
+  </tr>
+</table>
+<input type="submit" class="standalone" name="cpsdirectory_edit_button"
+  value="button_change" i18n:attributes="value" tal:condition="not:creation">
+<input type="submit" class="standalone" name="cpsdirectory_create_button"
+  value="button_create" i18n:attributes="value" tal:condition="creation">
+</form>
+</tal:block>
