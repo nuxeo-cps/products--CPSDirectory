@@ -41,6 +41,9 @@ from Products.CPSSchemas.Field import ValidationError
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 
+_marker = []
+
+
 #
 # UTF-8
 #
@@ -187,6 +190,8 @@ class LDAPBackingDirectory(BaseDirectory):
         classes = self.ldap_object_classes
         self.ldap_object_classes_c = [x.strip() for x in classes.split(',')]
         self.ldap_object_classes = ', '.join(self.ldap_object_classes_c)
+        # Reset connection (XXX problems with multiple threads)
+        self._v_conn = None
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, **kw):
@@ -265,6 +270,17 @@ class LDAPBackingDirectory(BaseDirectory):
             return 0
         return self.existsLDAP(id)
 
+    security.declarePrivate('getEntryAuthenticated')
+    def getEntryAuthenticated(self, id, password, default=_marker):
+        """Get and authenticate an entry."""
+        try:
+            return self._getEntryKW(id, password=password)
+        except KeyError:
+            if default is not _marker:
+                return default
+            else:
+                raise
+
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory."""
@@ -302,15 +318,15 @@ class LDAPBackingDirectory(BaseDirectory):
         adapter = LDAPBackingStorageAdapter(schema, None, dir, field_ids=attrs)
         return adapter
 
-    def _getEntryFromLDAP(self, id, field_ids):
+    def _getEntryFromLDAP(self, id, field_ids, password=None):
         """Get LDAP entry for a user.
 
         Returns converted values.
         """
         results = self.searchLDAP(id, ldap.SCOPE_BASE, '(objectClass=*)',
-                                  field_ids)
+                                  field_ids, password=password)
         if not results:
-            raise ValueError("No entry '%s'" % id)
+            raise KeyError("No entry '%s'" % id)
         dn, ldap_entry = results[0]
         entry = self.convertDataFromLDAP(dn, ldap_entry)
         return entry
@@ -473,18 +489,20 @@ class LDAPBackingDirectory(BaseDirectory):
                              (dn, self.ldap_base))
 
     security.declarePrivate('connectLDAP')
-    def connectLDAP(self):
-        """Get or initialize a connection to the LDAP server."""
-        conn = self._v_conn
-        if conn is not None:
-            return conn
+    def connectLDAP(self, bind_dn=None, bind_password=None):
+        """Get or initialize a connection to the LDAP server.
 
-        if self.ldap_use_ssl:
-            proto = 'ldaps'
-        else:
-            proto = 'ldap'
-        conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
-        try:
+        If bind_dn and bind_password are provided, bind using them.
+        Otherwise bind using the global bind dn and password.
+        """
+        conn = self._v_conn
+        if conn is None:
+            if self.ldap_use_ssl:
+                proto = 'ldaps'
+            else:
+                proto = 'ldap'
+            conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
+
             LOG('connectLDAP', TRACE, 'initialize conn_str=%s' % conn_str)
             conn = ldap.initialize(conn_str)
             try:
@@ -500,36 +518,36 @@ class LDAPBackingDirectory(BaseDirectory):
                 LOG('LDAPBackingDirectory.connect', DEBUG, 'No referrals')
                 pass
 
-            # Bind with authentication
-            try:
-                conn.simple_bind_s(self.ldap_bind_dn, self.ldap_bind_password)
-            except ldap.INVALID_CREDENTIALS:
-                raise ValueError("Incorrect LDAP configuration: "
-                                 "bad authentication")
-
-            # Check bind worked
-            try:
-                # XXX self.ldap_base usage not coherent with checkUnderBase
-                conn.search_s(toUTF8(self.ldap_base), ldap.SCOPE_BASE,
-                              '(objectClass=*)', attrlist=['dn'])
-            except ldap.NO_SUCH_OBJECT:
-                raise ValueError("Incorrect LDAP configuration: invalid base")
-
             #conn.manage_dsa_it(0)
-
             self._v_conn = conn
+
+        # Check how to bind
+        if bind_dn is None:
+            bind_dn = self.ldap_bind_dn
+            bind_password = self.ldap_bind_password
+
+        if (hasattr(conn, '_cps_bound_dn') and
+            conn._cps_bound_dn == bind_dn and
+            conn._cps_bound_password == bind_password):
             return conn
 
-        except ldap.SERVER_DOWN:
-            raise ValueError("Cannot connect to the LDAP server")
+        # Bind with authentication
+        conn._cps_bound_dn = None
+        conn._cps_bound_password = None
+        LOG('connectLDAP', TRACE, "bind_s dn=%s" % bind_dn)
+        conn.simple_bind_s(bind_dn, bind_password)
+        # may raise ldap.INVALID_CREDENTIALS
+        conn._cps_bound_dn = bind_dn
+        conn._cps_bound_password = bind_password
 
+        return conn
 
     security.declarePrivate('existsLDAP')
     def existsLDAP(self, dn):
         """Return true if the entry exists."""
         try:
             conn = self.connectLDAP()
-            LOG('existsLDAP', TRACE, "search_s dn=%s" % (dn,))
+            LOG('existsLDAP', TRACE, "search_s dn=%s" % dn)
             res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)', ['dn'])
             LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
         except ldap.NO_SUCH_OBJECT:
@@ -537,26 +555,32 @@ class LDAPBackingDirectory(BaseDirectory):
         return len(res) != 0
 
     security.declarePrivate('searchLDAP')
-    def searchLDAP(self, base, scope, filter, attrs):
+    def searchLDAP(self, base, scope, filter, attrs, password=None):
         """Search in LDAP.
 
         Returns a sequence of (dn, entry).
         entry's values are already converted from LDAP format.
+
+        If password is provided, attempt to bind using it.
         """
-        try:
+        if password is None:
             conn = self.connectLDAP()
-            LOG('searchLDAP', TRACE,
-                "search_s base=%s scope=%s filter=%s attrs=%s" %
-                (base, scope, filter, attrs))
-            ldap_entries = conn.search_s(base, scope, toUTF8(filter),
-                                         attrs)
-            LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries,))
-        except ldap.INVALID_CREDENTIALS:
-            raise
-        except ldap.NO_SUCH_OBJECT:
-            raise
-        except ldap.SIZELIMIT_EXCEEDED:
-            raise
+        else:
+            if scope != ldap.SCOPE_BASE:
+                raise ValueError("Incorrect scope for authenticated search")
+            try:
+                conn = self.connectLDAP(base, password)
+            except ldap.INVALID_CREDENTIALS:
+                LOG('searchLDAP', TRACE, "invalid credentials for %s" % base)
+                return []
+
+        LOG('searchLDAP', TRACE, "search_s base=%s scope=%s filter=%s attrs=%s" %
+            (base, scope, filter, attrs))
+        ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
+        LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
+        #except ldap.INVALID_CREDENTIALS:
+        #except ldap.NO_SUCH_OBJECT:
+        #except ldap.SIZELIMIT_EXCEEDED:
         return ldap_entries
 
     security.declarePrivate('deleteLDAP')
@@ -636,10 +660,11 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from an LDAP server.
     """
 
-    def __init__(self, schema, id, dir, **kw):
+    def __init__(self, schema, id, dir, password=None, **kw):
         """Create an Adapter for a schema."""
         self._id = id
         self._dir = dir
+        self._password = password
         BaseStorageAdapter.__init__(self, schema, **kw)
 
     def getData(self):
@@ -653,7 +678,8 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
 
         field_ids = self.getFieldIds()
-        entry = self._dir._getEntryFromLDAP(id, field_ids)
+        entry = self._dir._getEntryFromLDAP(id, field_ids,
+                                            password=self._password)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
