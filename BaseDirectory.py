@@ -209,8 +209,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout()
         layout.prepareLayoutWidgets(ds)
-        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
-        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        layout_structure = layout.computeLayoutStructure(layout_mode, dm)
         rendered = self._renderLayout(layout_structure, ds,
                                       layout_mode=layout_mode, **kw)
         return rendered, ds
@@ -244,8 +243,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         else:
             validate = 1
             ds.updateFromMapping(request.form)
-        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
-        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        layout_structure = layout.computeLayoutStructure(layout_mode, dm)
         if validate:
             ok = layout.validateLayoutStructure(layout_structure, ds,
                                                 layout_mode=layout_mode, **kw)
@@ -278,8 +276,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         layout.prepareLayoutWidgets(ds)
         if request is not None:
             ds.updateFromMapping(request.form)
-        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
-        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        layout_structure = layout.computeLayoutStructure(layout_mode, dm)
         if validate:
             ok = layout.validateLayoutStructure(layout_structure, ds,
                                                 layout_mode=layout_mode, **kw)
@@ -328,8 +325,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         layout.prepareLayoutWidgets(ds)
         if request is not None:
             ds.updateFromMapping(request.form)
-        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
-        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        layout_structure = layout.computeLayoutStructure(layout_mode, dm)
         if validate:
             ok = layout.validateLayoutStructure(layout_structure, ds,
                                                 layout_mode=layout_mode, **kw)
