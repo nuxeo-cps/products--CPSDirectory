@@ -159,6 +159,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def isUserModified(self):
         """Return if the object has been modified by users.
         """
+        if not hasattr(self, 'user_modified'):
+            return 0
         return self.user_modified
 
     security.declarePublic('setUserModified')
