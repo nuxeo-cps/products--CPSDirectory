@@ -28,7 +28,7 @@
      function popup_directorymultientries(destId, dirName, dispAttr, vocabulary, title) {
        var args
        args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
-       popup = window.open('popup_directorymultientries_form'+args, 'Multi DN Finder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
+       popup = window.open('popup_directorymultientries_form'+args, 'DirectoryMultiEntryFinder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
        if(!popup.opener)
          popup.opener = window;
        return false;
