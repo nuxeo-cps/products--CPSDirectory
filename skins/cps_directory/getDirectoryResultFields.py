@@ -19,7 +19,8 @@ if not fields:
         fields = [{'id': 'role', 'title': 'label_roles'},]
 
 if not fields:
-    fields = [{'id': default_field,
-               'title': 'Id'}]
+    dir = getattr(context.portal_directories, directory_id)
+    fields = [{'id': dir.id_field, 'title': 'Id'},
+              {'id': dir.title_field, 'title': 'Title'}]
 
 return fields
