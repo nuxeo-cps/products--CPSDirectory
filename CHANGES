@@ -1,9 +1,12 @@
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
 Bug fixes:
 ~~~~~~~~~~
-- missing directory icon UserFolder_icon.gif
-- The Roles Directory didn't implement deleteEntry.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- getEntry now has a default parameter, to prevent a raise of KeyError
-  if the entry does not exist.
-- userFolderDelRoles implemented in the userfolder patch.
+-
