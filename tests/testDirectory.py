@@ -32,19 +32,37 @@ class TestDirectoryWithDefaultUserFolder(
         self.assertEquals(self.pd.members.meta_type, "CPS Members Directory")
         self.assertEquals(self.pd.roles.meta_type, "CPS Roles Directory")
 
+    def testBasicSecurity(self):
+        directories = (self.pd.members, self.pd.groups, self.pd.roles)
+
+        for directory in directories:
+            self.assert_(directory.isVisible())
+            self.assert_(directory.isCreateEntryAllowed())
+
+        self.logout()
+
+        for directory in directories:
+            self.assert_(not directory.isVisible())
+            self.assert_(not directory.isCreateEntryAllowed())
+
+
     #
     # Members
     #
     def testDefaultMembers(self):
         members = self.pd.members
+
         # 'test_user_1_' comes from ZopeTestCase
         default_members = ['root', 'test_user_1_']
         self.assertEquals(members.listEntryIds(), default_members)
         search_result = members.searchEntries()
+
         # XXX: this fails. Why ?
         #self.assertEquals(search_result, default_members)
+
         for member in default_members:
             self.assert_(members.hasEntry(member))
+            self.assert_(members.getEntry(member))
 
     def testMemberCreation(self):
         members = self.pd.members
@@ -54,6 +72,7 @@ class TestDirectoryWithDefaultUserFolder(
         search_result = members.searchEntries(member=member_id)
         self.assert_(not search_result)
         self.assert_(not member_id in members.listEntryIds())
+        self.assertRaises(KeyError, members.getEntry, member_id)
 
         members.createEntry({'id': member_id})
 
@@ -61,6 +80,11 @@ class TestDirectoryWithDefaultUserFolder(
         search_result = members.searchEntries(id=member_id)
         self.assertEquals(search_result, [member_id])
         self.assert_(member_id in members.listEntryIds())
+
+        entry = members.getEntry(member_id)
+        self.assertEquals(entry, {'password': '__NO_PASSWORD__', 
+            'id': member_id, 'roles': [], 'givenName': '', 'groups': (), 
+            'sn': '', 'email': ''})
 
         # XXX: this shouldn't succeed
         #self.assertRaises(ValueError, members.createEntry, 
@@ -137,6 +161,10 @@ class TestDirectoryWithDefaultUserFolder(
         self.assert_(role_id in roles.listEntryIds())
 
         self.assertRaises(ValueError, roles.createEntry, {'role': role_id})
+
+    #
+    # TODO: add a more complex scenario here
+    #
 
 
 def test_suite():
