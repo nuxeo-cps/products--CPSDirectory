@@ -35,13 +35,13 @@ class IUserFolder(Interface.Base):
     # implementing them in the user folder itself.
     #
     # They are not CPS specific, but listed for completeness as CPS calls them.
-    def getUserNames(self):
+    def getUserNames():
         """Return a list of usernames"""
 
-    def getUser(self, name):
+    def getUser(name):
         """Return the named user object or None"""
 
-    def userFolderAddUser(self, name, password, roles, domains, **kw):
+    def userFolderAddUser(name, password, roles, domains, **kw):
         """API method for creating a new user object. Note that not all
            user folder implementations support dynamic creation of user
            objects."""
@@ -54,14 +54,14 @@ class IUserFolder(Interface.Base):
     # acl_users implement these methods and call it. If not,
     # a default version is called that assumes a standard user folder
     # without group support.
-    def mergedLocalRoles(self, object, withgroups=0):
+    def mergedLocalRoles(object, withgroups=0):
         """
         Return a merging of object and its ancestors' __ac_local_roles__.
         When called with withgroups=1, the keys are
         of the form user:foo and group:bar.
         """
 
-    def mergedLocalRolesWithPath(self, object, withgroups=0):
+    def mergedLocalRolesWithPath(object, withgroups=0):
         """
         Return a merging of object and its ancestors' __ac_local_roles__.
         When called with withgroups=1, the keys are
@@ -77,19 +77,19 @@ class IUserFolder(Interface.Base):
     # BasicUserFolder. These are not necessarily very efficient
     # and user folders may want to override them, especially in
     # the case of external storage, such as LDAP.
-    def setRolesOfUser(self, roles, username):
+    def setRolesOfUser(roles, username):
         """Sets the users of a role"""
 
-    def setUsersOfRole(self, usernames, role):
+    def setUsersOfRole(usernames, role):
         """Sets the users of a role"""
 
-    def getUsersOfRole(self, role):
+    def getUsersOfRole(role):
         """Gets the users of a role"""
 
-    def userFolderAddRole(self, role):
+    def userFolderAddRole(role):
         """Add a new role."""
 
-    def userFolderDelRoles(self, rolenames):
+    def userFolderDelRoles(rolenames):
         """Delete roles."""
 
     #
@@ -97,22 +97,22 @@ class IUserFolder(Interface.Base):
     #
     # A CPS UserFolder should have some kind of group support.
     # These methods are needed to support this.
-    def setGroupsOfUser(self, groupnames, username):
+    def setGroupsOfUser(groupnames, username):
         """Set the groups of a user"""
 
-    def setUsersOfGroup(self, usernames, groupname):
+    def setUsersOfGroup(usernames, groupname):
         """Set the users of the group"""
 
-    def getGroupNames(self):
+    def getGroupNames():
         """Return a list of group names"""
 
-    def getGroupById(self, groupname):
+    def getGroupById(groupname):
         """Return the given group"""
 
-    def userFolderAddGroup(self, groupname, **kw):
+    def userFolderAddGroup(groupname, **kw):
         """Create a group"""
 
-    def userFolderDelGroups(self, groupnames):
+    def userFolderDelGroups(groupnames):
         """Delete groups"""
     
     
@@ -124,10 +124,10 @@ class IUserFolder(Interface.Base):
     # is patched into BasicUserFolder, but that will give horrible
     # results on extended sources. Also, it supports no extended
     # attributes, which is common on external sources.
-    def listUserProperties(self):
+    def listUserProperties():
         """Lists properties settable or searchable on the users."""
 
-    def searchUsers(self, query={}, props=None, options=None, **kw):
+    def searchUsers(query={}, props=None, options=None, **kw):
         """Search for users having certain properties.
 
         If props is None, returns a list of ids:
@@ -150,13 +150,13 @@ class IUser(Interface.Base):
     #
     # These must be implemented as a patr of ANY user object, not just
     # for CPS. They are listed here to make the list complete.
-    def getRoles(self):
+    def getRoles():
         """Return the list of roles assigned to a user."""
 
-    def getUserName(self):
+    def getUserName():
         """Return the username of a user"""
 
-    def getId(self):
+    def getId():
         """Get the ID of the user. The ID can be used, at least from
         Python, to get the user from the user's
         UserDatabase"""
@@ -169,16 +169,16 @@ class IUser(Interface.Base):
         # priority, since all the userfodlers we support now does not
         # differ between id and username.
 
-    def getDomains(self):
+    def getDomains():
         """Return the list of domain restrictions for a user"""
 
     #
     # CPS Group support:
     #
-    def getGroups(self):
+    def getGroups():
         """Return the names of the groups that the user is a member of"""
 
-    def getComputedGroups(self):
+    def getComputedGroups():
         """Return the names of the groups that the user is a member of
 
         This also returns the groups which the grups are members of.
@@ -188,28 +188,28 @@ class IUser(Interface.Base):
     #
     # CPS Property support:
     #
-    def listProperties(self):
+    def listProperties():
         """Lists all properties that are set on the user."""
 
-    def hasProperty(self, id):
+    def hasProperty(id):
         """Check for a property"""
 
-    def getProperty(self, id, default=None):
+    def getProperty(id, default=None):
         """Returns the value of a property"""
 
-    def getProperties(self, ids):
+    def getProperties(ids):
         """Returns the values of list of properties"""
         # Returns as a dictionary, I hope?
 
-    def setProperty(self, id, value):
+    def setProperty(id, value):
         """Sets the value of a property"""
 
-    def setProperties(self, **kw):
+    def setProperties(**kw):
         """Sets the values of a dictionary of properties"""
 
 
 class IGroup(Interface.Base):
-    def getUsers(self):
+    def getUsers():
         """Returns the members of the group
 
         Does not return users who are members of member groups.
@@ -217,7 +217,7 @@ class IGroup(Interface.Base):
         in a management interface.
         """
 
-    def getComputedUsers(self):
+    def getComputedUsers():
         """Returns the users that are a members of the groups
 
         Returns members of subgroups as well as the main group.
@@ -229,9 +229,9 @@ class IGroup(Interface.Base):
     # Subgroup support.
     #
     # Having groups in groups is supported, but optional in CPS.
-    def getGroups(self):
+    def getGroups():
         """Returns the groups who are a member of the group"""
 
-    def setGroups(self, groupids):
+    def setGroups(groupids):
         """Sets the groups that are members of the group"""
 
