@@ -19,8 +19,8 @@
         string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id"
         i18n:translate="">cpsdir_label_edit_entry</a>
     </div>
-    <h1><span i18n:translate="">cpsdir_label_view <tal:block
-          i18n:name="dirname" tal:content="dirname" /></span></h1>
+    <h1><span i18n:translate="">cpsdir_label_view</span> <tal:block
+          i18n:translate="" tal:content="dirname" /></h1>
     <div class="description">
     </div>
   </metal:block>

@@ -23,11 +23,10 @@
     </div>
     <h1>
       <span tal:condition="python:ok == 'results'"
-        i18n:translate="">cpsdir_label_results <tal:block i18n:name="dirname"
-        tal:content="dirname" /></span>
+        i18n:translate="">cpsdir_label_results</span>
       <span tal:condition="python:ok != 'results'"
-        i18n:translate="">cpsdir_label_search <tal:block i18n:name="dirname"
-        tal:content="dirname" /></span>
+        i18n:translate="">cpsdir_label_search</span> <tal:block i18n:translate=""
+        tal:content="dirname" />
     </h1>
     <div class="description">
     </div>
