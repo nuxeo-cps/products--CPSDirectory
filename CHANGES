@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- fix: dapdirectory deleting non leaf entry raise cps error
+  now it display a warning psm
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
