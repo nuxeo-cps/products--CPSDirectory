@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.20.0 [R1 build 2004/12/21-09:20 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Raise ConfigurationError instead of ValueError for some
+  configuration problems.
+
+*******************************************
 ** CPSDirectory V1.19.1 [R1 build 2004/12/13-08:22 by madarche]
 
 Requires:
