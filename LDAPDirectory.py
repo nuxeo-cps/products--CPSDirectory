@@ -25,7 +25,6 @@ from types import ListType, TupleType, StringType
 from Globals import InitializeClass
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from AccessControl import getSecurityManager
 
 from Products.CMFCore.utils import getToolByName
 
@@ -244,18 +243,20 @@ class LDAPDirectory(BaseDirectory):
     #
 
     def _makeAttrsFromData(self, data, ignore_attrs=[]):
-        # Make attributs. Skin rdn_attr
+        # Make attributes. Skip rdn_attr
         attrs = {}
-        for fieldid, field in self._getSchemas()[0].items(): # XXX
-            value = data[fieldid]
-            if fieldid == 'dn':
+        for field_id, field in self._getSchemas()[0].items(): # XXX
+            if field.write_ignore_storage:
+                continue
+            value = data[field_id]
+            if field_id == 'dn':
                 # Never modifiable directly.
                 continue
-            if fieldid in ignore_attrs:
+            if field_id in ignore_attrs:
                 continue
             if type(value) not in (ListType, TupleType):
                 value = [value]
-            attrs[fieldid] = value
+            attrs[field_id] = value
         return attrs
 
     def _searchEntries(self, filter=None):
@@ -335,24 +336,23 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         if self._id is None:
             # Creation.
             return self.getDefaultData()
-
         entry = self._getEntry(self._schema.keys())
+        return self._getData(entry=entry)
 
-        data = {}
-        for field_id, field in self._schema.items():
-            if field_id == 'dn':
-                value = entry['dn']
-            else:
-                if entry.has_key(field_id):
-                    value = entry[field_id][0] # XXX multi-valued args!!!
-                else:
-                    value = field.getDefault()
-            data[field_id] = value
-        return data
+    def _getFieldData(self, field_id, field, entry=None):
+        """Get data from one field."""
+        if not entry.has_key(field_id):
+            return field.getDefault()
+        if field_id == 'dn':
+            return entry['dn']
+        return entry[field_id][0] # XXX multi-valued args!!!
 
-    def setData(self, data):
+    def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
-        dir = self._dir
+        data = self._setDataDoProcess(data, **kw)
+        for field_id, field in self._schema.items():
+            if field.write_ignore_storage:
+                del data[field_id]
 
         # Get dn by doing a lookup on the current entry.
         user_dn = self._getEntry()['dn']
@@ -362,8 +362,9 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         rdn_attr, rdn_value = rdn.split('=', 1)
 
         # XXX treat change of rdn
-        attrs = dir._makeAttrsFromData(data, ignore_attrs=[rdn_attr])
 
+        dir = self._dir
+        attrs = dir._makeAttrsFromData(data, ignore_attrs=[rdn_attr])
         if attrs:
             msg = dir._delegate.modify(user_dn, attrs=attrs)
             if msg.startswith('STRONG_AUTH_REQUIRED'):
