@@ -64,12 +64,12 @@ function updateParent() {
   value = getSelectedRadioValue(document.forms[0].uid)
   title = getSelectedRadioTitle(document.forms[0].uid)
   parentinput = opener.document.getElementById("$input_id");
-  parentinput.innerHTML = "<input type=\"hidden\" name=\"${input_id}\" value=\"" + value + "\">" + title
+  parentinput.innerHTML = "<input type=\"hidden\" name=\"${input_id}\" value=\"" + value + "\" />" + title
  self.close();
 }
   -->' />
    <input type="submit" class="standalone" value="button_update"
-    onclick="updateParent();" i18n:attributes="value">
+    onclick="updateParent();" i18n:attributes="value" />
     </metal:block>
   </metal:block>
 </div></div>

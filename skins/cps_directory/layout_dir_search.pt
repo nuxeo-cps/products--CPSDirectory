@@ -4,10 +4,10 @@
   formaction request/formaction|python: 'cpsdirectory_entry_search_form';
   ">
 <div class="group">
-<form action="." method="POST" name="form" enctype="multipart/form-data"
+<form action="." method="post" name="form" enctype="multipart/form-data"
   tal:attributes="action formaction">
-<input type="hidden" name="dirname" value="." tal:attributes="value
-request/dirname|string:members">
+<input type="hidden" name="dirname" value="."
+  tal:attributes="value request/dirname|string:members" />
 <table cellpadding="0" cellspacing="2" border="0" summary="form layout">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
@@ -43,7 +43,7 @@ request/dirname|string:members">
   <tr><td></td>
     <td><input type="submit" class="standalone"
           name="cpsdirectory_search_button" value="button_search"
-          i18n:attributes="value"></td>
+          i18n:attributes="value" /></td>
   </tr>
 </table>
 </form>

@@ -26,7 +26,7 @@
               <tal:block repeat="field fields">
                 <td tal:condition="not:repeat/field/index">
                   <input type="checkbox" name="ids:list"
-                    tal:condition="isAdmin" tal:attributes="value id"/>
+                    tal:condition="isAdmin" tal:attributes="value id" />
                 </td>
                 <td>
                   <a href="."
@@ -42,8 +42,8 @@
         <span i18n:translate="label_no_results" />
       </div>
       <p>
-        <input type="hidden" name="dirname" tal:attributes="value dirname"/>
-        <input type="hidden" name="ids:tokens:default" value=""/>
+        <input type="hidden" name="dirname" tal:attributes="value dirname" />
+        <input type="hidden" name="ids:tokens:default" value="" />
         <tal:block condition="python:isAdmin and results">
           <input type="button" value="button_select_all" class="context"
             i18n:attributes="value"
@@ -56,7 +56,7 @@
 
         </tal:block>
         <input type="button" class="context" value="button_back"
-          onclick="javascript:history.back()" i18n:attributes="value"/>
+          onclick="javascript:history.back()" i18n:attributes="value" />
       </p>
     </form>
   </div>

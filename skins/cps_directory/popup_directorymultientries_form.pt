@@ -26,14 +26,14 @@ function updateParent() {
   <tal:block repeat="item selection">
     <div>
       <input type="checkbox" checked="checked" class="noborder"
-        tal:attributes="name string:${input_id}:list;value item/uid;">
+        tal:attributes="name string:${input_id}:list;value item/uid;" />
       <tal:block replace="item/title" />
     </div>
   </tal:block>
   </div>
 
    <input type="submit" class="standalone" value="button_update"
-    onclick="updateParent();" i18n:attributes="value">
+    onclick="updateParent();" i18n:attributes="value" />
     </metal:block>
   </metal:block>
 </div></div>
