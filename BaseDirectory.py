@@ -44,11 +44,11 @@ class BaseDirectory(SimpleItemWithProperties):
 
     _properties = SimpleItemWithProperties._properties + (
         {'id': 'schema', 'type': 'string', 'mode': 'w',
-         'label': 'Schema'},
+         'label': "Schema"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
-         'label': 'Layout'},
+         'label': "Layout"},
         {'id': 'layout_style_prefix', 'type': 'string', 'mode': 'w',
-         'label': 'Layout style prefix'},
+         'label': "Layout style prefix"},
         )
 
     schema = ''
@@ -108,7 +108,7 @@ class BaseDirectory(SimpleItemWithProperties):
     #
 
     security.declarePublic('renderEntryDetailed')
-    def renderEntryDetailed(self, id, mode='view', **kw):
+    def renderEntryDetailed(self, id, layout_mode='view', **kw):
         """Render the entry.
 
         Returns (rendered, datastructure):
@@ -117,25 +117,27 @@ class BaseDirectory(SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
-        layoutdata = layout.getLayoutData(ds)
-        rendered = self._renderLayoutStyle(mode, layout=layoutdata,
+        layoutob = self._getLayout(self.layout)
+        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
+        layoutdata = layoutob.getLayoutData(ds, mode_chooser)
+        rendered = self._renderLayoutStyle(layout_mode, layout=layoutdata,
                                            datastructure=ds, **kw)
         return rendered, ds
 
     # XXX security ?
     security.declarePublic('renderEditEntryDetailed')
     def renderEditEntryDetailed(self, id, request=None,
-                                mode='edit', errmode='edit', **kw):
+                                layout_mode='edit', layout_mode_err='edit',
+                                **kw):
         """Modify the entry from request, returns detailed information
         about the rendering.
 
         If request is None, the entry is not modified and is rendered
-        in the specified mode.
+        in layout_mode.
 
         If request is not None, the parameters are validated and the
-        entry modified, and rendered in the specified mode. If there is
-        a validation error, the entry is rendered in mode errmode.
+        entry modified, and rendered in layout_mode. If there is
+        a validation error, the entry is rendered in layout_mode_err.
 
         Returns (rendered, ok, datastructure):
         - rendered is the rendered HTML,
@@ -144,18 +146,19 @@ class BaseDirectory(SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layout = self._getLayout(self.layout)
-        layoutdata = layout.getLayoutData(ds)
+        layoutob = self._getLayout(self.layout)
+        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
+        layoutdata = layoutob.getLayoutData(ds, mode_chooser)
         if request is not None:
             ds.updateFromMapping(request.form)
-            ok = layout.validateLayout(layoutdata, ds)
+            ok = layoutob.validateLayout(layoutdata, ds)
             if ok:
                 dm._commit()
             else:
-                mode = errmode
+                layout_mode = layout_mode_err
         else:
             ok = 1
-        rendered = self._renderLayoutStyle(mode, layout=layoutdata,
+        rendered = self._renderLayoutStyle(layout_mode, layout=layoutdata,
                                            datastructure=ds, ok=ok, **kw)
         return rendered, ok, ds
 
@@ -210,15 +213,15 @@ class BaseDirectory(SimpleItemWithProperties):
         return layout
 
     security.declarePrivate('_renderLayoutStyle')
-    def _renderLayoutStyle(self, mode, **kw):
+    def _renderLayoutStyle(self, layout_mode, **kw):
         """Render a layout according to the defined style.
 
         Uses the directory as a rendering context.
         """
-        layout_meth = self.layout_style_prefix + mode
+        layout_meth = self.layout_style_prefix + layout_mode
         layout_style = getattr(self, layout_meth, None)
         if layout_style is None:
             raise RuntimeError("No layout method '%s'" % layout_meth)
-        return layout_style(mode=mode, **kw)
+        return layout_style(layout_mode=layout_mode, **kw)
 
 InitializeClass(BaseDirectory)
