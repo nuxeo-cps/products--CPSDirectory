@@ -119,10 +119,13 @@ class RolesDirectory(BaseDirectory):
             user_roles = []
             # construct a list of roles covered by requested members
             for username in kwmembers:
-                userroles = [r for r in aclu.getUser(username).getRoles()\
-                                     if r not in user_roles]
-                if userroles:
-                    user_roles.extend(userroles)
+                u = aclu.getUser(username)
+                if not u:
+                    continue
+                for role in u.getRoles():
+                    if role not in user_roles:
+                        user_roles.append(role)
+                        
         # fields asked for
         if return_fields is not None:
             if isinstance(return_fields, StringType):
