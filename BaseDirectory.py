@@ -78,6 +78,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': 'Field for entry id'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry title'},
+        {'id': 'search_substring_fields', 'type': 'tokens', 'mode': 'w',
+         'label': 'Fields with substring search'},
         )
 
     schema = ''
@@ -90,6 +92,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     acl_entry_edit_roles = 'Manager'
     id_field = ''
     title_field = ''
+    search_substring_fields = []
+
     entry_roles = []
 
     acl_access_roles_c = ['Manager', 'Member']
@@ -249,6 +253,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
+        It is of the form {field1: value1, field2: [value21, value22]...}
+
+        The search is done:
+
+          - As a substring case-independent search for fields in
+            search_substring_fields.
+
+          - As an exact search for all other fields.
+
+          - Searches done for a list values are always OR exact searches.
 
         If return_fields is None, returns a list of ids:
           ['member1', 'member2']
