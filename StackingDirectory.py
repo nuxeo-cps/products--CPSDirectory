@@ -35,6 +35,7 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
+from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
 
 class StackingDirectory(BaseDirectory):
@@ -232,7 +233,7 @@ class StackingDirectory(BaseDirectory):
             try:
                 b_dir = getattr(dtool, dir_id)
             except AttributeError:
-                raise ValueError("No backing directory '%s'" % dir_id)
+                raise ConfigurationError("No backing directory '%s'" % dir_id)
             res.append(b_dir)
         return res
 
@@ -386,7 +387,7 @@ class StackingStorageAdapter(BaseStorageAdapter):
             try:
                 b_dir = getattr(dtool, dir_id)
             except AttributeError:
-                raise ValueError("No backing directory '%s'" % dir_id)
+                raise ConfigurationError("No backing directory '%s'" % dir_id)
 
             b_dir.createEntry(data)
 
