@@ -37,6 +37,7 @@ from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 from Products.CMFCore.utils import getToolByName, SimpleItemWithProperties
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 
 class LocalDirectory(BaseDirectory):
     """A Directory that acts as a Proxy to a directory in the UserHomeFolder.
@@ -46,7 +47,7 @@ class LocalDirectory(BaseDirectory):
 
     security = ClassSecurityInfo()
 
-    _properties = SimpleItemWithProperties._properties + (
+    _properties = BaseDirectory._properties + (
         {'id': 'directory_id', 'type': 'string', 'mode': 'w',
          'label': 'Id of local directory'},
         )
@@ -102,11 +103,22 @@ class LocalDirectory(BaseDirectory):
   
     def _getContent(self):
         """Get the content object, maybe editable."""
+        tool = getToolByName(self, 'portal_membership', None)
+        folder = tool.getHomeFolder()
         try:
-            tool = getToolByName(self, 'portal_membership', None)
-            return tool.getHomeFolder()._getOb(self.directory_id)
+            return folder._getOb(self.directory_id)
         except AttributeError:
-            return None
+            pass 
+        # The local directory could not be found. Try creating it.
+        # (Creates a ZODB Directory, because nothing else really
+        # makes sense at the moment. In the future maybe it should be
+        # a setting?)
+        props = {}
+        for prop in self.propertyIds():
+            props[prop] = self.getProperty(prop)
+        new_dir = ZODBDirectory(self.directory_id, **props)
+        folder._setObject(self.directory_id, new_dir)
+        return folder._getOb(self.directory_id)
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
