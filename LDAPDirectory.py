@@ -578,9 +578,6 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data, **kw)
-        for field_id, field in self.getFieldItems():
-            if field.write_ignore_storage:
-                del data[field_id]
 
         # Get dn by doing a lookup on the current entry.
         user_dn = self._dir._getLDAPEntry(self._id)['dn']
