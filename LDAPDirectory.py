@@ -31,9 +31,6 @@ from OFS.Image import File, Image
 
 from Products.CMFCore.utils import getToolByName
 
-# XXX we must not depend on CPSCore ! XXX
-from Products.CPSCore.utils import _isinstance
-
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.BasicFields import CPSStringListField, CPSDateTimeField
 
@@ -52,6 +49,14 @@ ldap_scopes = (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
 
 NO_PASSWORD = '__NO_PASSWORD__'
+
+def _isinstance(ob, cls):
+    try:
+        return isinstance(ob, cls)
+    except TypeError:
+        # In python 2.1 isinstance() raises TypeError
+        # instead of returning 0 for ExtensionClasses.
+        return 0
 
 
 class LDAPDirectory(BaseDirectory):
