@@ -11,25 +11,64 @@
   global edit_allowed python: dir.isEditEntryAllowed(id);
   "/>
 <metal:block use-macro="here/main_template/macros/master">
+  <metal:block fill-slot="css_slot">
+    <tal:block define="dummy python:request.set('breadcrumb_set',
+    [{
+      'id': 'directories',
+      'url': here.portal_url() + '/cpsdirectory_view',
+      'title': here.Localizer.default('Directories'),
+    },
+    {
+      'id': 'directories',
+      'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
+      'title': here.Localizer.default(dirtitle),
+    }
+   ]);" />
+    <tal:block define="global actions python:
+actions.update({'object': [{'id':'search_entry',
+  'url':base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
+  'name': 'cpsdir_label_search_entry',
+  'category': 'object'}]})" />
+    <tal:block condition="dir/isCreateEntryAllowed">
+      <tal:block define="global actions python:
+actions['object'].append({'id':'new_entry',
+  'url':base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
+  'name': 'cpsdir_label_create_entry',
+  'category': 'object'})" />
+    </tal:block>
+    <tal:block define="global actions python:
+actions['object'].append({'id':'view_entry',
+  'url':base_url+'cpsdirectory_entry_view?dirname='+dirname+'&id='+id,
+  'name': 'cpsdir_label_view_entry',
+  'category': 'object'})" />
+    <tal:block condition="edit_allowed">
+      <tal:block define="global actions python:
+actions['object'].append({'id':'edit_entry',
+  'url':base_url+'cpsdirectory_entry_edit_form?dirname='+dirname+'&id='+id,
+  'name': 'cpsdir_label_edit_entry',
+  'category': 'object'})" />
+    </tal:block>
+    <tal:block condition="dir/isDeleteEntryAllowed">
+      <tal:block define="global actions python:
+actions['object'].append({'id':'delete_entry',
+  'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
+  'onclick': 'return window.confirm(\''+ here.Localizer.default('description_confirm_delete') +'\')' ,
+  'name': 'cpsdir_label_delete_entry',
+  'category': 'object'})" />
+    </tal:block>
+    <link rel="Stylesheet" type="text/css" href=""
+      tal:attributes="href string:${base_url}document.css">
+  </metal:block>
+
   <metal:block fill-slot="header">
     <a tal:attributes="href string:${base_url}cpsdirectory_view">
       <img tal:replace="structure python:
         here.getImgTag('cpsdirectoryup_icon.gif', base_url=base_url)" />
       <b i18n:translate="">cpsdir_label_upto_directories</b></a>
-    <div class="documentActions" tal:condition="edit_allowed">
-      <a tal:attributes="href
-        string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id"
-        i18n:translate="">cpsdir_label_edit_entry</a>
-    </div>
-    <h1><span i18n:translate="">cpsdir_label_view</span> <tal:block
-          i18n:translate="" tal:content="dirtitle" /></h1>
+    <h1><span i18n:translate="" tal:content="dirtitle" />:
+        <span i18n:translate="cpsdir_label_view_entry" /></h1>
     <div class="description">
     </div>
-  </metal:block>
-
-  <metal:block fill-slot="css_slot">
-    <link rel="Stylesheet" type="text/css" href=""
-      tal:attributes="href string:${base_url}document.css">
   </metal:block>
 
   <metal:block fill-slot="main">
