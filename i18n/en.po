@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2004-02-06 12:32default\n"
+"POT-Creation-Date: 2004-03-04 14:04default\n"
 "PO-Revision-Date: 2004-01-27 17:58+0100\n"
 "Last-Translator: ben <ben@nuxeo.com>\n"
 "Language-Team: ben\n"
@@ -26,19 +26,6 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Error"
-
-#.   <a attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" content="dir/title_or_id" href="">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "Title"
-msgstr "Title"
-
-#.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
-#.       </input>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "button_create"
-msgstr "Create"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -78,7 +65,7 @@ msgstr "Up to Directories"
 msgid "cpsdir_label_view_entry"
 msgstr "View entry"
 
-#.   <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
+#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
@@ -134,6 +121,12 @@ msgstr "Full Name"
 
 msgid "cpsdir_label_delete_entry"
 msgstr "Delete entry"
+
+#~ msgid "Title"
+#~ msgstr "Title"
+
+#~ msgid "button_create"
+#~ msgstr "Create"
 
 #~ msgid "button_update"
 #~ msgstr "Create"

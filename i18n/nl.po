@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-06 12:32default\n"
+"POT-Creation-Date: 2004-03-04 14:04default\n"
 "Last-Translator: Lennart Regebro <regebro@nuxeo.com>\n"
 "Language-Team: Nuxeo <info@nuxeo.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,20 +17,6 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr ""
-
-#.   <a attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" content="dir/title_or_id" href="">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "Title"
-msgstr ""
-
-#.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
-#.       </input>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#, fuzzy
-msgid "button_create"
-msgstr "Maak een nieuw item aan"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -71,7 +57,7 @@ msgstr "Naar mappen"
 msgid "cpsdir_label_view_entry"
 msgstr "Weergave item"
 
-#.   <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
+#.   <span condition="widget/is_i18n" content="widget/help" style="white-space:pre;">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
@@ -130,6 +116,10 @@ msgstr "Volledige naam"
 #, fuzzy
 msgid "cpsdir_label_delete_entry"
 msgstr "Maak een nieuw item aan"
+
+#, fuzzy
+#~ msgid "button_create"
+#~ msgstr "Maak een nieuw item aan"
 
 #, fuzzy
 #~ msgid "button_update"
