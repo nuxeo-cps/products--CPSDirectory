@@ -224,6 +224,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePublic('getEntry')
     def getEntry(self, id, default=_marker):
         """Get entry filtered by acls and processes.
+
+        A default argument can be specified so that KeyError is not
+        raised if the entry does not exist.
         """
         if default is _marker:
             return self._getEntryKW(id)
