@@ -19,7 +19,7 @@
 """ZODBDirectory
 """
 
-from zLOG import LOG, DEBUG
+from zLOG import LOG, DEBUG, TRACE
 
 from cgi import escape
 from types import ListType, TupleType, StringType
@@ -30,11 +30,15 @@ from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
 from AccessControl.Role import RoleManager
 from OFS.SimpleItem import Item_w__name__
+
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
+
 from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
+
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 
 class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
@@ -50,14 +54,19 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
 
     security = ClassSecurityInfo()
 
-    id_field = 'id'
-    title_field = 'id'
-
     def __init__(self, id, **kw):
         BTreeFolder2.__init__(self, id)
         BaseDirectory.__init__(self, id, **kw)
 
-    _properties = BaseDirectory._properties
+    _properties = BaseDirectory._properties + (
+        {'id': 'password_field', 'type': 'string', 'mode': 'w',
+         'label': "Field for password (if authentication)"},
+        )
+    password_field = ''
+
+    id_field = 'id'
+    title_field = 'id'
+
     _properties_post_process_split = BaseDirectory._properties_post_process_split
     _properties_post_process_tales = BaseDirectory._properties_post_process_tales
 
@@ -103,6 +112,37 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
         return self.hasObject(id)
+
+    security.declarePublic('isAuthenticating')
+    def isAuthenticating(self):
+        """Check if this directory does authentication.
+
+        Returns a boolean.
+        """
+        return not not self.password_field
+
+    security.declarePrivate('getEntryAuthenticated')
+    def getEntryAuthenticated(self, id, password, **kw):
+        """Get and authenticate an entry.
+
+        Doesn't check ACLs.
+
+        Returns the entry if authenticated.
+        Raises KeyError if the entry doesn't exist.
+        Raises AuthenticationFailed if authentication failed.
+        """
+        entry = self._getEntryKW(id, **kw) # may raise KeyError
+        password_field = self.password_field
+        cur_password = entry.get(password_field)
+        if cur_password is None:
+            LOG('getEntryAuthenticated', TRACE, "No field '%s' for %s in %s" %
+                (password_field, id, self.getId()))
+            raise AuthenticationFailed
+        if not self._checkPassword(password, cur_password):
+            LOG('getEntryAuthenticated', TRACE,
+                "Authentication failed for %s in %s" % (id, self.getId()))
+            raise AuthenticationFailed
+        return entry
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
@@ -230,6 +270,14 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         adapters = [AttributeStorageAdapter(schema, ob, **kw)
                     for schema in self._getSchemas()]
         return adapters
+
+    security.declarePrivate('_checkPassword')
+    def _checkPassword(self, candidate, password):
+        """Check that a password is correct.
+
+        Returns a boolean.
+        """
+        return (candidate == password)
 
 InitializeClass(ZODBDirectory)
 
