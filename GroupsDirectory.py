@@ -59,10 +59,10 @@ class GroupsDirectory(BaseDirectory):
     subgroups_field = 'subgroups'
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         dir = self
-        adapters = [GroupStorageAdapter(schema, id, dir)
+        adapters = [GroupStorageAdapter(schema, id, dir, **kw)
                     for schema in self._getSchemas()]
         return adapters
 
@@ -193,13 +193,13 @@ class GroupStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from the user folder.
     """
 
-    def __init__(self, schema, group, dir):
+    def __init__(self, schema, group, dir, **kw):
         """Create an Adapter for a schema.
         """
         self._group = group
         self._dir = dir
         self._portal = getToolByName(dir, 'portal_url').getPortalObject()
-        BaseStorageAdapter.__init__(self, schema)
+        BaseStorageAdapter.__init__(self, schema, **kw)
 
     def _getGroupMembers(self, group):
         aclu = self._portal.acl_users

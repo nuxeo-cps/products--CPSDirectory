@@ -199,10 +199,10 @@ class LocalDirectory(BaseDirectory):
 
     # These next two are probably not needed, since they are internal.
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         ob = self._getContent()
-        return ob._getAdapters(id)
+        return ob._getAdapters(id, **kw)
 
     security.declarePrivate('_getAdditionalRoles')
     def _getAdditionalRoles(self, id):

@@ -71,10 +71,10 @@ class MembersDirectory(BaseDirectory):
     acl_entry_edit_roles_c = ['Manager', 'Owner']
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         dir = self
-        adapters = [MemberStorageAdapter(schema, id, dir)
+        adapters = [MemberStorageAdapter(schema, id, dir, **kw)
                     for schema in self._getSchemas()]
         return adapters
 
@@ -214,7 +214,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
     data.
     """
 
-    def __init__(self, schema, id, dir):
+    def __init__(self, schema, id, dir, **kw):
         """Create an Adapter for a schema.
 
         The id passed is the member id. It may be None for creation.
@@ -222,7 +222,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
         self._id = id
         self._dir = dir
         self._mtool = getToolByName(dir, 'portal_membership')
-        BaseStorageAdapter.__init__(self, schema)
+        BaseStorageAdapter.__init__(self, schema, **kw)
 
     def _getMember(self):
         member = self._mtool.getMemberById(self._id)

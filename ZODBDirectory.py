@@ -215,14 +215,14 @@ class ZODBDirectory(BTreeFolder2, BaseDirectory):
     #
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         if id is not None:
             ob = self._getOb(id)
         else:
             # Creation
             ob = None
-        adapters = [AttributeStorageAdapter(schema, ob)
+        adapters = [AttributeStorageAdapter(schema, ob, **kw)
                     for schema in self._getSchemas()]
         return adapters
 

@@ -10,4 +10,5 @@ Bug fixes:
 - Better error message in LocalDirectory if the home folder is missing.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- _getDataModel and _getAdapters always propagate **kw arguments to
+  the underlying storage adapter.

@@ -153,10 +153,10 @@ class LDAPDirectory(BaseDirectory):
                                  self.ldap_use_ssl)
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id, id_is_dn=0):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         dir = self
-        adapters = [LDAPStorageAdapter(schema, id, dir, id_is_dn=id_is_dn)
+        adapters = [LDAPStorageAdapter(schema, id, dir, **kw)
                     for schema in self._getSchemas()]
         return adapters
 
@@ -527,7 +527,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from an LDAP server.
     """
 
-    def __init__(self, schema, id, dir, field_ids=None, id_is_dn=0):
+    def __init__(self, schema, id, dir, id_is_dn=0, **kw):
         """Create an Adapter for a schema.
 
         If id_is_dn is true, then the passed id is actually a dn.
@@ -536,7 +536,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         self._id = id
         self._dir = dir
         self._id_is_dn = id_is_dn
-        BaseStorageAdapter.__init__(self, schema, field_ids=field_ids)
+        BaseStorageAdapter.__init__(self, schema, **kw)
 
     def getData(self):
         """Get data from an entry, returns a mapping.

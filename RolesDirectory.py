@@ -53,10 +53,10 @@ class RolesDirectory(BaseDirectory):
     members_field = 'members'
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
+    def _getAdapters(self, id, **kw):
         """Get the adapters for an entry."""
         dir = self
-        adapters = [RoleStorageAdapter(schema, id, dir)
+        adapters = [RoleStorageAdapter(schema, id, dir, **kw)
                     for schema in self._getSchemas()]
         return adapters
 
@@ -213,13 +213,13 @@ class RoleStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from the user folder.
     """
 
-    def __init__(self, schema, role, dir):
+    def __init__(self, schema, role, dir, **kw):
         """Create an Adapter for a schema.
         """
         self._role = role
         self._dir = dir
         self._portal = getToolByName(dir, 'portal_url').getPortalObject()
-        BaseStorageAdapter.__init__(self, schema)
+        BaseStorageAdapter.__init__(self, schema, **kw)
 
     def _getValidRoles(self):
         """Get the list of valid roles.

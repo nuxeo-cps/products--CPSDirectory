@@ -240,7 +240,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _getEntryKW(self, id, **kw):
         """Get entry filtered by acls and processes.
 
-        Passes additional **kw to the datamodel.
+        Passes additional **kw to _getDataModel.
         """
         dm = self._getDataModel(id, **kw)
         entry = {}
@@ -509,8 +509,11 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return schemas
 
     security.declarePrivate('_getAdapters')
-    def _getAdapters(self, id):
-        """Get the adapters for an entry."""
+    def _getAdapters(self, id, **kw):
+        """Get the adapters for an entry.
+
+        Passes additional **kw to the adapters.
+        """
         raise NotImplementedError
 
     security.declarePrivate('_getAdditionalRoles')
@@ -525,7 +528,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePrivate('_getDataModel')
     def _getDataModel(self, id, **kw):
-        """Get the datamodel for an entry."""
+        """Get the datamodel for an entry.
+
+        Passes additional **kw to _getAdapters.
+        """
         adapters = self._getAdapters(id, **kw)
         add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
         dm = DataModel(None, adapters, context=self, add_roles=add_roles)
