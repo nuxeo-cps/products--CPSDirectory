@@ -19,3 +19,7 @@ New internal features:
   instead of a KeyError (LocalDirectory).
 - Added headers in .po files to make them recognized by
   PlacelessTranslationService
+- You may specified a search_restricted_member_list within the options so
+  that the research will be restricted to this list when specified. A use
+  case is when you want to perform a research in a given context on people
+  having local roles within this context only
