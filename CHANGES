@@ -9,4 +9,5 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Added an optional 'loadcustom' parameter to the getDirectoryVocabularies.py
+  method.

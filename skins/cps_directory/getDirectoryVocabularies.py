@@ -1,4 +1,4 @@
-##parameters=
+##parameters=loadcustom=1
 """
 Get the vocabularies used for the directories.
 """
@@ -42,7 +42,8 @@ vocabularies = {
     'groups': groups_vocabulary,
     }
 
-cvocabularies = context.getCustomDirectoryVocabularies()
-vocabularies.update(cvocabularies)
+if loadcustom:
+    cvocabularies = context.getCustomDirectoryVocabularies()
+    vocabularies.update(cvocabularies)
 
 return vocabularies
