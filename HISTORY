@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.13.0 [R1 build 2004/06/14-07:57 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- Added the isUserModified() set of methods
+- In CPSDirectoryMultiEntriesWidget: added the option of 
+rendering in edit mode without using the popup window selection
+system (using CPSMultiSelectWidget rendering instead)
+Bug fixes:
+~~~~~~~~~~
+- Fix: searchEntries on a Stacking/MetaDirectory with return_fields=['*']
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.12.5 [R1 build 2004/05/28-16:16 by guillaum]
 
 Requires:

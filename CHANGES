@@ -3,13 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- Added the isUserModified() set of methods
-- In CPSDirectoryMultiEntriesWidget: added the option of 
-rendering in edit mode without using the popup window selection
-system (using CPSMultiSelectWidget rendering instead)
+-
 Bug fixes:
 ~~~~~~~~~~
-- Fix: searchEntries on a Stacking/MetaDirectory with return_fields=['*']
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
