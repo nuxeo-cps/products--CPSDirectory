@@ -30,7 +30,7 @@ APIs used are:
 
 from zLOG import LOG, TRACE, DEBUG
 
-from types import StringType
+from types import StringType, ListType, TupleType
 
 from Acquisition import aq_base, aq_parent, aq_inner
 
@@ -52,11 +52,11 @@ def _preprocessQuery(mapping, search_substring_props):
     
     for key, value in mapping.items():
         search_types[key] = 'exact'
-        if isinstance(value, str):
+        if isinstance(value, StringType):
             if key in search_substring_props:
                 search_types[key] = 'substring'
                 value = value.lower()
-        elif isinstance(value, list) or isinstance(value, tuple):
+        elif isinstance(value, (ListType, TupleType)):
             search_types[key] = 'list'
         query[key] = value
     return search_types, query
@@ -81,7 +81,7 @@ def _isEntryMatching(entry, search_types, query):
         searched = entry[key]
         if searched is None:
             return 0
-        if not isinstance(searched, list) or not isinstance(searched, tuple):
+        if not isinstance(searched, (ListType, TupleType)):
             searched = (searched,)
         matched = 0
         for item in searched:
