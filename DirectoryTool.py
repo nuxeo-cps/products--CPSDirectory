@@ -93,11 +93,11 @@ class DirectoryTool(UniqueObject, Folder):
     manage_addCPSDirectoryForm = DTMLFile('zmi/directory_addform', globals())
 
     security.declareProtected(ManagePortal, 'manage_addCPSDirectory')
-    def manage_addCPSDirectory(self, id, meta_type, REQUEST=None):
+    def manage_addCPSDirectory(self, id, meta_type, REQUEST=None, **kw):
         """Add a directory, called from the ZMI."""
         container = self
         cls = DirectoryTypeRegistry.getType(meta_type)
-        ob = cls(id)
+        ob = cls(id, **kw)
         container._setObject(id, ob)
         ob = container._getOb(id)
         if REQUEST is not None:
