@@ -22,13 +22,11 @@ A directory that redirects requests to other backing directories.
 """
 
 from zLOG import LOG, DEBUG, WARNING
-from copy import deepcopy
+from types import ListType, TupleType, StringType
 
 from Globals import InitializeClass
 from Globals import DTMLFile
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from AccessControl import getSecurityManager
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ManagePortal
@@ -52,20 +50,27 @@ class StackingDirectory(BaseDirectory):
 
     security = ClassSecurityInfo()
 
-    _properties = BaseDirectory._properties + (
-        {'id': 'creation_dir_expr', 'type': 'string', 'mode': 'w',
-         'label': "Directory used for creation (TALES)"},
-        )
-    creation_dir_expr = ''
-
-    creation_dir_expr_c = None
-
-    _properties_post_process_tales = (
-        ('creation_dir_expr', 'creation_dir_expr_c'),
-        )
+    # XXX for now creation is always done in the first matching dir.
+    #_properties = BaseDirectory._properties + (
+    #    {'id': 'creation_dir_expr', 'type': 'string', 'mode': 'w',
+    #     'label': "Directory used for creation (TALES)"},
+    #    )
+    #creation_dir_expr = ''
+    #
+    #creation_dir_expr_c = None
+    #
+    #_properties_post_process_tales = (
+    #    ('creation_dir_expr', 'creation_dir_expr_c'),
+    #    )
 
     def __init__(self, *args, **kw):
         BaseDirectory.__init__(self, *args, **kw)
+        #self.setBackingDirectories( # debug
+        #    (# dir_id, style, prefix/suffix, strip
+        #    ('dirfoo', 'prefix', 'a_', 0),
+        #    ('dirbar', 'suffix', '_b', 1),
+        #    ('dirbaz', 'none', None, 0),
+        #    ))
 
     #
     # ZMI
@@ -146,50 +151,9 @@ class StackingDirectory(BaseDirectory):
                 raise ValueError("No backing directory '%s'" % dir_id)
             # Find and convert ids
             b_ids = b_dir.listEntryIds()
-            if style == 'none':
-                for id in b_ids:
-                    if not ids_d.has_key(id):
-                        ids.append(id)
-                        ids_d[id] = None
-                    # XXX else warn
-            elif style == 'prefix':
-                if strip:
-                    for b_id in b_ids:
-                        id = fix + b_id
-                        if not ids_d.has_key(id):
-                            ids.append(id)
-                            ids_d[id] = None
-                        # XXX else warn
-                else:
-                    # Only keep ids that have correct prefix
-                    for b_id in b_ids:
-                        if not b_id.startswith(fix):
-                            continue
-                        id = b_id
-                        if not ids_d.has_key(id):
-                            ids.append(id)
-                            ids_d[id] = None
-                        # XXX else warn
-            elif style == 'suffix': # and strip
-                if strip:
-                    for b_id in b_ids:
-                        id = b_id + fix
-                        if not ids_d.has_key(id):
-                            ids.append(id)
-                            ids_d[id] = None
-                        # XXX else warn
-                else:
-                    # Only keep ids that have correct suffix
-                    for b_id in b_ids:
-                        if not b_id.endswith(fix):
-                            continue
-                        id = b_id
-                        if not ids_d.has_key(id):
-                            ids.append(id)
-                            ids_d[id] = None
-                        # XXX else warn
-            else:
-                raise ValueError(style)
+            uids = self._uniqueIdsFromBacking(b_ids, ids_d, dir_id, style, fix,
+                                              strip)
+            ids.extend(uids)
         return ids
 
     #def listEntryIdsAndTitles(self): XXX
@@ -241,11 +205,77 @@ class StackingDirectory(BaseDirectory):
 
         See API in the base class.
         """
-        raise NotImplementedError
-        #1. build queries for each backing dir
-        #3. do searches
-        #4. union results
+        dtool = getToolByName(self, 'portal_directories')
+        ids_d = {}
+        res = []
+        for dir_id, style, fix, strip in self.getBackingDirectories():
+            # Get backing dir
+            try:
+                b_dir = getattr(dtool, dir_id)
+            except AttributeError:
+                raise ValueError("No backing directory '%s'" % dir_id)
+            # Do search
+            b_kw = kw.copy()
+            b_id_field = b_dir.id_field
+            postfilter_id = None
+            if b_kw.has_key(b_id_field) and style in ('prefix', 'suffix'):
+                # Query on id and prefix/suffix.
+                value = b_kw[b_id_field]
+                if isinstance(value, ListType) or isinstance(value, TupleType):
+                    oldvalue = value
+                    value = []
+                    # Exact match, check prefix/suffix
+                    if style == 'prefix':
+                        for v in oldvalue:
+                            if not v.startswith(fix):
+                                continue
+                            if strip:
+                                value.append(v[len(fix):])
+                            else:
+                                value.append(v)
+                    else: # style == 'suffix':
+                        for v in oldvalue:
+                            if not v.endswith(fix):
+                                continue
+                            if strip:
+                                value.append(v[:-len(fix)])
+                            else:
+                                value.append(v)
+                    if not value:
+                        # Won't match in this directory
+                        continue
+                    b_kw[b_id_field] = value
+                elif isinstance(value, StringType):
+                    if b_id_field not in b_dir.search_substring_fields:
+                        # Exact match
+                        if style == 'prefix':
+                            if not value.startswith(fix):
+                                continue
+                            if strip:
+                                value = value[len(fix):]
+                        else: # style == 'suffix':
+                            if not value.endswith(fix):
+                                continue
+                            if strip:
+                                value = value[:-len(fix)]
+                        b_kw[b_id_field] = value
+                    else:
+                        # Substring match
+                        # XXX we cannot do it all from here, so postfilter
+                        raise NotImplementedError
+                        postfilter_id = value
 
+            b_res = b_dir.searchEntries(return_fields=return_fields, **b_kw)
+            if return_fields is None:
+                uids = self._uniqueIdsFromBacking(b_res, ids_d, dir_id, style,
+                                                  fix, strip)
+                res.extend(uids)
+            else:
+                ures = self._uniqueEntriesFromBacking(b_res, ids_d, b_id_field,
+                                                      dir_id, style, fix,
+                                                      strip)
+                res.extend(ures)
+        return res
 
     #
     # Internal
@@ -317,6 +347,114 @@ class StackingDirectory(BaseDirectory):
                 continue
             return b_dir, b_id
         raise KeyError(id)
+
+    def _uniqueIdsFromBacking(self, b_ids, ids_d, dir_id, style, fix, strip):
+        """Return the back-converted ids from a backing directory.
+
+        Ensures they are unique in dict ids_d.
+        """
+        ids = []
+        if style == 'none':
+            for id in b_ids:
+                if not ids_d.has_key(id):
+                    ids_d[id] = None
+                    ids.append(id)
+                # XXX else warn
+        elif style == 'prefix':
+            if strip:
+                for b_id in b_ids:
+                    id = fix + b_id
+                    if not ids_d.has_key(id):
+                        ids_d[id] = None
+                        ids.append(id)
+                    # XXX else warn
+            else:
+                # Only keep ids that have correct prefix
+                for b_id in b_ids:
+                    if not b_id.startswith(fix):
+                        continue
+                    id = b_id
+                    if not ids_d.has_key(id):
+                        ids_d[id] = None
+                        ids.append(id)
+                    # XXX else warn
+        elif style == 'suffix': # and strip
+            if strip:
+                for b_id in b_ids:
+                    id = b_id + fix
+                    if not ids_d.has_key(id):
+                        ids_d[id] = None
+                        ids.append(id)
+                    # XXX else warn
+            else:
+                # Only keep ids that have correct suffix
+                for b_id in b_ids:
+                    if not b_id.endswith(fix):
+                        continue
+                    id = b_id
+                    if not ids_d.has_key(id):
+                        ids_d[id] = None
+                        ids.append(id)
+                    # XXX else warn
+        else:
+            raise ValueError(style)
+        return ids
+
+    def _uniqueEntriesFromBacking(self, b_res, ids_d, b_id_field,
+                                  dir_id, style, fix, strip):
+        """Return the back-converted entries from a backing directory.
+
+        Ensures their ids are unique in dict ids_d.
+        """
+        res = []
+        # Back-convert ids
+        if style == 'none':
+            for b_entry in b_res:
+                id = b_entry[b_id_field]
+                if not ids_d.has_key(id):
+                    res.append(b_entry)
+                    ids_d[id] = None
+                # XXX else warn
+        elif style == 'prefix':
+            if strip:
+                for b_entry in b_res:
+                    id = fix + b_entry[b_id_field]
+                    if not ids_d.has_key(id):
+                        res.append(b_entry)
+                        ids_d[id] = None
+                    # XXX else warn
+            else:
+                # Only keep ids that have correct prefix
+                for b_entry in b_res:
+                    print 'entry %s' % `b_entry`
+                    id = b_entry[b_id_field]
+                    if not id.startswith(fix):
+                        continue
+                    if not ids_d.has_key(id):
+                        res.append(b_entry)
+                        ids_d[id] = None
+                    # XXX else warn
+        elif style == 'suffix': # and strip
+            if strip:
+                for b_entry in b_res:
+                    id = b_entry[b_id_field] + fix
+                    if not ids_d.has_key(id):
+                        res.append(b_entry)
+                        ids_d[id] = None
+                    # XXX else warn
+            else:
+                # Only keep ids that have correct suffix
+                for b_entry in b_res:
+                    id = b_entry[b_id_field]
+                    if not id.endswith(fix):
+                        continue
+                    if not ids_d.has_key(id):
+                        res.append(b_entry)
+                        ids_d[id] = None
+                    # XXX else warn
+        else:
+            raise ValueError(style)
+        return res
 
 InitializeClass(StackingDirectory)
 

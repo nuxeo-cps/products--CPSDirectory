@@ -217,151 +217,55 @@ class TestStackingDirectory(CPSDirectoryTestCase):
         self.failIf(self.dirbar.hasEntry(idstrip))
         self.failIf(self.dirstack.hasEntry(id))
 
-    def xxxtestSearch(self):
-        dir = self.dir
+    def test_searchEntries(self):
+        dir = self.dirstack
 
-        id1 = 'tree'
-        foo1 = 'green'
-        bar1 = ['a123', 'gra']
-        e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
-        dir.createEntry(e1)
+        fooentry = {'uid': 'FFF', 'foo': 'f1', 'glop': 'g1'}
+        self.dirfoo.createEntry(fooentry)
 
-        id2 = 'sea'
-        foo2 = 'blue'
-        bar2 = ['812A', 'gra']
-        e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
-        dir.createEntry(e2)
+        entry1 = {'uid': 'a_GGG', 'foo': 'f1', 'glop': 'g1'}
+        dir.createEntry(entry1)
+        entry2 = {'uid': 'a_HHH', 'foo': 'f2', 'glop': 'g1'}
+        dir.createEntry(entry2)
+        entry3 = {'uid': 'III_b', 'foo': 'f1', 'glop': 'g1'}
+        dir.createEntry(entry3)
+        entry4 = {'uid': 'JJJ_b', 'foo': 'f2', 'glop': 'g2'}
+        dir.createEntry(entry4)
+        entry5 = {'uid': 'KKK', 'foo': 'f1', 'glop': 'g2'}
+        dir.createEntry(entry5)
+        entry6 = {'uid': 'LLL', 'foo': 'f2', 'glop': 'g2'}
+        dir.createEntry(entry6)
 
-        ids = [id1, id2]
+        # All
+        ids = dir.searchEntries()
         ids.sort()
+        self.assertEquals(ids,
+                          ['III_b', 'JJJ_b', 'KKK', 'LLL', 'a_GGG', 'a_HHH'])
 
-        ### Without substrings
-        dir.search_substring_fields = []
-
-        # Basic searches
-        res = dir.searchEntries(idd=id1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1, foo2])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2, 'hop'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, '81'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='a123')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar=['a123'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gra'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['a123', '8'])
-        self.assertEquals(res, [id1])
-
-        # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo2, bar='gra')
-        self.assertEquals(res, [id2])
-        res = dir.searchEntries(foo=[foo1, foo2], bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2], bar='a123')
-        self.assertEquals(res, [id1])
-
-        # Failing substring searches
-        res = dir.searchEntries(idd='re')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='e')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar='812a')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar='gr')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(bar=['gr'])
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='E', bar='12')
-        self.assertEquals(res, [])
-
-    def xxxtestSearchSubstrings(self):
-        dir = self.dir
-
-        id1 = 'tree'
-        foo1 = 'green'
-        bar1 = ['a123', 'gra']
-        e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
-        dir.createEntry(e1)
-
-        id2 = 'sea'
-        foo2 = 'blue'
-        bar2 = ['812A', 'gra']
-        e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
-        dir.createEntry(e2)
-
-        ids = [id1, id2]
+        # Id back-conversion
+        ids = dir.searchEntries(uid='a_GGG')
+        self.assertEquals(ids, ['a_GGG'])
+        ids = dir.searchEntries(uid='III_b')
+        self.assertEquals(ids, ['III_b'])
+        ids = dir.searchEntries(uid='III')
+        self.assertEquals(ids, [])
+        # Id list match
+        ids = dir.searchEntries(uid=['a_GGG', 'III_b'])
         ids.sort()
+        self.assertEquals(ids, ['III_b', 'a_GGG'])
+        # Single field search
+        ids = dir.searchEntries(foo='f1')
+        ids.sort()
+        self.assertEquals(ids, ['III_b', 'KKK', 'a_GGG'])
+        # Multi-field search
+        ids = dir.searchEntries(foo='f1', glop='g1')
+        ids.sort()
+        self.assertEquals(ids, ['III_b', 'a_GGG'])
+        ids = dir.searchEntries(foo='f1', glop='g2')
+        self.assertEquals(ids, ['KKK'])
 
-        ### With substrings
-        dir.search_substring_fields = ['foo', 'bar']
-
-        # Basic searches
-        res = dir.searchEntries(idd=id1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo1)
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1, foo2])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2, 'hop'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, '81'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='a123')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar=['a123'])
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gra'])
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['a123', '8'])
-        self.assertEquals(res, [id1])
-
-        # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
-        self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo2, bar='gra')
-        self.assertEquals(res, [id2])
-        res = dir.searchEntries(foo=[foo1, foo2], bar='gra')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2], bar='a123')
-        self.assertEquals(res, [id1])
-
-        # Substring searches
-        res = dir.searchEntries(idd='re')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='e')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar='812a')
-        self.assertEquals(res, [id2])
-        res = dir.searchEntries(bar='gr')
-        self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gr'])
-        self.assertEquals(res, [])
-        res = dir.searchEntries(foo='E', bar='12')
-        self.assertEquals(res, ids)
+        # XXX should test case where foodir has substring search
+        # on id, and we searchEntries(uid='a_G')
 
 def test_suite():
     suite = unittest.TestSuite()
