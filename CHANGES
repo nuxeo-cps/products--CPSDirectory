@@ -3,17 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- Basic SQLDirectory, to store data into an SQL table.
+-
 Bug fixes:
 ~~~~~~~~~~
-- Used "Products.CMFCore.permissions" instead of deprecated
-  "Products.CMFCore.CMFCorePermissions".
-- ZODBDirectory.createEntry: correctly cleanup entry object.
-- fix #474: Make sure search didn't return alternate casing, this could be the
-  case for LDAP.
-- DirectoryWidget: getIdAndTitle did not check if id was None before trying to
-  get information from directory - this led to useless searches at creation
-  time, for instance.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- manage_addCPSDirectory() takes a **kw args that is propagated to the cls constructor
+-
