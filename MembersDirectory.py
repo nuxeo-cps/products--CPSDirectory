@@ -131,12 +131,11 @@ class MembersDirectory(BaseDirectory):
                 del kw[f]
             # XXX should also convert search_substring_fields
         try:
+            options = {'search_substring_props':
+                       self.search_substring_fields}
+            options.update(kw)
             res = mdtool.searchForMembers(kw, props=return_fields,
-                                          options={'search_substring_props':
-                                                   self.search_substring_fields,
-                                                   'search_restricted_member_list':
-                                                   kw.get('search_restricted_member_list', []),
-                                                   })
+                                          options=options)
         except ValueError, e:
             if str(e) == 'Too many results for this query':
                 raise SearchSizeLimitExceeded(str(e))
