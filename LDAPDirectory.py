@@ -261,7 +261,8 @@ class LDAPDirectory(BaseDirectory):
             if isinstance(value, StringType):
                 if value == '*':
                     f = filter_format('(%s=*)', (key,))
-                f = filter_format(fmt, (key, value))
+                else:
+                    f = filter_format(fmt, (key, value))
             elif isinstance(value, IntType):
                 f = filter_format(fmt, (key, str(value)))
             elif isinstance(value, ListType) or isinstance(value, TupleType):
