@@ -366,7 +366,7 @@ def setMemberProperties(self, mapping):
     if user_mapping:
         user.setProperties(**user_mapping)
     if member_mapping:
-        return self._old_cps_setMemberProperties(mapping)
+        return self._old_cps_setMemberProperties(member_mapping)
 
 def setSecurityProfile(self, password=None, roles=None, domains=None):
     """Set the user's basic security profile."""
