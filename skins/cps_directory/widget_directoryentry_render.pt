@@ -11,7 +11,7 @@
                    vocabulary here/vocabulary;">
 <span tal:attributes="id html_id">
   <input type="hidden" tal:condition="value"
-    tal:attributes="name html_id;value value;">
+    tal:attributes="name html_id;value value;" />
   <span tal:content="title" />
 <script type="text/javascript">
   <!--
