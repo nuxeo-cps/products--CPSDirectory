@@ -56,6 +56,7 @@ from GroupsDirectory import GroupsDirectory
 from LocalDirectory import LocalDirectory
 from MetaDirectory import MetaDirectory
 from StackingDirectory import StackingDirectory
+from IndirectDirectory import IndirectDirectory
 
 if has_ldap_delegate:
     from LDAPDirectory import LDAPDirectory
@@ -76,6 +77,7 @@ if has_ldap_delegate:
 else:
     LOG('LDAPDirectoryVocabulary', INFO,
         "Disabled (no LDAP user folder product found).")
+
 
 import UserFolderPatch
 import MemberToolsPatch
@@ -105,3 +107,4 @@ def initialize(registrar):
         VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPBackingDirectory)
+    DirectoryTypeRegistry.register(IndirectDirectory)
