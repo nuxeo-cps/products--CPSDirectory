@@ -1,54 +1,90 @@
+# translation of ro.po to 
 # ##########################################################
 # ################# DON'T EDIT THIS FILE! ##################
 # ##########################################################
 # Gettext Message File for default.
 # Your Name <your@email>, Year
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
+# , 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: default\n"
+"Project-Id-Version: ro\n"
 "POT-Creation-Date: 2004-08-30 12:18default\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Your Name <your@email>\n"
-"Language-Team: Name <email>\n"
+"PO-Revision-Date: 2005-04-01 12:51+0300\n"
+"Last-Translator: \n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-code: ro\n"
 "Language-name: Romanian\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
-msgstr ""
+msgstr "Eroare"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr ""
+msgstr "Alege un director"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr ""
+msgstr "Creeaza o noua intrare"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
-msgstr ""
+msgstr "Modifica intrarea"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
-msgstr ""
+msgstr "Rezultatele cautarii"
 
 #.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
-msgstr ""
+msgstr "Cauta o intrare"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -56,17 +92,17 @@ msgstr ""
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_upto_directories"
-msgstr ""
+msgstr "Lista de directoare"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
-msgstr ""
+msgstr "Vizualizare intrare"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr ""
+msgstr "Sunt prea multe rezultate pentru cererea ta, te rog rafineaza-ti cererea."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -76,7 +112,7 @@ msgstr ""
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
 #.   <span content="widget/label" condition="widget/is_i18n">label</span>
@@ -84,58 +120,66 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
-msgstr ""
+msgstr "label"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
-msgstr ""
+msgstr "Nici un rezultat"
 
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr ""
+msgstr "Nici un director disponibil"
 
 msgid "psm_entry_created"
-msgstr ""
+msgstr "Intrare creata"
 
 msgid "label_groups"
-msgstr ""
+msgstr "Grupuri"
 
 msgid "label_subgroups"
-msgstr ""
+msgstr "Subgrupuri"
 
 msgid "label_members"
-msgstr ""
+msgstr "Membri"
 
 msgid "label_first_name"
-msgstr ""
+msgstr "Prenume"
 
 msgid "label_last_name"
-msgstr ""
+msgstr "Nume"
 
 msgid "label_full_name"
-msgstr ""
+msgstr "Nume complet"
 
 msgid "cpsdir_label_delete_entry"
-msgstr ""
+msgstr "Sterge intrarea"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
+"Un spatiu personal va da acces la :<br />- un spatiu de lucru "
+"privat<br />- o agenda personala<br />- favorite<br />- "
+"posibilitatea  de a"
+"minimiza/inchide box-urile<br />"
 
 msgid "cpsdir_label_homeless"
-msgstr ""
+msgstr "Utilizarea unui spatiu personal"
 
 msgid "label_roles_Manager"
-msgstr ""
+msgstr "Administrator"
 
 msgid "label_roles_Member"
-msgstr ""
+msgstr "Membru"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
+"Atentie intrarea nu a fost stearsa ! pentru a sterge intrarea "
+"trebuie "
+"sa stergi toate intrarile sale."
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr ""
+msgstr "O intrare cu acelasi identificator exista deja."
+
