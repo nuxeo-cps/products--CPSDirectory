@@ -11,3 +11,5 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Don't raise RuntimeError but ValueError.
 - LDAPBackingDirectory: raise ConfigurationError when the LDAP server is down.
+- LDAPDirectory createEntry return new id, if id is a dn and
+  computed with a base_dn
