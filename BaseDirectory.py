@@ -612,7 +612,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _getSearchDataModel(self):
         """Get the datamodel for a search rendering."""
         adapters = self._getSearchAdapters()
-        dm = DataModel(None, adapters, check_acls=0, context=self)
+        dm = DataModel(None, adapters, context=self)
+        dm._check_acls = 0 # XXX use API
         dm._fetch()
         return dm
 
