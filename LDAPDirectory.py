@@ -48,14 +48,6 @@ ldap_scopes = (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
 NO_PASSWORD = '__NO_PASSWORD__'
 
-def _isinstance(ob, cls):
-    try:
-        return isinstance(ob, cls)
-    except TypeError:
-        # In python 2.1 isinstance() raises TypeError
-        # instead of returning 0 for ExtensionClasses.
-        return 0
-
 
 class LDAPDirectory(BaseDirectory):
     """LDAP Directory.
@@ -266,7 +258,7 @@ class LDAPDirectory(BaseDirectory):
                     f = filter_format(fmt, (key, value))
             elif isinstance(value, IntType):
                 f = filter_format(fmt, (key, str(value)))
-            elif isinstance(value, ListType) or isinstance(value, TupleType):
+            elif isinstance(value, (ListType, TupleType)):
                 fl = []
                 for v in value:
                     if v:
@@ -414,9 +406,9 @@ class LDAPDirectory(BaseDirectory):
             if not value and not keep_empty:
                 continue
             # Convert field data to strings for LDAP
-            if _isinstance(value, Image) or _isinstance(value, File):
+            if isinstance(value, (Image, File)):
                 value = str(value.data)
-            elif _isinstance(value, DateTime):
+            elif isinstance(value, DateTime):
                 # The nicer ways of converting to strings does not work with
                 # dates before 1970.
                 # LDAP generalized time strongly recommends GMT, so it
@@ -572,9 +564,9 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         if not entry.has_key(field_id):
             return field.getDefault()
         field_data = entry[field_id]
-        if _isinstance(field, CPSStringListField):
+        if isinstance(field, CPSStringListField):
             return field_data
-        if _isinstance(field, CPSDateTimeField):
+        if isinstance(field, CPSDateTimeField):
             # strptime is not available on Windows, so do this the
             # hard way:
             time = field_data[0]

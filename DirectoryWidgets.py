@@ -30,7 +30,7 @@ from types import StringType, ListType, TupleType
 from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
 from Products.CPSSchemas.Widget import CPSWidgetType
-from Products.CPSSchemas.BasicWidgets import renderHtmlTag, _isinstance
+from Products.CPSSchemas.BasicWidgets import renderHtmlTag
 from Products.CPSSchemas.BasicWidgets import \
      CPSSelectWidget, CPSMultiSelectWidget, CPSIdentifierWidget
 
@@ -118,8 +118,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
         """Prepare datastructure from datamodel."""
         datamodel = datastructure.getDataModel()
         value = datamodel[self.fields[0]]
-        if (_isinstance(value, ListType) or
-            _isinstance(value, TupleType)):
+        if isinstance(value, (ListType, TupleType)):
             LOG('CPSDirectoryEntryWidget.prepare', TRACE,
                 'expected String got Typle %s use first element' % value)
             if len(value):
@@ -220,7 +219,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
         """Prepare datastructure from datamodel."""
         datamodel = datastructure.getDataModel()
         value = datamodel[self.fields[0]]
-        if _isinstance(value, StringType):
+        if isinstance(value, StringType):
             LOG('CPSDirectoryMultiEntriesWidget.prepare', TRACE,
                 'expected List got String %s converting into list' % value)
             if value:
@@ -235,8 +234,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
         v = []
         widget_id = self.getWidgetId()
         value = datastructure[widget_id]
-        if (not _isinstance(value, ListType) and
-            not _isinstance(value, TupleType)):
+        if not isinstance(value, (ListType, TupleType)):
             err = 'cpsschemas_err_multiselect'
         else:
             vocabulary = self._getVocabulary(datastructure)
