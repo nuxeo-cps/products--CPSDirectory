@@ -363,7 +363,9 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     #
     # Roles
     #
-    def testDefaultRoles(self):
+    # FIXME: this test is desactivated because new roles can be added by
+    # other products
+    def _testDefaultRoles(self):
         # XXX this test assumes too much about existing roles.
         roles = self.pd.roles
 
