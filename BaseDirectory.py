@@ -169,15 +169,20 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return entry
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, return_attrs=None, **kw):
+    def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
 
-        If return_attrs is None, returns a list of entry ids.
+        If return_fields is None, returns a list of ids:
+          ['member1', 'member2']
 
-        Otherwise returns a list of dictionnaries with the specified
-        attributes (in addition to the id).
+        If return_fields is not None, it must be sequence of field ids.
+        The method will return a list of tuples containing the member id
+        and a dictionary of available fields:
+          [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
+
+        return_fields=['*'] means to return all available fields.
         """
         raise NotImplementedError
 

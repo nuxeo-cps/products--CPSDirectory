@@ -1,23 +1,29 @@
-<tal:block define="ids options/ids;
+<tal:block define="results options/results;
                    portal_url here/portal_url;
                    dirname here/getId;
+                   title_field here/title_field;
                    ">
 <div style="padding-left: 1.5em">
-<table tal:condition="ids">
+<table tal:condition="results">
 <tr>
   <th i18n:translate="">id</th>
 </tr>
-<tal:block repeat="id ids">
-<tr  tal:attributes="class python:test(repeat['id'].even(),'even','odd')">
-  <td>
-    <a href="."
-    tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
-    ><b  tal:content="id">john</b></a>
-  </td>
-</tr>
+<tal:block repeat="result results">
+  <tal:block define="id python:result[0];
+                     data python:result[1];
+                     even repeat/result/even;
+                     ">
+  <tr tal:attributes="class python:test(even, 'even', 'odd')">
+    <td>
+      <a href="."
+        tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
+        ><b tal:content="data/?title_field|id">john</b></a>
+    </td>
+  </tr>
+  </tal:block>
 </tal:block>
 </table>
-<div tal:condition="not:ids">
+<div tal:condition="not:results">
   <span i18n:translate="label_no_results" />
 </div>
 <br><br><input type="button" class="context" value="button_back"

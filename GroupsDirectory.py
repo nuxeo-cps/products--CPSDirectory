@@ -77,7 +77,7 @@ class GroupsDirectory(BaseDirectory):
             return ()
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, **kw):
+    def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()

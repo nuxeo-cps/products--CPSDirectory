@@ -29,6 +29,7 @@ from OFS.Image import File, Image
 
 from Products.CMFCore.utils import getToolByName
 
+# XXX we must not depend on CPSCore ! XXX
 from Products.CPSCore.utils import _isinstance
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
@@ -157,7 +158,7 @@ class LDAPDirectory(BaseDirectory):
         return self.searchEntries()
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, return_atts=None, **kw):
+    def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
@@ -167,13 +168,28 @@ class LDAPDirectory(BaseDirectory):
         Keys with value '*' search for an existing field.
         Otherwise does substring search.
         """
-        schemas = self._getSchemas()
-        field_ids = []
-        for schema in schemas:
-            field_ids.extend(schema.keys())
+        schema = self._getSchemas()[0]
+        all_field_ids = schema.keys()
+        # Find attrs needed to compute returned fields.
+        if return_fields is None:
+            attrs = None
+        else:
+            attrsd = {}
+            if return_fields == ['*']:
+                return_fields = all_field_ids
+            for field_id in return_fields:
+                if field_id not in all_field_ids:
+                    continue
+                attrsd[field_id] = None
+                dep_ids = schema[field_id].read_process_dependent_fields
+                for dep_id in dep_ids:
+                    attrsd[dep_id] = None
+            attrs = attrsd.keys()
+        # Build filter
         filter_elems = [self.objectClassFilter()]
+        LOG('searchEntries', DEBUG, 'search query is %s' % `kw`)
         for key, value in kw.items():
-            if not key in field_ids:
+            if not key in all_field_ids:
                 continue
             if key == 'dn': # XXX treat it
                 continue
@@ -201,8 +217,7 @@ class LDAPDirectory(BaseDirectory):
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter
-        # XXX treat return_attrs
-        return self._searchEntries(filter=filter)
+        return self._searchEntries(filter=filter, return_attrs=attrs)
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
@@ -257,6 +272,21 @@ class LDAPDirectory(BaseDirectory):
     # Internal
     #
 
+    def _getAdapterForPartialData(self, attrs):
+        """Get an adapter for partial data."""
+        dir = self
+        schema = self._getSchemas()[0]
+        adapter = LDAPStorageAdapter(schema, None, dir, field_ids=attrs)
+        return adapter
+
+    def _getPartialDataModel(self, adapter, entry):
+        """Get a partial datamodel representing the entry.
+
+        entry is the LDAP entry returned from the delegate.
+        """
+        data = adapter._getData(entry=entry)
+        return data
+
     def _makeAttrsFromData(self, data, ignore_attrs=[]):
         # Make attributes. Skip rdn_attr
         attrs = {}
@@ -299,26 +329,46 @@ class LDAPDirectory(BaseDirectory):
 
         return res['results'][0]
 
-    def _searchEntries(self, filter=None):
+    def _searchEntries(self, filter=None, return_attrs=None):
         """Search entries according to filter."""
         if not filter:
             filter = '(objectClass=*)'
-        LOG('_searchEntries', DEBUG, 'filter=%s' % `filter`)
         id_attr = self.id_field
+        if return_attrs is None:
+            attrs = [id_attr]
+        else:
+            attrs = list(return_attrs)
+            if id_attr not in return_attrs:
+                attrs.append(id_attr)
+        LOG('_searchEntries', DEBUG, 'filter=%s attrs=%s' % (filter, attrs))
         res = self._delegate.search(base=self.ldap_base,
                                     scope=self.ldap_scope,
                                     filter=filter,
-                                    attrs=[id_attr])
+                                    attrs=attrs)
         if res['exception']:
             LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
                 % res['exception'])
             return []
-        else:
-            results = res['results']
+
+        # Now we must compute a partial datamodel for each result,
+        # to get correct computed fields.
+
+        results = res['results']
+        if return_attrs is None:
             if id_attr == 'dn':
                 return [e['dn'] for e in results]
             else:
                 return [e[id_attr][0] for e in results]
+        else:
+            adapter = self._getAdapterForPartialData(return_attrs)
+            datas = []
+            for e in results:
+                data = self._getPartialDataModel(adapter, e)
+                datas.append((e, data))
+            if id_attr == 'dn':
+                return [(e['dn'], data) for e, data in datas]
+            else:
+                return [(e[id_attr][0], data) for e, data in datas]
 
     security.declarePrivate('objectClassFilter')
     def objectClassFilter(self):
@@ -349,12 +399,12 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     This adapter gets and sets data from an LDAP server.
     """
 
-    def __init__(self, schema, id, dir):
+    def __init__(self, schema, id, dir, field_ids=None):
         """Create an Adapter for a schema.
         """
         self._id = id
         self._dir = dir
-        BaseStorageAdapter.__init__(self, schema)
+        BaseStorageAdapter.__init__(self, schema, field_ids=field_ids)
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -365,7 +415,9 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         if id is None:
             # Creation.
             return self.getDefaultData()
-        entry = self._dir._getLDAPEntry(id, self._schema.keys())
+        # Compute entry so that it is passed as kw to _getFieldData.
+        field_ids = [field_id for field_id, field in self.getFieldItems()]
+        entry = self._dir._getLDAPEntry(id, field_ids)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
@@ -383,7 +435,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
     def _setData(self, data, **kw):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data, **kw)
-        for field_id, field in self._schema.items():
+        for field_id, field in self._field_items:
             if field.write_ignore_storage:
                 del data[field_id]
 

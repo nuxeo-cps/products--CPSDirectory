@@ -99,7 +99,7 @@ class MembersDirectory(BaseDirectory):
         #ids = getToolByName(dir, 'portal_membership').listMemberIds()
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, return_attrs=None, **kw):
+    def searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
@@ -112,7 +112,7 @@ class MembersDirectory(BaseDirectory):
             if f != p and kw.has_key(f):
                 kw[p] = kw[f]
                 del kw[f]
-        res = mdtool.searchForMembers(kw, props=return_attrs)
+        res = mdtool.searchForMembers(kw, props=return_fields)
         # XXX if returning props, back-convert known names.
         return res
 
