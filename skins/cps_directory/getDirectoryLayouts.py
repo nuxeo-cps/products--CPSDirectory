@@ -10,16 +10,15 @@ Get the layouts used for the directories.
 members_layout = {
     'widgets': {
         'id': {
-            'type': 'String Widget',
+            'type': 'Identifier Widget',
             'data': {
                 'fields': ['id'],
                 'label': "label_user_name",
                 'label_edit': "label_user_name",
                 'description': "Member login",
+                'is_required': 1,
                 'is_i18n': 1,
                 'css_class': '',
-                'display_width': 20,
-                'size_max': 0,
                 'readonly_layout_modes': ['edit'],
             },
         },
@@ -102,6 +101,7 @@ members_layout = {
                 'label': "label_last_name",
                 'label_edit': "label_last_name",
                 'description': "Member last name",
+                'is_required': 1,
                 'is_i18n': 1,
                 'css_class': '',
                 'display_width': 20,
@@ -129,6 +129,7 @@ members_layout = {
                 'label': "label_email",
                 'label_edit': "label_email",
                 'description': "Member email",
+                'is_required': 1,
                 'is_i18n': 1,
                 'css_class': '',
                 'display_width': 30,
@@ -151,6 +152,77 @@ members_layout = {
         },
     }
 
+members_search_layout = {
+    'widgets': {
+        'id': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['id'],
+                'label': "label_user_name",
+                'label_edit': "label_user_name",
+                'description': "Member login",
+                'display_width': 30,
+                'is_i18n': 1,
+            },
+        },
+        'groups': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['groups'],
+                'label': "label_groups",
+                'label_edit': "label_groups",
+                'description': "Member groups",
+                'is_i18n': 1,
+                'vocabulary': 'groups',
+                'size': 7,
+            },
+        },
+        'givenName': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['givenName'],
+                'label': "label_first_name",
+                'label_edit': "label_first_name",
+                'description': "Member first name",
+                'is_i18n': 1,
+                'display_width': 20,
+            },
+        },
+        'sn': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['sn'],
+                'label': "label_last_name",
+                'label_edit': "label_last_name",
+                'description': "Member last name",
+                'is_i18n': 1,
+                'display_width': 20,
+            },
+        },
+        'email': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['email'],
+                'label': "label_email",
+                'label_edit': "label_email",
+                'description': "Member email",
+                'is_i18n': 1,
+                'display_width': 30,
+            },
+        },
+    },
+    'layout': {
+        'style_prefix': 'layout_dir_',
+        'ncols': 2,
+        'rows': [
+            [{'widget_id': 'id'},],
+            [{'widget_id': 'givenName'}, {'widget_id': 'sn'},],
+            [{'widget_id': 'email'},],
+            [{'widget_id': 'groups'},],
+            ],
+        },
+    }
+
 
 #########################################################
 # roles
@@ -158,16 +230,14 @@ members_layout = {
 roles_layout = {
     'widgets': {
         'role': {
-            'type': 'String Widget',
+            'type': 'Identifier Widget',
             'data': {
                 'fields': ['role'],
                 'label': "label_roles",
                 'label_edit': "label_roles",
-                'description': "",
+                'is_required': 1,
                 'is_i18n': 1,
-                'css_class': '',
                 'display_width': 20,
-                'size_max': 0,
                 'readonly_layout_modes': ['edit'],
             },
         },
@@ -197,22 +267,57 @@ roles_layout = {
         },
     }
 
+roles_search_layout = {
+    'widgets': {
+        'role': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['role'],
+                'label': "label_roles",
+                'label_edit': "label_roles",
+                'is_i18n': 1,
+                'display_width': 20,
+            },
+        },
+        'members': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['members'],
+                'label': "label_members",
+                'label_edit': "label_members",
+                'description': "",
+                'is_i18n': 1,
+                'vocabulary': 'members',
+                'size': 7,
+            },
+        },
+    },
+    'layout': {
+        'style_prefix': 'layout_dir_',
+        'ncols': 1,
+        'rows': [
+            [{'ncols': 1, 'widget_id': 'role'},
+                ],
+            [{'ncols': 1, 'widget_id': 'members'},
+                ],
+            ],
+        },
+    }
+
+
 #########################################################
 # groups
 
 groups_layout = {
     'widgets': {
         'group': {
-            'type': 'String Widget',
+            'type': 'Identifier Widget',
             'data': {
                 'fields': ['group'],
                 'label': "label_group",
                 'label_edit': "label_group",
-                'description': "",
+                'is_required': 1,
                 'is_i18n': 1,
-                'css_class': '',
-                'display_width': 20,
-                'size_max': 0,
                 'readonly_layout_modes': ['edit'],
             },
         },
@@ -261,12 +366,53 @@ groups_layout = {
         },
     }
 
+groups_search_layout = {
+    'widgets': {
+        'group': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['group'],
+                'label': "label_group",
+                'label_edit': "label_group",
+                'is_i18n': 1,
+            },
+        },
+        'members': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['members'],
+                'label': "label_members",
+                'label_edit': "label_members",
+                'description': "",
+                'is_i18n': 1,
+                'css_class': '',
+                'vocabulary': 'members',
+                'size': 7,
+            },
+        },
+    },
+    'layout': {
+        'style_prefix': 'layout_dir_',
+        'ncols': 1,
+        'rows': [
+            [{'ncols': 1, 'widget_id': 'group'},
+                ],
+            [{'ncols': 1, 'widget_id': 'members'},
+                ],
+            ],
+        },
+    }
+
+
 #########################################################
 
 layouts = {
     'members': members_layout,
+    'members_search': members_search_layout,
     'roles': roles_layout,
+    'roles_search': roles_search_layout,
     'groups': groups_layout,
+    'groups_search': groups_search_layout,
     }
 
 if loadcustom:
