@@ -32,9 +32,6 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 
-_marker = []
-
-
 class RolesDirectory(BaseDirectory):
     """Roles Directory.
 
