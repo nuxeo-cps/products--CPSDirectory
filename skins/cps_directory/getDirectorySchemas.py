@@ -45,10 +45,52 @@ members_schema = {
         },
     }
 
-###########################################################
+#########################################################
+# roles
+
+roles_schema = {
+    'role': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 1,
+            },
+        },
+    'users': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    }
+
+#########################################################
+# groups
+
+groups_schema = {
+    'group': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 1,
+            },
+        },
+    'users': {
+        'type': 'CPS String Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+            },
+        },
+    }
+
+#########################################################
 
 schemas = {
     'members': members_schema,
+    'roles': roles_schema,
+    'groups': groups_schema,
     }
 
 return schemas

@@ -19,7 +19,7 @@ members_layout = {
                 'description': 'Member login',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
+                'display_width': 20,
                 'size_max': 0,
             },
         },
@@ -34,7 +34,7 @@ members_layout = {
                 'css_class': '',
                 'is_required': 1,
                 'hidden_view': 1,
-                'display_width': 40,
+                'display_width': 20,
                 'size_max': 0,
             },
         },
@@ -76,7 +76,7 @@ members_layout = {
                 'description': 'Member email',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
+                'display_width': 20,
                 'size_max': 0,
             },
         },
@@ -98,10 +98,102 @@ members_layout = {
         },
     }
 
-###########################################################
+#########################################################
+# roles
+
+roles_layout = {
+    'widgets': {
+        'role': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['role'],
+                'is_i18n': 0,
+                'label_edit': 'Role',
+                'label': 'Role',
+                'description': '',
+                'css_class': '',
+                'is_required': 1,
+                'display_width': 20,
+                'size_max': 0,
+            },
+        },
+        'users': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['users'],
+                'is_i18n': 0,
+                'label_edit': 'Users',
+                'label': 'Users',
+                'description': '',
+                'css_class': '',
+                'is_required': 1,
+                'display_width': 40,
+                'size_max': 0,
+            },
+        },
+    },
+    'layout': {
+        'ncols': 1,
+        'rows': [
+            [{'ncols': 1, 'widget_id': 'role'},
+                ],
+            [{'ncols': 1, 'widget_id': 'users'},
+                ],
+            ],
+        },
+    }
+
+#########################################################
+# groups
+
+groups_layout = {
+    'widgets': {
+        'group': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['group'],
+                'is_i18n': 0,
+                'label_edit': 'Group',
+                'label': 'Group',
+                'description': '',
+                'css_class': '',
+                'is_required': 1,
+                'display_width': 20,
+                'size_max': 0,
+            },
+        },
+        'users': {
+            'type': 'String Widget',
+            'data': {
+                'fields': ['users'],
+                'is_i18n': 0,
+                'label_edit': 'Users',
+                'label': 'Users',
+                'description': '',
+                'css_class': '',
+                'is_required': 1,
+                'display_width': 40,
+                'size_max': 0,
+            },
+        },
+    },
+    'layout': {
+        'ncols': 1,
+        'rows': [
+            [{'ncols': 1, 'widget_id': 'group'},
+                ],
+            [{'ncols': 1, 'widget_id': 'users'},
+                ],
+            ],
+        },
+    }
+
+#########################################################
 
 layouts = {
     'members': members_layout,
+    'roles': roles_layout,
+    'goups': groups_layout,
     }
 
 return layouts
