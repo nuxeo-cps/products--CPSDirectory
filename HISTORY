@@ -10,8 +10,6 @@ New features:
 - A Directory Vocabulary backed by LDAP can now be used with the DN as the
   key instead of the default Vocabulary's id field.
 
-- Groups and Roles directories now uses partial matches when searching on ID.
-
 Bug fixes:
 ~~~~~~~~~~
 -
