@@ -10,7 +10,7 @@ Get the layouts used for the directories.
 members_layout = {
     'widgets': {
         'id': {
-            'type': 'Identifier Widget',
+            'type': 'User Identifier Widget',
             'data': {
                 'fields': ['id'],
                 'label': "label_user_name",

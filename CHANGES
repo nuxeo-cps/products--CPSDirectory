@@ -4,6 +4,8 @@ Requires:
 New features:
 ~~~~~~~~~~~~~
 - DirectoryEntryVocabulary
+- New "User Identifier Widget" that use the isMemberIdAllowed() for
+  validation.
 Bug fixes:
 ~~~~~~~~~~
 -

@@ -13,6 +13,10 @@ widgets = {
         'type': 'CPS Directory MultiEntries Widget Type',
         'data': {},
         },
+    'User Identifier Widget': {
+        'type': 'CPS User Identifier Widget Type',
+        'data': {},
+        },
     }
 
 return widgets

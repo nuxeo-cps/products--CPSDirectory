@@ -31,8 +31,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
 from Products.CPSSchemas.Widget import CPSWidgetType
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag, _isinstance
-from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
-from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
+from Products.CPSSchemas.BasicWidgets import \
+     CPSSelectWidget, CPSMultiSelectWidget, CPSIdentifierWidget
 
 
 class EntryMixin:
@@ -283,7 +283,44 @@ InitializeClass(CPSDirectoryMultiEntriesWidgetType)
 
 ##################################################
 
+class CPSUserIdentifierWidget(CPSIdentifierWidget):
+    """Identifier widget."""
+    meta_type = "CPS User Identifier Widget"
+
+    def validate(self, datastructure, **kw):
+        """Validate datastructure and update datamodel."""
+        widget_id = self.getWidgetId()
+        err, v = self._extractValue(datastructure[widget_id])
+        if not err and v and not self.id_pat.match(v.lower()):
+            err = 'cpsschemas_err_identifier'
+
+        if err:
+            datastructure.setError(widget_id, err)
+            datastructure[widget_id] = v
+        else:
+            datamodel = datastructure.getDataModel()
+            datamodel[self.fields[0]] = v
+
+        if kw['layout_mode'] == 'create':
+            portal_registration = getToolByName(self, 'portal_registration')
+            return portal_registration.isMemberIdAllowed(v)
+
+        return not err
+
+InitializeClass(CPSUserIdentifierWidget)
+
+class CPSUserIdentifierWidgetType(CPSWidgetType):
+    """User Identifier Widget Type."""
+    meta_type = "CPS User Identifier Widget Type"
+    cls = CPSUserIdentifierWidget
+
+InitializeClass(CPSUserIdentifierWidgetType)
+
+##################################################
+
 WidgetTypeRegistry.register(CPSDirectoryEntryWidgetType,
                             CPSDirectoryEntryWidget)
 WidgetTypeRegistry.register(CPSDirectoryMultiEntriesWidgetType,
                             CPSDirectoryMultiEntriesWidget)
+WidgetTypeRegistry.register(CPSUserIdentifierWidgetType,
+                            CPSUserIdentifierWidget)
