@@ -103,7 +103,7 @@ def searchUsers(self, query={}, props=None, options=None, **kw):
     do_roles = query.has_key('roles')
     do_groups = query.has_key('groups')
     is_list_search, query = _preprocessQuery(query)
-    res = {}
+    res = []
     for user in self.getUsers():
         base_user = aq_base(user)
         id = user.getId()
