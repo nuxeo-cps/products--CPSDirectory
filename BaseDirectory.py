@@ -347,7 +347,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         id = entry[self.id_field]
         dm = self._getDataModel(id)
-        entry = _getEntryFromDataModel(dm)
+        entry = self._getEntryFromDataModel(dm)
         self.checkEditEntryAllowed(id=id, entry=entry)
         for key in dm.keys():
             if not entry.has_key(key):
@@ -383,7 +383,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         - datastructure is the resulting datastructure.
         """
         dm = self._getDataModel(id)
-        entry = _getEntryFromDataModel(dm)
+        entry = self._getEntryFromDataModel(dm)
         self.checkViewEntryAllowed(id=id, entry=entry)
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout()
@@ -414,7 +414,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         - datastructure is the resulting datastructure.
         """
         dm = self._getDataModel(id)
-        entry = _getEntryFromDataModel(dm)
+        entry = self._getEntryFromDataModel(dm)
         self.checkEditEntryAllowed(id=id, entry=entry)
         ds = DataStructure(datamodel=dm)
         layout = self._getLayout()
@@ -484,7 +484,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # Creation...
             # Compute new id.
             id = dm.data[self.id_field]
-            entry = _getEntryFromDataModel(dm)
+            entry = self._getEntryFromDataModel(dm)
             self.checkCreateEntryAllowed(id=id, entry=entry)
             self.createEntry(entry)
             # Redirect/render
