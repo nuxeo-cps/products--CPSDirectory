@@ -217,7 +217,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
-        dm = self._getDataModel(id)
+        return self._getEntryKW(id)
+
+    security.declarePrivate('_getEntryKW')
+    def _getEntryKW(self, id, **kw):
+        """Get entry filtered by acls and processes.
+
+        Passes additional **kw to the datamodel.
+        """
+        dm = self._getDataModel(id, **kw)
         entry = {}
         for key in dm.keys():
             try:
@@ -485,10 +493,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return ()
 
     security.declarePrivate('_getDataModel')
-    def _getDataModel(self, id):
+    def _getDataModel(self, id, **kw):
         """Get the datamodel for an entry."""
-        adapters = self._getAdapters(id)
-        add_roles = self._getAdditionalRoles(id)
+        adapters = self._getAdapters(id, **kw)
+        add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
         dm = DataModel(None, adapters, context=self, add_roles=add_roles)
         dm._fetch()
         return dm
