@@ -31,8 +31,8 @@ for field in result_fields:
 
 try:
     results = dir.searchEntries(return_fields=return_fields, **mapping)
-except SearchSizeLimitExceeded:
-    rendered = dir.cpsdirectory_entry_search_errors(exception=SearchSizeLimitExceeded())
+except SearchSizeLimitExceeded, e:
+    rendered = dir.cpsdirectory_entry_search_errors(exception=e)
     return rendered, 'results'
 
 for field, process_meth in process_fields.items():
