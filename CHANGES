@@ -1,11 +1,16 @@
 Requires:
 ~~~~~~~~~
--
+- remove all entries stored in an indirect directory instance, or delete the
+  directory.
 New features:
 ~~~~~~~~~~~~~
 - Indirect directories can now store entries coming from different directories.
-- Local directory 'directory_id' property has been changed from string to list
+  (compatibility is broken with previous instances of Indirect directory if
+  these instances are not empty)
+  Local directory 'directory_id' property has been changed from string to list
   because it is used for indirect directories.
+- A new type of vocabulary, indirect directory vocabulary, is used to get all
+  the possible entries for an indirect directory.
 Bug fixes:
 ~~~~~~~~~~
 -
