@@ -13,4 +13,4 @@ Bug fixes:
 - Correctly remove attributes from LDAP when they are empty.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Search result fields can be customized using getCustomDirectoryResultFields
