@@ -69,7 +69,8 @@ def _isEntryMatching(entry, search_types, query):
     does an OR search on all the list elements.
     If the query value is a list, does OR search with exact match.
     If the query value is a string, does an case-independent match or a
-    substring case independent search depending on search_substring_props.
+    substring case independent search depending on search_substring_props,
+    searching a substring '*' always match.
     """
     for key, value in query.items():
         if not value:
@@ -87,7 +88,10 @@ def _isEntryMatching(entry, search_types, query):
             if search_types[key] == 'list':
                 matched = item in value
             elif search_types[key] == 'substring':
-                matched = item.lower().find(value) != -1
+                if value == '*':
+                    matched = 1
+                else:
+                    matched = item.lower().find(value) != -1
             else: # search_types[key] == 'exact':
                 matched = item == value
             if matched:
@@ -201,8 +205,6 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
         users_res = None
     LOG('searchForMembers', DEBUG, "users_res=%s done_props=%s done_query_keys=%s" % (users_res, done_props, done_query_keys))
 
-    # Do the search in the local MemberData.
-
     mdtool = self
     mdtool_props = mdtool.propertyIds()
     if props is None:
@@ -212,12 +214,25 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
     else:
         member_props = [p for p in props
                         if p in mdtool_props and p not in done_props]
+
+
     member_query = {}
+    if member_props and users_res:
+        # here we need more properties than those returned by aclu
+        # so we add all ids found into the query to retrieve their props
+        if users_res:
+            member_query['id'] = []
+            for res in users_res:
+                member_query['id'].append(res[0])
+
     for key, value in query.items():
         if key in mdtool_props and key not in done_query_keys:
             member_query[key] = value
+
     LOG('searchForMembers', DEBUG, 'member_query=%s member_props=%s' %
         (member_query, member_props))
+
+    members_res = None
     if member_query:
         search_substring_props = options.get('search_substring_props', [])
         members_res = _searchInMemberData(
@@ -226,12 +241,10 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
             search_substring_props=search_substring_props)
         done_props.extend(mdtool_props)
         done_query_keys.extend(member_query.keys())
-    else:
-        # XXX incorrect if member_props exists !!!
-        members_res = None
 
-    LOG('searchForMembers', DEBUG, "members_res=%s done_props=%s done_query_keys=%s" % (members_res, done_props, done_query_keys))
-
+    LOG('searchForMembers', DEBUG,
+        "members_res=%s done_props=%s done_query_keys=%s" % (
+        members_res, done_props, done_query_keys))
 
     # Now merge the results
     # Keep members that are in both, and merge their info.
