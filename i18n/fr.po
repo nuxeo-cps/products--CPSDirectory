@@ -126,7 +126,7 @@ msgstr ""
 "- un espace de travail privé<br />"
 "- un agenda personnel<br />"
 "- des favoris<br />"
-"- la possibilité de reduction/fermeture des boîtes<br />"
+"- la possibilité de réduire/fermer des boîtes<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Utilisation d'un espace personnel"
