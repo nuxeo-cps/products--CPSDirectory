@@ -1,6 +1,6 @@
 Requires:
 ~~~~~~~~~
--
+- require CPSCore > 3.10.0
 New features:
 ~~~~~~~~~~~~~
 - DirectoryEntryVocabulary
