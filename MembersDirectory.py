@@ -35,6 +35,8 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 _marker = []
 
+NO_PASSWORD = '__NO_PASSWORD__'
+
 
 class MembersDirectory(BaseDirectory):
     """Members Directory.
@@ -191,7 +193,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
             if fieldid == dir.id_field:
                 value = id
             elif fieldid == dir.password_field:
-                value = 'this is the password XXX'
+                value = NO_PASSWORD
             elif fieldid == dir.roles_field:
                 value = self._getMemberRoles(member)
             elif fieldid == dir.groups_field:
@@ -214,10 +216,8 @@ class MemberStorageAdapter(BaseStorageAdapter):
                 pass
                 #raise ValueError("Can't write to id") # XXX
             elif fieldid == dir.password_field:
-                if value:
+                if value != NO_PASSWORD:
                     self._setMemberPassword(member, value)
-                else:
-                    raise ValueError("Can't write empty password") # XXX
             elif fieldid == dir.roles_field:
                 self._setMemberRoles(member, value)
             elif fieldid == dir.groups_field:
