@@ -4,6 +4,7 @@ Requires:
 New features:
 ~~~~~~~~~~~~~
 - Updated doc about MetaDirectory's missing entries management.
+- Updated doc about how StackingDirectory and MetaDirectory deal with id fields.
 Bug fixes:
 ~~~~~~~~~~
 - Made LDAPBackingDirectory work with non-ascii passwords (convert to UTF-8).
