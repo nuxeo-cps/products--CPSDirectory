@@ -10,12 +10,18 @@ NuxMetaDirectories has been deprecated in CPS3 in favor of CPSDirectories
 Changes
 -------
 
-1. Change all references to 'portal_metadirectories'
-(portal.portal_metadirectories, context.portal_metadirectories,
-getToolByName('portal_metadirectories' ...)) to 'portal_directories'.
+1. Change all references to 'portal_metadirectories' to
+   'portal_directories'.
 
-2. Replace 'display_prop' (property of portal_metadirectories) with
-'title_field'.
+2. Replace 'display_prop' (property of a directory) with 'title_field'.
 
-3. Replace getSearchableSchemaKeys by ???
+3. Replace references to directory_* skins by cpsdirectory_*. Beware
+   that some skin names have changed, and that the parameters to
+   cpsdirectory_entry_view are now 'dirname' and 'id' (not 'entry_id').
 
+4. Calls to getEntry('foo') will not return None anymore if the entry
+   does not exist but raise KeyError. If you want None returned, use
+   getEntry('foo', default=None).
+
+5. Replace getSearchableSchemaKeys by querying the schema directly for
+   the fields that you want.
