@@ -6,20 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-27 17:46default\n"
+"POT-Creation-Date: 2004-01-28 10:13default\n"
 "PO-Revision-Date: 2004-01-07 12:22+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#.   <h1>
-#.         Directories
-#.       </h1>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "Directories"
-msgstr "Elenchi"
 
 #.   <em content="err" style="color:red">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -34,29 +27,11 @@ msgstr "Errore"
 msgid "Title"
 msgstr "Titolo"
 
-#.   <input onclick="javascript:history.back()" class="context" type="button" value="button_back">
-#.   </input>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_back"
-msgstr "Indietro"
-
-#.   <input condition="not:creation" value="button_change" class="standalone" name="cpsdirectory_entry_edit_form:method" type="submit">
-#.       <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
-#.       </input></input>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "button_change"
-msgstr "Modifica"
-
 #.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
 msgstr "Crea"
-
-#.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
-msgstr "Cerca"
 
 #.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
 #.       </input>
@@ -81,7 +56,12 @@ msgstr "Crea un nuovo elemento"
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica l'elemento"
 
-#.   <span />
+#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Risultati della ricerca "
+
+#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
@@ -135,9 +115,6 @@ msgstr "Modifica"
 msgid "psm_entry_created"
 msgstr "Crea nuovo elemento"
 
-msgid "label_roles"
-msgstr "Ruolo(i)"
-
 msgid "label_groups"
 msgstr "Gruppo(i)"
 
@@ -157,8 +134,20 @@ msgstr "Nome completo"
 msgid "cpsdir_label_delete_entry"
 msgstr "Crea un nuovo elemento"
 
-msgid "cpsdir_label_results"
-msgstr "Risultati della ricerca "
+#~ msgid "Directories"
+#~ msgstr "Elenchi"
+
+#~ msgid "button_back"
+#~ msgstr "Indietro"
+
+#~ msgid "button_change"
+#~ msgstr "Modifica"
+
+#~ msgid "button_search"
+#~ msgstr "Cerca"
+
+#~ msgid "label_roles"
+#~ msgstr "Ruolo(i)"
 
 #~ msgid "cpsdir_label_create ${dirname}"
 #~ msgstr "Crea in ${dirname}"

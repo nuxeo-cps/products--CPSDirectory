@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2004-01-27 17:46default\n"
+"POT-Creation-Date: 2004-01-28 10:13default\n"
 "PO-Revision-Date: 2004-01-27 17:45+0100\n"
 "Last-Translator: ben <ben@nuxeo.com>\n"
 "Language-Team: ben\n"
@@ -20,13 +20,6 @@ msgstr ""
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
 "X-Generator: KBabel 1.0.1\n"
-
-#.   <h1>
-#.         Directories
-#.       </h1>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "Directories"
-msgstr "Annuaires"
 
 #.   <em content="err" style="color:red">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -41,29 +34,11 @@ msgstr "Erreur"
 msgid "Title"
 msgstr "Titre"
 
-#.   <input onclick="javascript:history.back()" class="context" type="button" value="button_back">
-#.   </input>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_back"
-msgstr "Retour"
-
-#.   <input condition="not:creation" value="button_change" class="standalone" name="cpsdirectory_entry_edit_form:method" type="submit">
-#.       <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
-#.       </input></input>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "button_change"
-msgstr "Enregistrer"
-
 #.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
 #.       </input>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "button_create"
 msgstr "Créer"
-
-#.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
-msgstr "Chercher"
 
 #.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
 #.       </input>
@@ -88,7 +63,12 @@ msgstr "Créer une nouvelle entrée"
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifier l'entrée"
 
-#.   <span />
+#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Résultats de la recherche"
+
+#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Chercher une entrée"
@@ -142,9 +122,6 @@ msgstr "Editer"
 msgid "psm_entry_created"
 msgstr "Entrée créée"
 
-msgid "label_roles"
-msgstr "Rôle(s)"
-
 msgid "label_groups"
 msgstr "Groupe(s)"
 
@@ -163,8 +140,20 @@ msgstr "Nom complet"
 msgid "cpsdir_label_delete_entry"
 msgstr "Supprimer l'entrée ..."
 
-msgid "cpsdir_label_results"
-msgstr "Résultats de la recherche"
+#~ msgid "Directories"
+#~ msgstr "Annuaires"
+
+#~ msgid "button_back"
+#~ msgstr "Retour"
+
+#~ msgid "button_change"
+#~ msgstr "Enregistrer"
+
+#~ msgid "button_search"
+#~ msgstr "Chercher"
+
+#~ msgid "label_roles"
+#~ msgstr "Rôle(s)"
 
 #~ msgid "cpsdir_label_create ${dirname}"
 #~ msgstr "Créer dans ${dirname}"
