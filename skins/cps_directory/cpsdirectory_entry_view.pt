@@ -9,6 +9,7 @@
   ds python: res[1];
   global title ds/?title_field|id;
   global edit_allowed python: dir.isEditEntryAllowed(id);
+  global delete_allowed python: dir.isDeleteEntryAllowed(id);
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="css_slot">
@@ -48,7 +49,7 @@ actions['object'].append({'id':'edit_entry',
   'name': 'cpsdir_label_edit_entry',
   'category': 'object'})" />
     </tal:block>
-    <tal:block condition="dir/isDeleteEntryAllowed">
+    <tal:block condition="delete_allowed">
       <tal:block define="global actions python:
 actions['object'].append({'id':'delete_entry',
   'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
