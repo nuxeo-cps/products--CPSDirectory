@@ -40,7 +40,7 @@
                 <td>
                   <a href="."
                     tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
-                    ><strong tal:content="python:data.get(field['id'])">john</strong></a>
+                    ><strong tal:content="structure python:data.get(field['id'])">john</strong></a>
                 </td>
               </tal:block>
             </tr>
