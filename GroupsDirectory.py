@@ -207,11 +207,7 @@ class GroupStorageAdapter(BaseStorageAdapter):
             groupob = aclu.getGroupById(group, _marker)
             if groupob is _marker:
                 raise KeyError("No group '%s'" % group)
-            if aclu.meta_type == 'Pluggable User Folder':
-                return groupob.getMembers()
-            else:
-                return tuple(groupob.getUsers())
-        # else try other APIs to get to group.
+            return groupob.getUsers()
         return ()
 
     def _setGroupMembers(self, group, members):

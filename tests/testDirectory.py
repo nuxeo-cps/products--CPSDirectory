@@ -1,4 +1,4 @@
-# TODO: 
+# TODO:
 # - don't depend on getDocumentSchemas / getDocumentTypes but is there
 #   an API for that ?
 
@@ -82,9 +82,90 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
         self.assertRaises(KeyError, members.createEntry, {'id': member_id})
 
-        # XXX: not implemented yet
-        #members.deleteEntry(member_id)
-        #self.assert_(not members.hasEntry(member_id))
+    def testMemberSearch(self):
+        members = self.pd.members
+        member_id1 = 'new_member5'
+        member_email1 = 'exAMple@mail'
+        member_sn1 = 'MemberFive'
+        members.createEntry({'id': member_id1,
+                             'email': member_email1,
+                             'sn': member_sn1,
+                             })
+        member_id2 = 'new_member6'
+        member_email2 = 'nospam@example.com'
+        member_sn2 = 'six'
+        members.createEntry({'id': member_id2,
+                             'email': member_email2,
+                             'sn': member_sn2,
+                             })
+        member_ids = [member_id1, member_id2]
+
+        ### Without substrings
+        members.search_substring_fields = []
+
+        # Basic searches
+        res = members.searchEntries(id=member_id1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=[member_id1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=member_email1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=[member_email1])
+        self.assertEquals(res, [member_id1])
+
+        # Multi-field searches
+        res = members.searchEntries(id=member_id1, email=[member_email1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=member_id1, email=[member_email2])
+        self.assertEquals(res, [])
+
+        # Failing substring searches
+        res = members.searchEntries(id='new_mem')
+        self.assertEquals(res, [])
+        res = members.searchEntries(email='exam')
+        self.assertEquals(res, [])
+        res = members.searchEntries(email='example@mail') # different case
+        self.assertEquals(res, [])
+
+
+        ### With substrings
+        members.search_substring_fields = ['id', 'email']
+
+        # Basic searches
+        res = members.searchEntries(id=member_id1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=[member_id1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=member_email1)
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(email=[member_email1])
+        self.assertEquals(res, [member_id1])
+
+        # Multi-field searches
+        res = members.searchEntries(id=member_id1, email=[member_email1])
+        self.assertEquals(res, [member_id1])
+        res = members.searchEntries(id=member_id1, email=[member_email2])
+        self.assertEquals(res, [])
+
+        # Substring searches
+        res = members.searchEntries(id='new_mem')
+        self.assertEquals(res, member_ids)
+        res = members.searchEntries(email='EXAM')
+        self.assertEquals(res, member_ids)
+        res = members.searchEntries(email='spam')
+        self.assertEquals(res, [member_id2])
+        res = members.searchEntries(email='aM')
+        self.assertEquals(res, member_ids)
+        res = members.searchEntries(email=['@']) # list implies exact match
+        self.assertEquals(res, [])
+
+    def testSetMemberPassword(self):
+        members = self.pd.members
+        member_id = 'new_member'
+        members.createEntry({'id': member_id})
+        members.editEntry({'id': member_id, members.password_field: 'password'})
+        u = self.folder.acl_users.getUser(member_id)
+        self.assert_(u._getPassword() == 'password')
 
     def testMemberSearch(self):
         members = self.pd.members
@@ -320,7 +401,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         self.assert_(not role_id in roles.listEntryIds())
 
         roles.createEntry({'role': role_id})
-
         self.assert_(roles.hasEntry(role_id))
         search_result = roles.searchEntries(role=role_id)
         self.assertEquals(search_result, [role_id])

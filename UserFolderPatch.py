@@ -27,7 +27,7 @@ from types import StringType
 
 from Acquisition import aq_base
 from AccessControl.User import UserFolder, User
-
+from Products.CMFCore.utils import getToolByName
 
 #
 # Helpers
@@ -147,10 +147,53 @@ def listUserProperties(self):
 def hasUser(self, user_id):
     raise NotImplementedError
 
+#
+# Extended Role management methods for CPS3
+#
+def setRolesOfUser(self, roles, username):
+    """Sets the users of a role"""
+    userob = self.getUser(username)
+    domains = userob.getDomains()
+    self._doChangeUser(username, None, roles, domains)
+
+def setUsersOfRole(self, usernames, role):
+    """Sets the users of a role"""
+    for user in self.getUserNames():
+        userob = self.getUser(user)
+        domains = userob.getDomains()
+        roles = list(userob.getRoles())
+        # If we call _doChangeUser with Authenticated in the roles,
+        # user.getRoles() will return Authenticated twice...
+        roles.remove('Authenticated')
+        if user in usernames and role not in roles:
+            roles.append(role)
+            self._doChangeUser(user, None, roles, domains)
+        elif user not in usernames and role in roles:
+            roles.remove(role)
+            self._doChangeUser(user, None, roles, domains)
+
+def getUsersOfRole(self, role):
+    """Gets the users of a role"""
+    users = []
+    for username in self.getUserNames():
+        user = self.getUser(username)
+        if role in user.getRoles():
+            users.append(username)
+    return users
+
+def userFolderAddRole(self, role):
+    """Creates a role"""
+    portal = self.aq_inner.aq_parent
+    portal._addRole(role)
+
 userfolder_methods = (
     searchUsers,
     listUserProperties,
     #hasUser,
+    setRolesOfUser,
+    setUsersOfRole,
+    getUsersOfRole,
+    userFolderAddRole,
     )
 
 # User

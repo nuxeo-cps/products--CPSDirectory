@@ -194,12 +194,7 @@ class RolesDirectory(BaseDirectory):
         if role in ('Anonymous', 'Authenticated', 'Owner', ''):
             raise KeyError("Role '%s' is invalid" % role)
         aclu = self.acl_users
-        if hasattr(aq_base(aclu), 'userFolderAddRole'):
-            aclu.userFolderAddRole(role)
-        else:
-            # Basic folder... add the role by hand on the portal.
-            portal = getToolByName(self, 'portal_url').getPortalObject()
-            portal._addRole(role)
+        aclu.userFolderAddRole(role)
         self.editEntry(entry)
 
 InitializeClass(RolesDirectory)
@@ -230,22 +225,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
         if role not in self._getValidRoles():
             raise KeyError("No role '%s'" % role)
         aclu = self._portal.acl_users
-        members = []
-        if hasattr(aq_base(aclu), 'getLDAPSchema'):
-            # LDAPUserFolder XXX
-            # XXX can still be optimized if rdn is login_attr
-            users = aclu.getGroupedUsers([(role, 'dummy_dn')])
-            for user in users:
-                members.append(user.getUserName())
-        else:
-            # With LDAP or PluggableUserFolder, getUsers returns only cached
-            # users, so we have to user getUserNames instead.
-            # XXX Invent a better API than this SLOW search.
-            for username in aclu.getUserNames():
-                user = aclu.getUser(username)
-                if role in user.getRoles():
-                    members.append(user.getUserName())
-        return members
+        return aclu.getUsersOfRole(role)
 
     def _setRoleMembers(self, role, members):
         # XXX treat LDAP
@@ -264,7 +244,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
                 changed = 1
             if changed:
                 try:
-                    aclu._doChangeUser(id, None, roles, user.getDomains())
+                    aclu.userFolderEditUser(id, None, roles, user.getDomains())
                 except KeyError:
                     # XXX PluggableUserFolder trying to change non-default
                     LOG('_setRoleMembers', DEBUG, 'Attempted to change user '

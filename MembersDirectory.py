@@ -235,17 +235,8 @@ class MemberStorageAdapter(BaseStorageAdapter):
     def _setMemberPassword(self, member, password):
         aclu = self._dir.acl_users
         user = member.getUser()
-        if hasattr(aq_base(aclu), 'manage_editUserPassword'):
-            # LDAPUserFolder XXX
-            if hasattr(aq_base(user), 'getUserDN'):
-                user_dn = user.getUserDN()
-                aclu.manage_editUserPassword(user_dn, password)
-            else:
-                LOG('_setMemberPassword', DEBUG, 'member %s is not in LDAP'
-                    % member)
-        else:
-            aclu._doChangeUser(user.getUserName(), password,
-                               user.getRoles(), user.getDomains())
+        aclu.userFolderEditUser(user.getUserName(), password,
+                                user.getRoles(), user.getDomains())
 
     def _getMemberRoles(self, member):
         roles = member.getUser().getRoles()
@@ -255,17 +246,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
     def _setMemberRoles(self, member, roles):
         aclu = self._dir.acl_users
         user = member.getUser()
-        if hasattr(aq_base(aclu), 'manage_editUserRoles'):
-            # LDAPUserFolder XXX
-            if hasattr(aq_base(user), 'getUserDN'):
-                user_dn = user.getUserDN()
-                aclu.manage_editUserRoles(user_dn, list(roles))
-            else:
-                LOG('_setMemberRoles', DEBUG, 'member %s is not in LDAP'
-                    % member)
-        else:
-            aclu._doChangeUser(user.getUserName(), None,
-                               list(roles), user.getDomains())
+        aclu.setRolesOfUser(roles, user.getUserName())
 
     def _getMemberGroups(self, member):
         user = member.getUser()
@@ -277,17 +258,9 @@ class MemberStorageAdapter(BaseStorageAdapter):
     def _setMemberGroups(self, member, groups):
         LOG('_setMemberGroups', DEBUG, 'set member=%s groups=%s' %
             (member, groups))
-        aclu = self._dir.acl_users # XXX
+        aclu = self._dir.acl_users
         user = member.getUser()
-        if hasattr(aq_base(aclu), 'manage_editUserGroups'):
-            # LDAPUserFolder XXX
-            if hasattr(aq_base(user), 'getUserDN'):
-                user_dn = user.getUserDN()
-                aclu.manage_editUserGroups(user_dn, list(groups))
-            else:
-                LOG('_setMemberGroups', DEBUG, 'member %s is not in LDAP'
-                    % member)
-        elif hasattr(aq_base(aclu), 'setGroupsOfUser'):
+        if hasattr(aq_base(aclu), 'setGroupsOfUser'):
             aclu.setGroupsOfUser(list(groups), user.getUserName())
         else:
             LOG('_setMemberGroups', WARNING, 'No group support found in UserFolder')

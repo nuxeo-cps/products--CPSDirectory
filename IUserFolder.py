@@ -26,46 +26,34 @@ __version__ = '$Revision$'[11:-2]
 import Interface
 
 class IUserFolder(Interface.Base):
-    # These methods are used by CPS in various ways, but are a part of
-    # The BasicUserFolder, and do not need overriding in the user folder itself:
-    def _addUser(self,name,password,confirm,roles,domains,REQUEST=None):
-        """Adds a user"""
-        # This is used when creating a portal and by MemberToolsPatch if
-        # userFolderAddUser doens't exist. Howvere, it awlays exists,
-        # (For Zope > 2.4) so that usage can be removed.
-
-        # It uses _doAddUser which LDAPUserFolder does NOT implement.
-        # However, when creating a portal we know we don't have an
-        # LDAPUserFolder, so it's OK.
-
-    def userFolderAddUser(self, name, password, roles, domains, **kw):
-        """API method for creating a new user object. Note that not all
-           user folder implementations support dynamic creation of user
-           objects."""
-        # This also calls _doAddUser, and LDAPUserFolder still does not
-        # implement it. This means that Adding users thrugh tge MemberTool
-        # does not work with LDAP at all. That needs to be fixed.
-        # I suggest adding _doAddUser to the LDAPUserGroupsFolder
-        # implementation.
-
+    #
+    # BasicUserFolder API
+    #
     # These are part of the BasicUserFolder API, but are not implemented
-    # in BasicUserFolder:
+    # in BasicUserFolder, and will therefore need overriding, either by
+    # subclassing from UserFolder instead of BasicUserFolder, or by
+    # implementing them in the user folder itself.
+    #
+    # They are not CPS specific, but listed for completeness as CPS calls them.
     def getUserNames(self):
         """Return a list of usernames"""
 
     def getUser(self, name):
         """Return the named user object or None"""
 
-    def _doChangeUser(self, name, password, roles, domains, **kw):
-        """Modify an existing user. This should be implemented by subclasses
-           to make the actual changes to a user. The 'password' will be the
-           original input password, unencrypted. The implementation of this
-           method is responsible for performing any needed encryption."""
+    def userFolderAddUser(self, name, password, roles, domains, **kw):
+        """API method for creating a new user object. Note that not all
+           user folder implementations support dynamic creation of user
+           objects."""
 
-        # This has been superceded by userFolderEditUser so I think we
-        # should change this. They do the same.
-
-    # Local roles extensions
+    #
+    # CPS Role management extensions
+    #
+    # These are not called directly. Instead they are called
+    # via CPSCore.utils. The methods there will check if
+    # acl_users implement these methods and call it. If not,
+    # a default version is called that assumes a standard user folder
+    # without group support.
     def mergedLocalRoles(self, object, withgroups=0):
         """
         Return a merging of object and its ancestors' __ac_local_roles__.
@@ -85,11 +73,27 @@ class IUserFolder(Interface.Base):
                     {'url':url, 'roles':[Role1]}],..}.
         """
 
-    def _getAllowedRolesAndUsers(self, user):
-        """Returns a list with all roles this user has + the username"""
-        # CPSCore.utils uses this if it exists. Funnily enough, it never does.
+    # There are default versions of thes following methods patched into
+    # BasicUserFolder. These are not necessarily very efficient
+    # and user folders may want to override them, especially in
+    # the case of external storage, such as LDAP.
+    def setRolesOfUser(self, roles, username):
+        """Sets the users of a role"""
 
-    # Group support
+    def setUsersOfRole(self, usernames, role):
+        """Sets the users of a role"""
+
+    def getUsersOfRole(self, role):
+        """Gets the users of a role"""
+
+    def userFolderAddRole(self, role):
+        """Add a new role."""
+
+    #
+    # CPS Group support
+    #
+    # A CPS UserFolder should have some kind of group support.
+    # These methods are needed to support this.
     def setGroupsOfUser(self, groupnames, username):
         """Set the groups of a user"""
 
@@ -105,7 +109,14 @@ class IUserFolder(Interface.Base):
     def userFolderAddGroup(self, groupname, **kw):
         """Create a group"""
 
-    # Searching
+    #
+    # Extended search API
+    #
+    # To support efficient searches of external user sources,
+    # An extended search API is defined. A default version of this
+    # is patched into BasicUserFolder, but that will give horrible
+    # results on extended sources. Also, it supports no extended
+    # attributes, which is common on external sources.
     def listUserProperties(self):
         """Lists properties settable or searchable on the users."""
 
@@ -125,25 +136,13 @@ class IUserFolder(Interface.Base):
         Special properties are 'id', 'roles', 'groups'.
         """
 
-    # Only on LDAPUserFolders
-    def manage_editUserPassword(self, dn, new_pw, REQUEST=None):
-        """ Change a user password """
-
-    def manage_editUserGroups(self, user_dn, usergroup_dns=[], REQUEST=None):
-        """ Edit the user groups of a user """
-
-    def userFolderAddRole(self, role):
-        """Add a new role."""
-
-    def getGroupedUsers(self, groups=None):
-        """ Return all those users that are in a group """
-
-        # I suggest we implement the standardized methods above on
-        # LDAPUserGroupsFolder so we don't have to call these.
-
 
 class IUser(Interface.Base):
+    #
     # Part of the standard user API:
+    #
+    # These must be implemented as a patr of ANY user object, not just
+    # for CPS. They are listed here to make the list complete.
     def getRoles(self):
         """Return the list of roles assigned to a user."""
 
@@ -154,46 +153,78 @@ class IUser(Interface.Base):
         """Get the ID of the user. The ID can be used, at least from
         Python, to get the user from the user's
         UserDatabase"""
-        # Today this, and getUserName() is the same. It is my uderstanding that
-        # getUserName() is preferred. There is for example no getUserIds()
-
-    def getRoles(self):
-        """Return the list of roles assigned to a user."""
+        # The difference between getID and getUserName is that the ID is 
+        # the ID used when storing the user, while the username is what
+        # the user types in the login box. This is the same in 99% of 
+        # cases (even with LDAP they are the same, and getUserDN is used
+        # to get the storage ID). Most likely the usage throughout CMF, 
+        # and probably also CPS is inconsistent. Fixing this is a low
+        # priority, since all the userfodlers we support now does not
+        # differ between id and username.
 
     def getDomains(self):
         """Return the list of domain restrictions for a user"""
 
-    # Group support:
-    def getGroupNames(self):
-        """Return a list of group names"""
+    #
+    # CPS Group support:
+    #
+    def getGroups(self):
+        """Return the names of the groups that the user is a member of"""
 
-    # Only on LDAPUsers:
-    def getUserDN(self):
-        """ Return the user's full Distinguished Name """
-        # This is used to get the DN so that the special user management
-        # methods on LDAP User Folder (see above) can be called.
-        # By implemnting the standard methods instead, the need for getUserDN
-        # automatically disappears.
+    def getComputedGroups(self):
+        """Return the names of the groups that the user is a member of
+
+        This also returns the groups which the grups are members of.
+        This method is not required by CPS, and only used if the userfolder
+        has groups in groups support."""
+
+    #
+    # CPS Property support:
+    #
+    def listProperties(self):
+        """Lists all properties that are set on the user."""
+
+    def hasProperty(self, id):
+        """Check for a property"""
+
+    def getProperty(self, id, default=None):
+        """Returns the value of a property"""
+
+    def getProperties(self, ids):
+        """Returns the values of list of properties"""
+        # Returns as a dictionary, I hope?
+
+    def setProperty(self, id, value):
+        """Sets the value of a property"""
+
+    def setProperties(self, **kw):
+        """Sets the values of a dictionary of properties"""
 
 
 class IGroup(Interface.Base):
-    # On pluggableUserFolder:
-    def getMembers(self):
+    def getUsers(self):
         """Returns the members of the group
 
-        Does not return users who are members of memeber groups.
+        Does not return users who are members of member groups.
+        Use this when you want to LIST the users of a group, for example
+        in a management interface.
         """
 
+    def getComputedUsers(self):
+        """Returns the users that are a members of the groups
+
+        Returns members of subgroups as well as the main group.
+        Use this when you want to find all users that are affected by
+        the groups roles, so called by the access control methods.
+        """
+
+    #
+    # Subgroup support.
+    #
+    # Having groups in groups is supported, but optional in CPS.
     def getGroups(self):
         """Returns the groups who are a member of the group"""
 
     def setGroups(self, groupids):
         """Sets the groups that are members of the group"""
-        # This functionality is currently only supported by PUF.
 
-    # On non-PluggableUserFolders
-    def getUsers(self):
-        """Returns the users that are a members of the groups"""
-
-    # I suggest that we on the other folders implement a getMembers
-    # alias for getUsers so we don't have to test for it.

@@ -56,7 +56,6 @@ class TestDirectoryVocabulary(CPSDirectoryTestCase):
         for role in ['Manager', 'Member', 'Reviewer', 'SectionManager',
           'SectionReader', 'SectionReviewer', 'WorkspaceManager',
           'WorkspaceMember', 'WorkspaceReader']:
-            keys = roles.keys()
             self.assert_(role in roles.keys())
             self.assert_(roles.has_key(role))
 

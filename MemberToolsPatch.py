@@ -301,8 +301,6 @@ def addMember(self, id, password, roles, domains, properties=None,
     if hasattr(aq_base(acl_users), 'userFolderAddUser'):
         # Standardized user folder API.
         acl_users.userFolderAddUser(id, password, roles, domains, **props)
-    elif hasattr(aq_base(acl_users), '_addUser'):
-        acl_users._addUser(id, password, password, roles, domains, **props)
     else:
         raise ValueError("Can't add Member, unsupported user folder")
 
