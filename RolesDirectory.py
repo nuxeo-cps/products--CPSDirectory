@@ -89,7 +89,7 @@ class RolesDirectory(BaseDirectory):
                 if role != kwrole:
                     continue
             if kwmembers:
-                # XXX optimize for LDAP
+                # XXX optimize for LDAP, using a getRolesWithUsers()
                 ok = 0
                 for user in users:
                     # XXX we want members, not users...
@@ -107,11 +107,26 @@ class RolesDirectory(BaseDirectory):
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
         # XXX check security?
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        aclu = portal.acl_users
-        return id in aclu.getUserNames()
+        # XXX optimize for LDAP
+        return id in self.listEntryIds()
 
-
+    security.declarePublic('createEntry')
+    def createEntry(self, entry):
+        """Create an entry in the directory."""
+        self.checkCreateEntryAllowed()
+        role = entry[self.id_field]
+        if self.hasEntry(role):
+            raise ValueError("Role '%s' already exists" % role)
+        if role in ('Anonymous', 'Authenticated', 'Owner', ''):
+            raise ValueError("Role '%s' is invalid" % role)
+        aclu = self.acl_users
+        if hasattr(aq_base(aclu), 'userFolderAddRole'):
+            aclu.userFolderAddRole(role)
+        else:
+            # Basic folder... add the role by hand on the portal.
+            portal = getToolByName(self, 'portal_url').getPortalObject()
+            portal._addRole(role)
+        self.writeEntry(entry)
 
 InitializeClass(RolesDirectory)
 
@@ -134,6 +149,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
         """Get the list of valid roles.
         """
         # XXX take into account LDAPUserFolder API to get all roles.
+        # XXX This returns more roles than the LDAP ones...
         return self._portal.valid_roles()
 
     def _getRoleMembers(self, role):
@@ -172,6 +188,9 @@ class RoleStorageAdapter(BaseStorageAdapter):
         Fills default value from the field if the object has no attribute.
         """
         role = self._role
+        if role is None:
+            # Creation.
+            return self.getDefaultData()
         dir = self._dir
         members = self._getRoleMembers(role)
         data = {}
