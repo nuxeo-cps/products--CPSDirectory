@@ -134,10 +134,10 @@ class MetaDirectory(BaseDirectory):
         dir_id = mappings[0].dir_id
         dtool = getToolByName(self, 'portal_directories')
         try:
-            dir = getattr(dtool, dir_id)
+            b_dir = getattr(dtool, dir_id)
         except AttributeError:
             raise ValueError("No backing directory '%s'" % dir_id)
-        return dir
+        return b_dir
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -191,13 +191,13 @@ class MetaDirectory(BaseDirectory):
         for mapping in self.getBackingDirectoriesMappings():
             # Get backing dir
             try:
-                dir = getattr(dtool, mapping.dir_id)
+                b_dir = getattr(dtool, mapping.dir_id)
             except AttributeError:
                 raise ValueError("No backing directory '%s'" %
                                  mapping.dir_id)
             # Get id XXX maybe convert
             b_id = id
-            dir.deleteEntry(b_id)
+            b_dir.deleteEntry(b_id)
 
     security.declarePublic('searchEntries')
     def searchEntries(self, return_fields=None, **kw):
@@ -217,24 +217,24 @@ class MetaDirectory(BaseDirectory):
     # Internal
     #
 
-    def _getEntryFromBacking(self, entry_id, field_ids):
+    def _getEntryFromBacking(self, id, field_ids):
         """Compute an entry from the backing directories."""
         dtool = getToolByName(self, 'portal_directories')
-        entry = {self.id_field: entry_id}
+        entry = {self.id_field: id}
         for mapping in self.getBackingDirectoriesMappings():
             # Get backing dir
             try:
-                dir = getattr(dtool, mapping.dir_id)
+                b_dir = getattr(dtool, mapping.dir_id)
             except AttributeError:
                 raise ValueError("No backing directory '%s'" %
                                  mapping.dir_id)
             # Get id XXX maybe convert
-            b_id = entry_id
+            b_id = id
             # Get field ids we want
             b_fids = []
-            for schema in dir._getSchemas():     # XXX
+            for schema in b_dir._getSchemas():     # XXX
                 for b_fid in schema.keys(): # XXX need API for this
-                    if b_fid == dir.id_field:
+                    if b_fid == b_dir.id_field:
                         # Ignore id
                         continue
                     if b_fid in mapping.field_ignore:
@@ -248,7 +248,7 @@ class MetaDirectory(BaseDirectory):
             # Get entry (no acls checked)
             if not b_fids:
                 continue
-            b_entry = dir._getEntry(b_id, fields_ids=b_fids)
+            b_entry = b_dir._getEntry(b_id, fields_ids=b_fids)
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
@@ -302,27 +302,26 @@ class MetaStorageAdapter(BaseStorageAdapter):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data, **kw)
         dir = self._dir
-        entry_id = self._id
+        id = self._id
 
         # Do we assume we want to write all fields ?
 
         dtool = getToolByName(dir, 'portal_directories')
-
         for mapping in dir.getBackingDirectoriesMappings():
             # Get backing dir
             try:
-                dir = getattr(dtool, mapping.dir_id)
+                b_dir = getattr(dtool, mapping.dir_id)
             except AttributeError:
                 raise ValueError("No backing directory '%s'" %
                                  mapping.dir_id)
             # Get id XXX maybe convert
-            b_id = entry_id
+            b_id = id
 
             # Build backing entry
             b_entry = {}
-            for schema in dir._getSchemas():     # XXX
+            for schema in b_dir._getSchemas():     # XXX
                 for b_fid in schema.keys(): # XXX need API for this
-                    if b_fid == dir.id_field:
+                    if b_fid == b_dir.id_field:
                         # Ignore id, already done.
                         continue
                     if b_fid in mapping.field_ignore:
@@ -334,12 +333,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
                         continue
                     b_entry[b_fid] = data[fid]
             # Build id last to be sure it's there
-            b_entry[dir.id_field] = b_id
+            b_entry[b_dir.id_field] = b_id
 
             # Write or create to backing dir
             if self._do_create:
-                dir.createEntry(b_entry)
+                b_dir.createEntry(b_entry)
             else:
-                dir.editEntry(b_entry)
+                b_dir.editEntry(b_entry)
 
 InitializeClass(MetaStorageAdapter)
