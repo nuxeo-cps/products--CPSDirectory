@@ -773,6 +773,7 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
         if field_id == 'base_dn':
             dn = entry['dn']
             return implodeDN(explodeDN(dn)[1:])
+        # FIXME entry may be None but not tested
         if not entry.has_key(field_id):
             return field.getDefault()
         return entry[field_id]
