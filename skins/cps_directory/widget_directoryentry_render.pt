@@ -9,6 +9,11 @@
                    title options/title;
                    directory here/directory;
                    vocabulary here/vocabulary;">
+<input tal:condition="python: not here.is_required and jsvalue"
+  type="checkbox" tal:attributes="name string:${html_id}_set"
+  checked="checked" />
+<input tal:condition="not: jsvalue" type="hidden"
+  tal:attributes="name string:${html_id}_set" value="checked" />
 <span tal:attributes="id html_id">
   <input type="hidden" tal:condition="value"
     tal:attributes="name html_id;value value;" />
