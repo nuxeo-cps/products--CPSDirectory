@@ -77,6 +77,7 @@ if has_ldap_delegate:
 else:
     LOG('LDAPDirectoryVocabulary', INFO,
         "Disabled (no LDAP user folder product found).")
+from IndirectDirectoryVocabulary import IndirectDirectoryVocabulary
 
 
 import UserFolderPatch
@@ -108,3 +109,4 @@ def initialize(registrar):
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPBackingDirectory)
     DirectoryTypeRegistry.register(IndirectDirectory)
+    VocabularyTypeRegistry.register(IndirectDirectoryVocabulary)
