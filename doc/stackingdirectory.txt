@@ -21,7 +21,17 @@ store different kinds of users.
 Features
 ========
 
-Several backing directories can be provided, they are ordered.
+Several backing directories can be provided, they are used in order when
+looking for an entry.
+
+An important feature of a stacking directory is that the id field of a
+backing directory may be different than the one of the stacking
+directory itself. However the id field of the stacking directory must
+still be present in the entries of the backing directory.
+
+This feature is typicaly used with an LDAP backing directory, whose id
+field is 'dn'. The stacking directory's id field can be set to 'uid' for
+instance, and things will still work.
 
 Finding the backing directory
 -----------------------------
@@ -29,5 +39,8 @@ Finding the backing directory
 When an entry is looked up, it is looked up in each backing directory in
 order until it is found.
 
-For creation, the backing directory in which the entry is to be created
-is specified directly by name.
+Searching an entry searches in all backing directories and aggregates
+results.
+
+When creating an entry, the backing directory in which the entry is to
+be created is specified directly in the stacking directory's properties.
