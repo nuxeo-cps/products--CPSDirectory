@@ -1,12 +1,15 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
 -
+
 New features:
 ~~~~~~~~~~~~~
 -
+
 Bug fixes:
 ~~~~~~~~~~
--
+- Correctly do field processing for computed fields in the Members directory.
+
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
