@@ -22,13 +22,10 @@ A directory redirects requests to other backing directories.
 """
 
 from zLOG import LOG, DEBUG, WARNING
-from copy import deepcopy
 
 from Globals import InitializeClass
 from Globals import DTMLFile
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from AccessControl import getSecurityManager
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ManagePortal
@@ -43,14 +40,14 @@ _marker = [] # XXX used?
 
 class DirectoryMapping:
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
+    security.declareObjectProtected(ManagePortal)
 
     def __init__(self, dir_id,
                  id_conv=None, field_rename=None, field_ignore=None):
         self.dir_id = dir_id
         self.id_conv = id_conv
-        self.field_rename = field_rename or {}
-        self.field_ignore = field_ignore or ()
+        self.field_rename = (field_rename or {}).copy()
+        self.field_ignore = field_ignore and tuple(field_ignore) or ()
 
 InitializeClass(DirectoryMapping)
 
@@ -71,9 +68,22 @@ class MetaDirectory(BaseDirectory):
         )
     backing_dir_ids = ()
 
+    backing_dir_infos = ()
+
     def __init__(self, *args, **kw):
         BaseDirectory.__init__(self, *args, **kw)
-        self.backing_dirs_mappings = {}
+        return
+        # XXX debug zmi
+        self.setBackingDirectories(
+            ({'dir_id': 'dirfoo',
+              'id_conv': None,
+              'field_ignore': ('pasglop',),
+              },
+             {'dir_id': 'dirbar',
+              'id_conv': None,
+              'field_rename': {'mail': 'email'}, # back:meta
+              },
+             ))
 
     #
     # ZMI
@@ -93,20 +103,27 @@ class MetaDirectory(BaseDirectory):
     # Management API
     #
 
-    security.declareProtected(ManagePortal, 'getBackingDirectoriesMappings')
-    def getBackingDirectoriesMappings(self):
-        """Get the list of backing directories and their mappings."""
-        return [DirectoryMapping('dirfoo',
-                                 id_conv=None,
-                                 field_rename={},
-                                 field_ignore=('pasglop',),
-                                 ),
-                DirectoryMapping('dirbar',
-                                 id_conv=None,
-                                 field_rename={'mail': 'email'}, # back:meta
-                                 field_ignore=(),
-                                 ),
-                ]
+    security.declareProtected(ManagePortal, 'getBackingDirectories')
+    def getBackingDirectories(self):
+        """Get the list of backing directories and their infos."""
+        return self.backing_dir_infos
+
+    security.declareProtected(ManagePortal, 'setBackingDirectories')
+    def setBackingDirectories(self, infos):
+        """Set the list of backing directories and their infos.
+
+        Infos is a sequence of dicts with keys dir_id, id_conv,
+        field_rename, field_ignore.
+        """
+        backing_dir_infos = []
+        for info in infos:
+            backing_dir_infos.append(
+                DirectoryMapping(info['dir_id'],
+                                 id_conv=info['id_conv'],
+                                 field_rename=info.get('field_rename'),
+                                 field_ignore=info.get('field_ignore')))
+        self.backing_dir_infos = tuple(backing_dir_infos)
+
 
     #
     # Internal API
@@ -128,7 +145,7 @@ class MetaDirectory(BaseDirectory):
     def _getFirstDirectory(self):
         """Get the first directory."""
         # XXX later: first directory that has no id conversion
-        mappings = self.getBackingDirectoriesMappings()
+        mappings = self.getBackingDirectories()
         if not mappings:
             return None
         dir_id = mappings[0].dir_id
@@ -188,7 +205,7 @@ class MetaDirectory(BaseDirectory):
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         dtool = getToolByName(self, 'portal_directories')
-        for mapping in self.getBackingDirectoriesMappings():
+        for mapping in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, mapping.dir_id)
@@ -221,7 +238,7 @@ class MetaDirectory(BaseDirectory):
         """Compute an entry from the backing directories."""
         dtool = getToolByName(self, 'portal_directories')
         entry = {self.id_field: id}
-        for mapping in self.getBackingDirectoriesMappings():
+        for mapping in self.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, mapping.dir_id)
@@ -307,7 +324,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
         # Do we assume we want to write all fields ?
 
         dtool = getToolByName(dir, 'portal_directories')
-        for mapping in dir.getBackingDirectoriesMappings():
+        for mapping in dir.getBackingDirectories():
             # Get backing dir
             try:
                 b_dir = getattr(dtool, mapping.dir_id)
