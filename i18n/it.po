@@ -158,6 +158,9 @@ msgstr "Modifica"
 msgid "psm_entry_created"
 msgstr "Crea nuovo elemento"
 
+msgid "label_groups"
+msgstr "Gruppo(i)"
+
 msgid "label_members"
 msgstr "Collaboratori"
 
