@@ -168,6 +168,7 @@ class LDAPBackingDirectory(BaseDirectory):
 
     ldap_scope_c = ldap.SCOPE_SUBTREE
     ldap_search_classes_c = ['person']
+    ldap_search_classes_filter = '(objectClass=person)'
     ldap_object_classes_c = ['top', 'person']
 
     all_password_encryptions = ('none',)
@@ -188,14 +189,26 @@ class LDAPBackingDirectory(BaseDirectory):
                 'SUBTREE': ldap.SCOPE_SUBTREE,
                 }
         self.ldap_scope_c = conv.get(self.ldap_scope, ldap.SCOPE_ONELEVEL)
-        # Split classes
+        # Split object classes for creation
+        classes = self.ldap_object_classes
+        classes = [x.strip() for x in classes.split(',')]
+        classes = filter(None, classes)
+        self.ldap_object_classes_c = classes
+        self.ldap_object_classes = ', '.join(classes)
+        # Split object classes for search
         classes = self.ldap_search_classes
         classes = [x.strip() for x in classes.split(',')]
-        self.ldap_search_classes_c = filter(None, classes)
-        self.ldap_search_classes = ', '.join(self.ldap_search_classes_c)
-        classes = self.ldap_object_classes
-        self.ldap_object_classes_c = [x.strip() for x in classes.split(',')]
-        self.ldap_object_classes = ', '.join(self.ldap_object_classes_c)
+        classes = filter(None, classes)
+        self.ldap_search_classes_c = classes
+        self.ldap_search_classes = ', '.join(classes)
+        # Prebuild objectClass search filter
+        if classes:
+            filt = ''.join(['(objectClass=%s)' % c for c in classes])
+            if len(classes) > 1:
+                filt = '(|%s)' % res
+        else:
+            filt = '(objectClass=*)'
+        self.ldap_search_classes_filter = filt
         # Reset connection (XXX problems with multiple threads)
         self._v_conn = None
 
@@ -336,10 +349,13 @@ class LDAPBackingDirectory(BaseDirectory):
 
         Returns converted values.
         """
+        filter = self.objectClassSearchFilter()
         try:
-            results = self.searchLDAP(id, ldap.SCOPE_BASE, '(objectClass=*)',
+            results = self.searchLDAP(id, ldap.SCOPE_BASE, filter,
                                       field_ids, password=password)
-        except ldap.INVALID_CREDENTIALS:
+        except (ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM):
+            # UNWILLING_TO_PERFORM: unauthenticated bind (DN with no password)
+            # disallowed
             if password is None:
                 LOG('_getEntryFromLDAP', ERROR,
                     "Invalid credentials for directory %s" % self.getId())
@@ -405,8 +421,6 @@ class LDAPBackingDirectory(BaseDirectory):
 
     def _searchEntries(self, filter, return_attrs):
         """Search entries according to filter."""
-        if not filter:
-            filter = '(objectClass=*)'
         if return_attrs is None:
             attrs = ['dn']
         else:
@@ -430,14 +444,7 @@ class LDAPBackingDirectory(BaseDirectory):
 
     security.declarePrivate('objectClassSearchFilter')
     def objectClassSearchFilter(self):
-        classes = self.ldap_search_classes_c
-        if classes:
-            res = ''.join(['(objectClass=%s)' % c for c in classes])
-            if len(classes) > 1:
-                res = '(|%s)' % res
-        else:
-            res = '(objectClass=*)'
-        return res
+        return self.ldap_search_classes_filter
 
     # XXX security
     def getImageFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
@@ -571,7 +578,8 @@ class LDAPBackingDirectory(BaseDirectory):
         try:
             conn = self.connectLDAP()
             LOG('existsLDAP', TRACE, "search_s dn=%s" % dn)
-            res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)', ['dn'])
+            filter = self.objectClassSearchFilter()
+            res = conn.search_s(dn, ldap.SCOPE_BASE, filter, ['dn'])
             LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
         except ldap.NO_SUCH_OBJECT:
             return 0
@@ -637,6 +645,8 @@ class LDAPBackingDirectory(BaseDirectory):
 
         # Get current entry
         LOG('modifyLDAP', TRACE, "search_s base dn=%s" % dn)
+        # (use objectClass=* because dn is already assumed valid
+        #  and also we'd like the *LDAP methods to be generic)
         res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)')
         LOG('modifyLDAP', TRACE, " -> results=%s" % (res,))
         if not res:
