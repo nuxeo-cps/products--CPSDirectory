@@ -53,6 +53,11 @@ class AuthenticationFailed(Exception):
     pass
 
 
+class ConfigurationError(ValueError):
+    """Raised when a directory is misconfigured."""
+    pass
+
+
 # Utility functions for _properties, should be elsewhere
 def _replaceProperty(props, id, prop):
     res = []
