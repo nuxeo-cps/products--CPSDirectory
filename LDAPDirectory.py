@@ -19,7 +19,7 @@
 """LDAPDirectory
 """
 
-from zLOG import LOG, DEBUG, PROBLEM, ERROR
+from zLOG import LOG, DEBUG, ERROR
 
 from types import ListType, TupleType, StringType
 from Globals import InitializeClass
@@ -75,6 +75,8 @@ class LDAPDirectory(BaseDirectory):
          'label': 'LDAP bind dn'},
         {'id': 'ldap_bind_password', 'type': 'string', 'mode': 'w',
          'label': 'LDAP bind password'},
+        {'id': 'ldap_rdn_attr', 'type': 'string', 'mode': 'w',
+         'label': 'LDAP rdn attribute'},
         {'id': 'ldap_object_classes_str', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes'},
         )
@@ -89,6 +91,7 @@ class LDAPDirectory(BaseDirectory):
     ldap_scope_str = 'BASE'
     ldap_bind_dn = ''
     ldap_bind_password = ''
+    ldap_rdn_attr = 'cn'
     ldap_object_classes_str = 'top, person'
 
     ldap_scope = ldap.SCOPE_BASE
@@ -190,9 +193,66 @@ class LDAPDirectory(BaseDirectory):
             filter = '(&%s)' % filter
         return self._searchEntries(filter=filter)
 
+    security.declarePublic('hasEntry')
+    def hasEntry(self, id):
+        """Does the directory have a given entry?"""
+        id_attr = self.id_field
+        filter = ('(&%s(objectClass=*))' %
+                  filter_format('(%s=%s)', (id_attr, id)))
+        res = self._delegate.search(base=self.ldap_base,
+                                    scope=self.ldap_scope,
+                                    filter=filter,
+                                    attrs=[id_attr])
+        if res['exception']:
+            LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
+                % res['exception'])
+            return 0
+
+        return res['size'] != 0
+
+    security.declarePublic('createEntry')
+    def createEntry(self, entry):
+        """Create an entry in the directory."""
+        self.checkCreateEntryAllowed()
+        if not entry.has_key(self.id_field):
+            raise ValueError("Missing value for '%s' in entry" %
+                             self.id_field)
+        if not entry.has_key(self.ldap_rdn_attr):
+            raise ValueError("Missing value for '%s' in entry" %
+                             self.ldap_rdn_attr)
+        id = entry[self.id_field]
+        if self.hasEntry(id):
+            raise ValueError("Entry '%s' already exists" % id)
+        # XXX check rdn value syntax...
+        rdn_attr = self.ldap_rdn_attr
+        rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])
+        base = self.ldap_base
+        attrs = self._makeAttrsFromData(entry)
+        attrs['objectClass'] = self.ldap_object_classes
+        LOG('createEntry', DEBUG, 'base=%s rdn=%s attrs=%s' %
+            (base, rdn, attrs))
+        msg = self._delegate.insert(base=base, rdn=rdn, attrs=attrs)
+        if msg:
+            raise ValueError("LDAP error: %s" % msg)
+
     #
     # Internal
     #
+
+    def _makeAttrsFromData(self, data, ignore_attrs=[]):
+        # Make attributs. Skin rdn_attr
+        attrs = {}
+        for fieldid, field in self._getSchemas()[0].items(): # XXX
+            value = data[fieldid]
+            if fieldid == 'dn':
+                # Never modifiable directly.
+                continue
+            if fieldid in ignore_attrs:
+                continue
+            if type(value) not in (ListType, TupleType):
+                value = [value]
+            attrs[fieldid] = value
+        return attrs
 
     def _searchEntries(self, filter=None):
         """Search entries according to filter."""
@@ -238,11 +298,10 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         # XXX use self.ldap_object_classes here too
         filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
                                                         (dir.id_field, id))
-        res = dir._delegate.search(base=dir.ldap_base, scope=dir.ldap_scope,
+        res = dir._delegate.search(base=dir.ldap_base,
+                                   scope=dir.ldap_scope,
                                    filter=filter,
-                                   attrs=field_ids,
-                                   bind_dn=dir.ldap_bind_dn,
-                                   bind_pwd=dir.ldap_bind_password)
+                                   attrs=field_ids)
         if res['exception']:
             LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
                 % res['exception'])
@@ -289,19 +348,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         rdn_attr, rdn_value = rdn.split('=', 1)
 
         # XXX treat change of rdn
-
-        attrs = {}
-        for fieldid, field in self._schema.items():
-            value = data[fieldid]
-            if fieldid == 'dn':
-                # Never modifiable directly.
-                continue
-            if fieldid == rdn_attr:
-                # XXX cannot change rdn attr directly...
-                continue
-            if type(value) not in (ListType, TupleType):
-                value = [value]
-            attrs[fieldid] = value
+        attrs = dir._makeAttrsFromData(data, ignore_attrs=[rdn_attr])
 
         if attrs:
             msg = dir._delegate.modify(user_dn, attrs=attrs)
