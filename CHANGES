@@ -6,6 +6,7 @@ New features:
 ~~~~~~~~~~~~~
 - Search for groups and roles.
 - Split search schemas and layouts so they can be customized independently.
+- Group and role creation work.
 
 Bug fixes:
 ~~~~~~~~~~
