@@ -22,6 +22,7 @@
 from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass
+from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import getToolByName
@@ -29,6 +30,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+
+
+_marker = []
 
 
 class MembersDirectory(BaseDirectory):
@@ -40,6 +44,25 @@ class MembersDirectory(BaseDirectory):
     meta_type = 'CPS Members Directory'
 
     security = ClassSecurityInfo()
+
+    _properties = BaseDirectory._properties + (
+        {'id': 'id_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for id'},
+        {'id': 'password_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for password'},
+        {'id': 'roles_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for roles'},
+        {'id': 'groups_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for groups'},
+        {'id': 'title_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for entry title'},
+        )
+
+    id_field = 'id'
+    password_field = 'password'
+    roles_field = 'roles'
+    groups_field = 'groups'
+    title_field = 'id'
 
     security.declarePrivate('getAdapters')
     def getAdapters(self, id):
@@ -88,20 +111,31 @@ class MemberStorageAdapter(BaseStorageAdapter):
         Fills default value from the field if the object has no attribute.
         """
         id = self._id
-        data = {'id': id}
-        data.update({
-            'password': 'this should be invisible',
-            'email': 'fg@nuxeo.com',
-            })
-        return data
-        # XXX
-        for field_id, field in self._schema.items():
-            if hasattr(base_ob, field_id):
-                value = getattr(ob, field_id)
+        dir = self._dir
+        member = self._mtool.getMemberById(id)
+        if member is None:
+            raise KeyError("No member '%s'" % id)
+        if not hasattr(aq_base(member), 'getMemberId'):
+            raise KeyError("User '%s' is not a member" % id)
+        user = member.getUser()
+        data = {}
+        for fieldid, field in self._schema.items():
+            if fieldid == dir.id_field:
+                value = id
+            elif fieldid == dir.password_field:
+                value = 'this is the password XXX'
+            elif fieldid == dir.roles_field:
+                value = user.getRoles()
+            elif fieldid == dir.groups_field:
+                if hasattr(aq_base(user), 'getGroups'):
+                    value = user.getGroups()
+                else:
+                    value = () # XXX or field.getDefault() ?
             else:
-                # Use default from field.
-                value = field.getDefault()
-            data[field_id] = value
+                value = member.getProperty(fieldid, _marker)
+                if value is _marker:
+                    value = field.getDefault()
+            data[fieldid] = value
         return data
 
     def setData(self, data):
