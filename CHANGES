@@ -15,4 +15,3 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Renamed writeEntry to editEntry.
-- isDeleteEntryAllowed now takes an id argument.
