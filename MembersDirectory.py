@@ -168,16 +168,17 @@ class MemberStorageAdapter(BaseStorageAdapter):
         return member
 
     def _setMemberPassword(self, member, password):
-        aclu = self._dir.acl_users # XXX
+        aclu = self._dir.acl_users
+        user = member.getUser()
         if hasattr(aq_base(aclu), 'manage_editUserPassword'):
-            # LDAPUserFolder
-            # XXX find dn
-            return
-            raise NotImplementedError
-            dn = None
-            aclu.manage_editUserPassword(dn, password)
+            # LDAPUserFolder XXX
+            if hasattr(aq_base(user), 'getUserDN'):
+                user_dn = user.getUserDN()
+                aclu.manage_editUserPassword(user_dn, password)
+            else:
+                LOG('_setMemberPassword', DEBUG, 'member %s is not in LDAP'
+                    % member)
         else:
-            user = member.getUser()
             aclu._doChangeUser(user.getUserName(), password,
                                user.getRoles(), user.getDomains())
 
@@ -187,15 +188,17 @@ class MemberStorageAdapter(BaseStorageAdapter):
                 if r not in ('Anonymous', 'Authenticated', 'Owner')]
 
     def _setMemberRoles(self, member, roles):
-        aclu = self._dir.acl_users # XXX
+        aclu = self._dir.acl_users
+        user = member.getUser()
         if hasattr(aq_base(aclu), 'manage_editUserRoles'):
-            # LDAPUserFolder
-            # XXX find dn
-            return
-            raise NotImplementedError
-            aclu.manage_editUserRoles(dn, role_dns)
+            # LDAPUserFolder XXX
+            if hasattr(aq_base(user), 'getUserDN'):
+                user_dn = user.getUserDN()
+                aclu.manage_editUserRoles(user_dn, list(roles))
+            else:
+                LOG('_setMemberRoles', DEBUG, 'member %s is not in LDAP'
+                    % member)
         else:
-            user = member.getUser()
             aclu._doChangeUser(user.getUserName(), None,
                                list(roles), user.getDomains())
 
@@ -207,14 +210,19 @@ class MemberStorageAdapter(BaseStorageAdapter):
             return () # XXX or field.getDefault() ?
 
     def _setMemberGroups(self, member, groups):
+        LOG('_setMemberGroups', DEBUG, 'set member=%s groups=%s' %
+            (member, groups))
         aclu = self._dir.acl_users # XXX
+        user = member.getUser()
         if hasattr(aq_base(aclu), 'manage_editUserGroups'):
-            # LDAPUserFolder
-            # XXX find dn
-            return
-            raise NotImplementedError
+            # LDAPUserFolder XXX
+            if hasattr(aq_base(user), 'getUserDN'):
+                user_dn = user.getUserDN()
+                aclu.manage_editUserGroups(user_dn, list(groups))
+            else:
+                LOG('_setMemberGroups', DEBUG, 'member %s is not in LDAP'
+                    % member)
         else:
-            user = member.getUser()
             if hasattr(aq_base(user), 'setGroupsOfUser'):
                 aclu.setGroupsOfUser(list(groups), user.getUserName())
 
