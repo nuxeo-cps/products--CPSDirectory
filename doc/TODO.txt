@@ -1,0 +1,13 @@
+=====================
+TODO for CPSDirectory
+=====================
+
+$Id$
+
+- Separate public and private methods to read/write/create entries
+  to be able to have private methods that do not check ACLs and
+  can be used by other internal code.
+
+- Speedup search for ZODBDirectory using a ZCatalog.
+
+- Caching.
