@@ -1,0 +1,31 @@
+<tal:block define="layout options/layout;
+                   ds options/datastructure;
+                   ">
+<table cellpadding="2" cellspacing="2" border="0">
+  <tr tal:repeat="row layout/rows">
+    <tal:block repeat="cell row">
+    <tal:block define="widget cell/widget;
+                       wrender python:widget.render('view', ds);
+                       "
+        condition="python: not widget.hidden_view and
+                           (not widget.hidden_empty or wrender.strip())">
+      <td width="120" align="right"  bgcolor="#EEEEEE">
+        <strong>
+        <span i18n:translate="" tal:condition="widget/is_i18n"
+          tal:content="widget/label">label</span
+        ><span tal:condition="not:widget/is_i18n"
+          tal:content="widget/label">label</span
+        >&nbsp;:
+        </strong>
+      </td>
+      <td valign="top" colspan="1"
+        tal:attributes="colspan python:cell['ncols']*2-1">
+        <div tal:attributes="class widget/css_class|nothing">
+          <tal:block replace="structure wrender" />
+        </div>
+      </td>
+    </tal:block>
+    </tal:block>
+  </tr>
+</table>
+</tal:block>
