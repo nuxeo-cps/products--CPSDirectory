@@ -157,14 +157,15 @@ class LDAPDirectory(BaseDirectory):
         return self.searchEntries()
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, **kw):
+    def searchEntries(self, return_atts=None, **kw):
         """Search for entries in the directory.
 
+        See API in the base class.
+
+        LDAP specifics:
         Keys with empty values are removed.
         Keys with value '*' search for an existing field.
-        Otherwise do substring search.
-
-        Returns a list of entry ids.
+        Otherwise does substring search.
         """
         schemas = self._getSchemas()
         field_ids = []
@@ -200,6 +201,7 @@ class LDAPDirectory(BaseDirectory):
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter
+        # XXX treat return_attrs
         return self._searchEntries(filter=filter)
 
     security.declarePublic('hasEntry')
