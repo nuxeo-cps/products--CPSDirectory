@@ -109,7 +109,9 @@ def searchUsers(self, query={}, props=None, options=None, **kw):
         id = user.getId()
         entry = {'id': id}
         if do_roles:
-            entry['roles'] = user.getRoles()
+            roles = user.getRoles()
+            entry['roles'] = [r for r in roles
+                              if r not in ('Anonymous', 'Authenticated')]
         if do_groups and hasattr(base_user, 'getGroups'):
             entry['groups'] = user.getGroups()
         if not _isEntryMatching(entry, is_list_search, query):
