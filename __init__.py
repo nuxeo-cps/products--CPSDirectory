@@ -18,18 +18,22 @@
 """CPSDirectory init.
 """
 
+import sys
 from zLOG import LOG, INFO
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 
+import_errors = [] # Hold the tracebacks for failed imports.
 try:
     from Products.LDAPUserGroupsFolder import LDAPDelegate
 except ImportError:
+    import_errors.append(sys.exc_info())
     try:
         from Products.LDAPUserFolder import LDAPDelegate
     except ImportError:
         LDAPDelegate = None
+        import_errors.append(sys.exc_info())
 has_ldap = (LDAPDelegate is not None)
 del LDAPDelegate
 
@@ -47,6 +51,10 @@ if has_ldap:
     from LDAPDirectory import LDAPDirectory
 else:
     LOG('LDAPDirectory', INFO, "Disabled (no LDAP user folder product found).")
+    # Display the tracebacks for further info in DEBUG mode.
+    for error in import_errors:
+        LOG('LDAPDirectory', DEBUG, 'Import Traceback',
+            error=error)
 
 from DirectoryVocabulary import DirectoryVocabulary
 
