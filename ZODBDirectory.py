@@ -34,11 +34,12 @@ from Products.CMFCore.CMFCorePermissions import ManagePortal
 
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 from Products.CMFCore.utils import getToolByName
+from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 
-class ZODBDirectory(BTreeFolder2, BaseDirectory):
+class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     """ZODB Directory.
 
     A directory that stores its data in the ZODB.
@@ -59,6 +60,8 @@ class ZODBDirectory(BTreeFolder2, BaseDirectory):
         BaseDirectory.__init__(self, id, **kw)
 
     _properties = BaseDirectory._properties
+    _properties_post_process_split = BaseDirectory._properties_post_process_split
+    _properties_post_process_tales = BaseDirectory._properties_post_process_tales
 
     #
     # ZMI
