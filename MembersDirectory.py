@@ -99,10 +99,20 @@ class MembersDirectory(BaseDirectory):
         #ids = getToolByName(dir, 'portal_membership').listMemberIds()
 
     security.declarePublic('searchEntries')
-    def searchEntries(self, **kw):
+    def searchEntries(self, return_attrs=None, **kw):
         """Search for entries in the directory.
 
-        XXX: OK, but what's the meaning of 'kw'?
+        The keyword arguments specify the search to be done.
+
+        If return_attrs is None, returns a list of ids:
+          ['member1', 'member2']
+
+        If return_attrs is not None, it must be sequence of property
+        ids. The method will return a list of tuples containing the
+        member id and a dictionary of available properties:
+          [('member1', {'email': 'foo', 'age': 75}), ('member2', {'age': 5})]
+
+        return_attrs=['*'] means to return all available properties.
         """
         mdtool = getToolByName(self, 'portal_memberdata')
         # Convert special fields id/roles/groups to known names.
@@ -112,9 +122,9 @@ class MembersDirectory(BaseDirectory):
             if f != p and kw.has_key(f):
                 kw[p] = kw[f]
                 del kw[f]
-        res = mdtool.searchForMembers(kw, props=['*'])
+        res = mdtool.searchForMembers(kw, props=return_attrs)
         # XXX if returning props, back-convert known names.
-        return [id for id, d in res]
+        return res
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
