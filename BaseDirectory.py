@@ -172,6 +172,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def searchEntries(self, return_attrs=None, **kw):
         """Search for entries in the directory.
 
+        The keyword arguments specify the search to be done.
+
         If return_attrs is None, returns a list of entry ids.
 
         Otherwise returns a list of dictionnaries with the specified
