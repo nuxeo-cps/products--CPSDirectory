@@ -43,6 +43,7 @@ import DirectoryTool
 import DirectoryWidgets
 
 from DirectoryTool import DirectoryTypeRegistry
+from ZODBDirectory import ZODBDirectory
 from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
@@ -80,6 +81,7 @@ def initialize(registrar):
         product_name = 'CPSDirectory',
         icon = 'tool.gif',
         ).initialize(registrar)
+    DirectoryTypeRegistry.register(ZODBDirectory)
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
