@@ -10,4 +10,4 @@ Bug fixes:
 - LDAPBackingDirectory: Correctly trap insufficient access errors.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- LDAPBackingDirectory: Automatically reconnect to server.
