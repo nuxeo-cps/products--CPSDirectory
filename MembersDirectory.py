@@ -103,7 +103,8 @@ class MembersDirectory(BaseDirectory):
         """Search for entries in the directory.
         """
         mdtool = getToolByName(self, 'portal_memberdata')
-        return mdtool.searchForMembers(kw, props=None)
+        res = mdtool.searchForMembers(kw, props=['*'])
+        return [id for id, d in res]
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
