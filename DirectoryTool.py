@@ -32,6 +32,7 @@ from OFS.Folder import Folder
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 
+from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 class DirectoryTool(UniqueObject, Folder):
     """Directory Tool
@@ -61,6 +62,8 @@ class DirectoryTool(UniqueObject, Folder):
         for dir_id, dir in self.objectItems():
             if dir.meta_type == 'Broken Because Product is Gone':
                 continue
+            if not isinstance(dir, BaseDirectory):
+                continue
             if dir.isVisible():
                 res.append(dir_id)
         res.sort()
@@ -72,13 +75,20 @@ class DirectoryTool(UniqueObject, Folder):
 
     def all_meta_types(self):
         # Stripping is done to be able to pass a type in the URL.
-        return [
+        meta_types = [
             {'name': dt,
              # _verifyObjectPaste needs this to be traversable
              # to a real object.
              'action': 'manage_addForm_' + dt.replace(' ', ''),
              'permission': ManagePortal}
             for dt in DirectoryTypeRegistry.listTypes()]
+        #for info in Folder.all_meta_types(self):
+        #    name = info['name']
+        #    if (name == 'Z SQL Method'
+        #        or (name.startswith('Z ')
+        #            and name.endswith('Database Connection'))):
+        #        meta_types.append(info)
+        return meta_types
 
     security.declareProtected(ManagePortal, 'manage_addCPSDirectoryForm')
     manage_addCPSDirectoryForm = DTMLFile('zmi/directory_addform', globals())
