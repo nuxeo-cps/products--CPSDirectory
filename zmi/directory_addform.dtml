@@ -1,0 +1,35 @@
+<dtml-let mt="REQUEST.other['traverse_subpath'][0]"
+          mt="getDirectoryMetaType(mt)"
+          >
+<dtml-var manage_page_header>
+
+<dtml-let form_title="'Add ' + mt">
+<dtml-var manage_form_title>
+</dtml-let>
+
+<form action="&dtml-URL1;/manage_addCPSDirectory" method="POST">
+<input type="hidden" name="meta_type" value="&dtml-mt;" />
+<table cellspacing="0" cellpadding="2" border="0">
+  <tr>
+    <td align="left" valign="top">
+      <div class="form-label">Id</div>
+    </td>
+    <td align="left" valign="top">
+      <div class="form-element">
+        <input type="text" name="id" size="40" value=""/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">
+      <div class="form-element">
+        <input class="form-element" type="submit" value=" Add " />
+      </div>
+    </td>
+  </tr>
+</table>
+</form>
+
+<dtml-var manage_page_footer>
+</dtml-let>
