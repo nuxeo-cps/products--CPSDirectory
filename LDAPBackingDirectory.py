@@ -607,6 +607,9 @@ class LDAPBackingDirectory(BaseDirectory):
         if bind_dn is None:
             bind_dn = self.ldap_bind_dn
             bind_password = self.ldap_bind_password
+            using_config_bind = True
+        else:
+            using_config_bind = False
 
         if (conn._cps_bound_dn == bind_dn and
             conn._cps_bound_password == bind_password):
@@ -622,6 +625,8 @@ class LDAPBackingDirectory(BaseDirectory):
             raise ConfigurationError("Directory '%s': LDAP server is down"
                                      % self.getId())
         except INVALID_CREDENTIALS:
+            if not using_config_bind:
+                raise
             raise ConfigurationError("Directory '%s': Invalid credentials"
                                      % self.getId())
         conn._cps_bound_dn = bind_dn
@@ -664,6 +669,9 @@ class LDAPBackingDirectory(BaseDirectory):
             except INVALID_DN_SYNTAX:
                 LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
                 return []
+            except INVALID_CREDENTIALS:
+                LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
+                raise AuthenticationFailed
 
         LOG('searchLDAP', TRACE, "search_s base=%s scope=%s filter=%s attrs=%s" %
             (base, scope, filter, attrs))
