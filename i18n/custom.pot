@@ -40,4 +40,20 @@ msgstr ""
 msgid "label_full_name"
 msgstr ""
 
+msgid "cpsdir_label_search_entry"
+msgstr ""
 
+msgid "cpsdir_label_create_entry"
+msgstr ""
+
+msgid "cpsdir_label_delete_entry"
+msgstr ""
+
+msgid "cpsdir_label_edit_entry"
+msgstr ""
+
+msgid "cpsdir_label_view_entry"
+msgstr ""
+
+msgid "cpsdir_label_results"
+msgstr ""

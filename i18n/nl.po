@@ -1,27 +1,140 @@
 # Gettext Message File for CPSDirectory.
-#
-#
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-27 17:46default\n"
 "Last-Translator: Lennart Regebro <regebro@nuxeo.com>\n"
 "Language-Team: Nuxeo <info@nuxeo.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#.   <h1>
+#.         Directories
+#.       </h1>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "Directories"
+msgstr ""
+
+#.   <em content="err" style="color:red">Error</em>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+msgid "Error"
+msgstr ""
+
+#.   <a attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" content="dir/title_or_id" href="">
+#.                 Title
+#.               </a>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "Title"
+msgstr ""
+
+#.   <input onclick="javascript:history.back()" class="context" type="button" value="button_back">
+#.   </input>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#, fuzzy
+msgid "button_back"
+msgstr "Wijzig"
+
+#.   <input condition="not:creation" value="button_change" class="standalone" name="cpsdirectory_entry_edit_form:method" type="submit">
+#.       <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
+#.       </input></input>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#, fuzzy
+msgid "button_change"
+msgstr "Wijzig"
+
+#.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
+#.       </input>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#, fuzzy
+msgid "button_create"
+msgstr "Maak een nieuw item aan"
+
+#.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
+#: from ../skins/cps_directory/layout_dir_search.pt
+#, fuzzy
+msgid "button_search"
+msgstr "Wijzig"
+
+#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
+#.       </input>
+#: from ../skins/cps_directory/popup_directoryentry_form.pt
+#: ../skins/cps_directory/popup_directorymultientries_form.pt
+#, fuzzy
+msgid "button_update"
+msgstr "Wijzig"
+
+#.   <p>Choose a directory</p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Kies een map"
 
-msgid "button_edit"
-msgstr "Wijzig"
-
-msgid "button_create_entry"
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_create_entry"
 msgstr "Maak een nieuw item aan"
 
-msgid "label_create_entry"
-msgstr "Maak een item aan"
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_edit_entry"
+msgstr "Wijzig item"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#, fuzzy
+msgid "cpsdir_label_search_entry"
+msgstr "Zoeken"
+
+#.   <b>cpsdir_label_upto_directories</b>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_upto_directories"
+msgstr "Naar mappen"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view_entry"
+msgstr "Weergave item"
+
+#.   <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr ""
+
+#.   <th content="field/title">id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "id"
+msgstr ""
+
+#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
+#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+#: ../skins/cps_directory/layout_dir_view.pt
+#, fuzzy
+msgid "label"
+msgstr "Rollen"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_no_results"
+msgstr "Geen resultaten."
+
+#.   <p condition="not:directories">
+#.         No directory available
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "no_dir_available"
+msgstr ""
+
+msgid "button_edit"
+msgstr "Wijzig"
 
 msgid "psm_entry_created"
 msgstr "Item aangemaakt"
@@ -44,32 +157,28 @@ msgstr "Achternaam"
 msgid "label_full_name"
 msgstr "Volledige naam"
 
-msgid "label_no_results"
-msgstr "Geen resultaten."
-
-msgid "label_results"
-msgstr "Resultaten"
-
-msgid "cpsdir_label_upto_directories"
-msgstr "Naar mappen"
-
-msgid "cpsdir_label_search"
-msgstr "Zoeken"
-
-msgid "cpsdir_label_create_entry"
+#, fuzzy
+msgid "cpsdir_label_delete_entry"
 msgstr "Maak een nieuw item aan"
-
-msgid "cpsdir_label_edit_entry"
-msgstr "Wijzig item"
-
-msgid "cpsdir_label_view_entry"
-msgstr "Weergave item"
-
-msgid "cpsdir_label_edit"
-msgstr "Wijzig"
-
-msgid "cpsdir_label_view"
-msgstr "Weergave"
 
 msgid "cpsdir_label_results"
 msgstr "Resultaten"
+
+#, fuzzy
+#~ msgid "cpsdir_label_create ${dirname}"
+#~ msgstr "Maak een nieuw item aan"
+
+#~ msgid "cpsdir_label_edit"
+#~ msgstr "Wijzig"
+
+#~ msgid "cpsdir_label_search"
+#~ msgstr "Zoeken"
+
+#~ msgid "cpsdir_label_view"
+#~ msgstr "Weergave"
+
+#~ msgid "label_create_entry"
+#~ msgstr "Maak een item aan"
+
+#~ msgid "label_results"
+#~ msgstr "Resultaten"

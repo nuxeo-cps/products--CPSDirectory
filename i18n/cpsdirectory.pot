@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-01-06 08:45default\n"
+"POT-Creation-Date: 2004-01-27 17:46default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -58,16 +58,16 @@ msgstr ""
 msgid "button_create"
 msgstr ""
 
-#.   <input condition="dir/isDeleteEntryAllowed" attributes="onclick python:'return window.confirm(\'%s\')' %
-#.               (here.Localizer.default('description_confirm_delete'), )" value="button_delete" class="destructive" name="cpsdirectory_entry_delete:method" type="submit">
-#.         </input>
-#: from ../skins/cps_directory/layout_dir_view.pt
-msgid "button_delete"
-msgstr ""
-
 #.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "button_search"
+msgstr ""
+
+#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
+#.       </input>
+#: from ../skins/cps_directory/popup_directoryentry_form.pt
+#: ../skins/cps_directory/popup_directorymultientries_form.pt
+msgid "button_update"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -75,41 +75,18 @@ msgstr ""
 msgid "choose_a_directory"
 msgstr ""
 
-#.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create ${dirname}"
-msgstr ""
-
-#.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
-#.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr ""
 
-#.   <span>cpsdir_label_edit</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit"
-msgstr ""
-
-#.   <a attributes="href
-#.           string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id">cpsdir_label_edit_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_edit_entry"
 msgstr ""
 
-#.   <span condition="python:ok == 'results'">cpsdir_label_results</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr ""
-
-#.   <span condition="python:ok != 'results'">cpsdir_label_search</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search"
-msgstr ""
-
-#.   <a attributes="href
-#.              string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname">cpsdir_label_search_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr ""
 
@@ -121,18 +98,17 @@ msgstr ""
 msgid "cpsdir_label_upto_directories"
 msgstr ""
 
-#.   <span>cpsdir_label_view</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view"
-msgstr ""
-
-#.   <a attributes="href
-#.           string:${base_url}cpsdirectory_entry_view?dirname=$dirname&id=$id">cpsdir_label_view_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_view_entry"
 msgstr ""
 
-#.   <th>id</th>
+#.   <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr ""
+
+#.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr ""
@@ -179,4 +155,10 @@ msgid "label_last_name"
 msgstr ""
 
 msgid "label_full_name"
+msgstr ""
+
+msgid "cpsdir_label_delete_entry"
+msgstr ""
+
+msgid "cpsdir_label_results"
 msgstr ""

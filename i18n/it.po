@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-06 08:45default\n"
+"POT-Creation-Date: 2004-01-27 17:46default\n"
 "PO-Revision-Date: 2004-01-07 12:22+0100\n"
 "Last-Translator: Paolo Dina <paolo@php3.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -53,58 +53,36 @@ msgstr "Modifica"
 msgid "button_create"
 msgstr "Crea"
 
-#.   <input condition="dir/isDeleteEntryAllowed" attributes="onclick python:'return window.confirm(\'%s\')' %
-#.               (here.Localizer.default('description_confirm_delete'), )" value="button_delete" class="destructive" name="cpsdirectory_entry_delete:method" type="submit">
-#.         </input>
-#: from ../skins/cps_directory/layout_dir_view.pt
-msgid "button_delete"
-msgstr "Elimina"
-
 #.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "button_search"
 msgstr "Cerca"
+
+#.   <input onclick="updateParent();" class="standalone" type="submit" value="button_update">
+#.       </input>
+#: from ../skins/cps_directory/popup_directoryentry_form.pt
+#: ../skins/cps_directory/popup_directorymultientries_form.pt
+#, fuzzy
+msgid "button_update"
+msgstr "Crea"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Scegli un elenco"
 
-#.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create"
-msgstr "Crea in "
-
-#.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
-#.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crea un nuovo elemento"
 
-#.   <span>cpsdir_label_edit</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit"
-msgstr "Modifica "
-
-#.   <a attributes="href
-#.           string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id">cpsdir_label_edit_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica l'elemento"
 
-#.   <span condition="python:ok == 'results'">cpsdir_label_results</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Risultati della ricerca "
-
-#.   <span condition="python:ok != 'results'">cpsdir_label_search</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search"
-msgstr "Cerca "
-
-#.   <a attributes="href
-#.              string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname">cpsdir_label_search_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
 
@@ -116,18 +94,17 @@ msgstr "Cerca un elemento"
 msgid "cpsdir_label_upto_directories"
 msgstr "Risali agli elenchi"
 
-#.   <span>cpsdir_label_view</span>
+#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view"
-msgstr "Visualizza"
-
-#.   <a attributes="href
-#.           string:${base_url}cpsdirectory_entry_view?dirname=$dirname&id=$id">cpsdir_label_view_entry</a>
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizza l'elemento"
 
-#.   <th>id</th>
+#.   <span condition="widget/is_i18n" content="widget/help">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr ""
+
+#.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
@@ -175,3 +152,25 @@ msgstr "Cognome"
 
 msgid "label_full_name"
 msgstr "Nome completo"
+
+#, fuzzy
+msgid "cpsdir_label_delete_entry"
+msgstr "Crea un nuovo elemento"
+
+msgid "cpsdir_label_results"
+msgstr "Risultati della ricerca "
+
+#~ msgid "cpsdir_label_create ${dirname}"
+#~ msgstr "Crea in ${dirname}"
+
+#~ msgid "cpsdir_label_edit"
+#~ msgstr "Modifica "
+
+#~ msgid "cpsdir_label_search"
+#~ msgstr "Cerca "
+
+#~ msgid "cpsdir_label_view"
+#~ msgstr "Visualizza"
+
+#~ msgid "button_delete"
+#~ msgstr "Elimina"
