@@ -273,9 +273,8 @@ class StackingDirectory(BaseDirectory):
                                                   fix, strip)
                 res.extend(uids)
             else:
-                ures = self._uniqueEntriesFromBacking(b_res, ids_d, b_id_field,
-                                                      dir_id, style, fix,
-                                                      strip)
+                ures = self._uniqueEntriesFromBacking(b_res, ids_d, dir_id,
+                                                      style, fix, strip)
                 res.extend(ures)
         return res
 
@@ -356,105 +355,84 @@ class StackingDirectory(BaseDirectory):
         Ensures they are unique in dict ids_d.
         """
         ids = []
+
+        def maybe_add(id, ids_d=ids_d, ids=ids):
+            if not ids_d.has_key(id):
+                ids_d[id] = None
+                ids.append(id)
+            # XXX else warn
+
         if style == 'none':
-            for id in b_ids:
-                if not ids_d.has_key(id):
-                    ids_d[id] = None
-                    ids.append(id)
-                # XXX else warn
+            for b_id in b_ids:
+                maybe_add(b_id)
         elif style == 'prefix':
             if strip:
                 for b_id in b_ids:
-                    id = fix + b_id
-                    if not ids_d.has_key(id):
-                        ids_d[id] = None
-                        ids.append(id)
-                    # XXX else warn
+                    maybe_add(fix + b_id)
             else:
                 # Only keep ids that have correct prefix
                 for b_id in b_ids:
                     if not b_id.startswith(fix):
                         continue
-                    id = b_id
-                    if not ids_d.has_key(id):
-                        ids_d[id] = None
-                        ids.append(id)
-                    # XXX else warn
-        elif style == 'suffix': # and strip
+                    maybe_add(b_id)
+        elif style == 'suffix':
             if strip:
                 for b_id in b_ids:
-                    id = b_id + fix
-                    if not ids_d.has_key(id):
-                        ids_d[id] = None
-                        ids.append(id)
-                    # XXX else warn
+                    maybe_add(b_id + fix)
             else:
                 # Only keep ids that have correct suffix
                 for b_id in b_ids:
                     if not b_id.endswith(fix):
                         continue
-                    id = b_id
-                    if not ids_d.has_key(id):
-                        ids_d[id] = None
-                        ids.append(id)
-                    # XXX else warn
+                    maybe_add(b_id)
         else:
             raise ValueError(style)
+
         return ids
 
-    def _uniqueEntriesFromBacking(self, b_res, ids_d, b_id_field,
-                                  dir_id, style, fix, strip):
+    def _uniqueEntriesFromBacking(self, b_res, ids_d, dir_id, style, fix,
+                                  strip):
         """Return the back-converted entries from a backing directory.
 
         Ensures their ids are unique in dict ids_d.
         """
         res = []
-        # Back-convert ids
+
+        def maybe_add(id, entry, ids_d=ids_d, res=res, id_field=self.id_field):
+            if not ids_d.has_key(id):
+                ids_d[id] = None
+                if entry.has_key(id_field):
+                    # Also convert id field
+                    entry[id_field] = id
+                res.append((id, entry))
+            # XXX else warn
+
         if style == 'none':
-            for b_entry in b_res:
-                id = b_entry[b_id_field]
-                if not ids_d.has_key(id):
-                    res.append(b_entry)
-                    ids_d[id] = None
-                # XXX else warn
+            for b_id, b_entry in b_res:
+                maybe_add(b_id, b_entry)
         elif style == 'prefix':
             if strip:
-                for b_entry in b_res:
-                    id = fix + b_entry[b_id_field]
-                    if not ids_d.has_key(id):
-                        res.append(b_entry)
-                        ids_d[id] = None
-                    # XXX else warn
+                for b_id, b_entry in b_res:
+                    maybe_add(fix + b_id, b_entry)
             else:
                 # Only keep ids that have correct prefix
-                for b_entry in b_res:
-                    id = b_entry[b_id_field]
-                    if not id.startswith(fix):
+                for b_id, b_entry in b_res:
+                    if not b_id.startswith(fix):
                         continue
-                    if not ids_d.has_key(id):
-                        res.append(b_entry)
-                        ids_d[id] = None
-                    # XXX else warn
-        elif style == 'suffix': # and strip
+                    maybe_add(b_id, b_entry)
+        elif style == 'suffix':
             if strip:
-                for b_entry in b_res:
-                    id = b_entry[b_id_field] + fix
-                    if not ids_d.has_key(id):
-                        res.append(b_entry)
-                        ids_d[id] = None
-                    # XXX else warn
+                for b_id, b_entry in b_res:
+                    maybe_add(b_id + fix, b_entry)
             else:
                 # Only keep ids that have correct suffix
-                for b_entry in b_res:
-                    id = b_entry[b_id_field]
-                    if not id.endswith(fix):
+                for b_id, b_entry in b_res:
+                    if not b_id.endswith(fix):
                         continue
-                    if not ids_d.has_key(id):
-                        res.append(b_entry)
-                        ids_d[id] = None
-                    # XXX else warn
+                    maybe_add(b_id, b_entry)
         else:
             raise ValueError(style)
+
         return res
 
 InitializeClass(StackingDirectory)
