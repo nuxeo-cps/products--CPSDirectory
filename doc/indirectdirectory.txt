@@ -1,0 +1,66 @@
+========================
+IndirectDirectory Design
+========================
+
+$Id$
+
+Introduction
+============
+
+An indirect directory is a directory whose purpose is to store "links"
+towards entries of another directory, so that changes made on the
+entries do not have to be reported on the two directories.
+
+The directory just stores the name of the directory it refers to, and
+the list of entry ids concerned.
+
+An indirect directory is typically used in a personal address book,
+to store personal contacts found in the members directory of the site.
+
+Features
+========
+
+Storing the entries
+------------------
+
+The indirect directory properties store the id of the directory it refers
+to, and so is the the list of entries to link to.
+All the possible entries (e.g. all the entries of the directory it refers
+to) are also available, so that the indirect directory can be managed
+through the ZMI interface, by manipulating a multiple selection.
+
+Getting and searching for the entries
+-------------------------------------
+
+The entries are retrieved from the directory it refers to, by using its
+adapters.
+The search is made by performing the search on the directory it refers to,
+using the same search criteria, and then filtering on the search results by
+removing entries that are not in the list of entries the indirect directory
+links to.
+
+Adding and deleting entries
+---------------------------
+
+When adding or deleting entries to/from the indirect directory, the actual
+real entries stored in the directory it refers to are not manipulated.
+It is just the list of enty ids that is manipulated.
+An error is raised when the user tries to add an entry thta already exists
+in the indirect directory, or when he/she tries to delete an entry thta is
+not in the indirect directory.
+
+Schema and layout to use for indirect directories
+-------------------------------------------------
+
+The schema used should be the same for the indirect directory, and the
+directory it refers to.
+
+The layout used should also be the same, except that:
+- All widgets, except the one storing the id should be hidden in layout
+  modes create and edit.
+- The better way to set the widget storing the id is to set it as a 'Select
+  Widget', using a vocabulary with type 'CPS Directory Vocabulary',
+  that would only present the ids available in the original
+  directory. It should also be read only in edit mode to prevent errors.
+  It would be even better if this widget, in create mode, would not present
+  to the user entries that are already stored in the indirect directory.
