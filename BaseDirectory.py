@@ -347,8 +347,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         id = entry[self.id_field]
         dm = self._getDataModel(id)
-        entry = self._getEntryFromDataModel(dm)
-        self.checkEditEntryAllowed(id=id, entry=entry)
+        dm_entry = self._getEntryFromDataModel(dm)
+        self.checkEditEntryAllowed(id=id, entry=dm_entry)
         for key in dm.keys():
             if not entry.has_key(key):
                 continue
@@ -484,7 +484,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # Creation...
             # Compute new id.
             id = dm.data[self.id_field]
-            entry = self._getEntryFromDataModel(dm)
+            #entry = self._getEntryFromDataModel(dm)
+            # XXX
+            entry = dm.data.copy() # Need full entry not filtered by ACLs
             self.checkCreateEntryAllowed(id=id, entry=entry)
             self.createEntry(entry)
             # Redirect/render
