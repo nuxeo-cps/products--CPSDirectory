@@ -38,7 +38,7 @@ Setting up properties
 ---------------------
 
 All the properties - except "Ids of the directories it refers to (for an
-Indirect Directory)" aka 'directories_ids' and "Type of local directory" aka
+Indirect Directory)" aka 'directory_ids' and "Type of local directory" aka
 'directory_type' - will be used to set up the properties of the personal
 directories created in the users'home folders.
 These directories will be named after the name of the Local Directory.
@@ -57,6 +57,6 @@ If you do not know what to use, chose to use ZODB directories.
 
 
 The property "Id of the directoies it refers to (for an Indirect Directory)"
-aka 'directories_ids' is used when creating an indirect directory in the user's
+aka 'directory_ids' is used when creating an indirect directory in the user's
 home folder: it is the ids of the directories it refers to (entries will be
 links to entries of these directories).

@@ -38,14 +38,14 @@ class IndirectDirectory(BaseDirectory):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
-        {'id': 'directories_ids', 'type': 'tokens', 'mode': 'w',
+        {'id': 'directory_ids', 'type': 'tokens', 'mode': 'w',
          'label': 'Ids of the directories it refers to'},
         {'id': 'object_ids', 'type': 'multiple selection',
          'select_variable': 'listAllPossibleEntriesIds', 'mode': 'w',
          'label': 'Ids of the entries of the others directories'},
         )
     # list of directory ids
-    directories_ids = []
+    directory_ids = []
     # list of strings directory_id/entry_id using '/' as a special character
     object_ids = []
 
@@ -74,7 +74,7 @@ class IndirectDirectory(BaseDirectory):
     security.declarePrivate('listAllPossibleEntriesIds')
     def listAllPossibleEntriesIds(self):
         res = []
-        for directory_id in self.directories_ids:
+        for directory_id in self.directory_ids:
             directory = self._getDirectory(directory_id)
             res_to_append = [self._makeId(directory_id,x) for x in directory.listEntryIds()]
             res.extend(res_to_append)
@@ -146,7 +146,7 @@ class IndirectDirectory(BaseDirectory):
         """Search for entries in the directory.
         """
         res = []
-        for directory_id in self.directories_ids:
+        for directory_id in self.directory_ids:
             directory = self._getDirectory(directory_id)
             real_entries = directory.searchEntries(return_fields, **kw)
             # filter entries returned from the search on the
@@ -191,13 +191,13 @@ class IndirectDirectory(BaseDirectory):
         else:
             try:
                 # try to get adapters from any of the directories...
-                return self._getDirectory(self.directories_ids[0])._getAdapters(None, search, **kw)
+                return self._getDirectory(self.directory_ids[0])._getAdapters(None, search, **kw)
             except IndexError:
                 return []
 
     security.declarePrivate('_getDirectory')
     def _getDirectory(self, directory_id):
-        if directory_id not in self.directories_ids:
+        if directory_id not in self.directory_ids:
             raise AttributeError("Directory '%s' is not allowed" % directory_id)
         dtool = getToolByName(self, 'portal_directories', None)
         directory = getattr(dtool, directory_id, None)
