@@ -42,7 +42,17 @@ def install(self):
     installer.verifyVocabularies(self.getDirectoryVocabularies())
 
     mdir = installer.getTool('portal_directories')['members']
-    mdir.updateMemberDataFromSchema()
+    try:
+        #
+        # Update the member data from the schema if we are
+        # using a CPS Members Directory
+        #
+        mdir.updateMemberDataFromSchema()
+    except AttributeError:
+        #
+        # Here, CPS LDAP Directory for members
+        #
+        installer.log("LDAP User Groups Folder")
 
     installer.setupTranslations()
     installer.verifyAction(
