@@ -24,6 +24,10 @@ from zLOG import LOG, DEBUG
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 
+from Products.CMFCore.utils import getToolByName
+
+from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 
@@ -37,4 +41,70 @@ class MembersDirectory(BaseDirectory):
 
     security = ClassSecurityInfo()
 
+    security.declarePrivate('getAdapters')
+    def getAdapters(self, id):
+        """Get the adapters for an entry."""
+        dir = self
+        adapters = [MemberStorageAdapter(schema, id, dir)
+                    for schema in self.getSchemas()]
+        return adapters
+
+    security.declarePublic('getEntry')
+    def getEntry(self, id):
+        """Get entry filtered by acls and processes.
+        """
+        return {
+            'id': id,
+            'givenName': 'Raoul',
+            'sn': id.upper(),
+            }
+
 InitializeClass(MembersDirectory)
+
+
+class MemberStorageAdapter(BaseStorageAdapter):
+    """Members Storage Adapter
+
+    This adapter gets and sets data from the user folder and the member
+    data.
+    """
+
+    def __init__(self, schema, id, dir):
+        """Create an Adapter for a schema.
+
+        The id passed is the member id.
+        """
+        self._id = id
+        self._dir = dir
+        self._mtool = getToolByName(dir, 'portal_membership')
+        BaseStorageAdapter.__init__(self, schema)
+
+    def _delete(self, field_id):
+        raise NotImplementedError
+
+    def getData(self):
+        """Get data from an entry, returns a mapping.
+
+        Fills default value from the field if the object has no attribute.
+        """
+        id = self._id
+        data = {'id': id}
+        data.update({'sn': id.upper(), 'givenName': 'Bob'})
+        return data
+        # XXX
+        for field_id, field in self._schema.items():
+            if hasattr(base_ob, field_id):
+                value = getattr(ob, field_id)
+            else:
+                # Use default from field.
+                value = field.getDefault()
+            data[field_id] = value
+        return data
+
+    def setData(self, data):
+        """Set data to the entry, from a mapping."""
+        raise NotImplementedError
+        for field_id in self._schema.keys():
+            setattr(self._ob, field_id, data[field_id])
+
+InitializeClass(MemberStorageAdapter)
