@@ -219,10 +219,20 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         raise NotImplementedError
 
     security.declarePublic('getEntry')
-    def getEntry(self, id):
+    def getEntry(self, id, accept_invalid_id=0):
         """Get entry filtered by acls and processes.
+
+        If accept_invalid_id and the entry id is not found,
+        return None instead of raising a KeyError,
+        this is a zpt facility.
         """
-        return self._getEntryKW(id)
+        if not accept_invalid_id:
+            return self._getEntryKW(id)
+        else:
+            try:
+                return self._getEntryKW(id)
+            except KeyError:
+                return None
 
     security.declarePrivate('_getEntryKW')
     def _getEntryKW(self, id, **kw):
