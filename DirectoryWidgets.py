@@ -25,11 +25,12 @@ from zLOG import LOG, DEBUG
 from urllib import urlencode
 from cgi import escape
 from Globals import InitializeClass
+from types import ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
 from Products.CPSSchemas.Widget import CPSWidgetType
-from Products.CPSSchemas.BasicWidgets import renderHtmlTag
+from Products.CPSSchemas.BasicWidgets import renderHtmlTag, _isinstance
 from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
 
@@ -170,6 +171,39 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     skin_name = 'cpsdirectory_entry_view'
 
 
+    def validate(self, datastructure, **kw):
+        """Validate datastructure and update datamodel."""
+        err = None
+        v = []
+        widget_id = self.getWidgetId()
+        value = datastructure[widget_id]
+        if (not _isinstance(value, ListType) and
+            not _isinstance(value, TupleType)):
+            err = 'cpsschemas_err_multiselect'
+        else:
+            vocabulary = self._getVocabulary(datastructure)
+            for i in value:
+                try:
+                    i = str(i)
+                except ValueError:
+                    err = 'cpsschemas_err_multiselect'
+                    break
+                if i == 'directorymultientries_reset':
+                    continue
+                if not vocabulary.has_key(i):
+                    err = 'cpsschemas_err_multiselect'
+                    break
+                v.append(i)
+        datastructure[widget_id] = v
+        if err:
+            datastructure.setError(widget_id, err)
+        else:
+            datamodel = datastructure.getDataModel()
+            datamodel[self.fields[0]] = v
+
+        return not err
+
+
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
         render_method = 'widget_directorymultientries_render'
@@ -189,7 +223,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             portal_directories = getToolByName(self, 'portal_directories')
             dir = getattr(portal_directories, self.directory)
             display_attr = dir.title_field
-            ids_and_titles = [self.getIdAndTitle(v) for v in value]
+            ids_and_titles = [(v,self.getIdAndTitle(v)[1]) for v in value]
             return meth(mode=mode, values=value, ids_and_titles=ids_and_titles,
                         display_attr=display_attr)
 
