@@ -162,6 +162,16 @@ groups_schema = {
                 'acl_write_roles': 'Manager',
             },
         },
+    'subgroups': {
+        'type': 'CPS String List Field',
+        'data': {
+                'default': '',
+                'is_indexed': 0,
+                'acl_write_roles_str': 'Manager',
+                'acl_write_expression_str':
+                    'dir/hasSubGroupsSupport'
+            },
+        },
     }
 
 #########################################################

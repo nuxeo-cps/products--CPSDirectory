@@ -19,7 +19,7 @@
 """GroupsDirectory
 """
 
-from zLOG import LOG, DEBUG
+from zLOG import LOG, DEBUG, WARNING
 
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -48,11 +48,14 @@ class GroupsDirectory(BaseDirectory):
     _properties = BaseDirectory._properties + (
         {'id': 'members_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for members'},
+        {'id': 'subgroups_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for sub groups'},
         )
 
     id_field = 'group'
     title_field = 'group'
     members_field = 'members'
+    subgroups_field = 'subgroups'
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id):
@@ -111,6 +114,15 @@ class GroupsDirectory(BaseDirectory):
         else:
             return [(g, {}) for g in groups]
 
+        res = []
+        for group in groups:
+            entry = self.getEntry(group)
+            ret_data = {}
+            for key in return_fields:
+                ret_data[key] = entry[key]
+            res.append((group, ret_data))
+        return res
+
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
@@ -130,6 +142,16 @@ class GroupsDirectory(BaseDirectory):
             return # XXX
         aclu.userFolderAddGroup(group)
         self.editEntry(entry)
+
+    security.declarePublic('hasSubGroupsSupport')
+    def hasSubGroupsSupport(self):
+        """Tells if the current acl_users has subgroups support.
+        """
+        aclu = self.acl_users
+        supported_aclus = ('Pluggable User Folder',)
+        if aclu.meta_type in supported_aclus:
+            return 1
+        return 0
 
 InitializeClass(GroupsDirectory)
 
@@ -154,7 +176,10 @@ class GroupStorageAdapter(BaseStorageAdapter):
             groupob = aclu.getGroupById(group, _marker)
             if groupob is _marker:
                 raise KeyError("No group '%s'" % group)
-            return tuple(groupob.getUsers())
+            if aclu.meta_type == 'Pluggable User Folder':
+                return groupob.getMembers()
+            else:
+                return tuple(groupob.getUsers())
         # else try other APIs to get to group.
         return ()
 
@@ -163,6 +188,27 @@ class GroupStorageAdapter(BaseStorageAdapter):
         if hasattr(aq_base(aclu), 'setUsersOfGroup'):
             aclu.setUsersOfGroup(members, group)
         # else try other APIs to get to group.
+
+    def _getGroupSubGroups(self, group):
+        """Returns the subgroups of the named group"""
+        aclu = self._portal.acl_users
+        if not hasattr(aq_base(aclu), 'getGroupById'):
+            return ()
+        groupob = aclu.getGroupById(group)
+        if hasattr(aq_base(groupob), 'getGroups'): # PluggableUserFolder
+            return groupob.getGroups()
+        return ()
+
+    def _setGroupSubGroups(self, group, subgroups):
+        """Set the subgroups of the named group"""
+        aclu = self._portal.acl_users
+        groupob = aclu.getGroupById(group)
+        if hasattr(aq_base(groupob), 'setGroups'): # PluggableUserFolder
+            groupob.setGroups(subgroups)
+            return
+        LOG('GroupsDirectory', WARNING,
+            'Attempt to set groups on groups on unsupported User Folder')
+        return None
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -175,12 +221,15 @@ class GroupStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
         dir = self._dir
         members = self._getGroupMembers(group)
+        subgroups = self._getGroupSubGroups(group)
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.id_field:
                 value = group
             elif fieldid == dir.members_field:
                 value = members
+            elif fieldid == dir.subgroups_field:
+                value = subgroups
             else:
                 raise ValueError("Invalid field %s for groups" % fieldid)
             data[fieldid] = value
@@ -194,5 +243,7 @@ class GroupStorageAdapter(BaseStorageAdapter):
             value = data[fieldid]
             if fieldid == dir.members_field:
                 self._setGroupMembers(group, value)
+            elif fieldid == dir.subgroups_field:
+                self._setGroupSubGroups(group, value)
 
 InitializeClass(GroupStorageAdapter)

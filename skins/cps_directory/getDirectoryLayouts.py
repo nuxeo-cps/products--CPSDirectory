@@ -322,6 +322,23 @@ groups_layout = {
                 'size': 7,
             },
         },
+        'subgroups': {
+            'type': 'MultiSelect Widget',
+            'data': {
+                'fields': ['subgroups'],
+                'label': "label_subgroups",
+                'label_edit': "label_subgroups",
+                'description': "",
+                'is_i18n': 1,
+                'css_class': '',
+                'vocabulary': 'groups',
+                'size': 7,
+                'hidden_if_expr':
+                    'context/hasSubGroupsSupport',
+                'hidden_layout_modes': 'search',
+                'hidden_readonly_layout_modes': 'edit create view'
+            },
+        },
     },
     'layout': {
         'style_prefix': 'layout_dir_',
@@ -330,6 +347,8 @@ groups_layout = {
             [{'ncols': 1, 'widget_id': 'group'},
                 ],
             [{'ncols': 1, 'widget_id': 'members'},
+                ],
+            [{'ncols': 1, 'widget_id': 'subgroups'},
                 ],
             ],
         },
