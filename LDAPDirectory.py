@@ -153,7 +153,7 @@ class LDAPDirectory(BaseDirectory):
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        return self._searchEntries()
+        return self.searchEntries()
 
     security.declarePublic('searchEntries')
     def searchEntries(self, **kw):

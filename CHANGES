@@ -8,7 +8,7 @@ New features:
 
 Bug fixes:
 ~~~~~~~~~~
--
+- listEntryIds() returned all objects in the LDAP regardless of objectClass.
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
