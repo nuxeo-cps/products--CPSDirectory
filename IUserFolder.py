@@ -39,6 +39,40 @@ class IUserFolder(Interface.Base):
            original input password, unencrypted. The implementation of this
            method is responsible for performing any needed encryption."""
 
+    def _addUser(self,name,password,confirm,roles,domains,REQUEST=None):
+        """Adds a user"""
+        # This is used when creating a portal and by MemberToolsPatch if
+        # userFolderAddUser doens't exist. Howvere, it awlays exists,
+        # (For Zope > 2.4 so that usage can be removed.
+
+    def userFolderAddUser(self, name, password, roles, domains, **kw):
+        """API method for creating a new user object. Note that not all
+           user folder implementations support dynamic creation of user
+           objects."""
+
+    # Local roles extensions
+    def mergedLocalRoles(self, object, withgroups=0):
+        """
+        Return a merging of object and its ancestors' __ac_local_roles__.
+        When called with withgroups=1, the keys are
+        of the form user:foo and group:bar.
+        """
+
+    def mergedLocalRolesWithPath(self, object, withgroups=0):
+        """
+        Return a merging of object and its ancestors' __ac_local_roles__.
+        When called with withgroups=1, the keys are
+        of the form user:foo and group:bar.
+        The path corresponding
+        to the object where the role takes place is added
+        with the role in the result. In this case of the form :
+        {'user:foo': [{'url':url, 'roles':[Role0, Role1]},
+                    {'url':url, 'roles':[Role1]}],..}.
+        """
+
+    #def _getAllowedRolesAndUsers()
+    # CPSCore.utils uses this if it exists. Funnily enough, it never does.
+
     # Group support
     def setGroupsOfUser(self, groupnames, username):
         """Set the groups of a user"""
@@ -54,6 +88,26 @@ class IUserFolder(Interface.Base):
 
     def userFolderAddGroup(self, groupname, **kw):
         """Create a group"""
+
+    # Searching
+    def listUserProperties(self):
+        """Lists properties settable or searchable on the users."""
+
+    def searchUsers(self, query={}, props=None, options=None, **kw):
+        """Search for users having certain properties.
+
+        If props is None, returns a list of ids:
+        ['user1', 'user2']
+
+        If props is not None, it must be sequence of property ids. The
+        method will return a list of tuples containing the user id and a
+        dictionary of available properties:
+        [('user1', {'email': 'foo', 'age': 75}), ('user2', {'age': 5})]
+
+        Options is used to specify the search type if possible. XXX
+
+        Special properties are 'id', 'roles', 'groups'.
+        """
 
     # Only on LDAPUserFolders
     def manage_editUserPassword(self, dn, new_pw, REQUEST=None):
