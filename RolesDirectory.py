@@ -94,6 +94,7 @@ class RolesDirectory(BaseDirectory):
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
+        # roles searched for
         kwrole = kw.get(self.id_field)
         if kwrole is not None:
             if isinstance(kwrole, StringType):
@@ -104,6 +105,7 @@ class RolesDirectory(BaseDirectory):
             else:
                 raise ValueError("Bad value for %s: %s" %
                                  (self.id_field, kwrole))
+        # members searched for
         kwmembers = kw.get(self.members_field)
         if kwmembers is not None:
             if isinstance(kwmembers, StringType):
@@ -121,6 +123,13 @@ class RolesDirectory(BaseDirectory):
                                      if r not in user_roles]
                 if userroles:
                     user_roles.extend(userroles)
+        # fields asked for
+        if return_fields is not None:
+            if isinstance(return_fields, StringType):
+                return_fields = [return_fields]
+            if return_fields == ['*']:
+                return_fields = (self.id_field, self.title_field,
+                                 self.members_field)
 
         LOG('RolesDirectory.searchEntries', DEBUG,
             "kwrole=%s, kwmembers=%s, return_fields=%s" %
@@ -148,11 +157,22 @@ class RolesDirectory(BaseDirectory):
         if not return_fields:
             return roles
         else:
-            # No fields are returned even if return_fields is set.
-            # This is for speed reasons, calling getEntry on each entry
-            # is too slow.
-            # XXX: implement optimized version.
-            return [ (role, {'role': role}) for role in roles]
+            # return asked properties if available in the roles directory.
+            roles_detail = []
+            for role in roles:
+                details = {}
+                entry = self.getEntry(role)
+                if self.id_field in return_fields:
+                    details[self.id_field] = entry[self.id_field]
+                if self.title_field in return_fields:
+                    details[self.title_field] = entry[self.title_field]
+                if self.members_field in return_fields:
+                    members = entry[self.members_field]
+                    if kwmembers is not None:
+                        members = [m for m in members if m in kwmembers]
+                    details[self.members_field] = tuple(members)
+                roles_detail.append((role, details))
+            return roles_detail
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
