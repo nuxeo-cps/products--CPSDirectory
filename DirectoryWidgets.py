@@ -22,7 +22,6 @@ Definition of directory-related widget types.
 """
 
 from zLOG import LOG, DEBUG
-from cgi import escape
 from urllib import urlencode
 from Globals import InitializeClass
 

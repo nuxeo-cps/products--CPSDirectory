@@ -32,15 +32,10 @@ from zLOG import LOG, TRACE, DEBUG
 
 from types import StringType
 
-from Globals import InitializeClass
 from Acquisition import aq_base
-from AccessControl import ClassSecurityInfo
-from AccessControl import getSecurityManager
 
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.MembershipTool import MembershipTool
 from Products.CMFCore.MemberDataTool import MemberDataTool
-from Products.CMFCore.MemberDataTool import MemberData
 
 _marker = []
 

@@ -22,10 +22,10 @@ Vocabulary referencing a directory.
 """
 
 from zLOG import LOG, DEBUG
-from Globals import InitializeClass, DTMLFile
+from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 
-from Products.CMFCore.CMFCorePermissions import View, ManagePortal
+from Products.CMFCore.CMFCorePermissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 

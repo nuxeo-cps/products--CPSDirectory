@@ -23,13 +23,9 @@ from zLOG import LOG, DEBUG, ERROR
 
 from types import ListType, TupleType, StringType
 from Globals import InitializeClass
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from time import strftime, gmtime
-from DateTime.DateTime import DateTime, safegmtime
+from DateTime.DateTime import DateTime
 from OFS.Image import File, Image
-
-from Products.CMFCore.utils import getToolByName
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.BasicFields import CPSStringListField, CPSDateTimeField
@@ -408,7 +404,7 @@ class LDAPDirectory(BaseDirectory):
             res = ''.join(['(objectClass=%s)' % each
                            for each in classes])
             if len(classes) > 1:
-                res ='(|%s)' % res
+                res = '(|%s)' % res
             return res
         else:
             return '(objectClass=*)'
