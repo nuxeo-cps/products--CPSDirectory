@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- ZMI management for MetaDirectory's backing directories.
 Bug fixes:
 ~~~~~~~~~~
 -

@@ -1,0 +1,79 @@
+<dtml-var manage_page_header>
+<dtml-let management_view="'Backings'">
+<dtml-var manage_tabs>
+</dtml-let>
+
+<h2>Backing directories</h2>
+<p class="form-help">
+  The Meta Directory can map fields from backing directories to other fields
+  in this directory. Fields from the backing directory can be ignored or
+  renamed.
+</p>
+
+<dtml-in "getBackingDirectories(no_dir=1)" mapping>
+<form action="&dtml-URL1;" method="post">
+  <h3>&dtml-dir_id;</h3>
+  <input type="hidden" name="dir_id" value="&dtml-dir_id;" />
+  <p>
+    To delete: <input type="checkbox" name="delete" />
+  </p>
+  <p>
+    Ignored fields:
+      <input type="text" name="field_ignore:tokens" size="30"
+         value="<dtml-var "' '.join(field_ignore)" html_quote>">
+  </p>
+  <p>
+    Fields renaming:
+    <table cellpadding="2" cellspacing="0" border="0">
+      <tr>
+        <th>Id in &dtml-dir_id;</th>
+        <th>Id in &dtml-getId;</th>
+      </tr>
+      <dtml-in "field_rename.items()+[('','')]">
+      <dtml-let b_id=sequence-key id=sequence-item>
+        <tr>
+          <td><input type="text" name="field_renames.b_id:records" value="&dtml-b_id;" /></td>
+          <td><input type="text" name="field_renames.id:records" value="&dtml-id;" /></td>
+        </tr>
+      </dtml-let>
+      </dtml-in>
+    </table>
+  </p>
+  <p>
+    <input type="submit" name="manage_changeBacking:method" value="Change" />
+  </p>
+</form>
+</dtml-in>
+
+<hr>
+<h2>Add a backing directory</h2>
+<form action="&dtml-URL1;" method="post">
+  <p>
+    Backing directory id:
+      <input type="text" name="dir_id" size="15">
+  </p>
+  <p>
+    Ignored fields:
+      <input type="text" name="field_ignore" size="30">
+  </p>
+  <p>
+    Fields renaming:
+    <table cellpadding="2" cellspacing="0" border="0">
+      <tr>
+        <th>Id in backing directory</th>
+        <th>Id in &dtml-getId;</th>
+      </tr>
+      <dtml-in "(1,2,3)">
+        <tr>
+          <td><input type="text" name="field_renames.b_id:records" /></td>
+          <td><input type="text" name="field_renames.id:records" /></td>
+        </tr>
+      </dtml-in>
+    </table>
+  </p>
+  <p>
+    <input type="submit" name="manage_addBacking:method" value="Add backing" />
+  </p>
+</form>
+
+<dtml-var manage_page_footer>

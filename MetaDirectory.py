@@ -57,13 +57,56 @@ class MetaDirectory(BaseDirectory):
 
     manage_options = (
         BaseDirectory.manage_options[:1] + (
-        {'label': 'Mappings', 'action': 'manage_metadirMappings'},
+        {'label': 'Backings', 'action': 'manage_editBackings'},
         ) + BaseDirectory.manage_options[1:]
         )
 
-    security.declareProtected(ManagePortal, 'manage_metadirMappings')
-    manage_metadirMappings = DTMLFile('zmi/metadir_mappings', globals())
+    security.declareProtected(ManagePortal, 'manage_editBackings')
+    manage_editBackings = DTMLFile('zmi/metadir_backings', globals())
 
+    security.declareProtected(ManagePortal, 'manage_changeBacking')
+    def manage_changeBacking(self, dir_id, field_ignore, field_renames,
+                             delete=0, REQUEST=None):
+        """Change mappings from ZMI."""
+        infos = self.getBackingDirectories(no_dir=1)
+        new_infos = []
+        msg = 'Changed.'
+        for info in infos:
+            if info['dir_id'] != dir_id:
+                new_infos.append(info)
+                continue
+            if delete:
+                msg = 'Deleted.'
+                continue
+            info['field_ignore'] = field_ignore
+            field_rename = {}
+            for d in field_renames:
+                field_rename[d['b_id']] = d['id']
+            info['field_rename'] = field_rename
+            new_infos.append(info)
+        self.setBackingDirectories(new_infos)
+        if REQUEST is not None:
+            args = 'manage_tabs_message='+msg
+            REQUEST.RESPONSE.redirect(self.absolute_url()+
+                                      '/manage_editBackings?'+args)
+
+    security.declareProtected(ManagePortal, 'manage_addBacking')
+    def manage_addBacking(self, dir_id, field_ignore, field_renames,
+                          REQUEST=None):
+        """Change mappings from ZMI."""
+        infos = self.getBackingDirectories(no_dir=1)
+        field_rename = {}
+        for d in field_renames:
+            field_rename[d['b_id']] = d['id']
+        infos.append({'dir_id': dir_id.strip(),
+                      'field_ignore': field_ignore,
+                      'field_rename': field_rename,
+                      })
+        self.setBackingDirectories(infos)
+        if REQUEST is not None:
+            args = 'manage_tabs_message=Added.'
+            REQUEST.RESPONSE.redirect(self.absolute_url()+
+                                      '/manage_editBackings?'+args)
 
     #
     # Management API
@@ -100,16 +143,24 @@ class MetaDirectory(BaseDirectory):
         """
         backing_dir_infos = []
         for info in infos:
-            field_rename = info.get('field_rename') or {}
+            renames = info.get('field_rename') or {}
             field_ignore = info.get('field_ignore')
+            field_rename = {}
             field_rename_back = {}
-            for back, meta in field_rename.items():
+            for back, meta in renames.items():
+                back = back.strip()
+                meta = meta.strip()
+                if not back or not meta or back == meta:
+                    continue
+                if field_rename.has_key(back):
+                    raise ValueError("Field id '%s' is used twice" % back)
                 if field_rename_back.has_key(meta):
-                    raise ValueError("Field id %s is renamed twice" % meta)
+                    raise ValueError("Field id '%s' is renamed twice" % meta)
+                field_rename[back] = meta
                 field_rename_back[meta] = back
             backing_dir_infos.append(
                 {'dir_id': info['dir_id'],
-                 'id_conv': info['id_conv'],
+                 'id_conv': info.get('id_conv'),
                  'field_rename': field_rename.copy(),
                  'field_rename_back': field_rename_back,
                  'field_ignore': field_ignore and tuple(field_ignore) or (),
