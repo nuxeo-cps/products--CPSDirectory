@@ -263,6 +263,9 @@ class StackingDirectory(BaseDirectory):
                 # XXX don't check acls on search
                 entries = b_dir._searchEntries(return_fields=['*'],
                     **{id_field: [id]})
+                # Make sure search didn't return alternate casing,
+                # this could be the case for LDAP.
+                entries = [e for e in entries if e[1][id_field] == id]
                 if not entries:
                     continue
                 if len(entries) > 1:

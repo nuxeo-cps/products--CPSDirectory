@@ -11,6 +11,8 @@ Bug fixes:
 - ZODBDirectory.createEntry()
   The "KeyError" is necessary due to an "ExtensionClass" bug, probably
   fixed in Zope 2.8: 
+- fix #474: Make sure search didn't return alternate casing, this could be the
+  case for LDAP.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - manage_addCPSDirectory() takes a **kw args that is propagated to the cls constructor
