@@ -7,6 +7,8 @@ New features:
 Bug fixes:
 ~~~~~~~~~~
 - fix tidy warning
+- disallow empty password strings for getEntryAthenticated in
+  LDAPBackingDirectory (bug with Sun iPlanet server)
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - splitting macro in progress

@@ -328,8 +328,10 @@ class LDAPBackingDirectory(BaseDirectory):
         Raises KeyError if the entry doesn't exist.
         Raises AuthenticationFailed if authentication failed.
         """
-        if not id.strip():
+        if not id.strip() or not password.strip():
             # We don't want to cause an empty LDAP search.
+            # Empty passwords are forbidden too  due to a
+            # strange behaviour of some LDAP servers (Sun iPlanet) 
             raise AuthenticationFailed
         return self._getEntryKW(id, password=password, **kw)
 
