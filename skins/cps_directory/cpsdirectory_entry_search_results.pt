@@ -79,11 +79,14 @@
                tal:attributes="href python:'%s?%s'%(request['URL'],
                                               mq(request.form, b_start=previous))"
                i18n:translate="batch_previous">Previous</a>
-            <a tal:repeat="page batch_info/pages"
-               tal:attributes="href python:'%s?%s'%(request['URL'],
-                                                  mq(request.form, b_start=page))"
-               tal:omit-tag="python:page == batch_info['start'] - 1"
-               tal:content="repeat/page/number">1</a>
+            <tal:block repeat="page batch_info/pages">
+              <a tal:condition="python:page != batch_info['start'] - 1"
+                tal:attributes="href python:'%s?%s'%(request['URL'],
+                mq(request.form, b_start=page))"
+                tal:content="repeat/page/number">1</a>
+              <span tal:condition="python:page == batch_info['start'] - 1"
+                tal:content="string:[${repeat/page/number}]" />
+            </tal:block>
             <a tal:define="next batch_info/next"
                tal:condition="python:next is not None"
                tal:attributes="href python:'%s?%s'%(request['URL'],
@@ -95,6 +98,6 @@
           <td>&nbsp;</td>
         </tr>
       </table>
-    </tal:block>            
+    </tal:block>
   </div>
 </tal:block>
