@@ -128,8 +128,7 @@ class MembersDirectory(BaseDirectory):
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
         # XXX check security?
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        aclu = portal.acl_users
+        aclu = self.acl_users
         return id in aclu.getUserNames()
 
     security.declarePublic('createEntry')
@@ -152,6 +151,15 @@ class MembersDirectory(BaseDirectory):
             raise ValueError("Cannot add member '%s'" % id)
         member.setMemberProperties({}) # Trigger registration in memberdata.
         self.editEntry(entry)
+
+    security.declarePublic('deleteEntry')
+    def deleteEntry(self, id):
+        """Delete an entry in the directory."""
+        self.checkDeleteEntryAllowed()
+        if not self.hasEntry(id):
+            raise KeyError("Members '%s' does not exist" % id)
+        aclu = self.acl_users
+        aclu._doDelUsers([id])
 
 InitializeClass(MembersDirectory)
 
