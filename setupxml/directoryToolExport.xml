@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<directory-tool xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <directory id="TYPE_ID"
+             tal:repeat="info here/listDirectoryInfo"
+             tal:attributes="id info/id;
+                             filename info/filename | default;
+                             " />
+</directory-tool>
