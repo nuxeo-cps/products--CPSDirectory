@@ -70,16 +70,13 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     security.declareProtected(View, '__getitem__')
     def __getitem__(self, key):
         dir = self._getDirectory()
-        entry = dir.getEntry(key)
-        print "y", entry
-        title_field = dir.title_field
-        return entry[title_field]
+        return dir.getEntry(key)[dir.title_field]
 
     security.declareProtected(View, 'get')
     def get(self, key, default=None):
         try:
             return self[key]
-        except KeyError, AttributeError:
+        except (KeyError, AttributeError):
             return default
 
     security.declareProtected(View, 'getMsgid')
@@ -93,12 +90,14 @@ class DirectoryVocabulary(SimpleItemWithProperties):
 
     security.declareProtected(View, 'items')
     def items(self):
-        # XXX There is most likely a more efficient way to do this.
-        return [(x, self[x]) for x in self.keys()]
+        return self._getDirectory().listEntryIdsAndTitles()
+
+    security.declareProtected(View, 'values')
+    def values(self):
+        return [t[1] for t in self.items()]
 
     security.declareProtected(View, 'has_key')
     def has_key(self, key):
-        # XXX dummy
-        return key in self.keys()
+        return self._getDirectory().hasEntry(key)
 
 InitializeClass(DirectoryVocabulary)
