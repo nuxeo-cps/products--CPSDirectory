@@ -153,8 +153,7 @@ class MembersDirectory(BaseDirectory):
 
         # Edit the just-create entry.
         # XXX this is basically editEntry without ACL checks
-        dm = self._getDataModel(id)
-        dm._check_acls = 0 # XXX use API
+        dm = self._getDataModel(id, check_acls=0)
         for key in dm.keys():
             if not entry.has_key(key):
                 continue

@@ -9,4 +9,4 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Better internal API for no ACL checks on datamodel.

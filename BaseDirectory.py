@@ -309,8 +309,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePrivate('_getEntry')
     def _getEntry(self, id, **kw):
         """Get entry filtered by processes but not acls."""
-        dm = self._getDataModel(id, **kw)
-        dm._check_acls = 0 # XXX use API
+        dm = self._getDataModel(id, check_acls=0, **kw)
         return self._getEntryFromDataModel(dm)
 
     security.declarePublic('searchEntries')
@@ -584,21 +583,24 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return ()
 
     security.declarePrivate('_getDataModel')
-    def _getDataModel(self, id, **kw):
+    def _getDataModel(self, id, check_acls=1, **kw):
         """Get the datamodel for an entry.
 
         Passes additional **kw to _getAdapters.
         """
         adapters = self._getAdapters(id, **kw)
         dm = DataModel(None, adapters, context=self)
+        if not check_acls:
+            dm._check_acls = 0 # XXX use API
         dm._fetch()
-        # Now compute add_roles for entry
-        # XXX merge additionalRoles and entry_local_roles
-        entry = self._getEntryFromDataModel(dm)
-        add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
-        entry_local_roles = self.getEntryLocalRoles(entry)
-        add_roles = tuple(add_roles) + tuple(entry_local_roles)
-        dm._setAddRoles(add_roles)
+        if check_acls:
+            # Now compute add_roles for entry
+            # XXX merge additionalRoles and entry_local_roles
+            entry = self._getEntryFromDataModel(dm)
+            add_roles = self._getAdditionalRoles(id) # XXX what if id is dn ?
+            entry_local_roles = self.getEntryLocalRoles(entry)
+            add_roles = tuple(add_roles) + tuple(entry_local_roles)
+            dm._setAddRoles(add_roles)
         return dm
 
     security.declarePrivate('_getSearchAdapters')
@@ -610,8 +612,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _getSearchDataModel(self):
         """Get the datamodel for a search rendering."""
         adapters = self._getSearchAdapters()
-        dm = DataModel(None, adapters, context=self)
-        dm._check_acls = 0 # XXX use API
+        dm = DataModel(None, adapters, check_acls=0, context=self)
         dm._fetch()
         return dm
 
