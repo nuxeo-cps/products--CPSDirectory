@@ -1,0 +1,52 @@
+========================
+StackingDirectory Design
+========================
+
+$Id$
+
+Introduction
+============
+
+A stacking directory is a directory whose purpose is to provide a
+consolidated view of several other directories that all have the same
+schema.
+
+Reading, writing, creating and searches are dispatched to the
+appropriate backing directory.
+
+A stacking directory is typically used to provide a synthesized 'users'
+directory for the CPSUserFolder, using several backing directories to
+store different kinds of users.
+
+Features
+========
+
+Several backing directories can be provided, they are ordered.
+
+Id prefixes and suffixes
+------------------------
+
+For each backing directory, a prefix for the ids can be specified. The
+prefix can be stripped or not when passed to the backing directory.
+
+For instance if we there are two backing directories A and B, with
+respective prefixes 'a_' and 'b_', then a request for an entry with id
+'a_foo' will automatically be directed to the directory A. In this
+directory the entry will have id 'foo' if the prefix is stripped, or
+'a_foo' if not.
+
+Finding the backing directory
+-----------------------------
+
+When an entry is accessed, the request is always passed to exactly one
+backing directory.
+
+To choose this directory, several strategies are used. First, prefixes
+or suffixes can restrict the potential backing directories to use. Then,
+if several directories are still available (which is the case when no
+prefixes or suffixes are used), then the entry is looked up in each
+directory in order until one is found.
+
+For creation, the backing directory in which the entry is to be created
+can be specified through a TALES expression that may access the fields
+of the entry.

@@ -2,19 +2,21 @@
 MetaDirectory Design
 ====================
 
+$Id$
+
 Introduction
 ============
 
 A meta-directory is a directory whose purpose is to link and redirect to
 other directories, doing some conversions in the process.
 
-Its first use is to provide a synthesized 'users' directory for the
-CPSUserFolder, using one or several backing directories for the user
-properties, and also optionaly separate directories for the groups and
-roles.
-
 Reading, writing, creating and searches are all dispatched appropriately
 to the backing directories.
+
+A meta-directory is typically used to provide a synthesized 'users'
+directory for the CPSUserFolder, using several backing directories for
+different user properties, and also optionaly separate directories for
+the groups and roles.
 
 Features
 ========
@@ -34,29 +36,42 @@ For each backing directory, the following must be specified:
 
 - what fields are renamed from the backing directory.
 
+Secondary id field for id conversion
+------------------------------------
+
+Sometimes the "real" value for the id of an entry in the backing
+directory cannot be used directly as a value for the id of the
+meta-directory. In this case, the backing directory must have a
+canonical "secondary" id attribute and the means to convert between the
+real and secondary id.
+
+When the backing directory is LDAP, its id is the dn. This is usually
+never an acceptable value for the id of the meta-directory. In this case
+a conversion from the dn to the secondary attribute must be performed.
+For LDAP the conversions are performed as followed, using 'uid' as an
+example for the secondary attribute:
+
+- dn to uid: if the rdn of the dn is uid, then extract its value,
+  otherwise lookup the entry and get the value for the uid.
+
+- uid to dn: if the rdn of the directory is uid and the directory is
+  ONELEVEL, then build the dn using the base_dn, otherwise do a search
+  of all the entries for the uid, and return the dn of the result
+  (assuming there is exactly one result).
+
 Cross-references
 ----------------
 
 Some fields of the meta-directory that are lists can be computed as
 cross-references to other directories. When these fields read, they are
 computed from a search in cross-referenced directory; when they are
-written to it's actually several entries of the cross-referenced
-directory that can be modified.
+written to, it's actually several entries of the cross-referenced
+directory that may be modified.
 
 For each cross-referenced field must be specified:
 
-- to what directory and field is the cross-reference.
+- to what target directory and field is the cross-reference.
 
-
-
-Other features
-==============
-
-(Not yet implemented.)
-
-Different backing directories depending on the entry
-----------------------------------------------------
-
-If an entry has to be stored into different directories (ex: LDAP or
-ZODB) depending on some criterion, it is possible to specify this.
-
+Cross-references are one-way, to get coherent directories the target
+field in the target directory must be cross-referenced in the opposite
+way.
