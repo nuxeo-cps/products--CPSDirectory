@@ -6,7 +6,7 @@ New features:
 - LDAPBackingDirectory: Made entry creation work if the dn is not present.
 Bug fixes:
 ~~~~~~~~~~
--
+- MetaDirectory: fixed listEntryIds with 'missing' directory as first backing.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - LDAPBackingDirectory: Precompute objectClass search filter, used it for all
