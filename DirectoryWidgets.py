@@ -127,6 +127,18 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
             else:
                 value = ''
         datastructure[self.getWidgetId()] = value
+        datastructure[self.getWidgetId() + '_set'] = ''
+
+    def validate(self, datastructure, **kw):
+        """Validate datastructure and update datamodel."""
+        widget_id = self.getWidgetId()
+        widget_set_id = widget_id + '_set'
+        if not self.is_required and not datastructure[widget_set_id]:
+            datamodel = datastructure.getDataModel()
+            datamodel[self.fields[0]] = ''
+            datastructure[widget_id] = ''
+            return 1
+        return CPSSelectWidget.validate(self, datastructure, **kw)
 
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
