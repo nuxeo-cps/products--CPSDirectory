@@ -63,7 +63,7 @@ members_schema = {
                 'default_expr': 'string:',
                 'acl_write_roles': 'Nobody',
                 'read_ignore_storage': 1,
-                'read_process_expr': 'python:givenName and sn and (givenName + " " + sn) or id',
+                'read_process_expr': 'python:(givenName + " " + sn).strip() or id',
                 'read_process_dependent_fields': ['givenName', 'sn', 'id'],
                 'write_ignore_storage': 1,
             },
