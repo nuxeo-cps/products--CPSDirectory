@@ -238,6 +238,20 @@ class LDAPDirectory(BaseDirectory):
         if msg:
             raise ValueError("LDAP error: %s" % msg)
 
+    security.declarePublic('deleteEntry')
+    def deleteEntry(self, id):
+        """Delete an entry in the directory.
+        """
+        if not self.hasEntry(id):
+            raise ValueError("Entry '%s' does not exist and can't be deleted " % id)
+        # XXX check rdn value syntax...
+        rdn_attr = self.ldap_rdn_attr
+        base = self.ldap_base
+        rdn = '%s=%s,%s' % (rdn_attr, id, base)
+        msg = self._delegate.delete(dn=rdn)
+        if msg:
+            raise ValueError("LDAP error: %s" % msg)
+
     #
     # Internal
     #
