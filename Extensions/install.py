@@ -218,10 +218,5 @@ def install(self):
         permission='View', category='global', visible=1)
 
 
-    # Synchronization from members directory schema to MemberData properties
-    mdir = portal.portal_directories.members
-    mdir.updateMemberDataFromSchema()
-    
-
     pr("End of specific CPSDirectory install")
     return pr('flush')
