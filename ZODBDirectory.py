@@ -259,7 +259,7 @@ class ZODBDirectoryEntry(Item_w__name__,
         """View object. XXX"""
         res = ['<html>']
         for id, value in self.__dict__.items():
-            res.append('<b>%s</b>: %s<br>'
+            res.append('<b>%s</b>: %s<br />'
                        % (escape(str(id)), escape(str(value))))
         res.append('</html>')
         return '\n'.join(res)
