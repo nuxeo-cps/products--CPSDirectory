@@ -1,4 +1,29 @@
 *******************************************
+** CPSDirectory V1.0.0 [R1 build 2003/11/19-20:55 by guillaum]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+- Add specific schema and layout for search if needed.
+
+New features:
+~~~~~~~~~~~~~
+- Search for groups and roles.
+- Split search schemas and layouts so they can be customized independently.
+- Group and role creation work.
+- Display save button only if at least one widget is in edit mode.
+- Default schema/layout have first and last name.
+- LDAPDirectory allows entry creation and modification.
+
+Bug fixes:
+~~~~~~~~~~
+- Misc.
+
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Efficient search done on user folders that know about searchUsers().
+- New API on MemberDataTool to search members: searchForMembers().
+
+*******************************************
 ** CPSDirectory V0.0.1 [R1 build 2003/11/10-18:19 by guillaum]
 
 ZODB Requires:
