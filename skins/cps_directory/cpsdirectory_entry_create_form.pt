@@ -30,7 +30,7 @@
         here.getImgTag('cpsdirectoryup_icon.png', base_url=base_url)" />
       <strong i18n:translate="">cpsdir_label_upto_directories</strong></a>
     <h1><span i18n:translate="" tal:content="dirtitle" />:
-        <span i18n:translate="cpsdir_label_create_entry" /></h1>
+        <span i18n:translate="cpsdir_label_create_entry">create entry</span></h1>
     <div class="description">
     </div>
   </metal:block>
