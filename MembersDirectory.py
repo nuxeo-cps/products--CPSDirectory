@@ -101,6 +101,8 @@ class MembersDirectory(BaseDirectory):
     security.declarePublic('searchEntries')
     def searchEntries(self, **kw):
         """Search for entries in the directory.
+
+        XXX: OK, but what's the meaning of 'kw'?
         """
         mdtool = getToolByName(self, 'portal_memberdata')
         # Convert special fields id/roles/groups to known names.
@@ -125,6 +127,8 @@ class MembersDirectory(BaseDirectory):
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory.
+
+        XXX: OK, but what exactly is an 'entry'?
         """
         self.checkCreateEntryAllowed()
         id = entry[self.id_field]
