@@ -100,14 +100,41 @@ class RoleStorageAdapter(BaseStorageAdapter):
         self._portal = getToolByName(dir, 'portal_url').getPortalObject()
         BaseStorageAdapter.__init__(self, schema)
 
-    def _delete(self, field_id):
-        raise NotImplementedError
-
     def _getValidRoles(self):
         """Get the list of valid roles.
         """
         # XXX take into account LDAPUserFolder API to get all roles.
         return self._portal.valid_roles()
+
+    def _getRoleMembers(self, role):
+        # XXX Stupid slow search for now. Optimizable for LDAP.
+        if role not in self._getValidRoles():
+            raise KeyError("No role '%s'" % role)
+        aclu = self._portal.acl_users
+        members = []
+        # XXX with LDAP getUsers returns only cached users !!! XXX
+        for user in aclu.getUsers():
+            if role in user.getRoles():
+                members.append(user.getUserName())
+        return members
+
+    def _setRoleMembers(self, role, members):
+        # XXX treat LDAP
+        aclu = self._portal.acl_users
+        # XXX with LDAP getUsers returns only cached users !!! XXX
+        for user in aclu.getUsers():
+            id = user.getUserName()
+            roles = user.getRoles()
+            changed = 0
+            if id in members and role not in roles:
+                roles = list(roles) + [role]
+                changed = 1
+            elif id not in members and role in roles:
+                roles = list(roles)
+                roles.remove(role)
+                changed = 1
+            if changed:
+                aclu._doChangeUser(id, None, roles, user.getDomains())
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -116,15 +143,7 @@ class RoleStorageAdapter(BaseStorageAdapter):
         """
         role = self._role
         dir = self._dir
-        if role not in self._getValidRoles():
-            raise KeyError("No role '%s'" % role)
-        aclu = self._portal.acl_users
-        # XXX Stupid slow search for now. Optimizable for LDAP.
-        members = []
-        for user in aclu.getUsers():
-            if role in user.getRoles():
-                members.append(user.getId())
-        members = tuple(members)
+        members = self._getRoleMembers(role)
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.role_field:
@@ -138,6 +157,11 @@ class RoleStorageAdapter(BaseStorageAdapter):
 
     def setData(self, data):
         """Set data to the entry, from a mapping."""
-        raise NotImplementedError
+        role = self._role
+        dir = self._dir
+        for fieldid, field in self._schema.items():
+            value = data[fieldid]
+            if fieldid == dir.members_field:
+                self._setRoleMembers(role, value)
 
 InitializeClass(RoleStorageAdapter)

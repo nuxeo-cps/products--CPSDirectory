@@ -102,8 +102,21 @@ class GroupStorageAdapter(BaseStorageAdapter):
         self._portal = getToolByName(dir, 'portal_url').getPortalObject()
         BaseStorageAdapter.__init__(self, schema)
 
-    def _delete(self, field_id):
-        raise NotImplementedError
+    def _getGroupMembers(self, group):
+        aclu = self._portal.acl_users
+        if hasattr(aq_base(aclu), 'getGroupById'):
+            groupob = aclu.getGroupById(group, _marker)
+            if groupob is _marker:
+                raise KeyError("No group '%s'" % group)
+            return tuple(groupob.getUsers())
+        # else try other APIs to get to group.
+        return ()
+
+    def _setGroupMembers(self, group, members):
+        aclu = self._portal.acl_users
+        if hasattr(aq_base(aclu), 'setUsersOfGroup'):
+            aclu.setUsersOfGroup(members, group)
+        # else try other APIs to get to group.
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -112,15 +125,7 @@ class GroupStorageAdapter(BaseStorageAdapter):
         """
         group = self._group
         dir = self._dir
-        aclu = self._portal.acl_users
-        if hasattr(aclu, 'getGroupById'):
-            groupob = aclu.getGroupById(group, _marker)
-            if groupob is _marker:
-                raise KeyError("No group '%s'" % group)
-            members = groupob.getUsers()
-        # else try other APIs to get to group.
-        else:
-            members = ()
+        members = self._getGroupMembers(group)
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.group_field:
@@ -134,6 +139,11 @@ class GroupStorageAdapter(BaseStorageAdapter):
 
     def setData(self, data):
         """Set data to the entry, from a mapping."""
-        raise NotImplementedError
+        group = self._group
+        dir = self._dir
+        for fieldid, field in self._schema.items():
+            value = data[fieldid]
+            if fieldid == dir.members_field:
+                self._setGroupMembers(group, value)
 
 InitializeClass(GroupStorageAdapter)

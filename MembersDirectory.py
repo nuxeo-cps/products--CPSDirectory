@@ -110,8 +110,61 @@ class MemberStorageAdapter(BaseStorageAdapter):
         self._mtool = getToolByName(dir, 'portal_membership')
         BaseStorageAdapter.__init__(self, schema)
 
-    def _delete(self, field_id):
-        raise NotImplementedError
+    def _getMember(self):
+        member = self._mtool.getMemberById(self._id)
+        if member is None:
+            raise KeyError("No member '%s'" % self._id)
+        if not hasattr(aq_base(member), 'getMemberId'):
+            raise KeyError("User '%s' is not a member" % self._id)
+        return member
+
+    def _setMemberPassword(self, member, password):
+        aclu = self._dir.acl_users # XXX
+        if hasattr(aq_base(aclu), 'manage_editUserPassword'):
+            # LDAPUserFolder
+            # XXX find dn
+            raise NotImplementedError
+            dn = None
+            aclu.manage_editUserPassword(dn, password)
+        else:
+            user = member.getUser()
+            aclu._doChangeUser(user.getUserName(), password,
+                               user.getRoles(), user.getDomains())
+
+    def _getMemberRoles(self, member):
+        roles = member.getUser().getRoles()
+        return [r for r in roles
+                if r not in ('Anonymous', 'Authenticated', 'Owner')]
+
+    def _setMemberRoles(self, member, roles):
+        aclu = self._dir.acl_users # XXX
+        if hasattr(aq_base(aclu), 'manage_editUserRoles'):
+            # LDAPUserFolder
+            # XXX find dn
+            raise NotImplementedError
+            aclu.manage_editUserRoles(dn, role_dns)
+        else:
+            user = member.getUser()
+            aclu._doChangeUser(user.getUserName(), None,
+                               list(roles), user.getDomains())
+
+    def _getMemberGroups(self, member):
+        user = member.getUser()
+        if hasattr(aq_base(user), 'getGroups'):
+            return user.getGroups()
+        else:
+            return () # XXX or field.getDefault() ?
+
+    def _setMemberGroups(self, member, groups):
+        aclu = self._dir.acl_users # XXX
+        if hasattr(aq_base(aclu), 'manage_editUserGroupsXXXXXX'):
+            # LDAPUserFolder
+            # XXX find dn
+            raise NotImplementedError
+        else:
+            user = member.getUser()
+            if hasattr(aq_base(user), 'setGroupsOfUser'):
+                aclu.setGroupsOfUser(list(groups), user.getUserName())
 
     def getData(self):
         """Get data from an entry, returns a mapping.
@@ -120,12 +173,7 @@ class MemberStorageAdapter(BaseStorageAdapter):
         """
         id = self._id
         dir = self._dir
-        member = self._mtool.getMemberById(id)
-        if member is None:
-            raise KeyError("No member '%s'" % id)
-        if not hasattr(aq_base(member), 'getMemberId'):
-            raise KeyError("User '%s' is not a member" % id)
-        user = member.getUser()
+        member = self._getMember()
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.id_field:
@@ -133,13 +181,9 @@ class MemberStorageAdapter(BaseStorageAdapter):
             elif fieldid == dir.password_field:
                 value = 'this is the password XXX'
             elif fieldid == dir.roles_field:
-                value = [r for r in user.getRoles()
-                         if r not in ('Anonymous', 'Authenticated', 'Owner')]
+                value = self._getMemberRoles(member)
             elif fieldid == dir.groups_field:
-                if hasattr(aq_base(user), 'getGroups'):
-                    value = user.getGroups()
-                else:
-                    value = () # XXX or field.getDefault() ?
+                value = self._getMemberGroups(member)
             else:
                 value = member.getProperty(fieldid, _marker)
                 if value is _marker:
@@ -149,8 +193,26 @@ class MemberStorageAdapter(BaseStorageAdapter):
 
     def setData(self, data):
         """Set data to the entry, from a mapping."""
-        raise NotImplementedError
-        for field_id in self._schema.keys():
-            setattr(self._ob, field_id, data[field_id])
+        dir = self._dir
+        member = self._getMember()
+        mapping = {}
+        for fieldid, field in self._schema.items():
+            value = data[fieldid]
+            if fieldid == dir.id_field:
+                pass
+                #raise ValueError("Can't write to id") # XXX
+            elif fieldid == dir.password_field:
+                if value:
+                    self._setMemberPassword(member, value)
+                else:
+                    raise ValueError("Can't write empty password") # XXX
+            elif fieldid == dir.roles_field:
+                self._setMemberRoles(member, value)
+            elif fieldid == dir.groups_field:
+                self._setMemberGroups(member, value)
+            else:
+                mapping[fieldid] = value
+        if mapping:
+            member.setMemberProperties(mapping)
 
 InitializeClass(MemberStorageAdapter)
