@@ -28,19 +28,24 @@ from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+from Products.CPSDirectory.IndirectDirectory import IndirectDirectory
 
 class LocalDirectory(BaseDirectory):
     """A Directory that acts as a Proxy to a directory in the UserHomeFolder.
     """
 
-    meta_type = 'CPS Local Directory'  
+    meta_type = 'CPS Local Directory'
 
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
         {'id': 'directory_id', 'type': 'string', 'mode': 'w',
-         'label': 'Id of local directory'},
+         'label': 'Id of the directory it refers to (for an Indirect Directory)'},
+        {'id': 'directory_type', 'type': 'selection',
+         'select_variable': 'supported_directories', 'mode': 'w',
+         'label': 'Type of local directory'},
         )
+    supported_directories = ['CPS ZODB Directory', 'CPS Indirect Directory']
 
     # Attributes:
     def _get_schema(self):
@@ -92,21 +97,40 @@ class LocalDirectory(BaseDirectory):
     search_substring_fields = ComputedAttribute(_get_search_substring_fields, 1)
 
     def __init__(self, id, **kw):
+        # No need to call BaseDirectory.__init__(self, id, **kw)
+        # because attributes are already set above?
         self.id = id
-        self.directory_id = ''
-  
+        self.directory_id = kw.get('directory_id', '')
+        self.directory_type = kw.get('directory_type', 'CPS ZODB Directory')
+
     def getProperty(self, id, d=None):
-        """Get the content object, maybe editable."""
-        tool = getToolByName(self, 'portal_membership', None)
-        folder = tool.getHomeFolder()
-        try:
-            ob = folder._getOb(self.directory_id)
-            return getattr(ob, id, d)
-        except AttributeError:
+        """Get the content object property, maybe editable."""
+        # AT: do not wait for the AttributeError, these two
+        # properties are not going to be found in the directory
+        # created in the home folder, as it is not a Local Directory
+        directory_type = getattr(self, 'directory_type', 'CPS ZODB Directory')
+        if (((directory_type == 'CPS ZODB Directory') and
+             id not in ['directory_id', 'directory_type']) or
+            ((directory_type == 'CPS Indirect Directory') and
+             id != 'directory_type')):
+            tool = getToolByName(self, 'portal_membership', None)
+            try:
+                folder = tool.getHomeFolder()
+                try:
+                    ob = folder._getOb(self.id)
+                    return getattr(ob, id, d)
+                except AttributeError:
+                    if id in self.__dict__.keys():
+                        return self.__dict__[id]
+                    else:
+                        return d
+            # admin: not found in members
+            except KeyError:
+                if id in self.__dict__.keys():
+                    return self.__dict__[id]
+        else:
             if id in self.__dict__.keys():
                 return self.__dict__[id]
-            else:
-                return d
 
     def _getContent(self):
         """Get the content object, maybe editable."""
@@ -116,19 +140,28 @@ class LocalDirectory(BaseDirectory):
             raise KeyError("Home folder could not be found. " \
                 "Maybe you are not a member of this portal?")
         try:
-            return folder._getOb(self.directory_id)
+            return folder._getOb(self.id)
         except AttributeError:
-            pass 
+            pass
         # The local directory could not be found. Try creating it.
         # (Creates a ZODB Directory, because nothing else really
         # makes sense at the moment. In the future maybe it should be
         # a setting?)
+        # AT: now create either a ZODB Directory, either an Indirectory
+        # Directory, and ZODB is default
         props = {}
+        directory_type = self.getProperty('directory_type')
         for prop in self.propertyIds():
+            # AT: among props:
+            # directory_type won't be useful
+            # directory_id will be useful only with indirect directories
             props[prop] = self.getProperty(prop)
-        new_dir = ZODBDirectory(self.directory_id, **props)
-        folder._setObject(self.directory_id, new_dir)
-        return folder._getOb(self.directory_id)
+        if directory_type == 'CPS Indirect Directory':
+            new_dir = IndirectDirectory(self.id, **props)
+        else:
+            new_dir = ZODBDirectory(self.id, **props)
+        folder._setObject(self.id, new_dir)
+        return folder._getOb(self.id)
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -212,7 +245,7 @@ class LocalDirectory(BaseDirectory):
     def _getAdditionalRoles(self, id):
         ob = self._getContent()
         return ob._getAdditionalRoles(id)
-    
+
 InitializeClass(LocalDirectory)
 
 
