@@ -110,9 +110,9 @@ class BaseDirectory(SimpleItemWithProperties):
         - rendered is the rendered HTML,
         - datastructure is the resulting datastructure.
         """
-        dm = self.getDataModel(id)
+        dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layout = self.getLayout(self.layout)
+        layout = self._getLayout(self.layout)
         layoutdata = layout.getLayoutData(ds)
         rendered = self._renderLayoutStyle(mode, layout=layoutdata,
                                            datastructure=ds, **kw)
@@ -127,8 +127,8 @@ class BaseDirectory(SimpleItemWithProperties):
     # Internal
     #
 
-    security.declarePrivate('getSchemas')
-    def getSchemas(self):
+    security.declarePrivate('_getSchemas')
+    def _getSchemas(self):
         """Get the schemas for this directory.
 
         Returns a sequence of Schema objects.
@@ -143,21 +143,21 @@ class BaseDirectory(SimpleItemWithProperties):
             schemas.append(schema)
         return schemas
 
-    security.declarePrivate('getAdapters')
-    def getAdapters(self, id):
+    security.declarePrivate('_getAdapters')
+    def _getAdapters(self, id):
         """Get the adapters for an entry."""
         raise NotImplementedError
 
-    security.declarePrivate('getDataModel')
-    def getDataModel(self, id):
+    security.declarePrivate('_getDataModel')
+    def _getDataModel(self, id):
         """Get the datamodel for an entry."""
-        adapters = self.getAdapters(id)
+        adapters = self._getAdapters(id)
         dm = DataModel(None, adapters)
         dm._fetch()
         return dm
 
-    security.declarePrivate('getLayout')
-    def getLayout(self, ob=None):
+    security.declarePrivate('_getLayout')
+    def _getLayout(self, ob=None):
         """Get the layout for our type.
         """
         ltool = getToolByName(self, 'portal_layouts')

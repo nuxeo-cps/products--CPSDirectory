@@ -58,12 +58,12 @@ class GroupsDirectory(BaseDirectory):
     users_field = 'users'
     title_field = 'group'
 
-    security.declarePrivate('getAdapters')
-    def getAdapters(self, id):
+    security.declarePrivate('_getAdapters')
+    def _getAdapters(self, id):
         """Get the adapters for an entry."""
         dir = self
         adapters = [GroupStorageAdapter(schema, id, dir)
-                    for schema in self.getSchemas()]
+                    for schema in self._getSchemas()]
         return adapters
 
     security.declarePublic('getEntry')
