@@ -5,7 +5,8 @@ New features:
 ~~~~~~~~~~~~~
 - Providing an easy way to delete multiple entries at a time through the search
   results form
-
+- Member directory have a homeless property to enable/disable access
+  to the private area && private calendar && favorites
 Bug fixes:
 ~~~~~~~~~~
 - Invalid Entry in view mode is a link to a CPS Error page
