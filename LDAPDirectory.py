@@ -230,41 +230,48 @@ class LDAPStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         BaseStorageAdapter.__init__(self, schema)
 
-    def getData(self):
-        """Get data from an entry, returns a mapping.
-
-        Fills default value from the field if the object has no attribute.
-        """
-        id = self._id
+    def _getEntry(self, field_ids=['dn']):
+        """Get entry for current user."""
         dir = self._dir
-
+        id = self._id
         # XXX treat case where id_field == 'dn' (use base=dn)
         # XXX use self.ldap_object_classes here too
-        filter = '(&(%s=%s)(objectClass=*))' % (dir.id_field, id)
-        field_ids = self._schema.keys()
-
+        filter = '(&%s(objectClass=*))' % filter_format('(%s=%s)',
+                                                        (dir.id_field, id))
         res = dir._delegate.search(base=dir.ldap_base, scope=dir.ldap_scope,
                                    filter=filter,
                                    attrs=field_ids,
                                    bind_dn=dir.ldap_bind_dn,
                                    bind_pwd=dir.ldap_bind_password)
-
         if res['exception']:
             LOG('LDAPDirectory', ERROR, 'Error talking to server: %s'
                 % res['exception'])
             raise ValueError(res['exception']) # XXX do better ?
-
         if not res['size']:
             raise ValueError("No user '%s'" % id)
 
-        result = res['results'][0]
+        LOG('_getEntry', DEBUG, 'got for field_ids=%s entry=%s' % (
+            field_ids, res))
+        return res['results'][0]
+
+    def getData(self):
+        """Get data from an entry, returns a mapping.
+
+        Fills default value from the field if the object has no attribute.
+        """
+        if self._id is None:
+            # Creation.
+            return self.getDefaultData()
+
+        entry = self._getEntry(self._schema.keys())
+
         data = {}
         for field_id, field in self._schema.items():
             if field_id == 'dn':
-                value = result['dn']
+                value = entry['dn']
             else:
-                if result.has_key(field_id):
-                    value = result[field_id][0] # XXX multi-valued args!!!
+                if entry.has_key(field_id):
+                    value = entry[field_id][0] # XXX multi-valued args!!!
                 else:
                     value = field.getDefault()
             data[field_id] = value
@@ -272,6 +279,36 @@ class LDAPStorageAdapter(BaseStorageAdapter):
 
     def setData(self, data):
         """Set data to the entry, from a mapping."""
-        raise NotImplementedError
+        dir = self._dir
+
+        # Get dn by doing a lookup on the current entry.
+        user_dn = self._getEntry()['dn']
+
+        # Find the rdn attr.
+        rdn = user_dn.split(',')[0]
+        rdn_attr, rdn_value = rdn.split('=', 1)
+
+        # XXX treat change of rdn
+
+        attrs = {}
+        for fieldid, field in self._schema.items():
+            value = data[fieldid]
+            if fieldid == 'dn':
+                # Never modifiable directly.
+                continue
+            if fieldid == rdn_attr:
+                # XXX cannot change rdn attr directly...
+                continue
+            if type(value) not in (ListType, TupleType):
+                value = [value]
+            attrs[fieldid] = value
+
+        if attrs:
+            LOG('LDAPDirectory.setData', DEBUG, 'sending attrs=%s' % (attrs,))
+            msg = dir._delegate.modify(user_dn, attrs=attrs)
+            if msg.startswith('STRONG_AUTH_REQUIRED'):
+                raise ValueError("Authentication required")
+            elif msg:
+                raise ValueError("LDAP error: %s" % msg)
 
 InitializeClass(LDAPStorageAdapter)
