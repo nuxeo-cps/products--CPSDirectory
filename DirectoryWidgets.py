@@ -23,79 +23,102 @@ Definition of directory-related widget types.
 
 from zLOG import LOG, DEBUG
 from urllib import urlencode
+from cgi import escape
 from Globals import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
 from Products.CPSSchemas.Widget import CPSWidgetType
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag
-from Products.CPSSchemas.BasicWidgets import CPSStringWidget
+from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
+from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
+
+
+
+class EntryMixin:
+    """Mixin class that knows how to access id and title from
+    and entry, even if it's LDAP keyed by dn.
+    """
+
+    def getIdAndTitle(self, value):
+        """Get id and title from an entry value.
+
+        Returns a tuple (id, title), or None, None if the
+        entry could not be found.
+        """
+        portal_directories = getToolByName(self, 'portal_directories')
+        dir = getattr(portal_directories, self.directory)
+        if self.entry_type == 'id':
+            id = value
+            try:
+                title = dir.getEntry(id)[dir.title_field]
+            except (IndexError, ValueError, KeyError):
+                title = None
+        else: # entry_type == 'dn':
+            try:
+                entry = dir.getEntryByDN(value)
+            except (IndexError, ValueError, KeyError):
+                id = None
+                title = None
+            else:
+                id = entry[dir.id_field]
+                title = entry[dir.title_field]
+        return (id, title)
+
+    def getTagForValue(self, value):
+        id, title = self.getIdAndTitle(value)
+        if id is None:
+            id = 'unknown'
+        if title is None:
+            title = '? (%s)' % value
+        portal_url = getToolByName(self, 'portal_url')()
+        href = '%s/%s?%s' % (portal_url, self.skin_name,
+                             urlencode({'dirname': self.directory,
+                                        'id': id,
+                                        }))
+        return renderHtmlTag('a',
+                             href=href,
+                             contents=escape(title))
+
 
 ##################################################
 
-class CPSDirectoryEntryWidget(CPSStringWidget):
+class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     """Directory entry widget.
 
-    This widget displays a reference to a directory entry as an href
-    link.
+    This widget displays a reference to a single directory entry as an
+    href link.
 
-    In edit mode XXX
+    In edit mode it uses a SelectWidget for now. XXX
     """
     meta_type = "CPS Directory Entry Widget"
 
-    _properties = CPSStringWidget._properties + (
-        {'id': 'dir_name', 'type': 'string', 'mode': 'w',
-         'label': 'Directory name'},
+    _properties = CPSSelectWidget._properties + (
+        {'id': 'directory', 'type': 'string', 'mode': 'w',
+         'label': 'Directory'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
          'select_variable': 'all_entry_types',
          'label': 'Entry type'},
-        {'id': 'dn_rdn_attr', 'type': 'string', 'mode': 'w',
-         'label': 'DN: rdn attribute'},
-        {'id': 'dn_base', 'type': 'string', 'mode': 'w',
-         'label': 'DN: base'},
+        {'id': 'skin_name', 'type': 'string', 'mode': 'w',
+         'label': 'Skin name'},
         )
-    all_entry_types = ['direct', 'dn']
+    all_entry_types = ['id', 'dn']
 
-    dir_name = ''
+    directory = ''
     entry_type = all_entry_types[0]
-    dn_rdn_attr = ''
-    dn_base = ''
+    skin_name = 'cpsdirectory_entry_view'
 
     def render(self, mode, datastructure, **kw):
         """Render in mode from datastructure."""
         value = datastructure[self.getWidgetId()]
         if mode == 'view':
-            if self.entry_type == 'direct':
-                id = value
-            else: # entry_type == 'dn':
-                try:
-                    # Get the rdn value
-                    id = value.split(',')[0].split('=')[1].strip()
-                except IndexError:
-                    id = 'unknown'
-            portal_url = getToolByName(self, 'portal_url')()
-            portal_directories = getToolByName(self, 'portal_directories')
-            dir = getattr(portal_directories, self.dir_name)
-            # yyy
-            skin_name = 'cpsdirectory_entry_view'
-            href = '%s/%s?%s' % (portal_url, skin_name,
-                                 urlencode({'dirname': self.dir_name,
-                                            'id': id,
-                                            }))
-            contents = 'fooXXX' # quoted!
-            return renderHtmlTag('a',
-                                 href=href,
-                                 contents=contents)
+            if value:
+                return self.getTagForValue(value)
+            else:
+                return ''
         elif mode == 'edit':
-            # XXX should be a select widget.
-            kw = {'type': 'text',
-                  'name': self.getHtmlWidgetId(),
-                  'value': value,
-                  'size': self.display_width,
-                  }
-            if self.size_max:
-                kw['maxlength'] = self.size_max
-            return renderHtmlTag('input', **kw)
+            return CPSDirectoryEntryWidget.inheritedAttribute('render')(
+                self, mode, datastructure, **kw)
         raise RuntimeError('unknown mode %s' % mode)
 
 InitializeClass(CPSDirectoryEntryWidget)
@@ -108,6 +131,57 @@ class CPSDirectoryEntryWidgetType(CPSWidgetType):
 
 InitializeClass(CPSDirectoryEntryWidgetType)
 
+##################################################
+
+class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
+    """Directory multi-entries widget.
+
+    This widget displays a reference to a several directory entries as
+    an href links.
+
+    In edit mode it uses a MultiSelectWidget for now. XXX
+    """
+    meta_type = "CPS Directory MultiEntries Widget"
+
+    _properties = CPSMultiSelectWidget._properties + (
+        {'id': 'directory', 'type': 'string', 'mode': 'w',
+         'label': 'Directory'},
+        {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
+         'select_variable': 'all_entry_types',
+         'label': 'Entry type'},
+        {'id': 'skin_name', 'type': 'string', 'mode': 'w',
+         'label': 'Skin name'},
+        )
+    all_entry_types = ['id', 'dn']
+
+    directory = ''
+    entry_type = all_entry_types[0]
+    skin_name = 'cpsdirectory_entry_view'
+
+    def render(self, mode, datastructure, **kw):
+        """Render in mode from datastructure."""
+        value = datastructure[self.getWidgetId()]
+        if mode == 'view':
+            res = [self.getTagForValue(v) for v in value]
+            return ', '.join(res)
+        elif mode == 'edit':
+            return CPSDirectoryMultiEntriesWidget.inheritedAttribute(
+                'render')(self, mode, datastructure, **kw)
+        raise RuntimeError('unknown mode %s' % mode)
+
+InitializeClass(CPSDirectoryMultiEntriesWidget)
+
+
+class CPSDirectoryMultiEntriesWidgetType(CPSWidgetType):
+    """Directory entry widget type."""
+    meta_type = "CPS Directory MultiEntries Widget Type"
+    cls = CPSDirectoryMultiEntriesWidget
+
+InitializeClass(CPSDirectoryMultiEntriesWidgetType)
+
+##################################################
 
 WidgetTypeRegistry.register(CPSDirectoryEntryWidgetType,
                             CPSDirectoryEntryWidget)
+WidgetTypeRegistry.register(CPSDirectoryMultiEntriesWidgetType,
+                            CPSDirectoryMultiEntriesWidget)

@@ -40,7 +40,7 @@ del LDAPDelegate
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 import DirectoryTool
-#import DirectoryWidgets
+import DirectoryWidgets
 
 from DirectoryTool import DirectoryTypeRegistry
 from MembersDirectory import MembersDirectory
