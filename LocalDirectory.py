@@ -54,53 +54,65 @@ class LocalDirectory(BaseDirectory):
 
     # Attributes:
     def _get_schema(self):
-        return getattr(self._getContent(), 'schema', '')
+        return getattr(self.getProperty('schema', ''))
     schema = ComputedAttribute(_get_schema, 1)
 
     def _get_schema_search(self):
-        return getattr(self._getContent(), 'schema_search', '')
+        return getattr(self.getProperty('schema_search', ''))
     schema_search = ComputedAttribute(_get_schema_search, 1)
 
     def _get_layout(self):
-        return getattr(self._getContent(), 'layout', '')
+        return getattr(self.getProperty('layout', ''))
     layout = ComputedAttribute(_get_layout, 1)
 
     def _get_layout_search(self):
-        return getattr(self._getContent(), 'layout_search', '')
+        return getattr(self.getProperty('layout_search', ''))
     layout_search = ComputedAttribute(_get_layout_search, 1)
 
     def _get_acl_access_roles(self):
-        return getattr(self._getContent(), 'acl_access_roles', '')
+        return getattr(self.getProperty('acl_access_roles', ''))
     acl_access_roles = ComputedAttribute(_get_acl_access_roles, 1)
 
     def _get_acl_entry_create_roles(self):
-        return getattr(self._getContent(), 'acl_entry_create_roles', '')
+        return getattr(self.getProperty('acl_entry_create_roles', ''))
     acl_entry_create_roles = ComputedAttribute(_get_acl_entry_create_roles, 1)
 
     def _get_acl_entry_create_roles(self):
-        return getattr(self._getContent(), 'acl_entry_delete_roles', '')
+        return getattr(self.getProperty('acl_entry_delete_roles', ''))
     acl_entry_delete_roles = ComputedAttribute(_get_acl_entry_create_roles, 1)
 
     def _get_acl_entry_edit_roles(self):
-        return getattr(self._getContent(), 'acl_entry_edit_roles', '')
+        return getattr(self.getProperty('acl_entry_edit_roles', ''))
     acl_entry_edit_roles = ComputedAttribute(_get_acl_entry_edit_roles, 1)
 
     def _get_id_field(self):
-        return getattr(self._getContent(), 'id_field', '')
+        return getattr(self.getProperty('id_field', ''))
     id_field = ComputedAttribute(_get_id_field, 1)
 
     def _get_title_field(self):
-        return getattr(self._getContent(), 'title_field', '')
+        return getattr(self.getProperty('title_field', ''))
     title_field = ComputedAttribute(_get_title_field, 1)
 
     def _get_search_substring_fields(self):
-        return getattr(self._getContent(), 'search_substring_fields', '')
+        return getattr(self.getProperty('search_substring_fields', ''))
     search_substring_fields = ComputedAttribute(_get_search_substring_fields, 1)
 
     def __init__(self, id, **kw):
         self.id = id
         self.directory_id = ''
   
+    def getProperty(self, id, d=None):
+        """Get the content object, maybe editable."""
+        tool = getToolByName(self, 'portal_membership', None)
+        folder = tool.getHomeFolder()
+        try:
+            return folder._getOb(self.directory_id)
+        except AttributeError:
+            if id in self.__dict__.keys():
+                return self.__dict__[id]
+            else:
+                return d
+
     def _getContent(self):
         """Get the content object, maybe editable."""
         tool = getToolByName(self, 'portal_membership', None)
