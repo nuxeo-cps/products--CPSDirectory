@@ -242,6 +242,7 @@ class LDAPDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory.
         """
+        self.checkCreateEntryAllowed()
         if not self.hasEntry(id):
             raise ValueError("Entry '%s' does not exist and can't be deleted " % id)
         # XXX check rdn value syntax...
