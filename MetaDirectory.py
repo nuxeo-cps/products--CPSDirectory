@@ -37,6 +37,7 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
+from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
 
 class MetaDirectory(BaseDirectory):
@@ -134,7 +135,8 @@ class MetaDirectory(BaseDirectory):
                 try:
                     dir = getattr(dtool, dir_id)
                 except AttributeError:
-                    raise ValueError("No backing directory '%s'" % dir_id)
+                    raise ConfigurationError("No backing directory '%s'"
+                                             % dir_id)
                 info['dir'] = dir
             # Treat Upgrades
             if not info.has_key('missing_entry_expr'):
