@@ -110,9 +110,8 @@ msgstr "Crea nuovo elemento"
 msgid "label_groups"
 msgstr "Gruppo(i)"
 
-#, fuzzy
 msgid "label_subgroups"
-msgstr "Gruppo(i)"
+msgstr "Sottogruppo(i)"
 
 msgid "label_members"
 msgstr "Collaboratori"
