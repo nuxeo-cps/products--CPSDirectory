@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Updated doc about MetaDirectory's missing entries management.
 Bug fixes:
 ~~~~~~~~~~
 - Made LDAPBackingDirectory work with non-ascii passwords (convert to UTF-8).
