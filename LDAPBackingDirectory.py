@@ -316,7 +316,8 @@ class LDAPBackingDirectory(BaseDirectory):
 
         Returns a boolean.
 
-        Asks the backing directories, all of them must be authenticating.
+        An LDAP Backing Directory is considered authenticating if
+        the password field is not empty.
         """
         return not not self.password_field
 
