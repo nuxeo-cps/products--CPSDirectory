@@ -31,4 +31,7 @@ vocabularies = {
     'groups': groups_vocabulary,
     }
 
+cvocabularies = context.getCustomDirectoryVocabularies()
+vocabularies.update(cvocabularies)
+
 return vocabularies

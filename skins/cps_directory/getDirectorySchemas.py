@@ -161,4 +161,7 @@ schemas = {
     'groups': groups_schema,
     }
 
+cschemas = context.getCustomDirectorySchemas()
+schemas.update(cschemas)
+
 return schemas

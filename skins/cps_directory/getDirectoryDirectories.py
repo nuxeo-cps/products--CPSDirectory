@@ -61,4 +61,7 @@ directories = {
     'groups': groups_directory,
     }
 
+cdirectories = context.getCustomDirectories()
+directories.update(cdirectories)
+
 return directories

@@ -328,4 +328,7 @@ layouts = {
     'groups': groups_layout,
     }
 
+clayouts = context.getCustomDirectoryLayouts()
+layouts.update(clayouts)
+
 return layouts
