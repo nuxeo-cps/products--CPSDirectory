@@ -7,11 +7,12 @@ $Id$
 Introduction
 ============
 
-A meta-directory is a directory whose purpose is to link and redirect to
-other directories, doing some conversions in the process.
+A meta-directory is a directory whose purpose is to link and redirect
+access to parts of an entry to other directories, doing some conversions
+in the process.
 
-Reading, writing, creating and searches are all dispatched appropriately
-to the backing directories.
+Reading, writing, creating, deleting and searches are all dispatched
+appropriately to the backing directories.
 
 A meta-directory is typically used to provide a synthesized 'users'
 directory for the CPSUserFolder, using several backing directories for
