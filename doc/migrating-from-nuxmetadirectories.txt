@@ -25,3 +25,18 @@ Changes
 
 5. Replace getSearchableSchemaKeys by querying the schema directly for
    the fields that you want.
+
+6. Be aware that results from a searchEntry is different than before.
+
+   If there are not return_fields, you get::
+
+     ['id1', 'id2', etc.]
+
+   If there is a return_fields parameter, you get::
+
+     [('id1', {'field1': value1, 'field2': value2}),
+       ('id2', {'field1': value3, 'field2': value4}),
+       etc.
+     ]
+
+   return_fields being in this example ('field1', 'field2')
