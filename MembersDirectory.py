@@ -161,6 +161,49 @@ class MembersDirectory(BaseDirectory):
         aclu = self.acl_users
         aclu._doDelUsers([id])
 
+    security.declarePrivate('updateMemberDataFromSchema')
+    def updateMemberDataFromSchema(self):
+        """Updates the MemberData tool properties with the ones found in the
+        members directory schema.
+
+        TODO These special fields are to be treated apart:
+          - id
+          - title
+
+        These specific fields are ignored:
+          - groups
+          - roles
+          - password & confirm
+
+        All other fields (e.g. givenName, sn, fullname, etc.) are added to the
+        MemberData tool properties if not found.
+        """
+        mdtool = getToolByName(self, 'portal_memberdata')
+        md_ids = mdtool.propertyIds()
+
+        # TODO Convert other types
+        converter = {'CPS String Field': 'string',
+                     'CPS String List Field': 'lines',
+                    }
+
+        for field in self._getSchemas()[0].objectValues():
+            # TODO handle id and title as required, ignore them for now
+            field_id = field.getFieldId()
+            if field_id in ('id', 'title'):
+                # for now
+                continue
+            # special fields not to be treated
+            elif field_id in ('groups', 'roles', 'password', 'confirm'):
+                continue
+            elif field_id in md_ids:
+                # already existing
+                continue
+            # Add property with the same kind of type
+            prop_value = field.getDefault()
+            prop_type = converter.get(field.meta_type, 'string')
+            mdtool.manage_addProperty(field_id, prop_value, prop_type)
+            LOG('updateMemberDataFromSchema', DEBUG, "added property=%s type=%s default value=%s" % (field_id, prop_type, prop_value))
+
 InitializeClass(MembersDirectory)
 
 
