@@ -12,4 +12,4 @@ Bug fixes:
 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Added unit tests for members, groups, roles

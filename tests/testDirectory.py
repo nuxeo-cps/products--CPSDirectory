@@ -68,6 +68,41 @@ class TestDirectoryWithDefaultUserFolder(
 
 
     #
+    # Groups
+    #
+    def testDefaultGroups(self):
+        groups = self.pd.groups
+
+        # XXX: it is a tuple, but later it is a list. I consider this
+        # an error.
+        default_groups = ()
+
+        self.assertEquals(groups.listEntryIds(), default_groups)
+        search_result = groups.searchEntries()
+        # XXX: see above remark
+        self.assertEquals(search_result, list(default_groups))
+
+    def testGroupCreation(self):
+        groups = self.pd.groups
+        group_id = 'new_group'
+
+        self.assert_(not groups.hasEntry(group_id))
+        search_result = groups.searchEntries(group=group_id)
+        self.assert_(not search_result)
+        self.assert_(not group_id in groups.listEntryIds())
+
+        groups.createEntry({'group': group_id})
+
+        self.assert_(groups.hasEntry(group_id))
+        search_result = groups.searchEntries(id=group_id)
+        self.assertEquals(search_result, [group_id])
+        self.assert_(group_id in groups.listEntryIds())
+
+        self.assertRaises(ValueError, groups.createEntry, 
+            {'group': group_id})
+
+
+    #
     # Roles
     #
     def testDefaultRoles(self):
