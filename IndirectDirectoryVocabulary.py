@@ -45,6 +45,19 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
 
     security = ClassSecurityInfo()
 
+    security.declareProtected(View, 'keys')
+    def keys(self):
+        res = self.listAllPossibleEntriesIds()
+        if self.add_empty_key:
+            v = ''
+            res = list(res)
+            if self.empty_key_pos == 'first':
+                res.insert(0, v)
+            else:
+                res.append(v)
+        return res
+
+
     security.declareProtected(View, 'items')
     def items(self):
         # this is the only change
@@ -57,5 +70,12 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
             else:
                 res.append(v)
         return res
+
+    security.declareProtected(View, 'has_key')
+    def has_key(self, key):
+        if self.add_empty_key and key == '':
+            return 1
+        return key in self.keys()
+
 
 InitializeClass(IndirectDirectoryVocabulary)
