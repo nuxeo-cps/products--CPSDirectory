@@ -58,7 +58,7 @@ actions['object'].append({'id':'delete_entry',
   'category': 'object'})" />
     </tal:block>
     <link rel="Stylesheet" type="text/css" href=""
-      tal:attributes="href string:${base_url}document.css">
+      tal:attributes="href string:${base_url}document.css" />
   </metal:block>
 
   <metal:block fill-slot="header">
