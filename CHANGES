@@ -7,6 +7,7 @@ New features:
 - Search for groups and roles.
 - Split search schemas and layouts so they can be customized independently.
 - Group and role creation work.
+- Display save button only if at least one widget is in edit mode.
 
 Bug fixes:
 ~~~~~~~~~~
@@ -16,4 +17,3 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Efficient search done on user folders that know about searchUsers().
 - New API on MemberDataTool to search members: searchForMembers().
-- Display save button only if at least one widget is in edit mode.
