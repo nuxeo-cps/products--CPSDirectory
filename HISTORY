@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.10.0 [R1 build 2004/03/25-11:38 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- Providing an easy way to delete multiple entries at a time through the search
+  results form
+- Member directory have a homeless property to enable/disable access
+  to the private area && private calendar && favorites
+Bug fixes:
+~~~~~~~~~~
+- Invalid Entry in view mode is a link to a CPS Error page
+- The MemberTools patch now only sets the properties on the user that thes
+  user object claim to support. Other properties will be set in the
+  MemberTool.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- let CPSDefault load functions.js
+
+*******************************************
 ** CPSDirectory V1.9.0 [R1 build 2004/03/08-14:01 by ben]
 ** CPS 3.0 RELEASE **
 

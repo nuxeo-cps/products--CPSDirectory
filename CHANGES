@@ -3,16 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- Providing an easy way to delete multiple entries at a time through the search
-  results form
-- Member directory have a homeless property to enable/disable access
-  to the private area && private calendar && favorites
+-
 Bug fixes:
 ~~~~~~~~~~
-- Invalid Entry in view mode is a link to a CPS Error page
-- The MemberTools patch now only sets the properties on the user that thes
-  user object claim to support. Other properties will be set in the
-  MemberTool.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- let CPSDefault load functions.js
+-
