@@ -150,4 +150,3 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "An entry with the same identifier already exists"
-

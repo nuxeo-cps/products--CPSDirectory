@@ -50,4 +50,3 @@ msgstr "Select all"
 
 msgid "button_delete"
 msgstr "Delete"
-

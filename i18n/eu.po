@@ -21,46 +21,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Errorea"
 
 #.   <p>Choose a directory</p>
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Direktorioa aukeratu"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Sarrera berria sortu"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Sarrera editatu"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Bilaketa emaitzak"
 
 #.   <span condition="python: ok != 'results'" />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Sarrera bilatu"
 
 #.   <b>cpsdir_label_upto_directories</b>
 #.   <strong>cpsdir_label_upto_directories</strong>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
@@ -68,50 +61,34 @@ msgid "cpsdir_label_upto_directories"
 msgstr "Direktorioetara"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Sarrera ikusi"
 
 #.   <p />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
 msgstr "Emaitza larregi; galdera gehiago zehaztu, mesedez."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr "Laguntza"
 
 #.   <th content="field/title">id</th>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-#, fuzzy
-msgid "label"
-msgstr "etiketa"
-
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
 msgstr "Emaitzarik ez"
 
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Ez dago direktoriorik"
 
@@ -143,7 +120,10 @@ msgid "cpsdir_label_delete_entry"
 msgstr "Sarrera ezabatu"
 
 msgid "cpsdir_help_homeless"
-msgstr "Atal pribatuaren aukerak hauexek dira:<br />- lanerako gune pribatua<br />- zure egutegia<br />- gogokoenen zerrenda<br />- kutxak txikitu eta ixteko aukera<br />"
+msgstr ""
+"Atal pribatuaren aukerak hauexek dira:<br />- lanerako gune pribatua<br />- "
+"zure egutegia<br />- gogokoenen zerrenda<br />- kutxak txikitu eta ixteko "
+"aukera<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Alderdi pribatua gaitu"
@@ -153,4 +133,3 @@ msgstr "Kudeatzailea"
 
 msgid "label_roles_Member"
 msgstr "Erabiltzailea"
-

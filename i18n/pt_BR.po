@@ -132,20 +132,10 @@ msgstr ""
 msgid "cpsdir_label_homeless"
 msgstr "Habilitar área particular"
 
-#, fuzzy
-msgid "label_roles_Manager"
-msgstr "Administrador de área de trabalho"
-
-#, fuzzy
-msgid "label_roles_Member"
-msgstr "Membro de área de trabalho"
-
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Desculpe mas esta entrada não pode ser removida, você que tem remover todas as subentradas primeiro."
+msgstr ""
+"Desculpe mas esta entrada não pode ser removida, você que tem remover todas "
+"as subentradas primeiro."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Uma entrada com o mesmo identificador já existe"
-
-#, fuzzy
-#~ msgid "label_roles"
-#~ msgstr "Papel(is)"

@@ -130,55 +130,8 @@ msgstr ""
 msgid "cpsdir_label_homeless"
 msgstr "Aktivieren privater Bereiche"
 
-#, fuzzy
-msgid "label_roles_Manager"
-msgstr "Rolle(n)"
-
-#, fuzzy
-msgid "label_roles_Member"
-msgstr "Rolle(n)"
-
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr ""
-
-#~ msgid "button_edit"
-#~ msgstr "Bearbeiten"
-
-#~ msgid "Title"
-#~ msgstr "Titel"
-
-#~ msgid "button_create"
-#~ msgstr "Erstellen"
-
-#~ msgid "button_update"
-#~ msgstr "Update"
-
-#~ msgid "Directories"
-#~ msgstr "Verzeichnisse"
-
-#~ msgid "button_back"
-#~ msgstr "Zurück"
-
-#~ msgid "button_change"
-#~ msgstr "Sichern"
-
-#~ msgid "button_search"
-#~ msgstr "Suchen"
-
-#~ msgid "cpsdir_label_create ${dirname}"
-#~ msgstr "Erstelle in ${dirname}"
-
-#~ msgid "cpsdir_label_edit"
-#~ msgstr "Bearbeiten"
-
-#~ msgid "cpsdir_label_search"
-#~ msgstr "Suche"
-
-#~ msgid "cpsdir_label_view"
-#~ msgstr "Ansehen"
-
-#~ msgid "button_delete"
-#~ msgstr "Löschen"

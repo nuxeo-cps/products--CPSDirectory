@@ -128,4 +128,3 @@ msgstr "Book - Chapter"
 
 msgid "portal_type_Chapter_description"
 msgstr "A Chapter contain Pages"
-

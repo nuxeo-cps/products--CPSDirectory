@@ -72,7 +72,8 @@ msgstr "Voir l'entrée"
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "Il y a trop de résultats pour votre requête, merci de préciser votre requête."
+msgstr ""
+"Il y a trop de résultats pour votre requête, merci de préciser votre requête."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -150,4 +151,3 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Une entré existe déjà avec le même identifiant"
-

@@ -54,16 +54,6 @@ msgstr "Resultados de la búsqueda"
 msgid "cpsdir_label_search_entry"
 msgstr "Buscar una entrada"
 
-#    <b>cpsdir_label_upto_directories</b>
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#, fuzzy
-msgid "cpsdir_label_upto_directories"
-msgstr "Lista de los directorios"
-
 #    <span />
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
@@ -85,17 +75,6 @@ msgstr ""
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#    <span condition="widget/is_i18n" content="widget/label_edit">label</span>
-#    <span condition="widget/is_i18n" content="widget/label">label</span>
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-#, fuzzy
-msgid "label"
-msgstr "etiqueta"
 
 #    <span />
 #.   <span />
@@ -137,30 +116,8 @@ msgstr "Nombre completo"
 msgid "cpsdir_label_delete_entry"
 msgstr "Suprimir la entrada"
 
-#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#, fuzzy
-msgid "cpsdir_help_homeless"
-msgstr "Resultados de la búsqueda"
-
-#    <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#, fuzzy
-msgid "cpsdir_label_homeless"
-msgstr "Resultados de la búsqueda"
-
-#, fuzzy
-msgid "label_roles_Manager"
-msgstr "Grupo(s)"
-
-#, fuzzy
-msgid "label_roles_Member"
-msgstr "Miembros"
-
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr ""
-
-#, fuzzy
-#~ msgid "label_roles"
-#~ msgstr "Grupo(s)"

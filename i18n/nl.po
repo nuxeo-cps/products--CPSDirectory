@@ -45,12 +45,6 @@ msgstr "Wijzig item"
 msgid "cpsdir_label_results"
 msgstr "Resultaten"
 
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#, fuzzy
-msgid "cpsdir_label_search_entry"
-msgstr "Zoeken"
-
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -79,15 +73,6 @@ msgstr ""
 msgid "id"
 msgstr ""
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-#, fuzzy
-msgid "label"
-msgstr "Rollen"
-
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
@@ -106,10 +91,6 @@ msgstr "Item aangemaakt"
 msgid "label_groups"
 msgstr "Groepen"
 
-#, fuzzy
-msgid "label_subgroups"
-msgstr "Groepen"
-
 msgid "label_members"
 msgstr "Leden"
 
@@ -122,73 +103,8 @@ msgstr "Achternaam"
 msgid "label_full_name"
 msgstr "Volledige naam"
 
-#, fuzzy
-msgid "cpsdir_label_delete_entry"
-msgstr "Maak een nieuw item aan"
-
-#, fuzzy
-msgid "cpsdir_help_homeless"
-msgstr "Resultaten"
-
-#, fuzzy
-msgid "cpsdir_label_homeless"
-msgstr "Resultaten"
-
-#, fuzzy
-msgid "label_roles_Manager"
-msgstr "Rollen"
-
-#, fuzzy
-msgid "label_roles_Member"
-msgstr "Leden"
-
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr ""
-
-#~ msgid "label_roles"
-#~ msgstr "Rollen"
-
-#~ msgid "button_edit"
-#~ msgstr "Wijzig"
-
-#, fuzzy
-#~ msgid "button_create"
-#~ msgstr "Maak een nieuw item aan"
-
-#, fuzzy
-#~ msgid "button_update"
-#~ msgstr "Wijzig"
-
-#, fuzzy
-#~ msgid "button_back"
-#~ msgstr "Wijzig"
-
-#, fuzzy
-#~ msgid "button_change"
-#~ msgstr "Wijzig"
-
-#, fuzzy
-#~ msgid "button_search"
-#~ msgstr "Wijzig"
-
-#, fuzzy
-#~ msgid "cpsdir_label_create ${dirname}"
-#~ msgstr "Maak een nieuw item aan"
-
-#~ msgid "cpsdir_label_edit"
-#~ msgstr "Wijzig"
-
-#~ msgid "cpsdir_label_search"
-#~ msgstr "Zoeken"
-
-#~ msgid "cpsdir_label_view"
-#~ msgstr "Weergave"
-
-#~ msgid "label_create_entry"
-#~ msgstr "Maak een item aan"
-
-#~ msgid "label_results"
-#~ msgstr "Resultaten"

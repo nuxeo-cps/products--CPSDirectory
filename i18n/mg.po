@@ -73,7 +73,9 @@ msgstr "Jerena"
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "Betsaka loatra ny valin'ny fangatahanao, Miangavy anao mba hamerina mazava tsara ny tena fangatahanao."
+msgstr ""
+"Betsaka loatra ny valin'ny fangatahanao, Miangavy anao mba hamerina mazava "
+"tsara ny tena fangatahanao."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -130,7 +132,10 @@ msgid "cpsdir_label_delete_entry"
 msgstr "Mamono"
 
 msgid "cpsdir_help_homeless"
-msgstr "Ny faritra manokana dia manome lalana anao hiditra amin'ny:<br/>- faritra manokana iray <br />- diary manokana iray<br />- ireo favoris<br />- fahafahana manakely/manidy ireo boaty"
+msgstr ""
+"Ny faritra manokana dia manome lalana anao hiditra amin'ny:<br/>- faritra "
+"manokana iray <br />- diary manokana iray<br />- ireo favoris<br />- "
+"fahafahana manakely/manidy ireo boaty"
 
 msgid "cpsdir_label_homeless"
 msgstr "Fampiasana faritra manokana"
@@ -142,8 +147,9 @@ msgid "label_roles_Member"
 msgstr "Mpikambana"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Tandremo fa tsy maty izy teo! Mba ho voavono izy dia tsy maintsy vonoinao aloha izay rehetra ao ambaniny (na zanany)"
+msgstr ""
+"Tandremo fa tsy maty izy teo! Mba ho voavono izy dia tsy maintsy vonoinao "
+"aloha izay rehetra ao ambaniny (na zanany)"
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Efa misy ato io sady mitovy ny identifiant-ny"
-

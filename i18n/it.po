@@ -22,45 +22,38 @@ msgstr ""
 "X-Poedit-Country: ITALY\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Errore"
 
 #.   <p>Choose a directory</p>
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Scegli un elenco:"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crea un elemento"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica l'elemento"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Risultati della ricerca"
 
 #.   <span condition="python: ok != 'results'" />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Cerca un elemento"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
@@ -68,46 +61,41 @@ msgid "cpsdir_label_upto_directories"
 msgstr "Ritorna agli elenchi"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizza l'elemento"
 
 #.   <p />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "La ricerca restituisce troppi risultati riferiti alla tua richiesta.<br> Ridefinisci la tua interrogazione."
+msgstr ""
+"La ricerca restituisce troppi risultati riferiti alla tua richiesta.<br> "
+"Ridefinisci la tua interrogazione."
 
 #.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr ""
 
 #.   <th content="field/title">id</th>
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "Identificatore"
 
 #.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#: from
-#: ../skins/cps_directory/layout_dir_edit.pt
+#: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
 msgstr "etichetta"
 
 #.   <span />
-#: from
-#: ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
 msgstr "Nessun risultato."
 
 #.   <p condition="not:directories">
-#: from
-#: ../skins/cps_directory/cpsdirectory_view.pt
+#: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Nessun elenco disponibile."
 
@@ -136,7 +124,11 @@ msgid "cpsdir_label_delete_entry"
 msgstr "Elimina l'elemento"
 
 msgid "cpsdir_help_homeless"
-msgstr "L'ambiente personale consente di accedere:<br />- all'ambiente di lavoro privato<br />- all'agenda personale<br />- alla cartella dei favoriti (bookmark)<br />- ed, infine, consente di chiudere o ridurre ad icona le caselle del portale.<br />"
+msgstr ""
+"L'ambiente personale consente di accedere:<br />- all'ambiente di lavoro "
+"privato<br />- all'agenda personale<br />- alla cartella dei favoriti "
+"(bookmark)<br />- ed, infine, consente di chiudere o ridurre ad icona le "
+"caselle del portale.<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Abilita ambiente personale"
@@ -148,8 +140,9 @@ msgid "label_roles_Member"
 msgstr "Collaboratore"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Attenzione, l'elemento non può essere eliminato.<br>Per effettuare questa azione devi prima cancellare tutti i sotto-elementi."
+msgstr ""
+"Attenzione, l'elemento non può essere eliminato.<br>Per effettuare questa "
+"azione devi prima cancellare tutti i sotto-elementi."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Attenzione, un oggetto con lo stesso identificativo è già presente."
-
