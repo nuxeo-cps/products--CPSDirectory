@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.1.0 [R1 build 2003/11/26-16:08 by regebro]
+
+New features:
+~~~~~~~~~~~~~
+- Translatability in skins. Translations for English and French (incomplete).
+
+Bug fixes:
+~~~~~~~~~~
+- It was not possible to change the groups on members with 
+  UserFolderWithGroups or PluggableUserFolder.
+- Only Managers could check if they had edit rights on an Entry.
+- LDAPDirectory did not use ObjectClass settings when searching.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Added unit tests for members, groups, roles
+- Allow restriction of LDAP searches to specific objectClasses.
+
+*******************************************
 ** CPSDirectory V1.0.0 [R1 build 2003/11/19-20:55 by guillaum]
 
 ZODB Requires:

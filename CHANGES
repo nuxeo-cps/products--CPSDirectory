@@ -4,15 +4,12 @@ ZODB Requires:
 
 New features:
 ~~~~~~~~~~~~~
-- Translatability in skins. Translations for English and French (incomplete).
+-
 
 Bug fixes:
 ~~~~~~~~~~
-- It was not possible to change the groups on members with 
-  UserFolderWithGroups or PluggableUserFolder.
-- Only Managers could check if they had edit rights on an Entry.
-- LDAPDirectory did not use ObjectClass settings when searching.
+-
+
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Added unit tests for members, groups, roles
-- Allow restriction of LDAP searches to specific objectClasses.
+-
