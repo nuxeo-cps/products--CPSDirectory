@@ -117,12 +117,12 @@ class BaseDirectory(SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layoutob = self._getLayout(self.layout)
-        layoutob.prepareLayoutWidgets(ds)
+        layout = self._getLayout(self.layout)
+        layout.prepareLayoutWidgets(ds)
         mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
-        layoutdata = layoutob.computeLayout(ds, mode_chooser)
-        rendered = self._renderLayoutStyle(layout_mode, layout=layoutdata,
-                                           datastructure=ds, **kw)
+        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
+        rendered = self._renderLayout(layout_structure, ds,
+                                      layout_mode=layout_mode, **kw)
         return rendered, ds
 
     # XXX security ?
@@ -147,25 +147,27 @@ class BaseDirectory(SimpleItemWithProperties):
         """
         dm = self._getDataModel(id)
         ds = DataStructure(datamodel=dm)
-        layoutob = self._getLayout(self.layout)
-        layoutob.prepareLayoutWidgets(ds)
+        layout = self._getLayout(self.layout)
+        layout.prepareLayoutWidgets(ds)
         if request is None:
             validate = 0
         else:
             validate = 1
             ds.updateFromMapping(request.form)
-        mode_chooser = layoutob.getStandardWidgetModeChooser(layout_mode, ds)
-        layoutdata = layoutob.computeLayout(ds, mode_chooser)
+        mode_chooser = layout.getStandardWidgetModeChooser(layout_mode, ds)
+        layout_structure = layout.computeLayoutStructure(ds, mode_chooser)
         if validate:
-            ok = layoutob.validateLayout(layoutdata, ds)
+            ok = layout.validateLayoutStructure(layout_structure, ds,
+                                                layout_mode=layout_mode, **kw)
             if ok:
                 dm._commit()
             else:
                 layout_mode = layout_mode_err
         else:
             ok = 1
-        rendered = self._renderLayoutStyle(layout_mode, layout=layoutdata,
-                                           datastructure=ds, ok=ok, **kw)
+        rendered = self._renderLayout(layout_structure, ds,
+                                      layout_mode=layout_mode, ok=ok, **kw)
+
         return rendered, ok, ds
 
     #
@@ -224,16 +226,20 @@ class BaseDirectory(SimpleItemWithProperties):
                              % (layout_id, self.getId()))
         return layout
 
-    security.declarePrivate('_renderLayoutStyle')
-    def _renderLayoutStyle(self, layout_mode, **kw):
+    security.declarePrivate('_renderLayout')
+    def _renderLayout(self, layout_structure, datastructure, **kw):
         """Render a layout according to the defined style.
 
         Uses the directory as a rendering context.
         """
-        layout_meth = self.layout_style_prefix + layout_mode
-        layout_style = getattr(self, layout_meth, None)
-        if layout_style is None:
-            raise RuntimeError("No layout method '%s'" % layout_meth)
-        return layout_style(layout_mode=layout_mode, **kw)
+        layout_mode = kw['layout_mode']
+        layout = layout_structure['layout']
+        # Render layout structure.
+        layout.renderLayoutStructure(layout_structure, datastructure, **kw)
+        # Apply layout style.
+        context = self
+        rendered = layout.renderLayoutStyle(layout_structure, datastructure,
+                                            context, **kw)
+        return rendered
 
 InitializeClass(BaseDirectory)

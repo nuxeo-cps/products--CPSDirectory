@@ -12,7 +12,6 @@ members_directory = {
     'data': {
         'schema': 'members',
         'layout': 'members',
-        'layout_style_prefix': 'layout_dir_',
         'id_field': 'id',
         'password_field': 'password',
         'roles_field': 'roles',
@@ -29,7 +28,6 @@ roles_directory = {
     'data': {
         'schema': 'roles',
         'layout': 'roles',
-        'layout_style_prefix': 'layout_dir_',
         'role_field': 'role',
         'members_field': 'members',
         'title_field': 'role',
@@ -44,7 +42,6 @@ groups_directory = {
     'data': {
         'schema': 'groups',
         'layout': 'groups',
-        'layout_style_prefix': 'layout_dir_',
         'group_field': 'group',
         'members_field': 'members',
         'title_field': 'group',

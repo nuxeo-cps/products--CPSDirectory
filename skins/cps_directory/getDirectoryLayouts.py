@@ -83,6 +83,7 @@ members_layout = {
         },
     },
     'layout': {
+        'style_prefix': 'layout_dir_',
         'ncols': 1,
         'rows': [
             [{'ncols': 1, 'widget_id': 'id'},
@@ -134,6 +135,7 @@ roles_layout = {
         },
     },
     'layout': {
+        'style_prefix': 'layout_dir_',
         'ncols': 1,
         'rows': [
             [{'ncols': 1, 'widget_id': 'role'},
@@ -179,6 +181,7 @@ groups_layout = {
         },
     },
     'layout': {
+        'style_prefix': 'layout_dir_',
         'ncols': 1,
         'rows': [
             [{'ncols': 1, 'widget_id': 'group'},
