@@ -5,8 +5,8 @@ Get the widget types used for the directories.
 #$Id$
 
 widgets = {
-#    'Directory Reference Widget': {
-#        'type': 'CPS Directory Reference Widget Type',
+#    'Directory Widget': {
+#        'type': 'CPS Directory Widget Type',
 #        'data': {},
 #        },
     }

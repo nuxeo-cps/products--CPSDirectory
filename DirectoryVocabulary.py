@@ -16,7 +16,7 @@
 # 02111-1307, USA.
 #
 # $Id$
-"""DirectoryReferenceVocabulary.
+"""DirectoryVocabulary.
 
 Vocabulary referencing a directory.
 """
@@ -32,13 +32,13 @@ from Products.CMFCore.utils import SimpleItemWithProperties
 from Products.CPSSchemas.Vocabulary import CPSVocabulary
 
 
-class DirectoryReferenceVocabulary(SimpleItemWithProperties):
-    """Directory Reference Vocabulary
+class DirectoryVocabulary(SimpleItemWithProperties):
+    """Directory Vocabulary
 
     This vocabulary is built by listing all the entries of a directory.
     """
 
-    meta_type = "CPS Directory Reference Vocabulary"
+    meta_type = "CPS Directory Vocabulary"
 
     security = ClassSecurityInfo()
 
@@ -94,3 +94,5 @@ class DirectoryReferenceVocabulary(SimpleItemWithProperties):
     def has_key(self, key):
         # XXX dummy
         return key in self.keys()
+
+InitializeClass(DirectoryVocabulary)

@@ -31,7 +31,7 @@ from MembersDirectory import MembersDirectory
 from RolesDirectory import RolesDirectory
 from GroupsDirectory import GroupsDirectory
 
-from DirectoryReferenceVocabulary import DirectoryReferenceVocabulary
+from DirectoryVocabulary import DirectoryVocabulary
 
 
 tools = (DirectoryTool.DirectoryTool,
@@ -49,4 +49,4 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MembersDirectory)
     DirectoryTypeRegistry.register(RolesDirectory)
     DirectoryTypeRegistry.register(GroupsDirectory)
-    VocabularyTypeRegistry.register(DirectoryReferenceVocabulary)
+    VocabularyTypeRegistry.register(DirectoryVocabulary)
