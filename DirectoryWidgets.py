@@ -178,6 +178,8 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
          'label': 'Entry type'},
         {'id': 'skin_name', 'type': 'string', 'mode': 'w',
          'label': 'Skin name'},
+        {'id': 'separator', 'type': 'string', 'mode': 'w',
+         'label': 'display separator in view mode' },
         {'id': 'popup_mode', 'type': 'selection', 'mode': 'w',
          'select_variable': 'all_popup_modes',
          'label': 'browse or search'},
@@ -189,6 +191,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
     popup_mode = all_popup_modes[0]
+    separator = ', '
 
     def validate(self, datastructure, **kw):
         """Validate datastructure and update datamodel."""
@@ -231,18 +234,22 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             raise RuntimeError("Unknown Render Method %s for widget type %s"
                                % (render_method, self.getId()))
         value = datastructure[self.getWidgetId()]
-
+        if value:
+            # sorting here because some storage (LDAP user group)
+            # doesn't store ordered list
+            value = list(value)
+            value.sort()
         if mode == 'view':
             render = ''
             if value:
                 res = [self.getTagForValue(v) for v in value]
-                render = ', '.join(res)
+                render = self.separator.join(res)
             return meth(mode=mode, value=value, render=render)
         elif mode == 'edit':
             portal_directories = getToolByName(self, 'portal_directories')
             dir = getattr(portal_directories, self.directory)
             display_attr = dir.title_field
-            ids_and_titles = [(v,self.getIdAndTitle(v)[1]) for v in value]
+            ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]
             return meth(mode=mode, values=value, ids_and_titles=ids_and_titles,
                         display_attr=display_attr)
 
