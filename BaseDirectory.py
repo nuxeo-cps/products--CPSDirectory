@@ -27,6 +27,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
+from Products.CPSCore.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
@@ -34,7 +35,7 @@ from Products.CPSSchemas.Field import ReadAccessError
 from Products.CPSSchemas.Field import WriteAccessError
 
 
-class BaseDirectory(SimpleItemWithProperties):
+class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     """Base Directory.
 
     A directory holds information about entries and how to access and
@@ -45,6 +46,7 @@ class BaseDirectory(SimpleItemWithProperties):
 
     security = ClassSecurityInfo()
 
+    _propertiesBaseClass = SimpleItemWithProperties
     _properties = SimpleItemWithProperties._properties + (
         {'id': 'schema', 'type': 'string', 'mode': 'w',
          'label': "Schema"},
