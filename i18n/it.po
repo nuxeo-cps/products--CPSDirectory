@@ -1,0 +1,171 @@
+# Gettext Message File for default.
+# Paolo Dina <paolo@php3.it>, 2004.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: it\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-06 08:45default\n"
+"PO-Revision-Date: 2004-01-07 12:22+0100\n"
+"Last-Translator: Paolo Dina <paolo@php3.it>\n"
+"Language-Team: Italian <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#.   <h1>
+#.         Directories
+#.       </h1>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "Directories"
+msgstr "Elenchi"
+
+#.   <em content="err" style="color:red">Error</em>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+msgid "Error"
+msgstr "Errore"
+
+#.   <a attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" content="dir/title_or_id" href="">
+#.                 Title
+#.               </a>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "Title"
+msgstr "Titolo"
+
+#.   <input onclick="javascript:history.back()" class="context" type="button" value="button_back">
+#.   </input>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "button_back"
+msgstr "Indietro"
+
+#.   <input condition="not:creation" value="button_change" class="standalone" name="cpsdirectory_entry_edit_form:method" type="submit">
+#.       <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
+#.       </input></input>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "button_change"
+msgstr "Modifica"
+
+#.   <input condition="creation" value="button_create" class="standalone" name="cpsdirectory_entry_create_form:method" type="submit">
+#.       </input>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "button_create"
+msgstr "Crea"
+
+#.   <input condition="dir/isDeleteEntryAllowed" attributes="onclick python:'return window.confirm(\'%s\')' %
+#.               (here.Localizer.default('description_confirm_delete'), )" value="button_delete" class="destructive" name="cpsdirectory_entry_delete:method" type="submit">
+#.         </input>
+#: from ../skins/cps_directory/layout_dir_view.pt
+msgid "button_delete"
+msgstr "Elimina"
+
+#.   <input value="button_search" class="standalone" name="cpsdirectory_search_button" type="submit" />
+#: from ../skins/cps_directory/layout_dir_search.pt
+msgid "button_search"
+msgstr "Cerca"
+
+#.   <p>Choose a directory</p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "choose_a_directory"
+msgstr "Scegli un elenco"
+
+#.   <span>cpsdir_label_create ${dirname (tal content="dirtitle")}</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_create ${dirname}"
+msgstr "Crea in ${dirname}"
+
+#.   <a condition="python: dir.isCreateEntryAllowed()" attributes="href
+#.              string:${base_url}cpsdirectory_entry_create_form?dirname=$dirname">cpsdir_label_create_entry</a>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_create_entry"
+msgstr "Crea un nuovo elemento"
+
+#.   <span>cpsdir_label_edit</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_edit"
+msgstr "Modifica "
+
+#.   <a attributes="href
+#.           string:${base_url}cpsdirectory_entry_edit_form?dirname=$dirname&id=$id">cpsdir_label_edit_entry</a>
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_edit_entry"
+msgstr "Modifica l'elemento"
+
+#.   <span condition="python:ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Risultati della ricerca "
+
+#.   <span condition="python:ok != 'results'">cpsdir_label_search</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_search"
+msgstr "Cerca "
+
+#.   <a attributes="href
+#.              string:${base_url}cpsdirectory_entry_search_form?dirname=$dirname">cpsdir_label_search_entry</a>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_search_entry"
+msgstr "Cerca un elemento"
+
+#.   <b>cpsdir_label_upto_directories</b>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_upto_directories"
+msgstr "Risali agli elenchi"
+
+#.   <span>cpsdir_label_view</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view"
+msgstr "Visualizza"
+
+#.   <a attributes="href
+#.           string:${base_url}cpsdirectory_entry_view?dirname=$dirname&id=$id">cpsdir_label_view_entry</a>
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_view_entry"
+msgstr "Visualizza l'elemento"
+
+#.   <th>id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "id"
+msgstr "id"
+
+#.   <span condition="widget/is_i18n" content="widget/label_edit">label</span>
+#.   <span condition="widget/is_i18n" content="widget/label">label</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+#: ../skins/cps_directory/layout_dir_view.pt
+msgid "label"
+msgstr "etichetta"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_no_results"
+msgstr "Nessun risultato"
+
+#.   <p condition="not:directories">
+#.         No directory available
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+msgid "no_dir_available"
+msgstr "Nessun elenco disponibile"
+
+msgid "button_edit"
+msgstr "Modifica"
+
+msgid "psm_entry_created"
+msgstr "Crea nuovo elemento"
+
+msgid "label_members"
+msgstr "Collaboratori"
+
+msgid "label_first_name"
+msgstr "Nome"
+
+msgid "label_last_name"
+msgstr "Cognome"
+
+msgid "label_full_name"
+msgstr "Nome completo"
