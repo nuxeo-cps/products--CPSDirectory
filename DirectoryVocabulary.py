@@ -54,15 +54,12 @@ class DirectoryVocabulary(SimpleItemWithProperties):
          'label':'Description'},
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label':'Directory'},
-        {'id': 'use_dn', 'type': 'boolean', 'mode': 'w',
-         'label':'Use DN as key (LDAP)'},
         )
 
     title = ''
     title_msgid = ''
     description = ''
     directory = ''
-    use_dn = 0
 
     def __init__(self, id, **kw):
         self.id = id
@@ -76,10 +73,7 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     security.declareProtected(View, '__getitem__')
     def __getitem__(self, key):
         dir = self._getDirectory()
-        if self.use_dn:
-            return dir.getEntryByDN(key)[dir.title_field]
-        else:
-            return dir.getEntry(key)[dir.title_field]
+        return dir.getEntry(key)[dir.title_field]
 
     security.declareProtected(View, 'get')
     def get(self, key, default=None):
@@ -96,18 +90,12 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     security.declareProtected(View, 'keys')
     def keys(self):
         dir = self._getDirectory()
-        if self.use_dn:
-            return dir.listEntryDNs()
-        else:
-            return dir.listEntryIds()
+        return dir.listEntryIds()
 
     security.declareProtected(View, 'items')
     def items(self):
         dir = self._getDirectory()
-        if self.use_dn:
-            return dir.listEntryDNsAndTitles()
-        else:
-            return dir.listEntryIdsAndTitles()
+        return dir.listEntryIdsAndTitles()
 
     security.declareProtected(View, 'values')
     def values(self):
@@ -116,9 +104,6 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     security.declareProtected(View, 'has_key')
     def has_key(self, key):
         dir = self._getDirectory()
-        if self.use_dn:
-            return dir.hasEntryByDN(key)
-        else:
-            return dir.hasEntry(key)
+        return dir.hasEntry(key)
 
 InitializeClass(DirectoryVocabulary)
