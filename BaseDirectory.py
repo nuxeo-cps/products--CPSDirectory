@@ -84,27 +84,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     acl_entry_create_roles = ['Manager']
     acl_entry_delete_roles = ['Manager']
 
+    _properties_post_process_split = (
+        ('acl_access_roles_str', 'acl_access_roles', ',; '),
+        ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
+        ('acl_entry_delete_roles_str', 'acl_entry_delete_roles', ',; '),
+        )
+
     def __init__(self, id, **kw):
         self.id = id
-
-    def _postProcessProperties(self):
-        """Post-processing after properties change."""
-        # Split on ',' or ';' or ' '.
-        for attr_str, attr, seps in (
-            ('acl_access_roles_str', 'acl_access_roles', ',; '),
-            ('acl_entry_create_roles_str', 'acl_entry_create_roles', ',; '),
-            ('acl_entry_delete_roles_str', 'acl_entry_delete_roles', ',; '),
-            ):
-            v = [getattr(self, attr_str)]
-            for sep in seps:
-                vv = []
-                for s in v:
-                    vv.extend(s.split(sep))
-                v = vv
-            v = [s.strip() for s in v]
-            v = filter(None, v)
-            setattr(self, attr_str, '; '.join(v))
-            setattr(self, attr, v)
 
     #
     # Usage API
