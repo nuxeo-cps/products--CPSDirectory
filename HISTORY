@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.12.2 [R1 build 2004/05/12-17:25 by guillaum]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- Fixed UTF8 conversion.
+- Corrected typo in isAuthenticating in MetaDirectory.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.12.1 [R1 build 2004/05/10-17:14 by guillaum]
 
 Requires:

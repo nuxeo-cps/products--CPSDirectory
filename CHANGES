@@ -6,8 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- Fixed UTF8 conversion.
-- Corrected typo in isAuthenticating in MetaDirectory.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
