@@ -1,0 +1,30 @@
+<tal:block define="mode options/mode;
+                   value options/value;
+                   html_id here/getHtmlWidgetId;">
+<tal:block condition="python: mode == 'view'" tal:content="options/render" />
+<tal:block condition="python: mode == 'edit'"
+  tal:define="display_attr options/display_attr;
+              title options/title;
+              directory here/directory;
+              vocabulary here/vocabulary;
+ ">
+<div tal:attributes="id html_id">
+  <input type="hidden"
+    tal:attributes="name html_id;value value;">
+  <span tal:content="title" />
+<script type="text/javascript">
+  <!--
+     function popup_directoryentry(destId, dirName, dispAttr, vocabulary, title) {
+       var args
+       args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
+       popup = window.open('popup_directoryentry_form'+args, 'DN Finder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
+       if(!popup.opener)
+         popup.opener = window;
+       return false;
+   }
+  //-->
+</script></div>
+<button type="button"
+  tal:attributes="onclick string:popup_directoryentry('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', '${here/label_edit}');">...</button><br>
+</tal:block>
+</tal:block>

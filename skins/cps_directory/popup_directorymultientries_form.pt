@@ -1,0 +1,44 @@
+<tal:block define="emptybody python:1">
+<metal:block use-macro="here/main_template/macros/master">
+<metal:block fill-slot="body"
+  tal:define="root_uid request/root_uid;
+              res python:here.getNavigation(finder='ldap',
+                root_uid=root_uid, REQUEST=request);
+              type string:ldap;">
+<div style="float:right">
+<button onclick="window.close()">Fermer</button>
+</div>
+  <metal:block use-macro="here/navigation_lib/macros/multi_select_navigation">
+    <metal:block fill-slot="action">
+
+ <script type="text/javascript"
+  tal:content='structure string:
+  <!--
+function updateParent() {
+  html = document.getElementById("divselection").innerHTML;
+  parentinput = opener.document.getElementById("$input_id");
+  parentinput.innerHTML = html;
+  self.close();
+}
+  -->' />
+  <div id="divselection" style="display:none">
+  <tal:block repeat="item selection">
+    <div>
+      <input type="checkbox" checked="checked" class="noborder"
+        tal:attributes="name string:${input_id}:list;value item/uid;">
+      <tal:block replace="item/title" />
+    </div>
+  </tal:block>
+  </div>
+
+   <input type="submit" class="standalone" value="button_update"
+    onclick="updateParent();" i18n:attributes="value">
+    </metal:block>
+  </metal:block>
+</metal:block>
+</metal:block>
+</tal:block>
+
+
+
+
