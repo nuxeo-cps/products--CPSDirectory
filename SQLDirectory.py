@@ -19,6 +19,10 @@
 """SQLDirectory
 
 This is a directory backed by a table in an SQL database.
+
+XXX TODO:
+- creation
+- deletion
 """
 
 from zLOG import LOG, DEBUG, TRACE
@@ -27,6 +31,7 @@ import sys
 from Acquisition import aq_base, aq_parent, aq_inner
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from DateTime.DateTime import DateTime
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
@@ -117,6 +122,9 @@ class SQLDirectory(BaseDirectory):
             return quoter(value)
         elif isinstance(value, (int, long)):
             return str(value)
+        elif isinstance(value, DateTime):
+            # XXX probably depends on SQL dialect
+            return "'"+value.ISO()+"'"
         else:
             LOG('getSQLValue', DEBUG, 'Unknown conversion for %s' % `value`)
             raise ValueError(value)
@@ -362,14 +370,6 @@ class SQLDirectory(BaseDirectory):
 
         LOG('_execute', TRACE, "Result:\n%s" % `res`)
         return res
-        """
-        Gadfly:
-        ([{'width': None, 'null': None, 'type': 's', 'name': 'GIVENNAME'},
-          {'width': None, 'null': None, 'type': 's', 'name': 'UID'},
-          {'width': None, 'null': None, 'type': 's', 'name': 'SN'}],
-         [('bar', 1, 'foo'),
-          ('Lemoche', 2, 'Bob')])
-        """
 
     def _getEntryFromSQL(self, id, field_ids, password=None):
         """Get SQL entry.
@@ -411,6 +411,42 @@ class SQLDirectory(BaseDirectory):
             # XXX conversions !
         return entry
 
+    def _convertDataToQuotedSQL(self, data):
+        """Convert a data mapping into a correct quoted SQL one.
+
+        Skips the id field.
+        Uses the schema to decide how conversion is done.
+        """
+        quoter = self._getSQLQuoter()
+        sql_data = {}
+        for field_id, field in self._getSchemas()[0].items(): # XXX
+            if field.write_ignore_storage:
+                continue
+            if not data.has_key(field_id):
+                continue
+            if field_id == self.id_field:
+                continue
+            value = data[field_id]
+            sql_value = self.getSQLValue(value, quoter=quoter)
+            sql_data[field_id] = sql_value
+        return sql_data
+
+    def _updateDataInSQL(self, id, sql_data):
+        """Update an SQL entry.
+
+        sql_data contains quoted sql values.
+        """
+        if not sql_data:
+            return
+        sets = ["%s = %s" % (key, value) for key, value in sql_data.items()]
+        sql = "UPDATE %(table)s SET %(sets)s WHERE %(idf)s = %(id)s" % {
+            'table': self.sql_table,
+            'sets': ', '.join(sets),
+            'idf': self.getSQLField(self.id_field),
+            'id': self.getSQLValue(id),
+            }
+        self._execute(sql)
+
 InitializeClass(SQLDirectory)
 
 class SQLStorageAdapter(BaseStorageAdapter):
@@ -448,8 +484,9 @@ class SQLStorageAdapter(BaseStorageAdapter):
     def _setData(self, data):
         """Set data to the entry, from a mapping."""
         data = self._setDataDoProcess(data)
-
-        raise NotImplementedError
+        dir = self._dir
+        sql_data = dir._convertDataToQuotedSQL(data)
+        dir._updateDataInSQL(self._id, sql_data)
 
     def _getContentUrl(self, entry_id, field_id):
         raise NotImplementedError
