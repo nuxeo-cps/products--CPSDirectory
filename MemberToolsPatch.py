@@ -280,7 +280,15 @@ def searchForMembers(self, query={}, props=None, options={}, **kw):
 # Existing APIs made more generic
 #
 
+# MemberDataTool
+
+memberdatatool_methods = (
+    searchForMembers,
+    )
+
 # MemberData
+
+from ZPublisher.Converters import type_converters
 
 def getProperty(self, id, default=_marker):
     # CPS: Try to get the property directly from the user object.
@@ -321,14 +329,14 @@ memberdata_methods = (
 # Patching
 #
 
-# XXX security!
+for meth in memberdatatool_methods:
+    setattr(MemberDataTool, meth.__name__, meth)
 
 for meth in memberdata_methods:
-    cls = MemberData
     name = meth.__name__
     oldname = '_old_cps_'+name
-    if not hasattr(cls, oldname):
-        setattr(cls, oldname, getattr(cls, name))
+    if not hasattr(MemberData, oldname):
+        setattr(MemberData, oldname, getattr(MemberData, name))
     setattr(MemberData, name, meth)
 
 LOG('MemberToolsPatch', TRACE, 'Patching Member Tools')
