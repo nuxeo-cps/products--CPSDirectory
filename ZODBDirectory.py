@@ -171,7 +171,8 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             # Cleanup object for minimal memory usage.
             try:
                 delattr(ob, '__ac_local_roles__')
-            except KeyError:
+            except (AttributeError, KeyError):
+                # ExtensionClasses raise KeyError... duh.
                 pass
         self.editEntry(entry)
         if not self.isUserModified():
