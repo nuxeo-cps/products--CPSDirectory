@@ -1,6 +1,6 @@
 <tal:block define="mode options/mode;
                    values options/values;
-                   html_id here/getHtmlWidgetId;">
+                   html_id here/getHtmlWidgetId">
 <tal:block condition="python: mode == 'view'"
   tal:content="structure options/render" />
 <tal:block condition="python: mode == 'edit'">
@@ -38,7 +38,7 @@
   //-->
 </script>
 <button type="button"
-  tal:attributes="onclick string:popup_directorymultientries('${html_id}', '${directory}', '${display_attr}', '${vocabulary}', 'DN Navigation', '${here/popup_mode}');">...</button><br />
+  tal:attributes="onclick string:popup_directorymultientries('${html_id}','${directory}','${display_attr}', '${vocabulary}', '${here/label_edit}', '${here/popup_mode}');">...</button><br />
 </tal:block>
 </tal:block>
 </tal:block>
