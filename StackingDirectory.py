@@ -36,9 +36,6 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
 
-_marker = [] # XXX used?
-
-
 class StackingDirectory(BaseDirectory):
     """Stacking Directory
 
