@@ -1,8 +1,8 @@
-##parameters=
+##parameters=loadcustom=1
+#$Id$
 """
 Get the directories used.
 """
-#$Id$
 
 #########################################################
 # members
@@ -64,7 +64,8 @@ directories = {
     'groups': groups_directory,
     }
 
-cdirectories = context.getCustomDirectories()
-directories.update(cdirectories)
+if loadcustom:
+    cdirectories = context.getCustomDirectories()
+    directories.update(cdirectories)
 
 return directories
