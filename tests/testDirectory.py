@@ -78,7 +78,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         entry = members.getEntry(member_id)
         self.assertEquals(entry, {'password': '__NO_PASSWORD__', 
             'id': member_id, 'roles': [], 'givenName': '', 'groups': (), 
-            'sn': '', 'email': '', 'fullname': ' '})
+            'sn': '', 'email': '', 'fullname': ' ', 'confirm': ''})
 
         # XXX: this shouldn't succeed
         #self.assertRaises(ValueError, members.createEntry, 
