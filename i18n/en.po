@@ -1,70 +1,144 @@
 # Gettext Message File for CPSDirectory.
+
 #
+
 #
+
 msgid ""
+
 msgstr ""
+
 "Project-Id-Version: en\n"
+
 "Report-Msgid-Bugs-To: \n"
+
 "Last-Translator: Lennart Regebro <regebro@nuxeo.com>\n"
+
 "Language-Team: Nuxeo <info@nuxeo.com>\n"
+
 "MIME-Version: 1.0\n"
+
 "Content-Type: text/plain; charset=UTF-8\n"
+
 "Content-Transfer-Encoding: 8bit\n"
 
+
+
 msgid "choose_a_directory"
+
 msgstr "Choose a directory"
 
+
+
 msgid "button_edit"
+
 msgstr "Edit"
+
+
 
 msgid "button_create_entry"
+
 msgstr "Create a new entry"
 
+
+
 msgid "label_create_entry"
+
 msgstr "Create an entry"
 
+
+
 msgid "psm_entry_created"
+
 msgstr "Entry created"
 
+
+
 msgid "label_groups"
+
 msgstr "Groups"
 
+
+
 msgid "label_members"
+
 msgstr "Members"
 
+
+
 msgid "label_first_name"
+
 msgstr "First Name"
 
+
+
 msgid "label_last_name"
+
 msgstr "Last Name"
 
+
+
 msgid "label_full_name"
+
 msgstr "Full Name"
 
+
+
 msgid "label_no_results"
+
 msgstr "No results."
 
+
+
 msgid "label_results"
+
 msgstr "Results"
 
+
+
 msgid "cpsdir_label_upto_directories"
+
 msgstr "Up to Directories"
 
+
+
 msgid "cpsdir_label_search"
+
 msgstr "Search"
 
+
+
 msgid "cpsdir_label_create_entry"
+
 msgstr "Create New Entry"
 
+
+
 msgid "cpsdir_label_edit_entry"
+
 msgstr "Edit Entry"
 
+
+
 msgid "cpsdir_label_view_entry"
+
 msgstr "View Entry"
 
+
+
 msgid "cpsdir_label_edit"
+
 msgstr "Edit"
 
+
+
 msgid "cpsdir_label_view"
+
 msgstr "View"
+
+
+
+msgid "cpsdir_label_results"
+
+msgstr "Results"
 
