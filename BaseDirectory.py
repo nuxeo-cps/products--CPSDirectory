@@ -586,7 +586,11 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # Get our entry from the members directory.
             mdir = getToolByName(self, 'portal_directories').members
             def getUserEntry(mdir=mdir, user_id=user_id):
-                return mdir._getEntry(user_id)
+                try:
+                    return mdir._getEntry(user_id)
+                except KeyError:
+                    # We're not a member...
+                    return {}
         # Put all the names in the data in the namespace.
         mapping = entry.copy()
         mapping.update({
