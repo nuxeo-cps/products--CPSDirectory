@@ -536,17 +536,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         if validate and ok:
             # Check new entry id does not already exist
-            # XXX should be done by field/schema... XXX
+            # this hack works only if id is not computed by createEntry
+            # XXX Hack, this should be done by field/schema... XXX
             id = dm.data[self.id_field]
             if id and self.hasEntry(id):
                 ok = 0
-                widget_id = self.id_field # XXX hack!
-                ds.setError(widget_id, 'cpsdir_err_entry_already_exists')
+                ds.setError(self.id_field, 'cpsdir_err_entry_already_exists')
 
-        if not validate or not ok:
-            rendered = self._renderLayout(layout_structure, ds,
-                                          layout_mode=layout_mode, ok=ok, **kw)
-        else:
+        if validate and ok:
             # Creation...
             # Compute new id.
             id = dm.data[self.id_field]
@@ -554,19 +551,34 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # XXX
             entry = dm.data.copy() # Need full entry not filtered by ACLs
             self.checkCreateEntryAllowed(id=id, entry=entry)
-            new_id = self.createEntry(entry)
-            if new_id is not None and id != new_id:
-                # new id computed by createEntry
-                id = new_id
-                dm.data[self.id_field] = id
+            try:
+                new_id = self.createEntry(entry)
+            except KeyError, e:
+                msg = str(e)
+                if msg.find('already exists') > 0:
+                    # XXX Hack, this should be done by field/schema... XXX
+                    ok = 0
+                    ds.setError(self.id_field,
+                                'cpsdir_err_entry_already_exists')
+                else:
+                    raise
 
-            # Redirect/render
-            created_func = getattr(self, created_callback, None)
-            if created_func is None:
-                raise ValueError("Unknown created_callback %s" %
-                                 created_callback)
-            rendered = created_func(ds) or ''
+            if ok:
+                if new_id is not None and id != new_id:
+                    # new id computed by createEntry
+                    id = new_id
+                    dm.data[self.id_field] = id
 
+                # Redirect/render
+                created_func = getattr(self, created_callback, None)
+                if created_func is None:
+                    raise ValueError("Unknown created_callback %s" %
+                                     created_callback)
+                rendered = created_func(ds) or ''
+
+        if not validate or not ok:
+            rendered = self._renderLayout(layout_structure, ds,
+                                          layout_mode=layout_mode, ok=ok, **kw)
         return rendered, ok, ds
 
     security.declarePublic('renderSearchDetailed')
