@@ -56,6 +56,10 @@ def match_pattern(pattern, value):
 
 class IndirectDirectory(BaseDirectory):
     """A Directory that just stores ids of entries of other directories.
+
+    An id for an indirect directory is the string of characters
+    <directory>/<id> where <directory> is the id of the directory holding the
+    real entry, and <id> is the id of the real entry within this directory.
     """
 
     meta_type = 'CPS Indirect Directory'
@@ -116,28 +120,14 @@ class IndirectDirectory(BaseDirectory):
         """Does the directory have a given entry?"""
         return id in self.listEntryIds()
 
-    security.declarePublic('getEntry')
-    def getEntry(self, id):
-        """Get entry filtered by acls and processes.
-        """
-        if not id:
-            return None
-        else:
-            directory_id = self._getDirectoryIdForId(id)
-            entry_id = self._getEntryIdForId(id)
-            directory = self._getDirectory(directory_id)
-            if not directory.hasEntry(entry_id):
-                return None
-            else:
-                entry = directory.getEntry(entry_id)
-                # giving to entry the good id...
-                id = entry[directory.id_field]
-                entry[directory.id_field] = self._makeId(directory_id, id)
-                return entry
-
     security.declarePublic('createEntry')
     def createEntry(self, entry):
-        """Create an entry in the directory."""
+        """Create an entry in the directory.
+
+        Create an entry consists in adding the indirect id into the list of
+        objects kept as an attribute in the indirect directory. There is no
+        edition to be done on the entry.
+        """
         self.checkCreateEntryAllowed(entry=entry)
         if entry is not None:
             # entry is supposed to have the good id already...
@@ -149,16 +139,18 @@ class IndirectDirectory(BaseDirectory):
             else:
                 directory = self._getDirectory(directory_id)
                 if directory.hasEntry(entry_id):
-                    object_ids_list = list(self.object_ids)
-                    object_ids_list.append(id)
-                    self.object_ids = tuple(object_ids_list)
+                    self.object_ids = self.object_ids + (id,)
                 else:
                     raise KeyError("Entry '%s' does not exist in directory '%s'"
                                    % (entry_id, directory_id,))
 
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
-        """Delete an entry in the directory."""
+        """Delete an entry in the directory.
+
+        Deleting an entry from the indirect directory consists in removing the
+        indirect id from the list of references.
+        """
         self.checkDeleteEntryAllowed(id=id)
         if not self.hasEntry(id):
             raise KeyError("Entry '%s' does not exist !" % id)
@@ -250,21 +242,17 @@ class IndirectDirectory(BaseDirectory):
         if id is not None:
             entry_id = self._getEntryIdForId(id)
             directory_id = self._getDirectoryIdForId(id)
+            directory = self._getDirectory(directory_id)
         else:
             entry_id = None
-            try:
-                directory_id = self.directory_ids[0]
-            except IndexError:
-                return []
-        directory = self._getDirectory(directory_id)
-        original_adapters = directory._getAdapters(entry_id, search, **kw)
-        adapters = [IndirectStorageAdapter(adapter.getSchema(),
+            directory = None
+
+        adapters = [IndirectStorageAdapter(schema,
                                            id=entry_id,
                                            dir=directory,
                                            indirect_id=id,
-                                           adapter=adapter,
                                            **kw)
-                    for adapter in original_adapters]
+                    for schema in self._getSchemas(search=search)]
         return adapters
 
     security.declarePrivate('_getDirectory')
@@ -316,7 +304,7 @@ class IndirectStorageAdapter(BaseStorageAdapter):
     data.
     """
 
-    def __init__(self, schema, id, dir, indirect_id, adapter, **kw):
+    def __init__(self, schema, id, dir, indirect_id, **kw):
         """Create an Adapter for a schema.
 
         The id passed is the member id within the directory.
@@ -325,25 +313,36 @@ class IndirectStorageAdapter(BaseStorageAdapter):
         self._id = id
         self._dir = dir
         self._indirect_id = indirect_id
-        self._adapter = adapter
         BaseStorageAdapter.__init__(self, schema, **kw)
 
     def getData(self):
         """Get data from an entry, returns a mapping.
 
         Fills default data if the id is None.
-        The mapping comes from the adapter adapted to the entry,
-        but the id is modified to keep the entry id within the indirect
-        directory (keeping the information of the directory that actually
-        holds the entry.
+        The mapping comes from the actual entry kept in the directory it refers
+        to, and this mapping is filtered using fields defined in the indirect
+        directory schemas.
+        The id value is changed so that the id is the indirect id, and not the
+        id of the entry within its directory (keeping the information of the
+        directory that actually holds the entry).
         """
         if self._id is None:
             data = self.getDefaultData()
         else:
-            data = self._adapter.getData()
             dir = self._dir
-            if data.has_key(dir.id_field):
-                data[dir.id_field] = self._indirect_id
+            old_data = dir.getEntry(self._id, default=None)
+            if old_data is None:
+                # KeyError will be catched by getEntry if
+                # a default value can be provided
+                raise KeyError
+            else:
+                data = self.getDefaultData()
+                # filter with fields in indirect schema
+                for field in data.keys():
+                    if old_data.has_key(field):
+                        data[field] = old_data[field]
+                if data.has_key(dir.id_field):
+                    data[dir.id_field] = self._indirect_id
         return data
 
 InitializeClass(IndirectStorageAdapter)
