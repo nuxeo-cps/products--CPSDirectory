@@ -29,14 +29,17 @@
           <button type="button" class="tooltipControl"
             tal:condition="widget/help"
             tal:attributes="onclick python:'toggleFormTooltip(\'%s\')' % tooltip_id;"> ? </button>
-          <div
-            style="background: #ffffe1; border: 1px solid #000000; padding: 0.8em;font-size: 80%; position: absolute; visibility: hidden; zIndex: 1000;"
+          <div style="background: #ffffe1; border: 1px solid #000000;
+                 padding:0.8em;font-size: 80%; position: absolute;
+                 visibility: hidden; zIndex: 1000; text-align:left;"
             tal:condition="widget/help"
             tal:attributes="id tooltip_id;
               onclick python:'showFormTooltip(false, \'%s\')' % tooltip_id;">
-            <span i18n:translate="" tal:condition="widget/is_i18n"
+            <span style="white-space:pre;"
+              i18n:translate="" tal:condition="widget/is_i18n"
               tal:content="widget/help">i18_key-help_for_this_field</span>
-            <span tal:condition="not:widget/is_i18n"
+            <span style="white-space:pre;"
+              tal:condition="not:widget/is_i18n"
               tal:content="widget/help">This is the help for this field</span>
           </div>
           <span i18n:translate="" tal:condition="widget/is_i18n"
