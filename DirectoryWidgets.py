@@ -101,6 +101,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
          'label': 'Entry type'},
         {'id': 'skin_name', 'type': 'string', 'mode': 'w',
          'label': 'Skin name'},
+        # include_root
         )
     all_entry_types = ['id', 'dn']
 
@@ -117,9 +118,28 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
             else:
                 return ''
         elif mode == 'edit':
-            return CPSDirectoryEntryWidget.inheritedAttribute('render')(
-                self, mode, datastructure, **kw)
-        raise RuntimeError('unknown mode %s' % mode)
+            portal_directories = getToolByName(self, 'portal_directories')
+            dir = getattr(portal_directories, self.directory)
+            display_attr = dir.title_field
+            html_id = self.getHtmlWidgetId()
+            html = """
+<div id="%s"><span>%s</span>
+<script type="text/javascript">
+  <!--
+     function popup_dn_nav(destId, dirName, dispAttr, vocabulary, title) {
+       var args
+       args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
+       popup = window.open('popup_directoryentry_form'+args, 'DN Finder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
+       if(!popup.opener)
+         popup.opener = window;
+       return false;
+   }
+  //-->
+</script></div>
+<button type="button"
+onclick="popup_dn_nav('%s', '%s', '%s', '%s', 'DN Finder');">...</button><br>""" % (html_id, value, html_id, self.directory, display_attr, self.vocabulary)
+
+        return html
 
 InitializeClass(CPSDirectoryEntryWidget)
 
