@@ -51,8 +51,6 @@ class IndirectDirectory(BaseDirectory):
 
     def __init__(self, id, **kw):
         BaseDirectory.__init__(self, id, **kw)
-        self.directories_ids = kw.get('directories_ids', [])
-        self.object_ids = []
 
     #
     # API
@@ -97,20 +95,20 @@ class IndirectDirectory(BaseDirectory):
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
-        if id is not None:
+        if id is None:
+            return None
+        else:
             directory_id = self._getDirectoryIdForId(id)
             entry_id = self._getEntryIdForId(id)
             directory = self._getDirectory(directory_id)
-            if directory.hasEntry(entry_id):
+            if not directory.hasEntry(entry_id):
+                return None
+            else:
                 entry = directory.getEntry(entry_id)
                 # giving to entry the good id...
                 id = entry[directory.id_field]
                 entry[directory.id_field] = self._makeId(directory_id, id)
                 return entry
-            else:
-                return None
-        else:
-            return None
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
