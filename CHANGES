@@ -12,4 +12,4 @@ Bug fixes:
   are expected in the result.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- widget directory entry use default function.js for javascript
