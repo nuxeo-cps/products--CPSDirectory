@@ -283,15 +283,17 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             value.sort()
         if mode == 'view':
             render = ''
-            if value:
+            if value is not None:
                 res = [self.getTagForValue(v) for v in value]
                 render = self.separator.join(res)
             return meth(mode=mode, value=value, render=render)
         elif mode == 'edit':
+            if value is None:
+                value = []                
             if (self.popup_mode == 'none'):
                 return CPSMultiSelectWidget.render(self, mode, datastructure, **kw)
-            display_attr = dir.title_field
-            ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]
+            display_attr = dir.title_field            
+            ids_and_titles = [(v, self.getIdAndTitle(v)[1]) for v in value]            
             return meth(mode=mode, values=value, ids_and_titles=ids_and_titles,
                         display_attr=display_attr)
 
