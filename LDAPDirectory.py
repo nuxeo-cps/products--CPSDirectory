@@ -245,6 +245,8 @@ class LDAPDirectory(BaseDirectory):
         self.checkCreateEntryAllowed()
         if not self.hasEntry(id):
             raise ValueError("Entry '%s' does not exist and can't be deleted " % id)
+        # XXX must get the real dn like in _setData (think of the
+        # case where of field_id != rdn_attr, or of subbranches)
         # XXX check rdn value syntax...
         rdn_attr = self.ldap_rdn_attr
         base = self.ldap_base
