@@ -13,7 +13,7 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 class TestDirectoryEntryVocabulary(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.ws = self.portal.workspaces
         self.pd = self.portal.portal_directories
         self.pv = self.portal.portal_vocabularies

@@ -26,7 +26,7 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         self.dir = dir
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.ws = self.portal.workspaces
         self.pd = self.portal.portal_directories
         self.makeDir()
@@ -277,7 +277,7 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
             )
         self.dir = dir
 
-        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "root"')
+        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "manager"')
         self.assertEquals(res, '')
         res = dir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
         self.assertEquals(res, '')
@@ -290,7 +290,7 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
         dir.createEntry(e)
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.ws = self.portal.workspaces
         self.pd = self.portal.portal_directories
         self.makeDir()

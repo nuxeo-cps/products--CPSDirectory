@@ -30,7 +30,7 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 class TestMetaDirectory(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.pd = self.portal.portal_directories
         self.makeDirs()
 
@@ -351,7 +351,7 @@ class TestMetaDirectory(CPSDirectoryTestCase):
 class TestMetaDirectoryMissing(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.pd = self.portal.portal_directories
         self.makeDirs()
 

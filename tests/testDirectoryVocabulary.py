@@ -16,7 +16,7 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 class TestDirectoryVocabulary(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.ws = self.portal.workspaces
         self.pd = self.portal.portal_directories
         self.pv = self.portal.portal_vocabularies
@@ -34,18 +34,17 @@ class TestDirectoryVocabulary(CPSDirectoryTestCase):
     def testMembers(self):
         members = self.pv.members
         self.assertEquals(members._getDirectory(), self.pd.members)
-        self.assertEquals(members.keys(), ['root', 'test_user_1_'])
-        root = members['root']
-        self.assertEquals(members.get('root'), root)
+        self.assertEquals(members.keys(), ['manager', 'test_user_1_'])
+        manager = members['manager']
+        self.assertEquals(members.get('manager'), manager)
         self.assertEquals(members.get('toto'), None)
         self.assertEquals(members.get('toto', 'titi'), 'titi')
-        self.assert_(members.has_key('root'))
+        self.assert_(members.has_key('manager'))
         members_ids = [ x[0] for x in members.items() ]
-        self.assert_('root' in members_ids)
+        self.assert_('manager' in members_ids)
         members_values = [ x[1] for x in members.items() ]
-        self.assert_(root in members_values)
-        self.assert_(root in members.values())
-
+        self.assert_(manager in members_values)
+        self.assert_(manager in members.values())
 
     def testGroups(self):
         groups = self.pv.groups

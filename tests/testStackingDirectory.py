@@ -31,7 +31,7 @@ class TestStackingDirectory(CPSDirectoryTestCase):
 
     def afterSetUp(self):
         CPSDirectoryTestCase.afterSetUp(self)
-        self.login('root')
+        self.login('manager')
         self.pd = self.portal.portal_directories
         self.makeDirs()
 

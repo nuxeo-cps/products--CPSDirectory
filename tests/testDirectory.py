@@ -14,7 +14,7 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('root')
+        self.login('manager')
         self.ws = self.portal.workspaces
         self.pd = self.portal.portal_directories
 
@@ -47,7 +47,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         members = self.pd.members
 
         # 'test_user_1_' comes from ZopeTestCase
-        default_members = ['root', 'test_user_1_']
+        default_members = ['manager', 'test_user_1_']
         self.assertEquals(members.listEntryIds(), default_members)
         search_result = members.searchEntries()
 
