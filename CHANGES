@@ -9,4 +9,5 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Raise ConfigurationError instead of ValueError for some
+  configuration problems.
