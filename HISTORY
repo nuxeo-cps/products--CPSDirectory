@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.5.0 [R1 build 2004/01/21-10:40 by ben]
+
+ZODB Requires:
+~~~~~~~~~~~~~~
+- widgets DirectoryEntry and MultiEntries require CPSNavigation
+  to install CPSNavigation just add the skin CPSNavigation/skins
+New features:
+~~~~~~~~~~~~~
+- Password widget uses a confirmation widget in edit mode.
+- New DirectoryEntry and DirectoryMultiEntries widgets
+- Directory vocabularies can now have an additional empty key.
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.4.1 [R1 build 2004/01/15-14:33 by regebro]
 
 ZODB Requires:

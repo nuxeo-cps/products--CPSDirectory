@@ -1,15 +1,15 @@
 ZODB Requires:
 ~~~~~~~~~~~~~~
-- widgets DirectoryEntry and MultiEntries require CPSNavigation
-  to install CPSNavigation just add the skin CPSNavigation/skins
+-
+
 New features:
 ~~~~~~~~~~~~~
-- Password widget uses a confirmation widget in edit mode.
-- New DirectoryEntry and DirectoryMultiEntries widgets
-- Directory vocabularies can now have an additional empty key.
+-
+
 Bug fixes:
 ~~~~~~~~~~
 -
+
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
