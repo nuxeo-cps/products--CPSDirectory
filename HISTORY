@@ -1,4 +1,32 @@
 *******************************************
+** CPSDirectory V1.11.0 [R1 build 2004/05/05-00:11 by guillaum]
+
+Requires:
+~~~~~~~~~
+- require CPSCore >= 3.10.0
+- require CPSSchemas >= 0.21.0
+New features:
+~~~~~~~~~~~~~
+- DirectoryEntryVocabulary
+- New "User Identifier Widget" that use the isMemberIdAllowed() for
+  validation.
+- updateMemberDataFromSchema renamed to manage_(...) and associated to a ZMI
+  tab so you can click a button to sync it afterwards (closes #310)
+- New LDAPBackingDirectory. Has only been very lightly tested.
+- StackingDirectory can work with a different id than the ones in the backing
+  directories.
+Bug fixes:
+~~~~~~~~~~
+- fix: deleteEntry raise error allowed pseudo role that are not manager
+- fix: Tightened up permission checks for entry creation or deletion.
+- fix: missing psm after deleting an entry
+- fix: ZODBDirectory.searchEntries would fail on a bad return_fields.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Better internal API for no ACL checks on datamodel.
+- Better default search results display for unknown directories.
+
+*******************************************
 ** CPSDirectory V1.10.3 [R1 build 2004/04/15-15:19 by guillaum]
 
 Requires:
