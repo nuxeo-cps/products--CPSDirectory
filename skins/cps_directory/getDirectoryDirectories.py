@@ -31,7 +31,7 @@ roles_directory = {
         'layout': 'roles',
         'layout_style_prefix': 'layout_dir_',
         'role_field': 'role',
-        'users_field': 'users',
+        'members_field': 'members',
         'title_field': 'role',
         },
     }
@@ -46,7 +46,7 @@ groups_directory = {
         'layout': 'groups',
         'layout_style_prefix': 'layout_dir_',
         'group_field': 'group',
-        'users_field': 'users',
+        'members_field': 'members',
         'title_field': 'group',
         },
     }

@@ -23,14 +23,14 @@ members_schema = {
             },
         },
     'roles': {
-        'type': 'CPS String Field',
+        'type': 'CPS String List Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,
             },
         },
     'groups': {
-        'type': 'CPS String Field',
+        'type': 'CPS String List Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,
@@ -56,8 +56,8 @@ roles_schema = {
                 'is_indexed': 1,
             },
         },
-    'users': {
-        'type': 'CPS String Field',
+    'members': {
+        'type': 'CPS String List Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,
@@ -76,8 +76,8 @@ groups_schema = {
                 'is_indexed': 1,
             },
         },
-    'users': {
-        'type': 'CPS String Field',
+    'members': {
+        'type': 'CPS String List Field',
         'data': {
                 'default': '',
                 'is_indexed': 0,

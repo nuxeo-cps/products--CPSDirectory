@@ -48,14 +48,14 @@ class RolesDirectory(BaseDirectory):
     _properties = BaseDirectory._properties + (
         {'id': 'role_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for role'},
-        {'id': 'users_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for users'},
+        {'id': 'members_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for members'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry title'},
         )
 
     role_field = 'role'
-    users_field = 'users'
+    members_field = 'members'
     title_field = 'role'
 
     security.declarePrivate('_getAdapters')
@@ -66,13 +66,21 @@ class RolesDirectory(BaseDirectory):
                     for schema in self._getSchemas()]
         return adapters
 
+    security.declarePrivate('listEntryIds')
+    def listEntryIds(self):
+        """List all the entry ids."""
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        roles = [r for r in portal.valid_roles()
+                 if r not in ('Anonymous', 'Authenticated', 'Owner')]
+        return roles
+
     security.declarePublic('getEntry')
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
         return {
             'role': id,
-            'users': ('Raoul', 'XXX')
+            'members': ('Raoul', 'XXX')
             }
 
 InitializeClass(RolesDirectory)
@@ -112,17 +120,17 @@ class RoleStorageAdapter(BaseStorageAdapter):
             raise KeyError("No role '%s'" % role)
         aclu = self._portal.acl_users
         # XXX Stupid slow search for now. Optimizable for LDAP.
-        users = []
+        members = []
         for user in aclu.getUsers():
             if role in user.getRoles():
-                users.append(user.getId())
-        users = tuple(users)
+                members.append(user.getId())
+        members = tuple(members)
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.role_field:
                 value = role
-            elif fieldid == dir.users_field:
-                value = users
+            elif fieldid == dir.members_field:
+                value = members
             else:
                 raise ValueError("Invalid field %s for roles" % fieldid)
             data[fieldid] = value

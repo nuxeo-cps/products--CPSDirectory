@@ -153,10 +153,7 @@ def install(self):
             pr("  Deleting.")
             vtool.manage_delObjects([id])
         pr("  Installing.")
-        ddict = info['data']['dict']
-        dlist = info['data']['list']
-        vtool.manage_addCPSVocabulary(id, 'CPS Vocabulary',
-                                      dict=ddict, list=dlist)
+        vtool.manage_addCPSVocabulary(id, info['type'], **info['data'])
 
     # directories
     pr("Verifiying directories")

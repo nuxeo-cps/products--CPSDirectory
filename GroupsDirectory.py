@@ -48,14 +48,14 @@ class GroupsDirectory(BaseDirectory):
     _properties = BaseDirectory._properties + (
         {'id': 'group_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for group'},
-        {'id': 'users_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for users'},
+        {'id': 'members_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field for members'},
         {'id': 'title_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for entry title'},
         )
 
     group_field = 'group'
-    users_field = 'users'
+    members_field = 'members'
     title_field = 'group'
 
     security.declarePrivate('_getAdapters')
@@ -66,13 +66,23 @@ class GroupsDirectory(BaseDirectory):
                     for schema in self._getSchemas()]
         return adapters
 
+    security.declarePrivate('listEntryIds')
+    def listEntryIds(self):
+        """List all the entry ids."""
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        aclu = portal.acl_users
+        if hasattr(aclu, 'getGroupNames'):
+            return tuple(aclu.getGroupNames())
+        else:
+            return ()
+
     security.declarePublic('getEntry')
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
         """
         return {
             'group': id,
-            'users': ('Bobby', 'XXX')
+            'members': ('Bobby', 'XXX')
             }
 
 InitializeClass(GroupsDirectory)
@@ -107,16 +117,16 @@ class GroupStorageAdapter(BaseStorageAdapter):
             groupob = aclu.getGroupById(group, _marker)
             if groupob is _marker:
                 raise KeyError("No group '%s'" % group)
-            users = groupob.getUsers()
+            members = groupob.getUsers()
         # else try other APIs to get to group.
         else:
-            users = ()
+            members = ()
         data = {}
         for fieldid, field in self._schema.items():
             if fieldid == dir.group_field:
                 value = group
-            elif fieldid == dir.users_field:
-                value = users
+            elif fieldid == dir.members_field:
+                value = members
             else:
                 raise ValueError("Invalid field %s for groups" % fieldid)
             data[fieldid] = value

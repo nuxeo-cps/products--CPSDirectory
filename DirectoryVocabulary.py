@@ -26,6 +26,7 @@ from Globals import InitializeClass, DTMLFile
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.CMFCorePermissions import View, ManagePortal
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 
 from Products.CPSSchemas.Vocabulary import CPSVocabulary
@@ -57,19 +58,23 @@ class DirectoryReferenceVocabulary(SimpleItemWithProperties):
     description = ''
     directory = ''
 
-    def __init__(self, id, title='', **kw):
-        self.id = id
-        self.title = title
+    def __init__(self, id, **kw):
+        self.manage_changeProperties(**kw)
+
+    def _getDirectory(self):
+        """Get the directory referenced."""
+        dirtool = getToolByName(self, 'portal_directories')
+        return getattr(dirtool, self.directory)
 
     security.declareProtected(View, '__getitem__')
     def __getitem__(self, key):
         # XXX dummy
-        return key+'heh'
+        return key
 
     security.declareProtected(View, 'get')
     def get(self, key, default=None):
         # XXX dummy
-        return key+'hoh'
+        return key
 
     security.declareProtected(View, 'getMsgid')
     def getMsgid(self, key, default=None):
@@ -78,13 +83,12 @@ class DirectoryReferenceVocabulary(SimpleItemWithProperties):
 
     security.declareProtected(View, 'keys')
     def keys(self):
-        # XXX dummy
-        return ('foo', 'bar')
+        return self._getDirectory().listEntryIds()
 
     security.declareProtected(View, 'items')
     def items(self):
         # XXX dummy
-        return ('fooitem', 'baritem')
+        return [(x, x) for x in self.keys()]
 
     security.declareProtected(View, 'has_key')
     def has_key(self, key):

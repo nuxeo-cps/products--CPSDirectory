@@ -39,7 +39,7 @@ members_layout = {
             },
         },
         'roles': {
-            'type': 'String Widget',
+            'type': 'MultiSelect Widget',
             'data': {
                 'fields': ['roles'],
                 'is_i18n': 0,
@@ -48,12 +48,12 @@ members_layout = {
                 'description': 'Member roles',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
-                'size_max': 0,
+                'vocabulary': 'roles',
+                'size': 7,
             },
         },
         'groups': {
-            'type': 'String Widget',
+            'type': 'MultiSelect Widget',
             'data': {
                 'fields': ['groups'],
                 'is_i18n': 0,
@@ -62,8 +62,8 @@ members_layout = {
                 'description': 'Member groups',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
-                'size_max': 0,
+                'vocabulary': 'groups',
+                'size': 7,
             },
         },
         'email': {
@@ -117,18 +117,18 @@ roles_layout = {
                 'size_max': 0,
             },
         },
-        'users': {
-            'type': 'String Widget',
+        'members': {
+            'type': 'MultiSelect Widget',
             'data': {
-                'fields': ['users'],
+                'fields': ['members'],
                 'is_i18n': 0,
-                'label_edit': 'Users',
-                'label': 'Users',
+                'label_edit': 'Members',
+                'label': 'Members',
                 'description': '',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
-                'size_max': 0,
+                'vocabulary': 'members',
+                'size': 7,
             },
         },
     },
@@ -137,7 +137,7 @@ roles_layout = {
         'rows': [
             [{'ncols': 1, 'widget_id': 'role'},
                 ],
-            [{'ncols': 1, 'widget_id': 'users'},
+            [{'ncols': 1, 'widget_id': 'members'},
                 ],
             ],
         },
@@ -162,18 +162,18 @@ groups_layout = {
                 'size_max': 0,
             },
         },
-        'users': {
-            'type': 'String Widget',
+        'members': {
+            'type': 'MultiSelect Widget',
             'data': {
-                'fields': ['users'],
+                'fields': ['members'],
                 'is_i18n': 0,
-                'label_edit': 'Users',
-                'label': 'Users',
+                'label_edit': 'Members',
+                'label': 'Members',
                 'description': '',
                 'css_class': '',
                 'is_required': 1,
-                'display_width': 40,
-                'size_max': 0,
+                'vocabulary': 'members',
+                'size': 7,
             },
         },
     },
@@ -182,7 +182,7 @@ groups_layout = {
         'rows': [
             [{'ncols': 1, 'widget_id': 'group'},
                 ],
-            [{'ncols': 1, 'widget_id': 'users'},
+            [{'ncols': 1, 'widget_id': 'members'},
                 ],
             ],
         },
@@ -193,7 +193,7 @@ groups_layout = {
 layouts = {
     'members': members_layout,
     'roles': roles_layout,
-    'goups': groups_layout,
+    'groups': groups_layout,
     }
 
 return layouts

@@ -62,6 +62,11 @@ class BaseDirectory(SimpleItemWithProperties):
     # Usage API
     #
 
+    security.declarePrivate('listEntryIds')
+    def listEntryIds(self):
+        """List all the entry ids."""
+        raise NotImplementedError
+
     security.declarePublic('createEntry')
     def createEntry(self, entry):
         """Create an entry in the directory.

@@ -72,6 +72,14 @@ class MembersDirectory(BaseDirectory):
                     for schema in self._getSchemas()]
         return adapters
 
+    security.declarePrivate('listEntryIds')
+    def listEntryIds(self):
+        """List all the entry ids."""
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        aclu = portal.acl_users
+        # Note: LDAPUserFolder's getUsers only returns cached users.
+        return tuple(aclu.getUserNames())
+
     security.declarePublic('getEntry')
     def getEntry(self, id):
         """Get entry filtered by acls and processes.
@@ -125,7 +133,8 @@ class MemberStorageAdapter(BaseStorageAdapter):
             elif fieldid == dir.password_field:
                 value = 'this is the password XXX'
             elif fieldid == dir.roles_field:
-                value = user.getRoles()
+                value = [r for r in user.getRoles()
+                         if r not in ('Anonymous', 'Authenticated', 'Owner')]
             elif fieldid == dir.groups_field:
                 if hasattr(aq_base(user), 'getGroups'):
                     value = user.getGroups()
