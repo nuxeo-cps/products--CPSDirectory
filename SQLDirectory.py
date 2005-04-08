@@ -372,7 +372,8 @@ class SQLDirectory(BaseDirectory):
     def _getConnection(self):
         """Get the SQL connection."""
         dbc = self._getDB()
-        conn = dbc()
+        return dbc()
+
 
     def _getSQLQuoter(self):
         """Get a quoting method designed for the connection.
