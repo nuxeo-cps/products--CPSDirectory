@@ -21,7 +21,7 @@
 This is a directory backed by a table in an SQL database.
 """
 
-from zLOG import LOG, DEBUG, TRACE
+from zLOG import LOG, DEBUG, TRACE, ERROR
 
 import sys
 from Acquisition import aq_base, aq_parent, aq_inner
