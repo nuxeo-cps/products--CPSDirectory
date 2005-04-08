@@ -32,6 +32,7 @@ from DateTime.DateTime import DateTime
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
+from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 
 class SQLSyntaxError(ValueError):
