@@ -411,7 +411,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Search for entries in the directory.
 
         The keyword arguments specify the search to be done.
-        It is of the form {field1: value1, field2: [value21, value22]...}
+        It is of the form field1=value1, field2=[value21, value22], etc.
 
         The search is done:
 
