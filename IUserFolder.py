@@ -16,11 +16,10 @@
 #
 # $Id$
 
-"""This file defines the interface required by CPSDirectories for UserFolders,
-Users and Groups.
+"""This module defines the interfaces required by CPSDirectories for
+UserFolders, Users and Groups.
 """
 
-__doc__ = '''User Folder Interfaces'''
 __version__ = '$Revision$'[11:-2]
 
 import Interface
