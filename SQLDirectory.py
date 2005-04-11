@@ -477,7 +477,7 @@ class SQLDirectory(BaseDirectory):
         elif isinstance(value, (list, tuple)):
             if not value:
                 # cannot match, ignore FIXME should fail query ?
-                pass
+                return None
             op = 'IN'
             val = ', '.join([self.getSQLValue(v, quoter=quoter)
                              for v in value])
