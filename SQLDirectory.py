@@ -63,8 +63,6 @@ class SQLDirectory(BaseDirectory):
          'label': "SQL table"},
         #{'id': 'sql_auxiliary_tables', 'type': 'string', 'mode': 'w',
         # 'label': "SQL auxiliary tables"},
-        {'id': 'ignore_case_for_substring_comparisons', 'type': 'boolean', 'mode': 'w',
-         'label': "Ignore case for substring comparisons"},
         )
 
     #all_sql_syntaxes = ('postgresql',)
@@ -74,7 +72,6 @@ class SQLDirectory(BaseDirectory):
     #sql_syntax = all_sql_syntaxes[0]
     sql_table = ''
     #sql_auxiliary_tables = ''
-    ignore_case_for_substring_comparisons = 0
 
     def all_sql_connection_paths(self):
         """Get SQL database connections in the current folder and above.
@@ -291,40 +288,9 @@ class SQLDirectory(BaseDirectory):
         for key, value in kw.items():
             if key not in all_field_ids:
                 continue
-            sqlfield = self.getSQLField(key)
-            if isinstance(value, str):
-                if not value:
-                    # For string match, we ignore empty values,
-                    # they likely come from unfilled html input fields.
-                    continue
-                if value == '*':
-                    continue
-                if key in self.search_substring_fields:
-                    # Note: LIKE is not supported by Gadfly
-                    op = 'LIKE'
-                    val = self.getSQLValue('%'+value+'%', quoter=quoter)
-                else:
-                    op = '='
-                    val = self.getSQLValue(value, quoter=quoter)
-            elif isinstance(value, (int, long)):
-                op = '='
-                val = str(value)
-            elif isinstance(value, (list, tuple)):
-                if not value:
-                    # cannot match, ignore FIXME should fail query ?
-                    continue
-                op = 'IN'
-                val = ', '.join([self.getSQLValue(v, quoter=quoter)
-                                 for v in value])
-                val = '('+val+')'
-            else:
-                raise ValueError("Bad value %s for '%s'" % (`value`, key))
-            if self.ignore_case_for_substring_comparisons and op == 'LIKE':
-                val = val.lower()
-                clause = "lower(%s) %s %s" % (sqlfield, op, val)
-            else:
-                clause = "%s %s %s" % (sqlfield, op, val)
-            clauses.append(clause)
+            clause = self._makeClause(key, value, quoter)
+            if clause is not None:
+                clauses.append(clause)
         if clauses:
             sql = sql + " WHERE " + " AND ".join(clauses)
         items, data = self._execute(sql)
@@ -486,6 +452,41 @@ class SQLDirectory(BaseDirectory):
             'id': self.getSQLValue(id),
             }
         self._execute(sql)
+
+    def _makeClause(key, value, quoter):
+        """Make the where clause for search query
+        """
+        sqlfield = self.getSQLField(key)
+        if isinstance(value, str):
+            if not value:
+                # For string match, we ignore empty values,
+                # they likely come from unfilled html input fields.
+                return None
+            if value == '*':
+                return None
+            if key in self.search_substring_fields:
+                # Note: LIKE is not supported by Gadfly
+                op = 'LIKE'
+                val = self.getSQLValue('%'+value+'%', quoter=quoter)
+            else:
+                op = '='
+                val = self.getSQLValue(value, quoter=quoter)
+        elif isinstance(value, (int, long)):
+            op = '='
+            val = str(value)
+        elif isinstance(value, (list, tuple)):
+            if not value:
+                # cannot match, ignore FIXME should fail query ?
+                continue
+            op = 'IN'
+            val = ', '.join([self.getSQLValue(v, quoter=quoter)
+                             for v in value])
+            val = '('+val+')'
+        else:
+            raise ValueError("Bad value %s for '%s'" % (`value`, key))
+        clause = "%s %s %s" % (sqlfield, op, val)
+        return clause
+
 
 InitializeClass(SQLDirectory)
 
