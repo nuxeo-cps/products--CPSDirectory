@@ -10,6 +10,6 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Avoid losing information in explodeDN for incorrect syntax.
-- SQLDirectory: factor out code to build the search query, making it easier
-  to overload in subclasses, and remove the
-  ignore_case_for_substring_comparisons property.
+- SQLDirectory: factor out code to build the search query, making it easier to
+  overload in subclasses, and remove the ignore_case_for_substring_comparisons
+  property.
