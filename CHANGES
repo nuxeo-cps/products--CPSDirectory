@@ -3,7 +3,8 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Added the email attribute in the result fields for members to be more
+  user-friendly.
 Bug fixes:
 ~~~~~~~~~~
 -

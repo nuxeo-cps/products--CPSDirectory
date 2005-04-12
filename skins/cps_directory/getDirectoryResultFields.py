@@ -11,6 +11,7 @@ if not fields:
     if directory_id == 'members':
         fields = [{'id': 'sn', 'title': 'label_last_name'},
                   {'id': 'givenName', 'title': 'label_first_name'},
+                  {'id': 'email', 'title': 'label_email'},
                   {'id': 'id', 'title': 'label_user_name'},
                   ]
     elif directory_id == 'groups':
