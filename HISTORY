@@ -1,4 +1,24 @@
 *******************************************
+** CPSDirectory V1.24.0 [R1 build 2005/04/13-08:14 by ben]
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- Added the email attribute in the result fields for members to be more
+  user-friendly.
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Avoid losing information in explodeDN for incorrect syntax.
+- SQLDirectory: factor out code to build the search query, making it easier to
+  overload in subclasses, and remove the ignore_case_for_substring_comparisons
+  property.
+
+*******************************************
 ** CPSDirectory V1.23.0 [R1 build 2005/03/17-15:00 by anahide]
 
 Requires:
