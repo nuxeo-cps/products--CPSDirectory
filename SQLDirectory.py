@@ -453,7 +453,7 @@ class SQLDirectory(BaseDirectory):
             }
         self._execute(sql)
 
-    def _makeClause(key, value, quoter):
+    def _makeClause(self, key, value, quoter):
         """Make the where clause for search query
         """
         sqlfield = self.getSQLField(key)
