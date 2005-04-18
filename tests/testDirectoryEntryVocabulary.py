@@ -9,8 +9,16 @@ if __name__ == '__main__':
 import unittest
 from Testing import ZopeTestCase
 from CPSDirectoryTestCase import CPSDirectoryTestCase
+from Products.CPSDirectory.DirectoryEntryVocabulary import DirectoryEntryVocabulary
+
+class FakeDir:
+    def getEntry(self, id, default=None):
+        return None
 
 class TestDirectoryEntryVocabulary(CPSDirectoryTestCase):
+
+    def _getDirectory(self):
+        return FakeDir()
 
     def afterSetUp(self):
         self.login('manager')
@@ -27,6 +35,12 @@ class TestDirectoryEntryVocabulary(CPSDirectoryTestCase):
         self.assert_('CPS Directory Entry Vocabulary' in VTR.listTypes())
         self.assertEquals(VTR.getType('CPS Directory Entry Vocabulary').meta_type,
             'CPS Directory Entry Vocabulary')
+
+    def test_keys(self):
+        entry_voc = DirectoryEntryVocabulary('ok')
+        entry_voc._getDirectory = self._getDirectory
+        self.assertEquals(entry_voc.keys(), [])
+
 
 def test_suite():
     suite = unittest.TestSuite()

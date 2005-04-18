@@ -77,7 +77,10 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
     def keys(self):
         dir = self._getDirectory()
         voc = dir.getEntry(self.entry_id, None)
-        res = voc.get(self.voc_entry_field, [])
+        if voc is None:
+            res = []
+        else:
+            res = voc.get(self.voc_entry_field, [])
 
         if self.add_empty_key:
             v = ''
