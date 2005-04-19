@@ -919,7 +919,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns the results, and a list of field ids to display.
         """
         mapping['return_fields'] = ['*']
-        res = self.searchEntries(**mapping)
+        res = self._searchEntries(**mapping)
         return res
 
     security.declareProtected(ManagePortal, 'manage_getZMISearchFields')
