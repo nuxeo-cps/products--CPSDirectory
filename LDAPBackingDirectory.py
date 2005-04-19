@@ -162,6 +162,8 @@ class LDAPBackingDirectory(BaseDirectory):
          'label': 'LDAP scope', 'select_variable': 'all_ldap_scopes'},
         {'id': 'ldap_search_classes', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes (search)'},
+        {'id': 'ldap_search_filter', 'type': 'string', 'mode': 'w',
+         'label': 'LDAP filter (search)'},
         {'id': 'ldap_bind_dn', 'type': 'string', 'mode': 'w',
          'label': 'LDAP bind dn'},
         {'id': 'ldap_bind_password', 'type': 'string', 'mode': 'w',
@@ -187,6 +189,7 @@ class LDAPBackingDirectory(BaseDirectory):
     ldap_base = ''
     ldap_scope = 'ONELEVEL'
     ldap_search_classes = 'person'
+    ldap_search_filter = ''
     ldap_bind_dn = ''
     ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
@@ -402,7 +405,7 @@ class LDAPBackingDirectory(BaseDirectory):
         Returns converted values.
         """
         self.checkUnderBase(id)
-        filter = self.objectClassSearchFilter()
+        filter = self.searchFilter()
         try:
             results = self.searchLDAP(id, SCOPE_BASE, filter,
                                       field_ids, password=password)
@@ -432,7 +435,7 @@ class LDAPBackingDirectory(BaseDirectory):
         encoded before being passed to LDAP.
         """
         all_field_ids = self._getSchemas()[0].keys()
-        filter_elems = [self.objectClassSearchFilter()]
+        filter_elems = [self.searchFilter()]
         for key, value in query.items():
             if not key in all_field_ids:
                 continue
@@ -497,9 +500,19 @@ class LDAPBackingDirectory(BaseDirectory):
                 res.append((dn, data))
             return res
 
-    security.declarePrivate('objectClassSearchFilter')
-    def objectClassSearchFilter(self):
-        return self.ldap_search_classes_filter
+    security.declarePrivate('searchFilter')
+    def searchFilter(self):
+        """Build the search filter for the entries."""
+        filter = self.ldap_search_classes_filter
+        other = self.ldap_search_filter.strip()
+        if other:
+            if other[0] != '(' and other[-1] != ')':
+                other = '('+other+')'
+            if filter != '(objectClass=*)':
+                filter = '(&%s%s)' % (filter, other)
+            else:
+                filter = other
+        return filter
 
     # XXX security
     def getImageFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
@@ -644,7 +657,7 @@ class LDAPBackingDirectory(BaseDirectory):
         try:
             conn = self.connectLDAP()
             LOG('existsLDAP', TRACE, "search_s dn=%s" % dn)
-            filter = self.objectClassSearchFilter()
+            filter = self.searchFilter()
             res = conn.search_s(dn, SCOPE_BASE, filter, ['dn'])
             LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
         except NO_SUCH_OBJECT:

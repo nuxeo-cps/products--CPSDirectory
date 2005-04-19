@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- LDAPBackingDirectory: added explicit filter for LDAP entries.
 Bug fixes:
 ~~~~~~~~~~
 -
