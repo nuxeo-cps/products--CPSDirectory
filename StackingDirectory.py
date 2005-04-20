@@ -381,7 +381,7 @@ class StackingStorageAdapter(BaseStorageAdapter):
             # in which case, it would be overwritten...
             # An explicit test would be better.
             old_entry, b_dir = self._dir._getEntryFromBacking(self._id)
-            b_dir.editEntry(data)
+            b_dir._editEntry(data)
         else:
             dir_id = self._dir.creation_dir
             if not dir_id:

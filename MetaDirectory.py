@@ -613,7 +613,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
                 b_dir.createEntry(b_entry)
             else:
                 try:
-                    b_dir.editEntry(b_entry)
+                    b_dir._editEntry(b_entry)
                 except KeyError:
                     if info['missing_entry'] is None:
                         raise

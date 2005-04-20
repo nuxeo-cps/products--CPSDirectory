@@ -448,10 +448,17 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def editEntry(self, entry):
         """Edit an entry in the directory.
         """
+        self._editEntry(entry, check_acls=True)
+
+    security.declarePrivate('_editEntry')
+    def _editEntry(self, entry, check_acls=False):
+        """Edit an entry in the directory, unrestricted.
+        """
         id = entry[self.id_field]
         dm = self._getDataModel(id)
         dm_entry = self._getEntryFromDataModel(dm)
-        self.checkEditEntryAllowed(id=id, entry=dm_entry)
+        if check_acls:
+            self.checkEditEntryAllowed(id=id, entry=dm_entry)
         for key in dm.keys():
             if not entry.has_key(key):
                 continue

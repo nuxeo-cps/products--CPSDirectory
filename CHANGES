@@ -10,3 +10,6 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - ZMI search uses unrestricted search method.
+- BaseDirectory has an unrestricted _editEntry method, used by meta and
+  stacking directories. Access control is done by the primary directory,
+  not by each backing.
