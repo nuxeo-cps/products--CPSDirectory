@@ -47,6 +47,7 @@ from ldap import NO_SUCH_OBJECT
 from ldap import SERVER_DOWN
 from ldap import INSUFFICIENT_ACCESS
 #from ldap import SIZELIMIT_EXCEEDED
+#from ldap import SIZELIMIT_EXCEEDED
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -737,6 +738,8 @@ class LDAPBackingDirectory(BaseDirectory):
             conn.add_s(dn, attrs_list)
         except INSUFFICIENT_ACCESS, e:
             raise self._insufficientAccess(e)
+        # FIXME: except OBJECT_CLASS_VIOLATION:
+        # {'info': "unrecognized objectClass 'evolutionPerson'", ...}
 
     security.declarePrivate('modifyLDAP')
     def modifyLDAP(self, dn, ldap_attrs):
