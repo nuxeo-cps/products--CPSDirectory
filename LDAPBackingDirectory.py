@@ -47,7 +47,7 @@ from ldap import NO_SUCH_OBJECT
 from ldap import SERVER_DOWN
 from ldap import INSUFFICIENT_ACCESS
 #from ldap import SIZELIMIT_EXCEEDED
-#from ldap import SIZELIMIT_EXCEEDED
+#from ldap import OBJECT_CLASS_VIOLATION
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
