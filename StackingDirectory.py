@@ -147,10 +147,9 @@ class StackingDirectory(BaseDirectory):
         """
         return self._getEntryKW(id, password=password, **kw)
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
@@ -393,7 +392,7 @@ class StackingStorageAdapter(BaseStorageAdapter):
             except AttributeError:
                 raise ConfigurationError("No backing directory '%s'" % dir_id)
 
-            b_dir.createEntry(data)
+            b_dir._createEntry(data)
 
     def _getContentUrl(self, entry_id, field_id):
         """ giving content url if backing has it"""

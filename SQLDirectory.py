@@ -214,13 +214,12 @@ class SQLDirectory(BaseDirectory):
         """
         return (candidate == password)
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry %s already exists" % `id`)
-        self.checkCreateEntryAllowed(entry=entry)
 
         sql_data = self._convertDataToQuotedSQL(entry)
         sql = "INSERT INTO %(table)s (%(fields)s) VALUES (%(vals)s)" % {

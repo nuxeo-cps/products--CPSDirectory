@@ -151,10 +151,9 @@ class GroupsDirectory(BaseDirectory):
         # XXX optimize for LDAP
         return id in self.listEntryIds()
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed(entry=entry)
         group = entry[self.id_field]
         if self.hasEntry(group):
             raise KeyError("Group '%s' already exists" % group)

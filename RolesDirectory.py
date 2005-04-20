@@ -183,10 +183,9 @@ class RolesDirectory(BaseDirectory):
         # XXX optimize for LDAP
         return id in self.listEntryIds()
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed(entry=entry)
         role = entry[self.id_field]
         if self.hasEntry(role):
             raise KeyError("Role '%s' already exists" % role)

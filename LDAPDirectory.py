@@ -317,14 +317,13 @@ class LDAPDirectory(BaseDirectory):
 
         return res['size'] != 0
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory.
 
         If a base_dn attribute is present, it is used to decide which
         subbranch to use.
         """
-        self.checkCreateEntryAllowed(entry=entry)
         if not entry.has_key(self.id_field):
             raise ValueError("Missing value for '%s' in entry" %
                              self.id_field)

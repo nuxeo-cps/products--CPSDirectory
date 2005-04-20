@@ -344,11 +344,9 @@ class LDAPBackingDirectory(BaseDirectory):
             raise AuthenticationFailed
         return self._getEntryKW(id, password=password, **kw)
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed(entry=entry)
-
         ldap_attrs = self.convertDataToLDAP(entry)
         if entry.get('dn'):
             dn = entry['dn']

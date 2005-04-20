@@ -343,6 +343,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Returns the id given to the entry if different from the one given
         or None.
         """
+        self.checkCreateEntryAllowed(entry=entry)
+        return self._createEntry(entry)
+
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
+        """Create an entry in the directory, unrestricted.
+
+        Returns the id given to the entry if different from the one given
+        or None.
+        """
         raise NotImplementedError
 
     security.declarePublic('getEntry')

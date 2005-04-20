@@ -257,10 +257,9 @@ class MetaDirectory(BaseDirectory):
         """
         return self._getEntryKW(id, password=password, **kw)
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory."""
-        self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
@@ -610,14 +609,14 @@ class MetaStorageAdapter(BaseStorageAdapter):
 
             # Write or create to backing dir
             if self._do_create:
-                b_dir.createEntry(b_entry)
+                b_dir._createEntry(b_entry)
             else:
                 try:
                     b_dir._editEntry(b_entry)
                 except KeyError:
                     if info['missing_entry'] is None:
                         raise
-                    b_dir.createEntry(b_entry)
+                    b_dir._createEntry(b_entry)
 
     def _getContentUrl(self, entry_id, field_id):
         """ giving content url if backing has it"""

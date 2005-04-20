@@ -151,8 +151,8 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             raise AuthenticationFailed
         return entry
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """@summary: Create an entry in the directory.
 
         Set the isUserModified flag
@@ -160,7 +160,6 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         @param entry: dictionnary of entry values
         @type: @Dict
         """
-        self.checkCreateEntryAllowed(entry=entry)
         id = entry.get(self.id_field)
         if id is None:
             raise KeyError("Entry data must have '%s' field" % self.id_field)

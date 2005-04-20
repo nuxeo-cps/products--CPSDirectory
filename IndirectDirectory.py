@@ -120,15 +120,14 @@ class IndirectDirectory(BaseDirectory):
         """Does the directory have a given entry?"""
         return id in self.listEntryIds()
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory.
 
         Create an entry consists in adding the indirect id into the list of
         objects kept as an attribute in the indirect directory. There is no
         edition to be done on the entry.
         """
-        self.checkCreateEntryAllowed(entry=entry)
         if entry is not None:
             # entry is supposed to have the good id already...
             id = entry[self.id_field]

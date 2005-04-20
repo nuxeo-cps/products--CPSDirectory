@@ -150,13 +150,10 @@ class MembersDirectory(BaseDirectory):
         aclu = self.acl_users
         return id in aclu.getUserNames()
 
-    security.declarePublic('createEntry')
-    def createEntry(self, entry):
+    security.declarePrivate('_createEntry')
+    def _createEntry(self, entry):
         """Create an entry in the directory.
-
-        XXX: OK, but what exactly is an 'entry'?
         """
-        self.checkCreateEntryAllowed(entry=entry)
         id = entry[self.id_field]
         if self.hasEntry(id):
             raise KeyError("Member '%s' already exists" % id)
