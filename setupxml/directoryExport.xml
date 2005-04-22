@@ -1,20 +1,13 @@
 <?xml version="1.0"?>
 <directory xmlns:tal="http://xml.zope.org/namespaces/tal"
            kind="KIND"
-           tal:define="dir options/dir"
-           tal:attributes="kind python:context.getDirectoryKind(dir)">
-  <properties
-      tal:define="props python:context.getDirectoryPropsXML(dir)"
-    ><property tal:replace="structure props"/>
-  </properties>
-  <entry-local-roles
-      tal:define="elrs python:context.getDirectoryEntryLR(dir)"
-      tal:condition="elrs">
-    <entry-local-role role="ROLE"
-       tal:repeat="elr elrs"
-       tal:attributes="role elr/role"
-       tal:content="elr/expr"
-       >TALES-EXPRESSION
-    </entry-local-role>
-  </entry-local-roles>
+           tal:attributes="kind context/getDirectoryKind">
+  <property tal:replace="structure context/getDirectoryPropsXML"/>
+  <entry-local-role role="ROLE"
+      tal:define="elrs context/getDirectoryEntryLR"
+      tal:repeat="elr elrs"
+      tal:attributes="role elr/role"
+      tal:content="elr/expr"
+     >TALES-EXPRESSION
+  </entry-local-role>
 </directory>
