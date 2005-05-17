@@ -1,6 +1,8 @@
 ##parameters=dirname=None, id=None, ids=[], REQUEST=None
-#
-# This script can be both called with request parameters or with form parameters
+# $Id$
+"""
+This script can be both called with request parameters or with form parameters
+"""
 
 from zLOG import LOG, DEBUG
 logKey = 'cpsdirectory_entry_delete'
