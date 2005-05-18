@@ -19,7 +19,7 @@ members_directory = {
         'password_field': 'password',
         'roles_field': 'roles',
         'groups_field': 'groups',
-        'title_field': 'id',
+        'title_field': 'fullname',
         'search_substring_fields': ['id', 'sn', 'givenName', 'email'],
         },
     }
