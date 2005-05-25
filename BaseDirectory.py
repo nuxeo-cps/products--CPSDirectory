@@ -328,8 +328,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         Returns a list of tuples (id, title).
         """
-        res = [(id, self.getEntry(id, default={}).get(self.title_field))
-               for id in self.listEntryIds()]
+        title_field = self.title_field
+        if self.id_field == title_field:
+            res = [(id, id) for id in self.listEntryIds()]
+        else:
+            res = [(id, self.getEntry(id, default={}).get(title_field))
+                   for id in self.listEntryIds()]
         return res
 
     security.declarePublic('hasEntry')

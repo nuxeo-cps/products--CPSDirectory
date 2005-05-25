@@ -49,10 +49,14 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         # 'test_user_1_' comes from ZopeTestCase
         default_members = ['manager', 'test_user_1_']
         self.assertEquals(members.listEntryIds(), default_members)
-        search_result = members.searchEntries()
+        # Only manager has a title set
+        ids_and_titles = [('manager', 'Manager CPS'),
+                          ('test_user_1_', 'test_user_1_')]
+        self.assertEquals(members.listEntryIdsAndTitles(), ids_and_titles)
 
-        # XXX: this fails. Why ?
-        #self.assertEquals(search_result, default_members)
+        # give an argument to search, otherwise no search is performed
+        search_result = members.searchEntries(**{members.id_field: '*'})
+        self.assertEquals(search_result, default_members)
 
         for member in default_members:
             self.assert_(members.hasEntry(member))
