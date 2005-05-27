@@ -79,7 +79,7 @@ class TestPOT(ZopeTestCase.ZopeTestCase):
 
     def testNoDuplicateMsgId(self):
         """Check that there are no duplicate msgid:s in the pot files"""
-        cmd = 'grep ^msgid %s/../i18n/%s|sort|uniq --repeated' % (
+        cmd = 'grep ^msgid %s/../i18n/%s|sort|uniq -d' % (
             _TESTS_PATH, potFile)
         status = commands.getstatusoutput(cmd)
         assert len(status[1]) == 0, "Duplicate msgid:s were found:\n\n%s" \
