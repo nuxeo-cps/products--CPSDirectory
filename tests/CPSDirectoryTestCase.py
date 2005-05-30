@@ -1,13 +1,7 @@
-# Perform replacements in sys.modules to be able to run tests with fake ldap
-# classes/methods
 from Testing import ZopeTestCase
 
 from Products.ExternalMethod.ExternalMethod import ExternalMethod
 from Products.CMFDefault.Portal import manage_addCMFSite
-
-# Perform replacements in sys.modules to be able to run tests with fake ldap
-# classes/methods
-from Products.CPSDirectory.tests.ldap import importer
 
 # needed products
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)

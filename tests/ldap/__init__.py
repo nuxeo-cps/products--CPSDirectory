@@ -17,7 +17,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-from functions import open,initialize,init,explode_dn,explode_rdn,get_option,set_option
+from functions import open, initialize, init, explode_dn, explode_rdn, get_option, set_option
+import ldapobject
+import filter
 
 NO_SUCH_OBJECT = 'NO_SUCH_OBJECT'
 SIZELIMIT_EXCEEDED = 'SIZELIMIT_EXCEEDED'

@@ -29,25 +29,6 @@ from zLOG import LOG, DEBUG, TRACE, ERROR
 import re
 import sys
 from types import ListType, TupleType, StringType, IntType, UnicodeType
-import ldap
-from ldap.ldapobject import ReconnectLDAPObject
-from ldap.filter import filter_format
-from ldap import SCOPE_BASE, SCOPE_ONELEVEL, SCOPE_SUBTREE
-from ldap import MOD_DELETE, MOD_REPLACE, MOD_ADD
-from ldap import OPT_REFERRALS
-from ldap import OPT_PROTOCOL_VERSION
-from ldap import VERSION2, VERSION3
-# Exceptions
-from ldap import LDAPError
-from ldap import INVALID_CREDENTIALS
-from ldap import INAPPROPRIATE_AUTH
-from ldap import UNWILLING_TO_PERFORM
-from ldap import INVALID_DN_SYNTAX
-from ldap import NO_SUCH_OBJECT
-from ldap import SERVER_DOWN
-from ldap import INSUFFICIENT_ACCESS
-#from ldap import SIZELIMIT_EXCEEDED
-#from ldap import OBJECT_CLASS_VIOLATION
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -61,6 +42,21 @@ from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import _replaceProperty
 
+# During testing?
+from inspect import currentframe
+if currentframe(4).f_code.co_filename.endswith('test.py'):
+    _TESTING = True
+else:
+    _TESTING = False
+
+# Import LDAP modules, maybe from testing code
+if not _TESTING:
+    import ldap
+    import ldap.ldapobject
+    import ldap.filter
+else:
+    from Products.CPSDirectory.tests import ldap
+del _TESTING
 
 #
 # UTF-8
@@ -96,7 +92,7 @@ def explodeDN(dn):
     """Explode a dn into list of rdns."""
     try:
         rdns = ldap.explode_dn(dn)
-    except LDAPError:
+    except ldap.LDAPError:
         # Bad syntax for dn, do simple split to avoid losing information
         rdns = [rdn.strip() for rdn in dn.split(',')]
     return [_simpleEscaping(rdn) for rdn in rdns]
@@ -196,7 +192,7 @@ class LDAPBackingDirectory(BaseDirectory):
     ldap_rdn_attr = 'cn'
     ldap_object_classes = 'top, person'
 
-    ldap_scope_c = SCOPE_SUBTREE
+    ldap_scope_c = ldap.SCOPE_SUBTREE
     ldap_search_classes_c = ['person']
     ldap_search_classes_filter = '(objectClass=person)'
     ldap_object_classes_c = ['top', 'person']
@@ -215,10 +211,10 @@ class LDAPBackingDirectory(BaseDirectory):
         # Make dns canonical
         self.ldap_base = makeCanonicalDN(self.ldap_base)
         # Convert string stuff
-        conv = {'ONELEVEL': SCOPE_ONELEVEL,
-                'SUBTREE': SCOPE_SUBTREE,
+        conv = {'ONELEVEL': ldap.SCOPE_ONELEVEL,
+                'SUBTREE': ldap.SCOPE_SUBTREE,
                 }
-        self.ldap_scope_c = conv.get(self.ldap_scope, SCOPE_ONELEVEL)
+        self.ldap_scope_c = conv.get(self.ldap_scope, ldap.SCOPE_ONELEVEL)
         # Split object classes for creation
         classes = self.ldap_object_classes
         classes = [x.strip() for x in classes.split(',')]
@@ -330,9 +326,9 @@ class LDAPBackingDirectory(BaseDirectory):
                                  self.ldap_rdn_attr)
             rdn = rdn_attr[0].strip() # If multivalued, take the first one.
             ava = '%s=%s' % (self.ldap_rdn_attr, rdn)
-            if self.ldap_scope_c == SCOPE_ONELEVEL:
+            if self.ldap_scope_c == ldap.SCOPE_ONELEVEL:
                 base_dn = self.ldap_base
-            else: # SCOPE_SUBTREE
+            else: # ldap.SCOPE_SUBTREE
                 if not entry.has_key('base_dn'):
                     raise ValueError("Missing base_dn in entry")
                 base_dn = entry['base_dn']
@@ -377,17 +373,18 @@ class LDAPBackingDirectory(BaseDirectory):
         self.checkUnderBase(id)
         filter = self.searchFilter()
         try:
-            results = self.searchLDAP(id, SCOPE_BASE, filter,
+            results = self.searchLDAP(id, ldap.SCOPE_BASE, filter,
                                       field_ids, password=password)
-        except (INVALID_CREDENTIALS, INAPPROPRIATE_AUTH,
-                UNWILLING_TO_PERFORM):
+        except (ldap.INVALID_CREDENTIALS,
+                ldap.INAPPROPRIATE_AUTH,
+                ldap.UNWILLING_TO_PERFORM):
             # INAPPROPRIATE_AUTH: tried auth on entry without userPassword
             # UNWILLING_TO_PERFORM: unauthenticated bind (DN with no password)
             # disallowed
             if password is None:
                 LOG('_getEntryFromLDAP', ERROR,
                     "Invalid credentials for directory %s" % self.getId())
-                raise INVALID_CREDENTIALS
+                raise ldap.INVALID_CREDENTIALS
             else:
                 LOG('_getEntryFromLDAP', TRACE,
                     "Invalid credentials for %s" % id)
@@ -426,14 +423,14 @@ class LDAPBackingDirectory(BaseDirectory):
                 fmt = '(%s=%s)'
             if isinstance(value, StringType):
                 if value == '*':
-                    f = filter_format('(%s=*)', (key,))
+                    f = ldap.filter.filter_format('(%s=*)', (key,))
                 else:
-                    f = filter_format(fmt, (key, value))
+                    f = ldap.filter.filter_format(fmt, (key, value))
             elif isinstance(value, IntType):
-                f = filter_format(fmt, (key, str(value)))
+                f = ldap.filter.filter_format(fmt, (key, str(value)))
             elif isinstance(value, ListType) or isinstance(value, TupleType):
                 # Always use exact match if a sequence is passed
-                fl = [filter_format('(%s=%s)', (key, v))
+                fl = [ldap.filter.filter_format('(%s=%s)', (key, v))
                       for v in value if v]
                 f = ''.join(fl)
                 if len(fl) > 1:
@@ -569,16 +566,16 @@ class LDAPBackingDirectory(BaseDirectory):
             conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
 
             LOG('connectLDAP', TRACE, 'initialize conn_str=%s' % conn_str)
-            conn = ReconnectLDAPObject(conn_str)
+            conn = ldap.ldapobject.ReconnectLDAPObject(conn_str)
             try:
-                conn.set_option(OPT_PROTOCOL_VERSION, VERSION3)
-            except LDAPError:
-                conn.set_option(OPT_PROTOCOL_VERSION, VERSION2)
+                conn.set_option(ldap.OPT_PROTOCOL_VERSION, ldap.VERSION3)
+            except ldap.LDAPError:
+                conn.set_option(ldap.OPT_PROTOCOL_VERSION, ldap.VERSION2)
 
             # Auto-chase referrals.
             try:
-                conn.set_option(OPT_REFERRALS, 1)
-            except LDAPError:
+                conn.set_option(ldap.OPT_REFERRALS, 1)
+            except ldap.LDAPError:
                 # Forget about it.
                 LOG('LDAPBackingDirectory.connect', DEBUG, 'No referrals')
                 pass
@@ -608,10 +605,10 @@ class LDAPBackingDirectory(BaseDirectory):
         LOG('connectLDAP', TRACE, "bind_s dn=%s" % bind_dn)
         try:
             conn.simple_bind_s(bind_dn, bind_password)
-        except SERVER_DOWN:
+        except ldap.SERVER_DOWN:
             raise ConfigurationError("Directory '%s': LDAP server is down"
                                      % self.getId())
-        except INVALID_CREDENTIALS:
+        except ldap.INVALID_CREDENTIALS:
             if not using_config_bind:
                 raise
             raise ConfigurationError("Directory '%s': Invalid credentials"
@@ -628,9 +625,9 @@ class LDAPBackingDirectory(BaseDirectory):
             conn = self.connectLDAP()
             LOG('existsLDAP', TRACE, "search_s dn=%s" % dn)
             filter = self.searchFilter()
-            res = conn.search_s(dn, SCOPE_BASE, filter, ['dn'])
+            res = conn.search_s(dn, ldap.SCOPE_BASE, filter, ['dn'])
             LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
-        except NO_SUCH_OBJECT:
+        except ldap.NO_SUCH_OBJECT:
             return 0
         return len(res) != 0
 
@@ -646,17 +643,17 @@ class LDAPBackingDirectory(BaseDirectory):
         if password is None:
             conn = self.connectLDAP()
         else:
-            if scope != SCOPE_BASE:
+            if scope != ldap.SCOPE_BASE:
                 raise ValueError("Incorrect scope for authenticated search")
             try:
                 if ',' not in base:
                     # Avoid doing an LDAP request if we know we'll fail.
-                    raise INVALID_DN_SYNTAX
+                    raise ldap.INVALID_DN_SYNTAX
                 conn = self.connectLDAP(base, toUTF8(password))
-            except INVALID_DN_SYNTAX:
+            except ldap.INVALID_DN_SYNTAX:
                 LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
                 return []
-            except INVALID_CREDENTIALS:
+            except ldap.INVALID_CREDENTIALS:
                 LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
                 raise AuthenticationFailed
 
@@ -664,15 +661,15 @@ class LDAPBackingDirectory(BaseDirectory):
             (base, scope, filter, attrs))
         try:
             ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
-        except NO_SUCH_OBJECT:
+        except ldap.NO_SUCH_OBJECT:
             raise ConfigurationError("Directory '%s': Invalid search base "
                                      "'%s'" % (self.getId(), base))
-        except SERVER_DOWN:
+        except ldap.SERVER_DOWN:
             raise ConfigurationError("Directory '%s': LDAP server is down"
                                      % self.getId())
         LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
-        #except NO_SUCH_OBJECT:
-        #except SIZELIMIT_EXCEEDED:
+        #except ldap.NO_SUCH_OBJECT:
+        #except ldap.SIZELIMIT_EXCEEDED:
         return ldap_entries
 
     def _insufficientAccess(self, e):
@@ -693,7 +690,7 @@ class LDAPBackingDirectory(BaseDirectory):
         LOG('deleteLDAP', TRACE, "delete_s dn=%s" % dn)
         try:
             conn.delete_s(dn)
-        except INSUFFICIENT_ACCESS, e:
+        except ldap.INSUFFICIENT_ACCESS, e:
             raise self._insufficientAccess(e)
 
     security.declarePrivate('insertLDAP')
@@ -705,9 +702,9 @@ class LDAPBackingDirectory(BaseDirectory):
         LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
         try:
             conn.add_s(dn, attrs_list)
-        except INSUFFICIENT_ACCESS, e:
+        except ldap.INSUFFICIENT_ACCESS, e:
             raise self._insufficientAccess(e)
-        # FIXME: except OBJECT_CLASS_VIOLATION:
+        # FIXME: except ldap.OBJECT_CLASS_VIOLATION:
         # {'info': "unrecognized objectClass 'evolutionPerson'", ...}
 
     security.declarePrivate('modifyLDAP')
@@ -724,7 +721,7 @@ class LDAPBackingDirectory(BaseDirectory):
         LOG('modifyLDAP', TRACE, "search_s base dn=%s" % dn)
         # (use objectClass=* because dn is already assumed valid
         #  and also we'd like the *LDAP methods to be generic)
-        res = conn.search_s(dn, SCOPE_BASE, '(objectClass=*)')
+        res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)')
         LOG('modifyLDAP', TRACE, " -> results=%s" % (res,))
         if not res:
             raise KeyError("No entry '%s'" % dn)
@@ -742,14 +739,14 @@ class LDAPBackingDirectory(BaseDirectory):
                     if key in rdn_attrs:
                         raise ValueError("Cannot delete rdn attribute '%s'"
                                          % key)
-                    mod_list.append((MOD_DELETE, key, None))
+                    mod_list.append((ldap.MOD_DELETE, key, None))
                 elif cur_ldap_entry[key] != values:
                     if key in rdn_attrs:
                         raise ValueError("Modrdn not implemented")
-                    mod_list.append((MOD_REPLACE, key, values))
+                    mod_list.append((ldap.MOD_REPLACE, key, values))
             else:
                 if values != ['']:
-                    mod_list.append((MOD_ADD, key, values))
+                    mod_list.append((ldap.MOD_ADD, key, values))
         if not mod_list:
             return
 

@@ -16,3 +16,4 @@ New internal features:
   Access control is done by the primary directory, not by each backing.
 - API for search factoured out in BaseDirectory adding method _getSearchFields
 - Test case does not depend anymore on CPSTestCase.
+- Fixed LDAP testing framework.

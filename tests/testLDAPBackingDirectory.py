@@ -14,6 +14,7 @@ from AccessControl import Unauthorized
 
 from CPSDirectoryTestCase import CPSDirectoryTestCase
 
+
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
     def makeDir(self):
