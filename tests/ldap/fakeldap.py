@@ -413,5 +413,5 @@ class FakeLdap:
 if __name__ == '__main__':
     # tiny test
     ob = initialize('dummy')
-    print ob.search_s('ou=personnes,o=bceao,c=int',2,
-            '(objectClass=BCEAOPerson)',['uid'],0)
+    print ob.search_s('ou=personnes,o=nuxeo,c=com',2,
+            '(objectClass=NuxeoPerson)',['uid'],0)

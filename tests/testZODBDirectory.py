@@ -26,13 +26,8 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         self.dir = dir
 
     def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDir()
-
-    def beforeTearDown(self):
-        self.logout()
 
     def testPresence(self):
         self.assertEquals(self.pd.zodbdir.meta_type, 'CPS ZODB Directory')
@@ -290,9 +285,7 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
         dir.createEntry(e)
 
     def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDir()
 
     def beforeTearDown(self):

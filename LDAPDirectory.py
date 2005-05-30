@@ -170,17 +170,6 @@ class LDAPDirectory(BaseDirectory):
         res = self._searchEntries(return_fields=['dn'])
         return [data['dn'] for id, data in res]
 
-    security.declarePrivate('listEntryIdsAndTitles')
-    def listEntryIdsAndTitles(self):
-        """List all the entry ids and titles."""
-        title_field = self.title_field
-        if self.id_field == title_field:
-            res = self._searchEntries()
-            return [(id, id) for id in res]
-        else:
-            res = self._searchEntries(return_fields=[title_field])
-            return [(id, data[title_field]) for id, data in res]
-
     security.declarePrivate('listEntryDNsAndTitles')
     def listEntryDNsAndTitles(self):
         """List all the entry dns and titles.
@@ -217,21 +206,8 @@ class LDAPDirectory(BaseDirectory):
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
         # Find attrs needed to compute returned fields.
-        # XXX this code is also in ZODBDirectory and should be factored out
-        if return_fields is None:
-            attrs = None
-        else:
-            attrsd = {}
-            if return_fields == ['*']:
-                return_fields = all_field_ids
-            for field_id in return_fields:
-                if field_id not in all_field_ids:
-                    continue
-                attrsd[field_id] = None
-                dep_ids = schema[field_id].read_process_dependent_fields
-                for dep_id in dep_ids:
-                    attrsd[dep_id] = None
-            attrs = attrsd.keys()
+        attrsd, return_fields = self._getSearchFields(return_fields)
+        attrs = attrsd.keys()
         # Build filter
         filter_elems = [self.objectClassFilter()]
         LOG('searchEntries', DEBUG, 'search query is %s' % `kw`)

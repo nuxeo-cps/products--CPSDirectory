@@ -20,15 +20,6 @@ class TestDirectoryEntryVocabulary(CPSDirectoryTestCase):
     def _getDirectory(self):
         return FakeDir()
 
-    def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
-        self.pv = self.portal.portal_vocabularies
-
-    def beforeTearDown(self):
-        self.logout()
-
     def testIsRegistered(self):
         from Products.CPSSchemas.VocabulariesTool \
             import VocabularyTypeRegistry as VTR

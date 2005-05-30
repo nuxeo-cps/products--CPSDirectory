@@ -225,28 +225,13 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
 
         # Compute needed fields from object.
         # All fields we need to return.
-        # XXX this code is also in LDAPDirectory and should be factored out
-        field_ids_d = {self.id_field: None}
-        if return_fields is not None:
-            if return_fields == ['*']:
-                return_fields = all_field_ids
-            ok_rf = []
-            for field_id in return_fields:
-                if field_id not in all_field_ids:
-                    continue
-                ok_rf.append(field_id)
-                field_ids_d[field_id] = None
-                dep_ids = schema[field_id].read_process_dependent_fields
-                for dep_id in dep_ids:
-                    field_ids_d[dep_id] = None
-            return_fields = ok_rf
-        # Also all fields the search is made on.
+        field_ids_d, return_fields = self._getSearchFields(return_fields)
+        # Add all fields the search is made on.
         for key in query.keys():
             field_ids_d[key] = None
         field_ids = field_ids_d.keys()
 
         # Do the search.
-        schema = self._getSchemas()[0]
         adapter = AttributeStorageAdapter(schema, None,
                                           field_ids=field_ids)
         res = []

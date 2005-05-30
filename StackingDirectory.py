@@ -96,18 +96,8 @@ class StackingDirectory(BaseDirectory):
             ids.extend(uids)
         return ids
 
-    security.declarePrivate('listEntryIdsAndTitles')
-    def listEntryIdsAndTitles(self):
-        """List all the entry ids and titles.
-
-        Returns a list of tuples (id, title).
-        """
-        title_field = self.title_field
-        if title_field == self.id_field:
-            return [(id, id) for id in self.listEntryIds()]
-        # XXX should try to call listEntryIdsAndTitles on the backing dirs.
-        results = self._searchEntries(return_fields=[title_field])
-        return [(id, entry[title_field]) for id, entry in results]
+    # XXX listEntryIdsAndTitles is generic and inherited from BaseDirectory,
+    # but should try to call listEntryIdsAndTitles on the backing directories
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):

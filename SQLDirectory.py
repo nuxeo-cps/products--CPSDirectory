@@ -252,29 +252,13 @@ class SQLDirectory(BaseDirectory):
 
         See API in the base class.
         """
-        id_field = self.id_field
         schema = self._getSchemas()[0]
         all_field_ids = schema.keys()
 
         # Find field_ids needed to compute returned fields.
-        # XXX this code is also in ZODBDirectory and should be factored out
-        if return_fields is None:
-            field_ids = []
-        else:
-            attrsd = {}
-            if return_fields == ['*']:
-                return_fields = all_field_ids
-            for field_id in return_fields:
-                if field_id not in all_field_ids:
-                    continue
-                attrsd[field_id] = None
-                dep_ids = schema[field_id].read_process_dependent_fields
-                for dep_id in dep_ids:
-                    attrsd[dep_id] = None
-            field_ids = attrsd.keys()
-            field_ids.sort()
-        if not id_field in field_ids:
-            field_ids.append(id_field)
+        attrsd, return_fields = self._getSearchFields(return_fields)
+        field_ids = attrsd.keys()
+        field_ids.sort()
 
         # Build query
         sql = "SELECT %(fields)s FROM %(table)s" % {
@@ -296,7 +280,7 @@ class SQLDirectory(BaseDirectory):
 
         # Build results
         res = []
-        idix = field_ids.index(id_field)
+        idix = field_ids.index(self.id_field)
         for result in data:
             result = list(result)
             id = result[idix]

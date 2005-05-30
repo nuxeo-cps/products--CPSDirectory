@@ -332,8 +332,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         if self.id_field == title_field:
             res = [(id, id) for id in self.listEntryIds()]
         else:
-            res = [(id, self.getEntry(id, default={}).get(title_field))
-                   for id in self.listEntryIds()]
+            results = self._searchEntries(return_fields=[title_field])
+            res = [(id, entry[title_field]) for id, entry in results]
         return res
 
     security.declarePublic('hasEntry')
@@ -714,6 +714,34 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         for schema in self._getSchemas(search=search):
             keys.extend(schema.keys())
         return keys
+
+    security.declarePrivate('_getSearchFields')
+    def _getSearchFields(self, return_fields=None):
+        """Get the fields dict used in search from return fields, and the
+        updated return fields
+
+        Also compute dependant fields.
+        """
+        res = []
+        # XXX AT: I dont get why only first schema is used
+        schema = self._getSchemas()[0]
+        all_field_ids = schema.keys()
+        field_ids_d = {self.id_field: None}
+        if return_fields is not None:
+            if return_fields == ['*']:
+                return_fields = all_field_ids
+            # filter invalid field ids
+            return_fields = [x for x in return_fields
+                             if x in all_field_ids]
+            # get dependant fields
+            dep_ids = []
+            for field_id in return_fields:
+                field_ids_d[field_id] = None
+                rpdf = schema[field_id].read_process_dependent_fields
+                dep_ids.extend(rpdf)
+            for field_id in dep_ids:
+                field_ids_d[field_id] = None
+        return field_ids_d, return_fields
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, search=0, **kw):

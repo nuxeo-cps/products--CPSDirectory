@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- encoding: iso-8859-15 -*-
+
 import os, sys
 
 if __name__ == '__main__':
@@ -8,10 +9,10 @@ if __name__ == '__main__':
 from zLOG import LOG, DEBUG, TRACE, ERROR, INFO
 import unittest
 from Testing import ZopeTestCase
-from CPSDirectoryTestCase import CPSDirectoryTestCase
 
 from AccessControl import Unauthorized
 
+from CPSDirectoryTestCase import CPSDirectoryTestCase
 
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
@@ -45,14 +46,11 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
         self.dir = dir
 
     def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDir()
 
     def beforeTearDown(self):
         self.logout()
-
 
     def testPresence(self):
         self.assertEquals(self.pd.ldapbackingdir.meta_type, 'CPS LDAP Backing Directory')
@@ -325,9 +323,7 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
         dir.createEntry(e)
 
     def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDir()
 
     def beforeTearDown(self):

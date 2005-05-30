@@ -31,14 +31,7 @@ class TestStackingDirectory(CPSDirectoryTestCase):
 
     def afterSetUp(self):
         CPSDirectoryTestCase.afterSetUp(self)
-        self.login('manager')
-        self.pd = self.portal.portal_directories
         self.makeDirs()
-
-    def beforeTearDown(self):
-        self.logout()
-        CPSDirectoryTestCase.beforeTearDown(self)
-
 
     def makeDirs(self):
         stool = self.portal.portal_schemas

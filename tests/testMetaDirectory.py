@@ -30,13 +30,8 @@ from AccessControl import Unauthorized
 class TestMetaDirectory(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('manager')
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDirs()
-
-    def beforeTearDown(self):
-        self.logout()
-
 
     def makeDirs(self):
         stool = self.portal.portal_schemas
@@ -351,13 +346,8 @@ class TestMetaDirectory(CPSDirectoryTestCase):
 class TestMetaDirectoryMissing(CPSDirectoryTestCase):
 
     def afterSetUp(self):
-        self.login('manager')
-        self.pd = self.portal.portal_directories
+        CPSDirectoryTestCase.afterSetUp(self)
         self.makeDirs()
-
-    def beforeTearDown(self):
-        self.logout()
-
 
     def makeDirs(self):
         stool = self.portal.portal_schemas

@@ -14,3 +14,5 @@ New internal features:
 - BaseDirectory has unrestricted _editEntry and _creatEntry methods,
   used by meta and stacking directories.
   Access control is done by the primary directory, not by each backing.
+- API for search factoured out in BaseDirectory adding method _getSearchFields
+- Test case does not depend anymore on CPSTestCase.

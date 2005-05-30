@@ -13,14 +13,6 @@ from AccessControl import Unauthorized
 
 class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
-    def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
-
-    def beforeTearDown(self):
-        self.logout()
-
     def testDirectories(self):
         self.assertEquals(self.pd.groups.meta_type, "CPS Groups Directory")
         self.assertEquals(self.pd.members.meta_type, "CPS Members Directory")

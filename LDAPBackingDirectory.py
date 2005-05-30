@@ -259,19 +259,6 @@ class LDAPBackingDirectory(BaseDirectory):
         """List all the entry ids."""
         return self._searchEntries()
 
-    security.declarePrivate('listEntryIdsAndTitles')
-    def listEntryIdsAndTitles(self):
-        """List all the entry ids and titles."""
-        title_field = self.title_field
-        if title_field == 'dn':
-            results = self._searchEntries()
-            res = [(id, id) for id in results]
-        else:
-            results = self._searchEntries(return_fields=[title_field])
-            res = [(id, entry[title_field]) for id, entry in results]
-        return res
-
-
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
@@ -283,26 +270,10 @@ class LDAPBackingDirectory(BaseDirectory):
         - Keys with empty values are removed.
         - Keys with value '*' search for an existing field.
         """
-        schema = self._getSchemas()[0]
-        all_field_ids = schema.keys()
-
         # Find attrs needed to compute returned fields.
-        # XXX this code is also in ZODBDirectory and should be factored out
-        if return_fields is None:
-            attrs = None
-        else:
-            attrsd = {}
-            if return_fields == ['*']:
-                return_fields = all_field_ids
-            for field_id in return_fields:
-                if field_id not in all_field_ids:
-                    continue
-                attrsd[field_id] = None
-                dep_ids = schema[field_id].read_process_dependent_fields
-                for dep_id in dep_ids:
-                    attrsd[dep_id] = None
-            attrs = attrsd.keys()
-
+        attrsd, return_fields = self._getSearchFields(return_fields)
+        attrs = attrsd.keys()
+        # Build filter
         filter = self._buildFilter(kw)
         res = self._searchEntriesFiltered(filter, attrs)
         return res

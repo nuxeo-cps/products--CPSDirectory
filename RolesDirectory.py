@@ -71,6 +71,22 @@ class RolesDirectory(BaseDirectory):
                  if r not in ('Anonymous', 'Authenticated', 'Owner')]
         return roles
 
+    # XXX AT: overriden method, will be unnecesary when _searchEntries returns
+    # dependant field values correctly
+    security.declarePrivate('listEntryIdsAndTitles')
+    def listEntryIdsAndTitles(self):
+        """List all the entry ids and titles.
+
+        Returns a list of tuples (id, title).
+        """
+        title_field = self.title_field
+        if self.id_field == title_field:
+            res = [(id, id) for id in self.listEntryIds()]
+        else:
+            res = [(id, self.getEntry(id, default={}).get(self.title_field))
+                   for id in self.listEntryIds()]
+        return res
+
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.

@@ -1,4 +1,4 @@
-# TODO: 
+# TODO:
 # - don't depend on getDocumentSchemas / getDocumentTypes but is there
 #   an API for that ?
 # - XXX check that "hack" in __getitem__ for dealing with dependency
@@ -15,20 +15,11 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 
 class TestDirectoryVocabulary(CPSDirectoryTestCase):
 
-    def afterSetUp(self):
-        self.login('manager')
-        self.ws = self.portal.workspaces
-        self.pd = self.portal.portal_directories
-        self.pv = self.portal.portal_vocabularies
-
-    def beforeTearDown(self):
-        self.logout()
-
     def testIsRegistered(self):
         from Products.CPSSchemas.VocabulariesTool \
             import VocabularyTypeRegistry as VTR
         self.assert_('CPS Directory Vocabulary' in VTR.listTypes())
-        self.assertEquals(VTR.getType('CPS Directory Vocabulary').meta_type, 
+        self.assertEquals(VTR.getType('CPS Directory Vocabulary').meta_type,
             'CPS Directory Vocabulary')
 
     def testMembers(self):
@@ -54,9 +45,7 @@ class TestDirectoryVocabulary(CPSDirectoryTestCase):
     def testRoles(self):
         roles = self.pv.roles
         self.assertEquals(roles._getDirectory(), self.pd.roles)
-        for role in ['Manager', 'Member', 'Reviewer', 'SectionManager',
-          'SectionReader', 'SectionReviewer', 'WorkspaceManager',
-          'WorkspaceMember', 'WorkspaceReader']:
+        for role in ['Manager', 'Member', 'Reviewer']:
             self.assert_(role in roles.keys())
             self.assert_(roles.has_key(role))
 
