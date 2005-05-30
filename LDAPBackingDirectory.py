@@ -268,7 +268,10 @@ class LDAPBackingDirectory(BaseDirectory):
         """
         # Find attrs needed to compute returned fields.
         attrsd, return_fields = self._getSearchFields(return_fields)
-        attrs = attrsd.keys()
+        if return_fields is None:
+            attrs = None
+        else:
+            attrs = attrsd.keys()
         # Build filter
         filter = self._buildFilter(kw)
         res = self._searchEntriesFiltered(filter, attrs)
