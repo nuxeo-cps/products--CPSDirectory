@@ -28,7 +28,6 @@ from zLOG import LOG, DEBUG, TRACE, ERROR
 
 import re
 import sys
-from types import ListType, TupleType, StringType, IntType, UnicodeType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -67,7 +66,7 @@ if default_encoding == 'ascii':
     default_encoding = 'latin1'
 
 def toUTF8(s):
-    if not isinstance(s, UnicodeType):
+    if not isinstance(s, unicode):
         s = unicode(s, default_encoding)
     return s.encode('utf-8')
 
@@ -424,14 +423,14 @@ class LDAPBackingDirectory(BaseDirectory):
                 fmt = '(%s=*%s*)'
             else:
                 fmt = '(%s=%s)'
-            if isinstance(value, StringType):
+            if isinstance(value, basestring):
                 if value == '*':
                     f = ldap.filter.filter_format('(%s=*)', (key,))
                 else:
                     f = ldap.filter.filter_format(fmt, (key, value))
-            elif isinstance(value, IntType):
+            elif isinstance(value, int):
                 f = ldap.filter.filter_format(fmt, (key, str(value)))
-            elif isinstance(value, ListType) or isinstance(value, TupleType):
+            elif isinstance(value, (list, tuple)):
                 # Always use exact match if a sequence is passed
                 fl = [ldap.filter.filter_format('(%s=%s)', (key, v))
                       for v in value if v]
