@@ -96,24 +96,53 @@ class IndirectDirectory(BaseDirectory):
 
         Returns a list of tuples (id, title).
         """
-        # Default dummy implementation.
-        # To be implemented
-        return [(id, id) for id in self.listEntryIds()]
+        title_field = self.title_field
+        if self.id_field == title_field:
+            res = [(id, id) for id in self.listEntryIds()]
+        else:
+            res = []
+            # Get all the fields that title may depend on
+            field_ids_d = {title_field: None}
+            schema = self._getSchemas()[0]
+            dep_ids = schema[title_field].read_process_dependent_fields
+            for dep_id in dep_ids:
+                field_ids_d[dep_id] = None
+            # id field is already in dependant fields
+            if self.id_field in field_ids_d:
+                del field_ids_d[self.id_field]
+            for id in self.listEntryIds():
+                entry_id = self._getEntryIdForId(id)
+                directory_id = self._getDirectoryIdForId(id)
+                directory = self._getDirectory(directory_id)
+                adapter = IndirectStorageAdapter(schema,
+                                                 id=entry_id,
+                                                 dir=directory,
+                                                 indirect_id=id,
+                                                 **field_ids_d)
+                entry = adapter.getData()
+                adapter.finalizeDefaults(entry)
+                res.append((id, entry[title_field]))
+        return res
 
     security.declarePrivate('listAllPossibleEntriesIds')
     def listAllPossibleEntriesIds(self):
         res = []
         for directory_id in self.directory_ids:
             directory = self._getDirectory(directory_id)
-            res_to_append = [self._makeId(directory_id,x) for x in directory.listEntryIds()]
+            res_to_append = [self._makeId(directory_id, x)
+                             for x in directory.listEntryIds()]
             res.extend(res_to_append)
         return res
 
     security.declarePrivate('listAllPossibleEntriesIdsAndTitles')
     def listAllPossibleEntriesIdsAndTitles(self):
-        # Default dummy implementation.
-        # To be implemented
-        return [(id, id) for id in self.listAllPossibleEntriesIds()]
+        res = []
+        for directory_id in self.directory_ids:
+            directory = self._getDirectory(directory_id)
+            res_to_append = [(self._makeId(directory_id, x[0]), x[1])
+                             for x in directory.listEntryIdsAndTitles()]
+            res.extend(res_to_append)
+        return res
 
     security.declarePublic('hasEntry')
     def hasEntry(self, id):

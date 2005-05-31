@@ -17,6 +17,10 @@ from CPSDirectoryTestCase import CPSDirectoryTestCase
 
 class TestLDAPbackingDirectory(CPSDirectoryTestCase):
 
+    def afterSetUp(self):
+        CPSDirectoryTestCase.afterSetUp(self)
+        self.makeDir()
+
     def makeDir(self):
         stool = self.portal.portal_schemas
         schema = stool.manage_addCPSSchema('testldapbd')
@@ -45,13 +49,6 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
             acl_entry_edit_roles='Manager; BigSmurf; DoPeter',
             )
         self.dir = dir
-
-    def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
-        self.makeDir()
-
-    def beforeTearDown(self):
-        self.logout()
 
     def testPresence(self):
         self.assertEquals(self.pd.ldapbackingdir.meta_type, 'CPS LDAP Backing Directory')

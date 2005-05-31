@@ -8,6 +8,9 @@ Bug fixes:
 ~~~~~~~~~~
 - BaseDirectory: listEntryIdsAndTitles returned a list of tuples (id, id)
   instead of (id, title)
+- IndirectDirectory: listEntryIdsAndTitles and
+  listAllPossibleEntriesIdsAndTitles returned a list of tuples (id, id) instead
+  of (id, title)
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - ZMI search uses unrestricted search method.
