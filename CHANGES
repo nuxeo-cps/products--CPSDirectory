@@ -3,20 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- LDAPBackingDirectory: added explicit filter for LDAP entries.
+-
 Bug fixes:
 ~~~~~~~~~~
-- BaseDirectory: listEntryIdsAndTitles returned a list of tuples (id, id)
-  instead of (id, title)
-- IndirectDirectory: listEntryIdsAndTitles and
-  listAllPossibleEntriesIdsAndTitles returned a list of tuples (id, id) instead
-  of (id, title)
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- ZMI search uses unrestricted search method.
-- BaseDirectory has unrestricted _editEntry and _creatEntry methods,
-  used by meta and stacking directories.
-  Access control is done by the primary directory, not by each backing.
-- API for search factoured out in BaseDirectory adding method _getSearchFields
-- Test case does not depend anymore on CPSTestCase.
-- Fixed LDAP testing framework.
+-
