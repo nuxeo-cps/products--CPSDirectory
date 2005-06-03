@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2005-06-02 14:38default\n"
+"POT-Creation-Date: 2005-06-03 15:40default\n"
 "PO-Revision-Date: 2004-10-04 16:52+0100\n"
 "Last-Translator:  <>\n"
 "Language-Team: Euskara <eu@li.org>\n"
@@ -22,6 +22,127 @@ msgstr ""
 "Language-Code: eu\n"
 "Language-Name: Basque\n"
 "Domain: default\n"
+
+#.   <em content="err" style="color:red">Error</em>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+msgid "Error"
+msgstr "Errorea"
+
+#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.                 Title
+#.               </a>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "Title"
+msgstr ""
+
+#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
+#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "button_back"
+msgstr ""
+
+#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
+#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "button_delete"
+msgstr ""
+
+#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
+#: from ../skins/cps_directory/layout_dir_search.pt
+msgid "button_search"
+msgstr ""
+
+#.   <p>Choose a directory</p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "choose_a_directory"
+msgstr "Direktorioa aukeratu"
+
+#.   <span>create entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_create_entry"
+msgstr "Sarrera berria sortu"
+
+#.   <span>Edit entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_edit_entry"
+msgstr "Sarrera editatu"
+
+#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Bilaketa emaitzak"
+
+#.   <span condition="python: ok != 'results'">search an entry</span>
+#.   <span condition="python: ok != 'results'" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_search_entry"
+msgstr "Sarrera bilatu"
+
+#.   <strong>cpsdir_label_upto_directories</strong>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_upto_directories"
+msgstr "Direktorioetara"
+
+#.   <span>view entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view_entry"
+msgstr "Sarrera ikusi"
+
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr "Emaitza larregi; galdera gehiago zehaztu, mesedez."
+
+#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr "Laguntza"
+
+#.   <th content="field/title">id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "id"
+msgstr "id"
+
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+#: ../skins/cps_directory/layout_dir_view.pt
+msgid "label"
+msgstr "label"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_no_results"
+msgstr "Emaitzarik ez"
+
+#.   <p condition="not:directories">
+#.         No directory available
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "no_dir_available"
+msgstr "Ez dago direktoriorik"
 
 msgid "psm_entry_created"
 msgstr "Sarrera sortuta"
@@ -47,23 +168,8 @@ msgstr "Abizena"
 msgid "label_full_name"
 msgstr "Izen osoa"
 
-msgid "cpsdir_label_search_entry"
-msgstr "Sarrera bilatu"
-
-msgid "cpsdir_label_create_entry"
-msgstr "Sarrera berria sortu"
-
 msgid "cpsdir_label_delete_entry"
 msgstr "Sarrera ezabatu"
-
-msgid "cpsdir_label_edit_entry"
-msgstr "Sarrera editatu"
-
-msgid "cpsdir_label_view_entry"
-msgstr "Sarrera ikusi"
-
-msgid "cpsdir_label_results"
-msgstr "Bilaketa emaitzak"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -82,9 +188,11 @@ msgstr "Erabiltzailea"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
+"Sorry but this entry can not be deleted, you have to delete all sub entries "
+"first."
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr ""
+msgstr "An entry with the same identifier already exists"
 
 #, fuzzy
 msgid "label_cpsdir_roles_Member"
@@ -92,31 +200,4 @@ msgstr "Member"
 
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Administrator"
-
-msgid "Error"
-msgstr "Errorea"
-
-msgid "choose_a_directory"
-msgstr "Direktorioa aukeratu"
-
-msgid "cpsdir_label_upto_directories"
-msgstr "Direktorioetara"
-
-msgid "description_too_many_results_refine_query"
-msgstr "Emaitza larregi; galdera gehiago zehaztu, mesedez."
-
-msgid "id"
-msgstr "id"
-
-msgid "label"
-msgstr "label"
-
-msgid "label_no_results"
-msgstr "Emaitzarik ez"
-
-msgid "no_dir_available"
-msgstr "Ez dago direktoriorik"
-
-#~ msgid "i18_key-help_for_this_field"
-#~ msgstr "Laguntza"
+msgstr "Manager"

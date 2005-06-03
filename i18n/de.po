@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-02 14:33default\n"
+"POT-Creation-Date: 2005-06-03 15:09default\n"
 "PO-Revision-Date: 2005-03-14 09:52+0100\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -82,6 +82,14 @@ msgstr "Eintrag löschen nicht erlaubt"
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Eintrag existiert schon"
 
+#, fuzzy
+msgid "label_cpsdir_roles_Member"
+msgstr "Member"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Manager"
+msgstr "Manager"
+
 msgid "Error"
 msgstr "Fehler"
 
@@ -108,14 +116,23 @@ msgstr "Kein Treffer"
 msgid "no_dir_available"
 msgstr "Kein Verzeichnis verfügbar"
 
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "button_back"
+#~ msgstr "ZurÃ¼ck"
+
+#~ msgid "button_delete"
+#~ msgstr "LÃ¶schen"
+
+#~ msgid "button_search"
+#~ msgstr "Suchen"
+
 #~ msgid "i18_key-help_for_this_field"
 #~ msgstr "Hilfe für dieses Feld"
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"
-
-#~ msgid "Title"
-#~ msgstr "Titel"
 
 #~ msgid "button_create"
 #~ msgstr "Erstellen"
@@ -126,14 +143,8 @@ msgstr "Kein Verzeichnis verfügbar"
 #~ msgid "Directories"
 #~ msgstr "Verzeichnisse"
 
-#~ msgid "button_back"
-#~ msgstr "ZurÃ¼ck"
-
 #~ msgid "button_change"
 #~ msgstr "Sichern"
-
-#~ msgid "button_search"
-#~ msgstr "Suchen"
 
 #~ msgid "cpsdir_label_create ${dirname}"
 #~ msgstr "Erstelle in ${dirname}"
@@ -146,6 +157,3 @@ msgstr "Kein Verzeichnis verfügbar"
 
 #~ msgid "cpsdir_label_view"
 #~ msgstr "Ansehen"
-
-#~ msgid "button_delete"
-#~ msgstr "LÃ¶schen"

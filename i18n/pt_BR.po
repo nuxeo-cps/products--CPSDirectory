@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2005-06-02 14:38default\n"
+"POT-Creation-Date: 2005-06-03 15:40default\n"
 "PO-Revision-Date: 2004-09-08 15:49-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@curiango.ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -16,6 +16,127 @@ msgstr ""
 "Language-Code: pt_BR\n"
 "Language-Name: Portuguese Brazilian\n"
 "Domain: default\n"
+
+#.   <em content="err" style="color:red">Error</em>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+msgid "Error"
+msgstr "Erro"
+
+#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.                 Title
+#.               </a>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "Title"
+msgstr ""
+
+#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
+#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "button_back"
+msgstr ""
+
+#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
+#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "button_delete"
+msgstr ""
+
+#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
+#: from ../skins/cps_directory/layout_dir_search.pt
+msgid "button_search"
+msgstr ""
+
+#.   <p>Choose a directory</p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "choose_a_directory"
+msgstr "Escolha um diretório"
+
+#.   <span>create entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+msgid "cpsdir_label_create_entry"
+msgstr "Criar uma entrada"
+
+#.   <span>Edit entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
+msgid "cpsdir_label_edit_entry"
+msgstr "Editar entrada"
+
+#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_results"
+msgstr "Resultados"
+
+#.   <span condition="python: ok != 'results'">search an entry</span>
+#.   <span condition="python: ok != 'results'" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+msgid "cpsdir_label_search_entry"
+msgstr "Buscar entrada"
+
+#.   <strong>cpsdir_label_upto_directories</strong>
+#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_upto_directories"
+msgstr "Subir para"
+
+#.   <span>view entry</span>
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view_entry"
+msgstr "Visualizar entrada"
+
+#.   <p />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
+msgid "description_too_many_results_refine_query"
+msgstr "Muitos resultados; refine sua busca."
+
+#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+msgid "i18_key-help_for_this_field"
+msgstr "Tecla de ajuda i18 para este campo"
+
+#.   <th content="field/title">id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "id"
+msgstr "id"
+
+#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
+#.   <span content="widget/label" condition="widget/is_i18n">label</span>
+#: from ../skins/cps_directory/layout_dir_edit.pt
+#: ../skins/cps_directory/layout_dir_search.pt
+#: ../skins/cps_directory/layout_dir_view.pt
+msgid "label"
+msgstr "Rótulo"
+
+#.   <span />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_no_results"
+msgstr "Nenhum resultado"
+
+#.   <p condition="not:directories">
+#.         No directory available
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "no_dir_available"
+msgstr "Nenhum diretório disponível"
 
 msgid "psm_entry_created"
 msgstr "Entrada criada"
@@ -42,23 +163,8 @@ msgstr "Último Nome"
 msgid "label_full_name"
 msgstr "Nome Completo"
 
-msgid "cpsdir_label_search_entry"
-msgstr "Buscar entrada"
-
-msgid "cpsdir_label_create_entry"
-msgstr "Criar uma entrada"
-
 msgid "cpsdir_label_delete_entry"
 msgstr "Remover entrada"
-
-msgid "cpsdir_label_edit_entry"
-msgstr "Editar entrada"
-
-msgid "cpsdir_label_view_entry"
-msgstr "Visualizar entrada"
-
-msgid "cpsdir_label_results"
-msgstr "Resultados"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -71,7 +177,7 @@ msgstr "Habilitar área particular"
 
 #, fuzzy
 msgid "label_roles_Manager"
-msgstr "Administrator"
+msgstr "Manager"
 
 #, fuzzy
 msgid "label_roles_Member"
@@ -91,31 +197,4 @@ msgstr "Member"
 
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Administrator"
-
-msgid "Error"
-msgstr "Erro"
-
-msgid "choose_a_directory"
-msgstr "Escolha um diretório"
-
-msgid "cpsdir_label_upto_directories"
-msgstr "Subir para"
-
-msgid "description_too_many_results_refine_query"
-msgstr "Muitos resultados; refine sua busca."
-
-msgid "id"
-msgstr "id"
-
-msgid "label"
-msgstr "Rótulo"
-
-msgid "label_no_results"
-msgstr "Nenhum resultado"
-
-msgid "no_dir_available"
-msgstr "Nenhum diretório disponível"
-
-#~ msgid "i18_key-help_for_this_field"
-#~ msgstr "Tecla de ajuda i18 para este campo"
+msgstr "Manager"
