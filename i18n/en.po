@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: 2004-08-30 12:21+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -25,87 +25,11 @@ msgstr ""
 "Language-Name: English\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Error"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Choose a directory"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Create a new entry"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Edit entry"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Search results"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Search an entry"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Up to Directories"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "View entry"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr "There are too many results for your query, please refine your query."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "No match"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "No directory available"
-
 msgid "psm_entry_created"
 msgstr "Entry created"
+
+msgid "label_roles"
+msgstr "Roles"
 
 msgid "label_groups"
 msgstr "Groups"
@@ -125,8 +49,23 @@ msgstr "Last Name"
 msgid "label_full_name"
 msgstr "Full Name"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Search an entry"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Create a new entry"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Delete entry"
+
+msgid "cpsdir_label_edit_entry"
+msgstr "Edit entry"
+
+msgid "cpsdir_label_view_entry"
+msgstr "View entry"
+
+msgid "cpsdir_label_results"
+msgstr "Search results"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -138,7 +77,7 @@ msgid "cpsdir_label_homeless"
 msgstr "Enable private area"
 
 msgid "label_roles_Manager"
-msgstr "Administrator"
+msgstr "Manager"
 
 msgid "label_roles_Member"
 msgstr "Member"
@@ -150,3 +89,34 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "An entry with the same identifier already exists"
+
+msgid "label_cpsdir_roles_Member"
+msgstr "Member"
+
+msgid "label_cpsdir_roles_Manager"
+msgstr "Manager"
+
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#~ msgid "choose_a_directory"
+#~ msgstr "Choose a directory"
+
+#~ msgid "cpsdir_label_upto_directories"
+#~ msgstr "Up to Directories"
+
+#~ msgid "description_too_many_results_refine_query"
+#~ msgstr ""
+#~ "There are too many results for your query, please refine your query."
+
+#~ msgid "id"
+#~ msgstr "id"
+
+#~ msgid "label"
+#~ msgstr "label"
+
+#~ msgid "label_no_results"
+#~ msgstr "No match"
+
+#~ msgid "no_dir_available"
+#~ msgstr "No directory available"

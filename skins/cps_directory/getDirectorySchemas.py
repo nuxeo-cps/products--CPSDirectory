@@ -34,6 +34,7 @@ members_schema = {
         'data': {
                 'default_expr': 'python:[]',
                 'acl_write_roles': 'Manager',
+                'translated': 1,
             },
         },
     'groups': {

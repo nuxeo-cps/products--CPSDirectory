@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -25,88 +25,11 @@ msgstr ""
 "Language-Name: French\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Erreur"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Choix de l'annuaire"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Créer une nouvelle entrée"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Modifier l'entrée"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Résultats de la recherche"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Chercher une entrée"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Liste des annuaires"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "Voir l'entrée"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr ""
-"Il y a trop de résultats pour votre requête, merci de préciser votre requête."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "Aucun résultat"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "Aucun annuaire disponible"
-
 msgid "psm_entry_created"
 msgstr "Entrée créée"
+
+msgid "label_roles"
+msgstr "Rôles"
 
 msgid "label_groups"
 msgstr "Groupes"
@@ -126,8 +49,23 @@ msgstr "Nom"
 msgid "label_full_name"
 msgstr "Nom complet"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Chercher une entrée"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Créer une nouvelle entrée"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Supprimer l'entrée"
+
+msgid "cpsdir_label_edit_entry"
+msgstr "Modifier l'entrée"
+
+msgid "cpsdir_label_view_entry"
+msgstr "Voir l'entrée"
+
+msgid "cpsdir_label_results"
+msgstr "Résultats de la recherche"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -151,3 +89,35 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Une entré existe déjà avec le même identifiant"
+
+msgid "label_cpsdir_roles_Member"
+msgstr "Membre"
+
+msgid "label_cpsdir_roles_Manager"
+msgstr "Administrateur"
+
+#~ msgid "Error"
+#~ msgstr "Erreur"
+
+#~ msgid "choose_a_directory"
+#~ msgstr "Choix de l'annuaire"
+
+#~ msgid "cpsdir_label_upto_directories"
+#~ msgstr "Liste des annuaires"
+
+#~ msgid "description_too_many_results_refine_query"
+#~ msgstr ""
+#~ "Il y a trop de résultats pour votre requête, merci de préciser votre "
+#~ "requête."
+
+#~ msgid "id"
+#~ msgstr "id"
+
+#~ msgid "label"
+#~ msgstr "label"
+
+#~ msgid "label_no_results"
+#~ msgstr "Aucun résultat"
+
+#~ msgid "no_dir_available"
+#~ msgstr "Aucun annuaire disponible"

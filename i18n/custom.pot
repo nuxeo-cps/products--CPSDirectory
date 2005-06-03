@@ -75,3 +75,9 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr ""
+
+msgid "label_cpsdir_roles_Member"
+msgstr ""
+
+msgid "label_cpsdir_roles_Manager"
+msgstr ""

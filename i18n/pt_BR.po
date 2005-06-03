@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: 2004-09-08 15:49-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@curiango.ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -17,87 +17,12 @@ msgstr ""
 "Language-Name: Portuguese Brazilian\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Erro"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Escolha um diretório"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Criar uma entrada"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Editar entrada"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Resultados"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Buscar entrada"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Subir para"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "Visualizar entrada"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr "Muitos resultados; refine sua busca."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Tecla de ajuda i18 para este campo"
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "Rótulo"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "Nenhum resultado"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "Nenhum diretório disponível"
-
 msgid "psm_entry_created"
 msgstr "Entrada criada"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Roles"
 
 msgid "label_groups"
 msgstr "Grupos"
@@ -117,8 +42,23 @@ msgstr "Último Nome"
 msgid "label_full_name"
 msgstr "Nome Completo"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Buscar entrada"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Criar uma entrada"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Remover entrada"
+
+msgid "cpsdir_label_edit_entry"
+msgstr "Editar entrada"
+
+msgid "cpsdir_label_view_entry"
+msgstr "Visualizar entrada"
+
+msgid "cpsdir_label_results"
+msgstr "Resultados"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -129,6 +69,14 @@ msgstr ""
 msgid "cpsdir_label_homeless"
 msgstr "Habilitar área particular"
 
+#, fuzzy
+msgid "label_roles_Manager"
+msgstr "Administrator"
+
+#, fuzzy
+msgid "label_roles_Member"
+msgstr "Member"
+
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 "Desculpe mas esta entrada não pode ser removida, você que tem remover todas "
@@ -136,3 +84,38 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Uma entrada com o mesmo identificador já existe"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Member"
+msgstr "Member"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Manager"
+msgstr "Administrator"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "choose_a_directory"
+msgstr "Escolha um diretório"
+
+msgid "cpsdir_label_upto_directories"
+msgstr "Subir para"
+
+msgid "description_too_many_results_refine_query"
+msgstr "Muitos resultados; refine sua busca."
+
+msgid "id"
+msgstr "id"
+
+msgid "label"
+msgstr "Rótulo"
+
+msgid "label_no_results"
+msgstr "Nenhum resultado"
+
+msgid "no_dir_available"
+msgstr "Nenhum diretório disponível"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Tecla de ajuda i18 para este campo"

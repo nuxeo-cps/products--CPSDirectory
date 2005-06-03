@@ -1,12 +1,9 @@
-# ##########################################################
-# ################# DON'T EDIT THIS FILE! ##################
-# ##########################################################
 # Gettext Message File for default.
 # Your Name <your@email>, Year
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -14,91 +11,15 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language-code: LL\n"
-"Language-name: Language\n"
+"Language-Code: LL\n"
+"Language-Name: Language\n"
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr ""
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr ""
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr ""
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr ""
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr ""
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr ""
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr ""
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr ""
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr ""
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr ""
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr ""
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr ""
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr ""
-
 msgid "psm_entry_created"
+msgstr ""
+
+msgid "label_roles"
 msgstr ""
 
 msgid "label_groups"
@@ -119,7 +40,22 @@ msgstr ""
 msgid "label_full_name"
 msgstr ""
 
+msgid "cpsdir_label_search_entry"
+msgstr ""
+
+msgid "cpsdir_label_create_entry"
+msgstr ""
+
 msgid "cpsdir_label_delete_entry"
+msgstr ""
+
+msgid "cpsdir_label_edit_entry"
+msgstr ""
+
+msgid "cpsdir_label_view_entry"
+msgstr ""
+
+msgid "cpsdir_label_results"
 msgstr ""
 
 msgid "cpsdir_help_homeless"
@@ -138,4 +74,10 @@ msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
+msgstr ""
+
+msgid "label_cpsdir_roles_Member"
+msgstr ""
+
+msgid "label_cpsdir_roles_Manager"
 msgstr ""

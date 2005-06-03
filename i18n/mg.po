@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mg\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: 2004-11-24 14:00+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -26,89 +26,12 @@ msgstr ""
 "Language-Name: Malagasy\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Diso"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Fifidianana tahirin'adiresy"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Mampiditra vaovao"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Manova"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Vokatry ny fikarohana"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Mitady"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Lisitry ny tahirin'adiresy"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "Jerena"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr ""
-"Betsaka loatra ny valin'ny fangatahanao, Miangavy anao mba hamerina mazava "
-"tsara ny tena fangatahanao."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "Tsy misy valiny"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "Tsy misy tahirin'adiresy azo jerena"
-
 msgid "psm_entry_created"
 msgstr "Voaforona ilay nampidirinao teo"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Rôles"
 
 msgid "label_groups"
 msgstr "Vondrona"
@@ -128,8 +51,23 @@ msgstr "Anarana"
 msgid "label_full_name"
 msgstr "Anarana feno"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Mitady"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Mampiditra vaovao"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Mamono"
+
+msgid "cpsdir_label_edit_entry"
+msgstr "Manova"
+
+msgid "cpsdir_label_view_entry"
+msgstr "Jerena"
+
+msgid "cpsdir_label_results"
+msgstr "Vokatry ny fikarohana"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -153,3 +91,37 @@ msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Efa misy ato io sady mitovy ny identifiant-ny"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Member"
+msgstr "Membre"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Manager"
+msgstr "Administrateur"
+
+msgid "Error"
+msgstr "Diso"
+
+msgid "choose_a_directory"
+msgstr "Fifidianana tahirin'adiresy"
+
+msgid "cpsdir_label_upto_directories"
+msgstr "Lisitry ny tahirin'adiresy"
+
+msgid "description_too_many_results_refine_query"
+msgstr ""
+"Betsaka loatra ny valin'ny fangatahanao, Miangavy anao mba hamerina mazava "
+"tsara ny tena fangatahanao."
+
+msgid "id"
+msgstr "id"
+
+msgid "label"
+msgstr "label"
+
+msgid "label_no_results"
+msgstr "Tsy misy valiny"
+
+msgid "no_dir_available"
+msgstr "Tsy misy tahirin'adiresy azo jerena"

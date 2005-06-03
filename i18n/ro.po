@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:38default\n"
 "PO-Revision-Date: 2005-04-01 12:51+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -18,88 +18,12 @@ msgstr ""
 "Language-Name: Rumanian\n"
 "Domain: default\n"
 
-
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Eroare"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Alege un director"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Creeaza o noua inregistrare"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Modifica inregistrarea"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Rezultatele cautarii"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Cauta o inregistrare"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Lista directoarelor"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "Vizualizare inregistrare"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr "Sunt prea multe rezultate pentru aceasta cerere, te rugam repeta cautarea selectand mai multe restrictii."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "Nici un rezultat"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "Nici un director disponibil"
-
 msgid "psm_entry_created"
 msgstr "Inregistrare creata cu succes"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Rôles"
 
 msgid "label_groups"
 msgstr "Grupuri"
@@ -119,15 +43,29 @@ msgstr "Nume"
 msgid "label_full_name"
 msgstr "Nume complet"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Cauta o inregistrare"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Creeaza o noua inregistrare"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Sterge inregistrare"
 
+msgid "cpsdir_label_edit_entry"
+msgstr "Modifica inregistrarea"
+
+msgid "cpsdir_label_view_entry"
+msgstr "Vizualizare inregistrare"
+
+msgid "cpsdir_label_results"
+msgstr "Rezultatele cautarii"
+
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Un spatiu personal iti da acces la :<br />- un spatiu de lucru "
-"privat<br />- o agenda personala<br />- favorite<br />- "
-"posibilitatea  de a"
-"minimiza/inchide box-urile<br />"
+"Un spatiu personal iti da acces la :<br />- un spatiu de lucru privat<br />- "
+"o agenda personala<br />- favorite<br />- posibilitatea  de aminimiza/"
+"inchide box-urile<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Utilizarea unui spatiu personal"
@@ -140,9 +78,42 @@ msgstr "Membru"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Atentie inregistrarea nu a fost stearsa! Pentru stergerea aceasteia "
-"este necesara "
-"stergerea tuturor inregistrarilor continute de aceasta."
+"Atentie inregistrarea nu a fost stearsa! Pentru stergerea aceasteia este "
+"necesara stergerea tuturor inregistrarilor continute de aceasta."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "O inregistrare cu acelasi identificator exista deja."
+
+#, fuzzy
+msgid "label_cpsdir_roles_Member"
+msgstr "Membre"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Manager"
+msgstr "Administrateur"
+
+msgid "Error"
+msgstr "Eroare"
+
+msgid "choose_a_directory"
+msgstr "Alege un director"
+
+msgid "cpsdir_label_upto_directories"
+msgstr "Lista directoarelor"
+
+msgid "description_too_many_results_refine_query"
+msgstr ""
+"Sunt prea multe rezultate pentru aceasta cerere, te rugam repeta cautarea "
+"selectand mai multe restrictii."
+
+msgid "id"
+msgstr "id"
+
+msgid "label"
+msgstr "label"
+
+msgid "label_no_results"
+msgstr "Nici un rezultat"
+
+msgid "no_dir_available"
+msgstr "Nici un director disponibil"

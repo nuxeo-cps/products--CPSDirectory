@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-02 14:33default\n"
 "PO-Revision-Date: 2005-03-14 09:52+0100\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -18,89 +18,12 @@ msgstr ""
 "Language-Name: German\n"
 "Domain: default\n"
 
-#.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-msgid "Error"
-msgstr "Fehler"
-
-#.   <p>Choose a directory</p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "choose_a_directory"
-msgstr "Wähle ein Verzeichnis"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-msgid "cpsdir_label_create_entry"
-msgstr "Neuer Eintrag"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-msgid "cpsdir_label_edit_entry"
-msgstr "Bearbeite Eintrag"
-
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_results"
-msgstr "Such Ergebnis"
-
-#.   <span condition="python: ok != 'results'" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-msgid "cpsdir_label_search_entry"
-msgstr "Suche Eintrag"
-
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Zurück zu Verzeichnissen"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
-msgstr "Ansehen Eintrag"
-
-#.   <p />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
-msgid "description_too_many_results_refine_query"
-msgstr ""
-"Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre "
-"Suchabfrage."
-
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Hilfe für dieses Feld"
-
-#.   <th content="field/title">id</th>
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "id"
-msgstr "ID"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "Label"
-
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "label_no_results"
-msgstr "Kein Treffer"
-
-#.   <p condition="not:directories">
-#.         No directory available
-#.       </p>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-msgid "no_dir_available"
-msgstr "Kein Verzeichnis verfügbar"
-
 msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
+
+#, fuzzy
+msgid "label_roles"
+msgstr "Roles"
 
 msgid "label_groups"
 msgstr "Gruppen"
@@ -120,8 +43,23 @@ msgstr "Nachname"
 msgid "label_full_name"
 msgstr "Voller Name"
 
+msgid "cpsdir_label_search_entry"
+msgstr "Suche Eintrag"
+
+msgid "cpsdir_label_create_entry"
+msgstr "Neuer Eintrag"
+
 msgid "cpsdir_label_delete_entry"
 msgstr "Lösche Eintrag"
+
+msgid "cpsdir_label_edit_entry"
+msgstr "Bearbeite Eintrag"
+
+msgid "cpsdir_label_view_entry"
+msgstr "Ansehen Eintrag"
+
+msgid "cpsdir_label_results"
+msgstr "Such Ergebnis"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
@@ -143,6 +81,35 @@ msgstr "Eintrag löschen nicht erlaubt"
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Eintrag existiert schon"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "choose_a_directory"
+msgstr "Wähle ein Verzeichnis"
+
+msgid "cpsdir_label_upto_directories"
+msgstr "Zurück zu Verzeichnissen"
+
+msgid "description_too_many_results_refine_query"
+msgstr ""
+"Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre "
+"Suchabfrage."
+
+msgid "id"
+msgstr "ID"
+
+msgid "label"
+msgstr "Label"
+
+msgid "label_no_results"
+msgstr "Kein Treffer"
+
+msgid "no_dir_available"
+msgstr "Kein Verzeichnis verfügbar"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Hilfe für dieses Feld"
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"
