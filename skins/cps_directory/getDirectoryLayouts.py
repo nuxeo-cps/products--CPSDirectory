@@ -66,6 +66,7 @@ members_layout = {
                 'css_class': '',
                 'vocabulary': 'global_roles',
                 'render_format': 'checkbox',
+                'translated': 1,
             },
         },
         'groups': {
