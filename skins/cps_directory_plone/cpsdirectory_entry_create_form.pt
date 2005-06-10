@@ -20,12 +20,12 @@
     [{
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_view',
-      'title': here.Localizer.default('Directories'),
+      'title': here.translation_service('Directories'),
     },
     {
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
-      'title': here.Localizer.default(dirtitle),
+      'title': here.translation_service(dirtitle),
     }
    ]);" />
     <tal:block define="global dummy python:

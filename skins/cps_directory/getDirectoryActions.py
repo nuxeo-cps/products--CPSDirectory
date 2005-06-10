@@ -46,7 +46,7 @@ edit_action = {
 delete_action = {
     'id':'delete_entry',
     'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
-    'onclick': 'return window.confirm(\''+ context.Localizer.default('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
+    'onclick': 'return window.confirm(\''+ context.translation_service('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
     'name': 'cpsdir_label_delete_entry',
     'category': 'object',
     }

@@ -9,13 +9,13 @@ from zLOG import LOG, DEBUG
 directories_breadcrumb = {
     'id': 'directories',
     'url': context.portal_url() + '/cpsdirectory_view',
-    'title': context.Localizer.default('Directories'),
+    'title': context.translation_service('Directories'),
     }
 
 directory_breadcrumbs = {
     'id': 'directories',
     'url': context.portal_url() + '/cpsdirectory_entry_search_form?dirname=' + dirname,
-    'title': context.Localizer.default(dirtitle),
+    'title': context.translation_service(dirtitle),
     }
 
 breadcrumb_set = [directories_breadcrumb]

@@ -22,12 +22,12 @@
     [{
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_view',
-      'title': here.Localizer.default('Directories'),
+      'title': here.translation_service('Directories'),
     },
     {
       'id': 'directories',
       'url': here.portal_url() + '/cpsdirectory_entry_search_form?dirname='+dirname,
-      'title': here.Localizer.default(dirtitle),
+      'title': here.translation_service(dirtitle),
     }
    ]);" />
     <tal:block define="global dummy python:
@@ -56,7 +56,7 @@ actions['object'].append({'id':'edit_entry',
       <tal:block define="global dummy python:
 actions['object'].append({'id':'delete_entry',
   'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
-  'onclick': 'return window.confirm(\''+ here.Localizer.default('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
+  'onclick': 'return window.confirm(\''+ here.translation_service('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
   'name': 'cpsdir_label_delete_entry',
   'category': 'object'})" />
     </tal:block>

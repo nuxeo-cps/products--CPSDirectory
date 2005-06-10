@@ -6,8 +6,8 @@
     [{
       'id': 'directories',
       'url': portal_url+'/cpsdirectory_view',
-      'longtitle': here.Localizer.default('Directories'),
-      'title': here.Localizer.default('Directories'),
+      'longtitle': here.translation_service('Directories'),
+      'title': here.translation_service('Directories'),
     }]);
   dirtool here/portal_directories;
   directories dirtool/listVisibleDirectories;
