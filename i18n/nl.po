@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 "Language-Code: nl\n"
-"Language-Name: Nederlands\n"
+"Language-Name: Dutch\n"
 "Domain: default\n"
 
 #.   <em content="err" style="color:red">Error</em>

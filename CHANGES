@@ -8,6 +8,7 @@ Bug fixes:
 ~~~~~~~~~~
 - i18n fix on role labels translations (Member & Manager)
 - Taking advantage of the new centralized CPSI18n.tests.translations module.
+- Fixed translation files through the CPSI18n/bin/fix_pos script.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
