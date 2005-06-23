@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2005-06-03 15:40default\n"
+"POT-Creation-Date: 2005-06-23 17:27default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr ""
 
-#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
 #.                 Title
 #.               </a>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -30,23 +30,12 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
-#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
+#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "button_back"
-msgstr ""
-
-#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
-#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_delete"
-msgstr ""
-
-#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
 msgstr ""
 
 #.   <p>Choose a directory</p>

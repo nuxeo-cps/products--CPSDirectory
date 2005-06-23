@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2004-08-30 12:18default\n"
+"POT-Creation-Date: 2005-06-23 17:27default\n"
 "PO-Revision-Date: 2005-06-15 14:12-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -28,28 +28,52 @@ msgstr ""
 msgid "Error"
 msgstr "Erro"
 
+#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
+#.                 Title
+#.               </a>
+#: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
+msgid "Title"
+msgstr ""
+
+#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
+#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
+msgid "button_back"
+msgstr ""
+
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Escolha um diretório"
 
+#.   <span>create entry</span>
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Criar uma entrada"
 
+#.   <span>Edit entry</span>
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Editar entrada"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Resultados"
 
+#.   <span condition="python: ok != 'results'">search an entry</span>
 #.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Buscar entrada"
 
@@ -58,11 +82,17 @@ msgstr "Buscar entrada"
 #: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_upto_directories"
 msgstr "Subir para"
 
+#.   <span>view entry</span>
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
@@ -71,7 +101,7 @@ msgstr "Visualizar entrada"
 msgid "description_too_many_results_refine_query"
 msgstr "Muitos resultados; refine sua busca."
 
-#.   <span style="white-space:pre;" content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
+#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 msgid "i18_key-help_for_this_field"
 msgstr "Tecla de ajuda i18 para este campo"
@@ -98,11 +128,15 @@ msgstr "Nenhum resultado"
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
+#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Nenhum diretório disponível"
 
 msgid "psm_entry_created"
 msgstr "Entrada criada"
+
+msgid "label_roles"
+msgstr "Grupos"
 
 msgid "label_groups"
 msgstr "Grupos"
@@ -148,5 +182,16 @@ msgstr ""
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Uma entrada com o mesmo identificador já existe"
 
-#~ msgid "label_roles"
-#~ msgstr "Grupos"
+#, fuzzy
+msgid "label_cpsdir_roles_Member"
+msgstr "Member"
+
+#, fuzzy
+msgid "label_cpsdir_roles_Manager"
+msgstr "Manager"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"

@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2005-06-03 15:40default\n"
+"POT-Creation-Date: 2005-06-23 17:27default\n"
 "PO-Revision-Date: 2004-10-04 16:52+0100\n"
 "Last-Translator:  <>\n"
 "Language-Team: Euskara <eu@li.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 "Language-Name: Basque\n"
 "Domain: default\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Errorea"
 
-#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
 #.                 Title
 #.               </a>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -37,23 +37,12 @@ msgstr "Errorea"
 msgid "Title"
 msgstr ""
 
-#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
-#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
+#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "button_back"
-msgstr ""
-
-#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
-#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_delete"
-msgstr ""
-
-#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -194,10 +183,15 @@ msgstr ""
 msgid "cpsdir_err_entry_already_exists"
 msgstr "An entry with the same identifier already exists"
 
-#, fuzzy
 msgid "label_cpsdir_roles_Member"
-msgstr "Member"
+msgstr ""
 
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"

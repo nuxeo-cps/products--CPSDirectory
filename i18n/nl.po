@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-03 15:40default\n"
+"POT-Creation-Date: 2005-06-23 17:27default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: Nederlands <contact@nuxeo.com>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Language-Name: Dutch\n"
 "Domain: default\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Error"
 
-#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
 #.                 Title
 #.               </a>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -33,23 +33,12 @@ msgstr "Error"
 msgid "Title"
 msgstr ""
 
-#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
-#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
+#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "button_back"
-msgstr ""
-
-#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
-#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_delete"
-msgstr ""
-
-#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -205,3 +194,9 @@ msgstr "Member"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"
