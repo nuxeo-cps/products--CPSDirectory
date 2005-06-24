@@ -17,10 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-code: pt-br\n"
-"Language-Name: Português do Brasil\n"
+"Language-Name: Portuguese Brazilian\n"
 "Domain: default\n"
 "Language-Code: pt_BR\n"
-"Language-Name: Portuguese Brazilian\n"
+
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
