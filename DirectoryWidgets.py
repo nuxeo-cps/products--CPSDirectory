@@ -320,7 +320,7 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
         """Validate datastructure and update datamodel."""
         widget_id = self.getWidgetId()
         err, v = self._extractValue(datastructure[widget_id])
-        if not err and v and not self.id_pat.match(v.lower()):
+        if not err and v and not self._checkIdentifier(v):
             err = 'cpsschemas_err_identifier'
 
         if err:
@@ -329,10 +329,9 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
         else:
             datamodel = datastructure.getDataModel()
             datamodel[self.fields[0]] = v
-
-        if kw['layout_mode'] == 'create':
-            portal_registration = getToolByName(self, 'portal_registration')
-            return portal_registration.isMemberIdAllowed(v)
+            if kw['layout_mode'] == 'create':
+                portal_registration = getToolByName(self, 'portal_registration')
+                return portal_registration.isMemberIdAllowed(v)
 
         return not err
 
