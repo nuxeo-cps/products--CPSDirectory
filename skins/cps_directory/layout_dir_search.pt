@@ -8,7 +8,7 @@
   tal:attributes="action formaction">
 <input type="hidden" name="dirname" value="."
   tal:attributes="value request/dirname|string:members" />
-<table cellpadding="0" cellspacing="2" border="0" summary="form layout">
+<table cellpadding="0" cellspacing="2" summary="form layout">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
     <tal:block define="widget cell/widget;
