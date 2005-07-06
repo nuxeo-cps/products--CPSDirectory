@@ -32,6 +32,7 @@ import sys
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from OFS.Image import Image
+from OFS.Cache import Cacheable
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.Field import ValidationError
@@ -121,7 +122,7 @@ def implodeRDN(avas):
     return '+'.join(avas)
 
 
-class LDAPBackingDirectory(BaseDirectory):
+class LDAPBackingDirectory(BaseDirectory, Cacheable):
     """LDAP Backing Directory.
 
     A directory that connects to an LDAP server.
@@ -137,6 +138,11 @@ class LDAPBackingDirectory(BaseDirectory):
     """
 
     meta_type = 'CPS LDAP Backing Directory'
+
+    manage_options = (
+        BaseDirectory.manage_options +
+        Cacheable.manage_options
+        )
 
     security = ClassSecurityInfo()
 
@@ -236,6 +242,7 @@ class LDAPBackingDirectory(BaseDirectory):
         self.ldap_search_classes_filter = filt
         # Reset connection (XXX problems with multiple threads)
         self._v_conn = None
+        self.ZCacheable_invalidate()
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, search=0, **kw):
@@ -441,6 +448,7 @@ class LDAPBackingDirectory(BaseDirectory):
                 raise ValueError("Bad value %s for '%s'" % (`value`, key))
             if f:
                 filter_elems.append(f)
+        filter_elems.sort()
         filter = ''.join(filter_elems)
         if len(filter_elems) > 1:
             filter = '(&%s)' % filter
@@ -642,6 +650,26 @@ class LDAPBackingDirectory(BaseDirectory):
 
         If password is provided, attempt to bind using it.
         """
+        if self.ZCacheable_isCachingEnabled():
+            attrs = list(attrs)
+            attrs.sort()
+            keyset = {
+                'base': base,
+                'scope': scope,
+                'filter': filter,
+                'attrs': attrs,
+                }
+            if password is not None:
+                keyset['password'] = password
+            LOG('searchLDAP', TRACE, "Searching cache for %s" % (keyset,))
+            ldap_entries = self.ZCacheable_get(keywords=keyset)
+            if ldap_entries is not None:
+                LOG('searchLDAP', TRACE, " -> results=%s" %
+                    (ldap_entries[:20],))
+                return ldap_entries
+        else:
+            keyset = None
+
         if password is None:
             conn = self.connectLDAP()
         else:
@@ -672,6 +700,11 @@ class LDAPBackingDirectory(BaseDirectory):
         LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
         #except ldap.NO_SUCH_OBJECT:
         #except ldap.SIZELIMIT_EXCEEDED:
+
+        if keyset is not None:
+            LOG('searchLDAP', TRACE, "Putting in cache")
+            self.ZCacheable_set(ldap_entries, keywords=keyset)
+
         return ldap_entries
 
     def _insufficientAccess(self, e):
@@ -694,6 +727,7 @@ class LDAPBackingDirectory(BaseDirectory):
             conn.delete_s(dn)
         except ldap.INSUFFICIENT_ACCESS, e:
             raise self._insufficientAccess(e)
+        self.ZCacheable_invalidate()
 
     security.declarePrivate('insertLDAP')
     def insertLDAP(self, dn, ldap_attrs):
@@ -706,6 +740,7 @@ class LDAPBackingDirectory(BaseDirectory):
             conn.add_s(dn, attrs_list)
         except ldap.INSUFFICIENT_ACCESS, e:
             raise self._insufficientAccess(e)
+        self.ZCacheable_invalidate()
         # FIXME: except ldap.OBJECT_CLASS_VIOLATION:
         # {'info': "unrecognized objectClass 'evolutionPerson'", ...}
 
@@ -754,6 +789,7 @@ class LDAPBackingDirectory(BaseDirectory):
 
         LOG('modifyLDAP', TRACE, "modify_s dn=%s mod_list=%s" % (dn, mod_list))
         conn.modify_s(dn, mod_list)
+        self.ZCacheable_invalidate()
 
 
 InitializeClass(LDAPBackingDirectory)

@@ -3,7 +3,11 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- LDAPBackingDirectory is now Cache-aware, and can be used with
+  a RAM Cache Manager. Caching is done at the lowest LDAP level, so
+  doesn't depend on user or rights.
+- RAM Cache Managers can be added directly in portal_directories. Typical
+  configuration should remove the AUTHENTICATED_USER from the keywords.
 Bug fixes:
 ~~~~~~~~~~
 - i18n fix on role labels translations (Member & Manager)
