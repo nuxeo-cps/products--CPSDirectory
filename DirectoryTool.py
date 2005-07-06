@@ -87,6 +87,8 @@ class DirectoryTool(UniqueObject, Folder):
             if (name.startswith('Z') and
                 name.endswith('Database Connection')):
                 meta_types.append(info)
+            elif name.endswith('RAM Cache Manager'):
+                meta_types.append(info)
         return meta_types
 
     security.declareProtected(ManagePortal, 'manage_addCPSDirectoryForm')
