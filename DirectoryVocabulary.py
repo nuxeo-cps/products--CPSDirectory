@@ -147,7 +147,7 @@ class DirectoryVocabulary(SimpleItemWithProperties):
         if self.add_empty_key and key == '':
             return 1
         dir = self._getDirectory()
-        return dir.hasEntry(key)
+        return dir._hasEntry(key)
 
     security.declareProtected(ManagePortal, 'isUserModified')
     def isUserModified(self):

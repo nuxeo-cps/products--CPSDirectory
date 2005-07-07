@@ -144,9 +144,10 @@ class IndirectDirectory(BaseDirectory):
             res.extend(res_to_append)
         return res
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
+        # XXX should use base class implementation
         return id in self.listEntryIds()
 
     security.declarePrivate('_createEntry')
@@ -162,11 +163,11 @@ class IndirectDirectory(BaseDirectory):
             id = entry[self.id_field]
             directory_id = self._getDirectoryIdForId(id)
             entry_id = self._getEntryIdForId(id)
-            if self.hasEntry(id):
+            if self._hasEntry(id):
                 raise KeyError("Entry '%s' already exists" % id)
             else:
                 directory = self._getDirectory(directory_id)
-                if directory.hasEntry(entry_id):
+                if directory._hasEntry(entry_id):
                     self.object_ids = self.object_ids + (id,)
                 else:
                     raise KeyError("Entry '%s' does not exist in directory '%s'"
@@ -180,7 +181,7 @@ class IndirectDirectory(BaseDirectory):
         indirect id from the list of references.
         """
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist !" % id)
         object_ids_list = list(self.object_ids)
         object_ids_list.remove(id)

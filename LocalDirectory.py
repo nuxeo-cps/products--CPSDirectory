@@ -206,11 +206,11 @@ class LocalDirectory(BaseDirectory):
         except AttributeError:
             raise NotImplementedError
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
         ob = self._getContent()
-        return ob.hasEntry(id)
+        return ob._hasEntry(id)
 
     security.declarePrivate('_createEntry')
     def _createEntry(self, entry):

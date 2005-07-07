@@ -192,18 +192,17 @@ class RolesDirectory(BaseDirectory):
                 roles_detail.append((role, details))
             return roles_detail
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
-        # XXX check security?
-        # XXX optimize for LDAP
+        # XXX should use base class implementation
         return id in self.listEntryIds()
 
     security.declarePrivate('_createEntry')
     def _createEntry(self, entry):
         """Create an entry in the directory."""
         role = entry[self.id_field]
-        if self.hasEntry(role):
+        if self._hasEntry(role):
             raise KeyError("Role '%s' already exists" % role)
         if role in ('Anonymous', 'Authenticated', 'Owner', ''):
             raise KeyError("Role '%s' is invalid" % role)

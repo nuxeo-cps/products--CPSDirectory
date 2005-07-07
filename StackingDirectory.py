@@ -99,14 +99,15 @@ class StackingDirectory(BaseDirectory):
     # XXX listEntryIdsAndTitles is generic and inherited from BaseDirectory,
     # but should try to call listEntryIdsAndTitles on the backing directories
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
+        # XXX should use base class implementation
         id_field = self.id_field
         for b_dir in self._getBackingDirs():
             if id_field == b_dir.id_field:
                 # Use primary id
-                if b_dir.hasEntry(id):
+                if b_dir._hasEntry(id):
                     return 1
             else:
                 # Use secondary id
@@ -141,7 +142,7 @@ class StackingDirectory(BaseDirectory):
     def _createEntry(self, entry):
         """Create an entry in the directory."""
         id = entry[self.id_field]
-        if self.hasEntry(id):
+        if self._hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
         # Adapter now does all the work
         adapter = self._getAdapters(id, creation=1)[0]
@@ -151,7 +152,7 @@ class StackingDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         id_field = self.id_field
         done = 0

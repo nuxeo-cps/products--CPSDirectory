@@ -160,18 +160,17 @@ class GroupsDirectory(BaseDirectory):
             # XXX: implement optimized version.
             return [(g, {'group': g}) for g in groups]
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
-        # XXX check security?
-        # XXX optimize for LDAP
+        # XXX should use base class implementation
         return id in self.listEntryIds()
 
     security.declarePrivate('_createEntry')
     def _createEntry(self, entry):
         """Create an entry in the directory."""
         group = entry[self.id_field]
-        if self.hasEntry(group):
+        if self._hasEntry(group):
             raise KeyError("Group '%s' already exists" % group)
         aclu = self.acl_users
         if not hasattr(aq_base(aclu), 'userFolderAddGroup'):
@@ -183,7 +182,7 @@ class GroupsDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Group '%s' does not exist" % id)
         aclu = self.acl_users
         aclu.userFolderDelGroups([id])

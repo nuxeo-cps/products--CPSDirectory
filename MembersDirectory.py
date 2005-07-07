@@ -159,10 +159,10 @@ class MembersDirectory(BaseDirectory):
         # XXX if returning props, back-convert known names.
         return res
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
-        # XXX check security?
+        # XXX should use base class implementation
         aclu = self.acl_users
         return id in aclu.getUserNames()
 
@@ -171,7 +171,7 @@ class MembersDirectory(BaseDirectory):
         """Create an entry in the directory.
         """
         id = entry[self.id_field]
-        if self.hasEntry(id):
+        if self._hasEntry(id):
             raise KeyError("Member '%s' already exists" % id)
         mtool = getToolByName(self, 'portal_membership')
         password = '38fnvas7ds' # XXX default password ???
@@ -197,7 +197,7 @@ class MembersDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Members '%s' does not exist" % id)
         mtool = getToolByName(self, 'portal_membership')
         mtool.deleteMembers([id], check_permission=0)

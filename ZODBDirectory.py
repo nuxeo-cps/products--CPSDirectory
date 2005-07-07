@@ -115,8 +115,8 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
             res.append((id, entry[title_field]))
         return res
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
         return self.hasObject(id)
 
@@ -163,7 +163,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         id = entry.get(self.id_field)
         if id is None:
             raise KeyError("Entry data must have '%s' field" % self.id_field)
-        if self.hasEntry(id):
+        if self._hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
         ob = ZODBDirectoryEntry()
         ob._setId(id)
@@ -189,7 +189,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         @type id: @String
         """
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         self._delObject(id)
         if not self.isUserModified():

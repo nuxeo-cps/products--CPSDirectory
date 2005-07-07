@@ -252,11 +252,6 @@ class LDAPDirectory(BaseDirectory):
             filter = '(&%s)' % filter
         return self._filteredSearchEntries(filter=filter, return_attrs=attrs)
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
-        """Does the directory have a given entry?"""
-        return self._hasEntry(id)
-
     security.declarePrivate('hasEntryByDN')
     def hasEntryByDN(self, dn):
         """Does the directory have a given entry?
@@ -307,7 +302,7 @@ class LDAPDirectory(BaseDirectory):
             raise ValueError("Missing value for '%s' in entry" %
                              self.ldap_rdn_attr)
         id = entry[self.id_field]
-        if id and self.hasEntry(id):
+        if id and self._hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
         rdn_attr = self.ldap_rdn_attr
         rdn = '%s=%s' % (rdn_attr, entry[rdn_attr])

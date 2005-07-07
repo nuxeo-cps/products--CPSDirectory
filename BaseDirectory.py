@@ -320,7 +320,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
         """List all the entry ids."""
-        raise NotImplementedError
+        return self._searchEntries()
 
     security.declarePrivate('listEntryIdsAndTitles')
     def listEntryIdsAndTitles(self):
@@ -339,7 +339,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
-        raise NotImplementedError
+        self.checkViewEntryAllowed()
+        return self._hasEntry(id)
+
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
+        """Does the directory have a given entry?
+
+        This method doesn't do security checks.
+        """
+        return bool(self._searchEntries(**{self.id_field: [id]}))
 
     security.declarePublic('createEntry')
     def createEntry(self, entry):
@@ -598,7 +607,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # this hack works only if id is not computed by createEntry
             # XXX Hack, this should be done by field/schema... XXX
             id = dm.data[self.id_field]
-            if id and self.hasEntry(id):
+            if id and self._hasEntry(id):
                 ok = 0
                 ds.setError(self.id_field, 'cpsdir_err_entry_already_exists')
 

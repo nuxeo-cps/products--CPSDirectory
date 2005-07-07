@@ -283,9 +283,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         res = self._searchEntriesFiltered(filter, attrs)
         return res
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
+        # XXX should use base class implementation
         if not isCanonicalDN(id):
             raise KeyError("Entry DN '%s' is not canonical")
         try:
@@ -348,7 +349,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                                      (base_dn, self.ldap_base))
             dn = implodeDN((ava, base_dn))
 
-        if self.hasEntry(dn):
+        if self._hasEntry(dn):
             raise KeyError("Entry '%s' already exists" % dn)
 
         ldap_attrs['objectClass'] = list(self.ldap_object_classes_c)
@@ -359,7 +360,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("No entry '%s'" % id)
         self.deleteLDAP(id)
 

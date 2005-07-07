@@ -8,6 +8,7 @@ New features:
   doesn't depend on user or rights.
 - RAM Cache Managers can be added directly in portal_directories. Typical
   configuration should remove the AUTHENTICATED_USER from the keywords.
+- hasEntry now checks security, _hasEntry is the unrestricted method.
 Bug fixes:
 ~~~~~~~~~~
 - i18n fix on role labels translations (Member & Manager)

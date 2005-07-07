@@ -225,12 +225,13 @@ class MetaDirectory(BaseDirectory):
         results = self._searchEntries(return_fields=[title_field])
         return [(id, entry[title_field]) for id, entry in results]
 
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
+    security.declarePrivate('_hasEntry')
+    def _hasEntry(self, id):
         """Does the directory have a given entry?"""
+        # XXX should use base class implementation
         for info in self.getBackingDirectories():
             if info['missing_entry'] is None:
-                return info['dir'].hasEntry(id)
+                return info['dir']._hasEntry(id)
         return 0
 
     security.declarePublic('isAuthenticating')
@@ -261,7 +262,7 @@ class MetaDirectory(BaseDirectory):
     def _createEntry(self, entry):
         """Create an entry in the directory."""
         id = entry[self.id_field]
-        if self.hasEntry(id):
+        if self._hasEntry(id):
             raise KeyError("Entry '%s' already exists" % id)
 
         # Fetch a dm with default values
@@ -281,7 +282,7 @@ class MetaDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         for info in self.getBackingDirectories():
             b_dir = info['dir']
