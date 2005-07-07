@@ -28,6 +28,7 @@ from Acquisition import aq_base, aq_parent, aq_inner
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from DateTime.DateTime import DateTime
+from OFS.Cache import Cacheable
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
@@ -40,7 +41,7 @@ class SQLSyntaxError(ValueError):
     pass
 
 
-class SQLDirectory(BaseDirectory):
+class SQLDirectory(BaseDirectory, Cacheable):
     """SQL Directory.
 
     A directory that connects to an SQL database.
@@ -48,6 +49,11 @@ class SQLDirectory(BaseDirectory):
     # XXX what about tables where the id is not a string, like an int ?
 
     meta_type = 'CPS SQL Directory'
+
+    manage_options = (
+        BaseDirectory.manage_options +
+        Cacheable.manage_options
+        )
 
     security = ClassSecurityInfo()
 
@@ -90,10 +96,10 @@ class SQLDirectory(BaseDirectory):
         paths.sort()
         return paths
 
-    #def _postProcessProperties(self):
-    #    """Post-processing after properties change."""
-    #    BaseDirectory._postProcessProperties(self)
-    #    # XXX sql_auxiliary_tables
+    def _postProcessProperties(self):
+        """Post-processing after properties change."""
+        BaseDirectory._postProcessProperties(self)
+        self.ZCacheable_invalidate()
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, search=0, **kw):
@@ -134,45 +140,6 @@ class SQLDirectory(BaseDirectory):
     #
     # API
     #
-
-    security.declarePrivate('listEntryIds')
-    def listEntryIds(self):
-        """List all the entry ids."""
-        sql = "SELECT %(id)s FROM %(table)s" % {
-            'id': self.getSQLField(self.id_field),
-            'table': self.sql_table,
-            }
-        items, data = self._execute(sql)
-        res = [t[0] for t in data]
-        return res
-
-    security.declarePrivate('listEntryIdsAndTitles')
-    def listEntryIdsAndTitles(self):
-        """List all the entry ids and titles."""
-        id_field = self.id_field
-        title_field = self.title_field
-        if title_field == id_field:
-            ids = self.listEntryIds()
-            return [(id, id) for id in ids]
-        sql = "SELECT %(id)s, %(title)s FROM %(table)s" % {
-            'id': self.getSQLField(id_field),
-            'title': self.getSQLField(title_field),
-            'table': self.sql_table,
-            }
-        items, data = self._execute(sql)
-        return data
-
-    security.declarePublic('hasEntry')
-    def hasEntry(self, id):
-        """Does the directory have a given entry?"""
-        sql = ("SELECT COUNT(%(idf)s) FROM %(table)s"
-               " WHERE %(idf)s = %(id)s") % {
-            'idf': self.getSQLField(self.id_field),
-            'table': self.sql_table,
-            'id': self.getSQLValue(id),
-            }
-        items, data = self._execute(sql)
-        return not not data[0][0]
 
     security.declarePublic('isAuthenticating')
     def isAuthenticating(self):
@@ -218,7 +185,7 @@ class SQLDirectory(BaseDirectory):
     def _createEntry(self, entry):
         """Create an entry in the directory."""
         id = entry[self.id_field]
-        if self.hasEntry(id):
+        if self._hasEntry(id):
             raise KeyError("Entry %s already exists" % `id`)
 
         sql_data = self._convertDataToQuotedSQL(entry)
@@ -237,7 +204,7 @@ class SQLDirectory(BaseDirectory):
     def deleteEntry(self, id):
         """Delete an entry in the directory."""
         self.checkDeleteEntryAllowed(id=id)
-        if not self.hasEntry(id):
+        if not self._hasEntry(id):
             raise KeyError("No entry %s" % `id`)
         sql = "DELETE FROM %(table)s WHERE %(idf)s = %(id)s" % {
             'table': self.sql_table,
@@ -282,13 +249,16 @@ class SQLDirectory(BaseDirectory):
         res = []
         idix = field_ids.index(self.id_field)
         for result in data:
-            result = list(result)
             id = result[idix]
-            entry = {}
-            for field_id in field_ids:
-                entry[field_id] = result.pop(0)
-                # XXX conversions !
-            res.append((id, entry))
+            if return_fields is None:
+                res.append(id)
+            else:
+                result = list(result)
+                entry = {}
+                for field_id in field_ids:
+                    entry[field_id] = result.pop(0)
+                    # XXX conversions !
+                res.append((id, entry))
 
         # Now we must compute a partial datamodel for each result,
         # to get correct computed fields.
@@ -339,9 +309,22 @@ class SQLDirectory(BaseDirectory):
 
         Returns a tuple (items, data) or raises an exception.
         """
-        LOG('_execute', TRACE, "Execute:\n  %s" % sql)
+        keyset = None
+        if self.ZCacheable_isCachingEnabled():
+            if sql.startswith("SELECT"):
+                keyset = {'query': sql}
+                LOG('_execute', TRACE, "Searching cache for %s" % (keyset,))
+                res = self.ZCacheable_get(keywords=keyset)
+                if res is not None:
+                    LOG('_execute', TRACE, " -> results=%s" %
+                        (res[0], res[1][:20],))
+                    return res
+            else:
+                self.ZCacheable_invalidate()
+
         conn = self._getConnection()
         try:
+            LOG('_execute', TRACE, "Execute:\n  %s" % sql)
             res = conn.query(sql)
         except SyntaxError, e:
             # Gadlfy: invalid syntax
@@ -358,6 +341,11 @@ class SQLDirectory(BaseDirectory):
             raise
 
         LOG('_execute', TRACE, "Result:\n%s" % `res`)
+
+        if keyset is not None:
+            LOG('_execute', TRACE, "Putting in cache")
+            self.ZCacheable_set(res, keywords=keyset)
+
         return res
 
     def _getEntryFromSQL(self, id, field_ids, password=None):
