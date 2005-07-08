@@ -15,10 +15,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# $Id:$
+# $Id$
 
 import unittest
-import Acquisition
 from Testing.ZopeTestCase import ZopeTestCase
 from Testing.ZopeTestCase.doctest import DocTestSuite
 
