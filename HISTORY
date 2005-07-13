@@ -1,4 +1,30 @@
 *******************************************
+** CPSDirectory V1.26.0 [R1 build 2005/07/13-16:06 by ben]
+** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 24893
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- LDAPBackingDirectory is now Cache-aware, and can be used with
+  a RAM Cache Manager. Caching is done at the lowest LDAP level, so
+  doesn't depend on user or rights.
+- SQLDirectory is now Cache-aware too.
+- RAM Cache Managers can be added directly in portal_directories. Typical
+  configuration should remove the AUTHENTICATED_USER from the keywords.
+- hasEntry now checks security, _hasEntry is the unrestricted method.
+Bug fixes:
+~~~~~~~~~~
+- i18n fix on role labels translations (Member & Manager)
+- Taking advantage of the new centralized CPSI18n.tests.translations module.
+- Fixed translation files through the CPSI18n/bin/fix_pos script.
+- SQLDirectory searchEntries failed to return correct results when no
+  return_fields were specified.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Unit tests for SQLDirectory.
+
+*******************************************
 ** CPSDirectory V1.25.0 [R1 build 2005/06/02-09:32 by fguillaume]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 22058
 Requires:
