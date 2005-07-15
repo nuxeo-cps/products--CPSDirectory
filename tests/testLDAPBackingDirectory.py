@@ -275,6 +275,95 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
         """
+
+
+class TestLDAPbackingDirectoryHierarchical(CPSDirectoryTestCase):
+
+    def afterSetUp(self):
+        CPSDirectoryTestCase.afterSetUp(self)
+        self.makeDir()
+
+    def createEntry(self, id, children=[]):
+        """Basic entry creation."""
+        self.dir.createEntry({'id': id, 'cn': id,
+                              'dn': '%s=%s,%s'% (self.dir.ldap_rdn_attr,
+                                                 id, self.dir.ldap_base),
+                              'children': children})
+
+    def makeDir(self):
+        stool = self.portal.portal_schemas
+        schema = stool.manage_addCPSSchema('testldapbd')
+        schema.manage_addField('id', 'CPS String Field')
+        schema.manage_addField('dn', 'CPS String Field')
+        schema.manage_addField('cn', 'CPS String Field')
+        schema.manage_addField('children', 'CPS String List Field')
+
+        dir = self.pd.manage_addCPSDirectory('ldapbackingdir',
+                                             'CPS LDAP Backing Directory')
+        dir.manage_changeProperties(
+            schema='testldapbd',
+            schema_search='testldapbd',
+            layout='',
+            layout_search='',
+            password_field='userPassword',
+            title_field='cn',
+            ldap_base='ou=personnes,o=nuxeo,c=com',
+            ldap_rdn_attr='cn',
+            ldap_scope='SUBTREE',
+            ldap_search_classes='person',
+            acl_directory_view_roles='Manager; BigSmurf',
+            acl_entry_create_roles='Manager; BigSmurf; DoAlbator',
+            acl_entry_delete_roles='Manager; BigSmurf; DoChapi',
+            acl_entry_view_roles='Manager; BigSmurf; DoPeter',
+            acl_entry_edit_roles='Manager; BigSmurf; DoPeter',
+            is_hierarchical=True,
+            children_attr='children',
+            children_id_attr='cn',
+            )
+        self.dir = dir
+        self.createEntry('a', ['b1', 'b2', 'b3'])
+        self.createEntry('b1', ['c11', 'c12'])
+        self.createEntry('b2')
+        self.createEntry('b3', ['c31', 'c32'])
+        self.createEntry('c12')
+        self.createEntry('c31')
+        self.createEntry('c32')
+
+    def test_isHierarchical(self):
+        directory = self.dir
+        directory.manage_changeProperties(is_hierarchical=False)
+        self.assert_(not directory._isHierarchical())
+        directory.manage_changeProperties(is_hierarchical=True)
+        self.assert_(directory._isHierarchical())
+
+    def test_listChildrenEntryIds(self):
+        directory = self.dir
+        self.assertEquals(directory._listChildrenEntryIds(
+            'cn=a,ou=personnes,o=nuxeo,c=com'),
+                          ['cn=b1,ou=personnes,o=nuxeo,c=com',
+                           'cn=b2,ou=personnes,o=nuxeo,c=com',
+                           'cn=b3,ou=personnes,o=nuxeo,c=com'])
+        self.assertEquals(directory._listChildrenEntryIds(
+            'cn=b3,ou=personnes,o=nuxeo,c=com'),
+                          ['cn=c31,ou=personnes,o=nuxeo,c=com',
+                           'cn=c32,ou=personnes,o=nuxeo,c=com'])
+        self.assertEquals(directory._listChildrenEntryIds(
+            'cn=b2,ou=personnes,o=nuxeo,c=com'),
+                          [])
+
+    def test_getParentEntryId(self):
+        directory = self.dir
+        self.assert_(directory._getParentEntryId(
+            'cn=a,ou=personnes,o=nuxeo,c=com') is None)
+        self.assertEquals(directory._getParentEntryId(
+            'cn=c32,ou=personnes,o=nuxeo,c=com'),
+                          'cn=b3,ou=personnes,o=nuxeo,c=com')
+        self.assertEquals(directory._getParentEntryId(
+            'cn=b2,ou=personnes,o=nuxeo,c=com'),
+                          'cn=a,ou=personnes,o=nuxeo,c=com')
+
+
+
 class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
     # We test entry local roles on LDAPBacking directory as this is the
     # simplest form of directory with minimal dependencies.
@@ -382,6 +471,7 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
+    suite.addTest(unittest.makeSuite(TestLDAPbackingDirectoryHierarchical))
     suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
     return suite
 
