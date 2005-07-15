@@ -114,6 +114,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': 'Field for entry title'},
         {'id': 'search_substring_fields', 'type': 'tokens', 'mode': 'w',
          'label': 'Fields with substring search'},
+        {'id': 'is_hierarchical', 'type': 'boolean', 'mode': 'w',
+         'label': 'Directory has hierarchical support'},
         )
 
     schema = ''
@@ -128,6 +130,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     id_field = ''
     title_field = ''
     search_substring_fields = []
+    is_hierarchical = False
 
     entry_roles = []
 
@@ -503,6 +506,31 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Return a new clean entry for entry_id.
         """
         raise NotImplementedError
+
+
+    # hierarchical management
+    security.declarePrivate('_isHierarchical')
+    def _isHierarchical(self):
+        """Return True if the directory support hierarchical methods."""
+        return self.is_hierarchical
+
+    security.declarePrivate('_listChildrenEntryIds')
+    def _listChildrenEntryIds(self, id, field_id=None):
+        """Return a children entries ids for entry 'id'.
+
+        Return a list of field_id if not None or self.id_field.
+        Available only if directory is hierarchical."""
+        raise NotImplementedError
+
+    security.declarePrivate('_getParentEntryId')
+    def _getParentEntryId(self, id, field_id):
+        """Return Parent Id of 'id'.
+
+        Return None if 'id' have no parent.
+        Return a field_id if not None or a self.id_field.
+        Available only if directory is hierarchical."""
+        raise NotImplementedError
+
 
     #
     # Rendering API
