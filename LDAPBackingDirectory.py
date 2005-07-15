@@ -135,6 +135,12 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
       special ASCII chars are LDAP escaped (ex '\\3D' for '=').
 
     - 'base_dn' is read-only.
+
+
+    Hierarchical support requires to set is_hierarchical to True and to provide
+    a children_attr that holds the list of children for the current entry. The
+    list of children can be a list of 'cn' instead of 'dn', this can be set
+    using the children_id_attr property.
     """
 
     meta_type = 'CPS LDAP Backing Directory'
@@ -174,6 +180,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'LDAP rdn attribute (create)'},
         {'id': 'ldap_object_classes', 'type': 'string', 'mode': 'w',
          'label': 'LDAP object classes (create)'},
+        {'id': 'children_attr', 'type': 'string', 'mode': 'w',
+         'label': 'Field that contains a list of sub entries id for hierarchical directory'},
+        {'id': 'children_id_attr', 'type': 'string', 'mode': 'w',
+         'label': 'attr used as id for children_attr default is ldap_rdn_attr.'},
         )
     _properties = _replaceProperty(
         _properties, 'id_field',
@@ -196,6 +206,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
     ldap_object_classes = 'top, person'
+
+    children_id_attr = ldap_rdn_attr
+    children_attr = None
 
     ldap_scope_c = ldap.SCOPE_SUBTREE
     ldap_search_classes_c = ['person']
@@ -317,7 +330,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         if not id.strip() or not password.strip():
             # We don't want to cause an empty LDAP search.
             # Empty passwords are forbidden too  due to a
-            # strange behaviour of some LDAP servers (Sun iPlanet) 
+            # strange behaviour of some LDAP servers (Sun iPlanet)
             raise AuthenticationFailed
         return self._getEntryKW(id, password=password, **kw)
 
@@ -363,6 +376,78 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         if not self._hasEntry(id):
             raise KeyError("No entry '%s'" % id)
         self.deleteLDAP(id)
+
+
+    #
+    # Hierarchical management
+    #
+    security.declarePrivate('_isHierarchical')
+    def _isHierarchical(self):
+        """Return True if the directory support hierarchical methods."""
+        if self.is_hierarchical and self.children_attr is not None:
+            return True
+        return False
+
+
+    security.declarePrivate('_listChildrenEntryIds')
+    def _listChildrenEntryIds(self, id, field_id=None):
+        """Return a children entries ids for entry 'id'.
+
+        Return a list of field_id if not None or self.id_field.
+        Available only if directory is hierarchical."""
+        if not self._isHierarchical():
+            raise ValueError(
+                "Directory [%s] is not hierarchical." % self.getId())
+        # get list of children
+        entry = self._getEntryFromLDAP(id, field_ids=[self.children_attr])
+        children = entry.get(self.children_attr, [])
+
+        # convert ids
+        field_id = field_id or self.id_field
+        if not children or field_id == self.children_id_attr:
+            return children
+        if field_id == 'dn' and self.children_id_attr == self.ldap_rdn_attr:
+            # fast rdn -> dn convertion
+            return ['%s=%s,%s' % (self.ldap_rdn_attr, child, self.ldap_base)
+                    for child in children]
+        # XXXX code to check and test
+        raise NotImplementedError('Convertion from %s to %s.' %  (
+            self.children_id_attr, field_id))
+        children_entries = [
+            self._searchEntries(return_fields=[field_id],
+                                **{self.children_id_attr: [child]})
+            for child in children]
+        return [entry[0][1].get(field_id) for entry in children_entires]
+
+
+    security.declarePrivate('_getParentEntryId')
+    def _getParentEntryId(self, id, field_id=None):
+        """Return Parent Id of 'id'.
+
+        Return None if 'id' have no parent.
+        Return a field_id if not None or a self.id_field.
+        Available only if directory is hierarchical."""
+        if not self._isHierarchical():
+            raise ValueError(
+                "Directory [%s] is not hierarchical." % self.getId())
+
+        field_id = field_id or self.id_field
+        # convert id to children_id
+        if self.id_field == self.children_id_attr:
+            c_id = id
+        else:
+            entry = self._getEntryFromLDAP(id,
+                                           field_ids=[self.children_id_attr])
+            c_id = entry.get(self.children_id_attr)
+        # search parent
+        parent = self._searchEntries(return_fields=[field_id],
+                                     **{self.children_attr: [c_id]})
+        parent = parent or None
+        if parent is not None:
+            # return the first available
+            parent = parent[0][1].get(field_id)
+
+        return parent
 
     #
     # Internal
