@@ -508,7 +508,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         raise NotImplementedError
 
 
-    # hierarchical management
+    #
+    # Hierarchical support
+    #
     security.declarePrivate('_isHierarchical')
     def _isHierarchical(self):
         """Return True if the directory support hierarchical methods."""
