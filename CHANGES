@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
 Bug fixes:
 ~~~~~~~~~~
 -
