@@ -33,7 +33,7 @@
   //-->
 </script></span>
 <button type="button"
-  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${here/root_uid}, '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
+  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${here/root_id}, '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
 </tal:block>
 </tal:block>
 </tal:block>

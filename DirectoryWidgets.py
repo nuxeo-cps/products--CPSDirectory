@@ -99,7 +99,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label': 'Directory', 'is_required' : 1},
-        {'id': 'root_uid', 'type': 'string', 'mode': 'w',
+        {'id': 'root_id', 'type': 'string', 'mode': 'w',
          'label': 'id of the root if the directory is hierarchical'},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
@@ -116,7 +116,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     all_popup_modes = ['browse', 'search']
 
     directory = ''
-    root_uid = ''
+    root_id = ''
     directory_view = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
@@ -201,7 +201,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     _properties = CPSMultiSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label': 'Directory', 'is_required' : 1},
-        {'id': 'root_uid', 'type': 'string', 'mode': 'w',
+        {'id': 'root_id', 'type': 'string', 'mode': 'w',
          'label': 'id of the root if the directory is hierarchical'},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
@@ -219,7 +219,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     all_entry_types = ['id', 'dn']
     all_popup_modes = ['browse', 'search', 'none']
     directory = ''
-    root_uid = ''
+    root_id = ''
     directory_view = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
