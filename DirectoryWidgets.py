@@ -99,6 +99,8 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
          'label': 'Directory', 'is_required' : 1},
+        {'id': 'root_uid', 'type': 'string', 'mode': 'w',
+         'label': 'id of the root if the directory is hierarchical'},
         {'id': 'directory_view', 'type': 'string', 'mode': 'w',
          'label': 'Optional directory used in view mode'},
         {'id': 'entry_type', 'type': 'selection', 'mode': 'w',
@@ -114,6 +116,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     all_popup_modes = ['browse', 'search']
 
     directory = ''
+    root_uid = ''
     directory_view = ''
     entry_type = all_entry_types[0]
     skin_name = 'cpsdirectory_entry_view'
