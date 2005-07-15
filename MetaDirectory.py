@@ -476,6 +476,49 @@ class MetaDirectory(BaseDirectory):
         #LOG('searchEntries', DEBUG, 'rf=%s idf=%s sidf=%s res=%s' % (return_fields, id_field, self.id_field, acc_res))
         return acc_res
 
+
+    #
+    # Hierarchical support
+    #
+    security.declarePrivate('_isHierarchical')
+    def _isHierarchical(self):
+        """Return true if one of the backing directory is hierarchical."""
+        for info in self.getBackingDirectories():
+            if info['missing_entry'] is None:
+                if info['dir']._isHierarchical():
+                    return True
+        return False
+
+    security.declarePrivate('_listChildrenEntryIds')
+    def _listChildrenEntryIds(self, id, field_id=None):
+        """Return a children entries ids for entry 'id'.
+
+        Return a list of field_id if not None or self.id_field.
+        Use the first hierarchical backing directory."""
+        field_id = field_id or self.id_field
+        for info in self.getBackingDirectories():
+            if info['missing_entry'] is None:
+                if info['dir']._isHierarchical():
+                    return info['dir']._listChildrenEntryIds(id, field_id)
+        raise ValueError(
+            "No Hierarchical backing directory for [%s] found." % self.getId())
+
+
+    security.declarePrivate('_getParentEntryId')
+    def _getParentEntryId(self, id):
+        """Return Parent Id of 'id'.
+
+        Return None if 'id' have no parent.
+        Return a field_id if not None or a self.id_field.
+        Use the first hierarchical backing directory."""
+        field_id = field_id or self.id_field
+        for info in self.getBackingDirectories():
+            if info['missing_entry'] is None:
+                if info['dir']._isHierarchical():
+                    return info['dir']._getParentEntryId(id, field_id)
+        raise ValueError(
+            "No Hierarchical backing directory for [%s] found." % self.getId())
+
     #
     # Internal
     #
