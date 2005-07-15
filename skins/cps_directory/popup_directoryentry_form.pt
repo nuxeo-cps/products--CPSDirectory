@@ -4,14 +4,13 @@
 
 
 </metal:block>
-
 <metal:block fill-slot="body"
   tal:define="root_uid request/root_uid;
               dir_name request/dir_name|nothing;
               res python:here.getNavigation(finder='cpsdirectory',
                 root_uid=root_uid, REQUEST=request);">
 <div style="margin: 1em;">
-<div class="document">
+<div class="document" style="font-size:80%">
 <div style="float:right">
 <button onclick="window.close()">Fermer</button>
 </div>
