@@ -20,9 +20,9 @@
   <span tal:content="title" />
 <script type="text/javascript">
   <!--
-     function popup_directoryentry(destId, dirName, dispAttr, vocabulary, title, value, popupMode) {
+     function popup_directoryentry(destId, dirName, rootUid, dispAttr, vocabulary, title, value, popupMode) {
        var args
-       args='?input_id='+destId+'&root_uid='+dirName+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary+'&current_uid='+escape(value);
+       args='?input_id='+destId+'&dir_name='+dirName+'&root_uid='+escape(rootUid)+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary+'&current_uid='+escape(value);
        if (popupMode == 'search')
          args=args+'&search=1'
        popup = window.open('popup_directoryentry_form'+args, 'DirectoryEntry', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
@@ -33,7 +33,7 @@
   //-->
 </script></span>
 <button type="button"
-  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
+  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${here/root_uid}, '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
 </tal:block>
 </tal:block>
 </tal:block>
