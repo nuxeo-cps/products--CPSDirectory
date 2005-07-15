@@ -211,8 +211,72 @@ class StackingDirectory(BaseDirectory):
         return res
 
     #
+    # Hierarchical support
+    #
+    security.declarePrivate('_isHierarchical')
+    def _isHierarchical(self):
+        """Return True if one of the backing directories is hierarchical."""
+        for b_dir in self._getBackingDirs():
+            if b_dir._isHierarchical():
+                return True
+        return False
+
+
+    security.declarePrivate('_listChildrenEntryIds')
+    def _listChildrenEntryIds(self, id, field_id=None):
+        """Return a children entries ids for entry 'id'.
+
+        Return a list of field_id if not None or self.id_field.
+        Available only if one of the backing directory is hierarchical."""
+        field_id = field_id or self.id_field
+        for b_dir in self._getBackingDirs():
+            if b_dir._isHierarchical():
+                b_id = self._getBackingId(b_dir, id)
+                return b_dir._listChildrenEntryIds(b_id, field_id)
+        raise ValueError(
+            "No Hierarchical backing directory for [%s] found." % self.getId())
+
+
+    security.declarePrivate('_getParentEntryId')
+    def _getParentEntryId(self, id, field_id=None):
+        """Return Parent Id of 'id'.
+
+        Return None if 'id' have no parent.
+        Return a field_id if not None or a self.id_field.
+        Available only if one backing directory is hierarchical."""
+        field_id = field_id or self.id_field
+        for b_dir in self._getBackingDirs():
+            if b_dir._isHierarchical():
+                b_id = self._getBackingId(b_dir, id)
+                return b_dir._getParentEntryId(b_id, field_id)
+        raise ValueError(
+            "No Hierarchical backing directory for [%s] found." % self.getId())
+
+    #
     # Internal
     #
+    security.declarePrivate('_getBackingId')
+    def _getBackingId(self, b_dir, id):
+        """Return the backing directory entry id giving a stacking id."""
+        id_field = self.id_field
+        if id_field == b_dir.id_field:
+            # Use primary id
+            return id
+        else:
+            # Use secondary id
+            # XXX don't check acls on search
+            b_ids = b_dir._searchEntries(**{id_field: [id]})
+            if len(b_ids):
+                if len(b_ids) > 1:
+                    LOG('StackingDirectory', WARNING,
+                        "Got several entries when asking %s about %s=%s" %
+                        (b_dir.getId(), id_field, id))
+                return b_ids[0]
+        LOG('StackingDirectory', WARNING,
+            "Got no entry when asking %s about %s=%s" %
+            (b_dir.getId(), id_field, id))
+        return None
+
 
     def _getBackingDirs(self):
         """Return the list of backing directories."""
