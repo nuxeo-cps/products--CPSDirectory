@@ -379,7 +379,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
 
 
     #
-    # Hierarchical management
+    # Hierarchical support
     #
     security.declarePrivate('_isHierarchical')
     def _isHierarchical(self):
