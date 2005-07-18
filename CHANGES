@@ -11,3 +11,4 @@ New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - DirectoryWidget handle a root_uid which can be different from the directory
   root, this enable to display just a part of a hierarchical directory.
+- DirectoryWidget improve xhtml
