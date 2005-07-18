@@ -28,7 +28,7 @@
   <!--
      function popup_directorymultientries(destId, dirName, rootUid, dispAttr, vocabulary, title, popupMode) {
        var args
-       args='?input_id='+destId+'&dir_name='+dirName+'&root_uid='+escape(rootUid)+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary;
+       args='?input_id='+destId+'&dir_name='+dirName+'&root_uid='+escape(rootUid)+'&title='+escape(title)+'&display_attr='+dispAttr+'&vocabulary='+vocabulary+'&clear_selection=1';
        if (popupMode == 'search')
          args=args+'&search=1'
        popup = window.open('popup_directorymultientries_form'+args, 'DirectoryMultiEntryFinder', 'toolbar=0, scrollbars=1, location=0, statusbar=0, menubar=0, resizable=1, dependent=1, width=712, height=480')
