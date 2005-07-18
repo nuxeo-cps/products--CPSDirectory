@@ -19,7 +19,6 @@
 
 import unittest
 from Testing.ZopeTestCase import ZopeTestCase
-from Testing.ZopeTestCase.doctest import DocTestSuite
 
 from OFS.SimpleItem import Item
 from OFS.Folder import Folder
