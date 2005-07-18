@@ -260,7 +260,8 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
                 if not vocabulary.has_key(i):
                     err = 'cpsschemas_err_multiselect'
                     break
-                v.append(i)
+                if i not in v:
+                    v.append(i)
         datastructure[widget_id] = v
         if err:
             datastructure.setError(widget_id, err)
