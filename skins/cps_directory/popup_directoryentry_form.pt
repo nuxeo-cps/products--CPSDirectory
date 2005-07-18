@@ -22,7 +22,7 @@
 
 function updateParent() {
   value = getSelectedRadioValue(document.forms[0].uid)
-  title = getSelectedRadioId(document.forms[0].uid)
+  title = getSelectedRadioLabel(document.forms[0].uid)
   parentinput = opener.document.getElementById("$input_id");
   parentinput.innerHTML = "<input type=\"hidden\" name=\"${input_id}\" value=\"" + value + "\" />" + title
  self.close();
