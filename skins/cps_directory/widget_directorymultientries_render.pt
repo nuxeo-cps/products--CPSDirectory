@@ -15,10 +15,11 @@
 
 <tal:block repeat="it ids_and_titles">
   <div tal:define="value python:it[0];
-                   title python:it[1];">
+                   title python:it[1];
+                   id python:html_id+str(repeat['it'].number())">
     <input type="checkbox" checked="checked" class="noborder"
-      tal:attributes="name string:${html_id}:list;value value;" />
-    <tal:block replace="title" />
+      tal:attributes="name string:${html_id}:list;value value;id id" />
+    <label tal:content="title" tal:attributes="for id" />
   </div>
 </tal:block>
 <div tal:attributes="id html_id"></div>

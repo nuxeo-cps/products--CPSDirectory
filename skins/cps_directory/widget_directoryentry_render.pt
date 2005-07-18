@@ -10,14 +10,14 @@
                    directory here/directory;
                    vocabulary here/vocabulary;">
 <input tal:condition="python: not here.is_required and jsvalue"
-  type="checkbox" tal:attributes="name string:${html_id}_set"
+  type="checkbox" tal:attributes="name string:${html_id}_set;id string:${html_id}_setx"
   checked="checked" class="noborder" />
 <input tal:condition="not: jsvalue" type="hidden"
   tal:attributes="name string:${html_id}_set" value="checked" />
 <span tal:attributes="id html_id">
   <input type="hidden" tal:condition="value"
     tal:attributes="name html_id;value value;" />
-  <span tal:content="title" />
+  <label tal:attributes="for string:${html_id}_setx" tal:content="title" />
 <script type="text/javascript">
   <!--
      function popup_directoryentry(destId, dirName, rootUid, dispAttr, vocabulary, title, value, popupMode) {
@@ -33,7 +33,7 @@
   //-->
 </script></span>
 <button type="button"
-  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${here/root_id}, '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
+  tal:attributes="onclick string:popup_directoryentry('${html_id}','${directory}', '${here/root_id}', '${display_attr}', '${vocabulary}', '${here/label_edit}','${jsvalue}', '${here/popup_mode}');">...</button><br />
 </tal:block>
 </tal:block>
 </tal:block>
