@@ -38,7 +38,7 @@ from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getEngine
 from Products.PageTemplates.TALES import CompilerError
 
-from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure

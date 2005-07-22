@@ -34,7 +34,7 @@ from OFS.SimpleItem import Item_w__name__
 from Products.CMFCore.permissions import ManagePortal
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 
-from Products.CPSSchemas.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory

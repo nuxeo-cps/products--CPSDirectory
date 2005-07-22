@@ -1,6 +1,6 @@
 Requires:
 ~~~~~~~~~
--
+- CPSUtil > 0.5.3
 New features:
 ~~~~~~~~~~~~~
 - Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
