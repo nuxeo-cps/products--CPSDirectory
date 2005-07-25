@@ -23,51 +23,76 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 import unittest
-from Testing import ZopeTestCase
-from CPSDirectoryTestCase import CPSDirectoryTestCase
+from Testing.ZopeTestCase import ZopeTestCase
 from AccessControl import Unauthorized
+from OFS.Folder import Folder
 
-class TestStackingDirectory(CPSDirectoryTestCase):
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
-    def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
-        self.makeDirs()
+class TestStackingDirectory(ZopeTestCase):
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        sfoo = FakeSchema({
+            'uid': FakeField(),
+            'moo': FakeField(),
+            'glop': FakeField(),
+            })
+        stool._setObject('sfoo', sfoo)
 
     def makeDirs(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('sfoo')
-        schema.manage_addField('uid', 'CPS String Field')
-        schema.manage_addField('moo', 'CPS String Field')
-        schema.manage_addField('glop', 'CPS String Field')
-
-        dirfoo = self.pd.manage_addCPSDirectory('dirfoo',
-                                                'CPS ZODB Directory')
-        dirfoo.manage_changeProperties(schema='sfoo', id_field='uid')
-
-        dirbar = self.pd.manage_addCPSDirectory('dirbar',
-                                                'CPS ZODB Directory')
-        dirbar.manage_changeProperties(schema='sfoo', id_field='uid')
-
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        from Products.CPSDirectory.StackingDirectory import StackingDirectory
+        dtool = self.portal.portal_directories
+        dirfoo = ZODBDirectory('dirfoo', id_field='uid', schema='sfoo')
+        dtool._setObject(dirfoo.getId(), dirfoo)
+        dirbar = ZODBDirectory('dirbar', id_field='uid', schema='sfoo')
+        dtool._setObject(dirbar.getId(), dirbar)
         # In baz, the id is moo.
-        dirbaz = self.pd.manage_addCPSDirectory('dirbaz',
-                                                'CPS ZODB Directory')
-        dirbaz.manage_changeProperties(schema='sfoo', id_field='moo')
+        dirbaz = ZODBDirectory('dirbaz', id_field='moo', schema='sfoo')
+        dtool._setObject(dirbaz.getId(), dirbaz)
+        dirstack = StackingDirectory('dirstack', id_field='uid', schema='sfoo',
+                title_field='glop',
+                backing_dirs=(
+                    'dirfoo',
+                    'dirbar',
+                    'dirbaz',
+                    ),
+                creation_dir='dirbar',
+                )
+        dtool._setObject(dirstack.getId(), dirstack)
+        for dir in (dirfoo, dirbar, dirbaz, dirstack):
+            dir.manage_changeProperties(
+                    acl_directory_view_roles='test_role_1_',
+                    acl_entry_create_roles='test_role_1_',
+                    acl_entry_delete_roles='test_role_1_',
+                    acl_entry_view_roles='test_role_1_',
+                    acl_entry_edit_roles='test_role_1_',
+                    )
 
-        dirstack = self.pd.manage_addCPSDirectory('dirstack',
-                                                  'CPS Stacking Directory')
-        dirstack.manage_changeProperties(schema='sfoo',
-                                         id_field='uid', title_field='glop',
-                                         backing_dirs=('dirfoo',
-                                                       'dirbar',
-                                                       'dirbaz'),
-                                         creation_dir='dirbar',
-                                         )
+        self.dirfoo = dtool.dirfoo
+        self.dirbar = dtool.dirbar
+        self.dirbaz = dtool.dirbaz
+        self.dirstack = dtool.dirstack
+        self.dirs = [self.dirfoo, self.dirbar, self.dirbaz]
 
-        self.dirfoo = dirfoo
-        self.dirbar = dirbar
-        self.dirbaz = dirbaz
-        self.dirstack = dirstack
-        self.dirs = [dirfoo, dirbar, dirbaz ]
+    def afterSetUp(self):
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
+        self.makeDirs()
 
     def test_getEntry(self):
         id1 = '111'

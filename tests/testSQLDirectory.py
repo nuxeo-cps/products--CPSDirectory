@@ -20,56 +20,15 @@
 import unittest
 from Testing.ZopeTestCase import ZopeTestCase
 
-from OFS.SimpleItem import Item
 from OFS.Folder import Folder
 
 from Products.CPSDirectory.tests.fakeSQL import FakeSQLConnection
 from Products.CPSDirectory.tests.fakeSQL import FakeDBC
-
-
-class FakeRoot(Folder):
-    id = ''
-    def getPhysicalRoot(self):
-        return self
-
-class FakeField:
-    write_ignore_storage = False
-    read_ignore_storage = False
-    read_process_dependent_fields = ()
-    def processValueAfterRead(self, value, *args):
-        return value
-    def processValueBeforeWrite(self, value, *args):
-        return value
-    def checkReadAccess(self, *args):
-        pass
-    def checkWriteAccess(self, *args):
-        pass
-    def computeDependantFields(self, *args, **kw):
-        pass
-
-class FakeSchema(Item):
-    def __init__(self, fields):
-        self.fields = fields
-    def keys(self):
-        return self.fields.keys()
-    def items(self):
-        return self.fields.items()
-    def values(self):
-        return self.fields.values()
-    def __getitem__(self, key):
-        return self.fields[key]
-
-_marker = object()
-class FakeSchemasTool(Folder):
-    id = 'portal_schemas'
-    def _getOb(self, id, default=_marker):
-        if default is _marker:
-            return getattr(self, id)
-        else:
-            return getattr(self, id, default)
-
-class FakeDirectoryTool(Folder):
-    id = 'portal_directories'
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
 
 

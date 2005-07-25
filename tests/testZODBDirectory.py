@@ -1,32 +1,63 @@
-# TODO:
-# - don't depend on getDocumentSchemas / getDocumentTypes but is there
-#   an API for that ?
-
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 import unittest
-from Testing import ZopeTestCase
-from CPSDirectoryTestCase import CPSDirectoryTestCase
-from AccessControl import Unauthorized
+from Testing.ZopeTestCase import ZopeTestCase
 
-class TestZODBDirectory(CPSDirectoryTestCase):
+from AccessControl import Unauthorized
+from OFS.Folder import Folder
+
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
+
+
+class TestZODBDirectory(ZopeTestCase):
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'idd': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeField(),
+            })
+        stool._setObject('testzodb', s)
 
     def makeDir(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testzodb')
-        schema.manage_addField('idd', 'CPS String Field')
-        schema.manage_addField('foo', 'CPS String Field')
-        schema.manage_addField('bar', 'CPS String List Field')
-
-        dir = self.pd.manage_addCPSDirectory('zodbdir',
-                                             'CPS ZODB Directory')
-        dir.manage_changeProperties(schema='testzodb', id_field='idd')
-        self.dir = dir
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        dtool = self.portal.portal_directories
+        dir = ZODBDirectory('zodbdir',
+                           id_field='idd',
+                           title_field='foo',
+                           schema='testzodb',
+                           schema_search='',
+                           layout='',
+                           layout_search='',
+                           password_field='',
+                           acl_directory_view_roles='test_role_1_',
+                           acl_entry_create_roles='test_role_1_',
+                           acl_entry_delete_roles='test_role_1_',
+                           acl_entry_view_roles='test_role_1_',
+                           acl_entry_edit_roles='test_role_1_',
+                           )
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.zodbdir
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
         self.makeDir()
 
     def testPresence(self):
@@ -56,6 +87,7 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         self.assertRaises(KeyError, dir.createEntry, {'idd': id})
 
         self.assertEqual(dir.listEntryIds(), [id])
+        self.assertEqual(dir.listEntryIdsAndTitles(), [(id, 'ouah')])
         self.assert_(dir.hasEntry(id))
 
         e = dir.getEntry(id)
@@ -64,29 +96,9 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         dir.deleteEntry(id)
 
         self.assertEqual(dir.listEntryIds(), [])
+        self.assertEqual(dir.listEntryIdsAndTitles(), [])
         self.assert_(not dir.hasEntry(id))
         self.assertRaises(KeyError, dir.getEntry, id)
-
-
-    def testFetchWithComputedValues(self):
-        dir = self.dir
-        dir.title_field = 'baz'
-        schema = self.portal.portal_schemas.testzodb
-        schema.manage_addField('baz', 'CPS String Field',
-                               read_ignore_storage=1,
-                               read_process_expr='python: foo+"_yo"',
-                               read_process_dependent_fields='foo',
-                               )
-        id = 'chien'
-        entry = {'idd': id, 'foo': 'ouah', 'bar': ['4']}
-        dir.createEntry(entry)
-
-        e = dir.getEntry(id)
-        ok = {'idd': id, 'foo': 'ouah', 'bar': ['4'], 'baz': 'ouah_yo'}
-        self.assertEquals(e, ok)
-
-        ids_titles = dir.listEntryIdsAndTitles()
-        self.assertEquals(ids_titles, [(id, 'ouah_yo')])
 
     def testSearch(self):
         dir = self.dir
@@ -148,6 +160,8 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         # Failing substring searches
         res = dir.searchEntries(idd='re')
         self.assertEquals(res, [])
+        res = dir.searchEntries(idd='tre')
+        self.assertEquals(res, [])
         res = dir.searchEntries(idd='TREE')
         self.assertEquals(res, [])
         res = dir.searchEntries(foo='e')
@@ -174,7 +188,6 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         self.assertEquals(res, [(id1, {'foo': foo1, 'bar': bar1})])
         res = dir.searchEntries(foo='green', return_fields=['zblurg'])
         self.assertEquals(res, [(id1, {})])
-
 
     def testSearchSubstrings(self):
         dir = self.dir
@@ -249,30 +262,50 @@ class TestZODBDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
-class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
+class TestDirectoryEntryLocalRoles(ZopeTestCase):
     # We test entry local roles on ZODB directory as this is the
     # simplest form of directory with minimal dependencies.
 
-    def makeDir(self):
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        utool = Folder('portal_url')
+        utool.getPortalObject = lambda : self.root.portal
+        self.root.portal.portal_url = utool
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
         stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testzodb')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('name', 'CPS String Field')
+        s = FakeSchema({
+            'id': FakeField(),
+            'name': FakeField(),
+            })
+        stool._setObject('testzodb', s)
 
-        dir = self.pd.manage_addCPSDirectory('zodbdir',
-                                             'CPS ZODB Directory')
-        dir.manage_changeProperties(
-            schema='testzodb',
-            id_field='id',
-            acl_directory_view_roles='BigSmurf',
-            acl_entry_create_roles='BigSmurf; DoAlbator',
-            acl_entry_delete_roles='BigSmurf; DoChapi',
-            acl_entry_view_roles='BigSmurf; DoPeter',
-            acl_entry_edit_roles='BigSmurf; DoPeter',
-            )
-        self.dir = dir
+    def makeDir(self):
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        dtool = self.portal.portal_directories
+        dir = ZODBDirectory('members',
+                           id_field='id',
+                           title_field='name',
+                           schema='testzodb',
+                           schema_search='',
+                           layout='',
+                           layout_search='',
+                           password_field='',
+                           acl_directory_view_roles='BigSmurf',
+                           acl_entry_create_roles='BigSmurf; DoAlbator',
+                           acl_entry_delete_roles='BigSmurf; DoChapi',
+                           acl_entry_view_roles='BigSmurf; DoPeter',
+                           acl_entry_edit_roles='BigSmurf; DoPeter',
+                           )
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.members
 
-        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "manager"')
+        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "test_user_1_"')
         self.assertEquals(res, '')
         res = dir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
         self.assertEquals(res, '')
@@ -282,10 +315,13 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
         self.assertEquals(res, '')
 
         e = {'id': 'peterpan', 'name': 'Peterpan'}
-        dir.createEntry(e)
+        self.dir.createEntry(e)
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
+        ZopeTestCase.afterSetUp(self)
+        self.login('test_user_1_')
+        self.makeSite()
+        self.makeSchema()
         self.makeDir()
 
     def beforeTearDown(self):

@@ -25,38 +25,58 @@ if __name__ == '__main__':
 
 import unittest
 from AccessControl import Unauthorized
-from CPSDirectoryTestCase import CPSDirectoryTestCase
+from Testing.ZopeTestCase import ZopeTestCase
+from OFS.Folder import Folder
 
-class TestIndirectDirectory(CPSDirectoryTestCase):
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeListField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
+from Products.CPSSchemas.DataModel import DEFAULT_VALUE_MARKER
 
-    def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
-        self.makeDir()
+
+def makeFullname(value, data, ob, context):
+    # surname or len(id.split('/'))>1 and id.split('/')[1] or id
+    surname = data.get('surname')
+    if surname and surname is not DEFAULT_VALUE_MARKER:
+        return surname
+    return ob.getId().upper()
+
+
+class TestIndirectDirectory(ZopeTestCase):
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'surname': FakeField(),
+            'fullname': FakeField(read_expr=makeFullname,
+                                  read_dep=('surname',)),
+            })
+        stool._setObject('testindirectdir', s)
 
     def makeDir(self):
         """
         Make a test ZODB dir and an indirect dir prointing towards it, in order
         to make tests
         """
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        from Products.CPSDirectory.IndirectDirectory import IndirectDirectory
 
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testindirectdir')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('surname', 'CPS String Field')
-        field = schema.manage_addField('fullname', 'CPS String Field')
-        # make it a computed field
-        field.manage_changeProperties(
-            default_expr='string:',
-            acl_write_roles='Nobody',
-            read_ignore_storage=1,
-            read_process_expr="python:surname or len(id.split('/'))>1 and id.split('/')[1] or id",
-            read_process_dependent_fields=['surname', 'id'],
-            write_ignore_storage=1,
-            )
-
-        zodbdir = self.pd.manage_addCPSDirectory('zodbdir',
-                                                 'CPS ZODB Directory')
-        zodbdir.manage_changeProperties(
+        dtool = self.portal.portal_directories
+        zodbdir = ZODBDirectory('zodbdir')
+        dtool._setObject(zodbdir.getId(), zodbdir)
+        dtool.zodbdir.manage_changeProperties(
             schema='testindirectdir',
             schema_search='testindirectdir',
             layout='',
@@ -64,19 +84,19 @@ class TestIndirectDirectory(CPSDirectoryTestCase):
             id_field='id',
             title_field='fullname',
             search_substring_fields= ('id', 'fullname'),
-            acl_directory_view_roles='Manager',
-            acl_entry_create_roles='Manager',
-            acl_entry_delete_roles='Manager',
-            acl_entry_view_roles='Manager',
-            acl_entry_edit_roles='Manager',
+            acl_directory_view_roles='test_role_1_',
+            acl_entry_create_roles='test_role_1_',
+            acl_entry_delete_roles='test_role_1_',
+            acl_entry_view_roles='test_role_1_',
+            acl_entry_edit_roles='test_role_1_',
             )
         # add entries to the zodb dir
-        zodbdir.createEntry({'id': 'juanita', 'surname': 'Juanita',})
-        zodbdir.createEntry({'id': 'juan'})
-        self.zodbdir = zodbdir
+        dtool.zodbdir.createEntry({'id': 'juanita', 'surname': 'Juanita',})
+        dtool.zodbdir.createEntry({'id': 'juan'})
+        self.zodbdir = dtool.zodbdir
 
-        dir = self.pd.manage_addCPSDirectory('indirectdir',
-                                             'CPS Indirect Directory')
+        dir = IndirectDirectory('indirectdir')
+        dtool._setObject(dir.getId(), dir)
         dir.manage_changeProperties(
             schema='testindirectdir',
             schema_search='testindirectdir',
@@ -86,14 +106,19 @@ class TestIndirectDirectory(CPSDirectoryTestCase):
             title_field='fullname',
             search_substring_fields=('id',),
             directory_ids=('zodbdir',),
-            acl_directory_view_roles='Manager',
-            acl_entry_create_roles='Manager',
-            acl_entry_delete_roles='Manager',
-            acl_entry_view_roles='Manager',
-            acl_entry_edit_roles='Manager',
+            acl_directory_view_roles='test_role_1_',
+            acl_entry_create_roles='test_role_1_',
+            acl_entry_delete_roles='test_role_1_',
+            acl_entry_view_roles='test_role_1_',
+            acl_entry_edit_roles='test_role_1_',
             )
-        self.dir = dir
+        self.dir = dtool.indirectdir
 
+    def afterSetUp(self):
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
+        self.makeDir()
 
     #
     # Tests begin here
@@ -142,10 +167,10 @@ class TestIndirectDirectory(CPSDirectoryTestCase):
         self.assertEqual(self.dir.listEntryIdsAndTitles(), [])
         self.dir.createEntry({'id': 'zodbdir/juan'})
         self.assertEqual(self.dir.listEntryIdsAndTitles(),
-                         [('zodbdir/juan', 'juan'),])
+                         [('zodbdir/juan', 'JUAN'),])
         self.dir.createEntry({'id': 'zodbdir/juanita'})
         self.assertEqual(self.dir.listEntryIdsAndTitles(),
-                         [('zodbdir/juan', 'juan'),
+                         [('zodbdir/juan', 'JUAN'),
                           ('zodbdir/juanita', 'Juanita'),
                           ])
 
@@ -156,7 +181,7 @@ class TestIndirectDirectory(CPSDirectoryTestCase):
 
     def test_listAllPossibleEntriesIdsAndTitles(self):
         self.assertEqual(self.dir.listAllPossibleEntriesIdsAndTitles(),
-                         [('zodbdir/juan', 'juan'),
+                         [('zodbdir/juan', 'JUAN'),
                           ('zodbdir/juanita', 'Juanita'),
                           ])
 
@@ -165,7 +190,7 @@ class TestIndirectDirectory(CPSDirectoryTestCase):
         self.assertEqual(self.dir._makeId('truc', 'muche'),
                          'truc/muche')
 
-    def test_getDirctory(self):
+    def test_getDirectory(self):
         self.assertEqual(self.dir._getDirectory('zodbdir'),
                          self.zodbdir)
         self.assertRaises(AttributeError,

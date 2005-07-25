@@ -8,31 +8,50 @@ if __name__ == '__main__':
 
 from zLOG import LOG, DEBUG, TRACE, ERROR, INFO
 import unittest
-from Testing import ZopeTestCase
+from Testing.ZopeTestCase import ZopeTestCase
 
 from AccessControl import Unauthorized
+from OFS.Folder import Folder
 
-from CPSDirectoryTestCase import CPSDirectoryTestCase
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeListField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
-
-class TestLDAPbackingDirectory(CPSDirectoryTestCase):
+class TestLDAPbackingDirectory(ZopeTestCase):
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
         self.makeDir()
 
-    def makeDir(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testldapbd')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('dn', 'CPS String Field')
-        schema.manage_addField('cn', 'CPS String Field')
-        schema.manage_addField('foo', 'CPS String Field')
-        schema.manage_addField('bar', 'CPS String List Field')
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
 
-        dir = self.pd.manage_addCPSDirectory('ldapbackingdir',
-                                             'CPS LDAP Backing Directory')
-        dir.manage_changeProperties(
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'dn': FakeField(),
+            'cn': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeListField(),
+            })
+        stool._setObject('testldapbd', s)
+
+    def makeDir(self):
+        from Products.CPSDirectory.LDAPBackingDirectory import \
+                                                    LDAPBackingDirectory
+        dtool = self.portal.portal_directories
+        dir = LDAPBackingDirectory('ldapbackingdir',
             schema='testldapbd',
             schema_search='testldapbd',
             layout='',
@@ -42,13 +61,14 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',
             ldap_search_classes='person',
-            acl_directory_view_roles='Manager; BigSmurf',
-            acl_entry_create_roles='Manager; BigSmurf; DoAlbator',
-            acl_entry_delete_roles='Manager; BigSmurf; DoChapi',
-            acl_entry_view_roles='Manager; BigSmurf; DoPeter',
-            acl_entry_edit_roles='Manager; BigSmurf; DoPeter',
+            acl_directory_view_roles='test_role_1_',
+            acl_entry_create_roles='test_role_1_',
+            acl_entry_delete_roles='test_role_1_',
+            acl_entry_view_roles='test_role_1_',
+            acl_entry_edit_roles='test_role_1_',
             )
-        self.dir = dir
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.ldapbackingdir
 
     def testPresence(self):
         self.assertEquals(self.pd.ldapbackingdir.meta_type, 'CPS LDAP Backing Directory')
@@ -81,8 +101,8 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
         self.assertRaises(KeyError, dir.getEntry, dn)
 
         dir.createEntry(entry)
-        self.assertRaises(KeyError, dir.createEntry, {'id': id, 'foo': 'ouah', 'bar': ['4'],
-             'dn': dn ,'cn': 'chien'})
+        self.assertRaises(KeyError, dir.createEntry,
+            {'id': id, 'foo': 'ouah', 'bar': ['4'], 'dn': dn ,'cn': 'chien'})
 
         self.assertEqual(dir.listEntryIds(), [dn])
         self.assert_(dir.hasEntry(dn))
@@ -277,11 +297,31 @@ class TestLDAPbackingDirectory(CPSDirectoryTestCase):
         """
 
 
-class TestLDAPbackingDirectoryHierarchical(CPSDirectoryTestCase):
+class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
         self.makeDir()
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'dn': FakeField(),
+            'cn': FakeField(),
+            'children': FakeListField(),
+            })
+        stool._setObject('testldapbd', s)
 
     def createEntry(self, id, children=[]):
         """Basic entry creation."""
@@ -291,36 +331,30 @@ class TestLDAPbackingDirectoryHierarchical(CPSDirectoryTestCase):
                               'children': children})
 
     def makeDir(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testldapbd')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('dn', 'CPS String Field')
-        schema.manage_addField('cn', 'CPS String Field')
-        schema.manage_addField('children', 'CPS String List Field')
-
-        dir = self.pd.manage_addCPSDirectory('ldapbackingdir',
-                                             'CPS LDAP Backing Directory')
-        dir.manage_changeProperties(
-            schema='testldapbd',
-            schema_search='testldapbd',
-            layout='',
-            layout_search='',
-            password_field='userPassword',
-            title_field='cn',
-            ldap_base='ou=personnes,o=nuxeo,c=com',
-            ldap_rdn_attr='cn',
-            ldap_scope='SUBTREE',
-            ldap_search_classes='person',
-            acl_directory_view_roles='Manager; BigSmurf',
-            acl_entry_create_roles='Manager; BigSmurf; DoAlbator',
-            acl_entry_delete_roles='Manager; BigSmurf; DoChapi',
-            acl_entry_view_roles='Manager; BigSmurf; DoPeter',
-            acl_entry_edit_roles='Manager; BigSmurf; DoPeter',
-            is_hierarchical=True,
-            children_attr='children',
-            children_id_attr='cn',
+        from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
+        dtool = self.portal.portal_directories
+        dir = LDAPBackingDirectory('ldapbackingdir',
+                                   schema='testldapbd',
+                                   schema_search='testldapbd',
+                                   layout='',
+                                   layout_search='',
+                                   password_field='userPassword',
+                                   title_field='cn',
+                                   ldap_base='ou=personnes,o=nuxeo,c=com',
+                                   ldap_rdn_attr='cn',
+                                   ldap_scope='SUBTREE',
+                                   ldap_search_classes='person',
+                                   acl_directory_view_roles='test_role_1_',
+                                   acl_entry_create_roles='test_role_1_',
+                                   acl_entry_delete_roles='test_role_1_',
+                                   acl_entry_view_roles='test_role_1_',
+                                   acl_entry_edit_roles='test_role_1_',
+                                   is_hierarchical=True,
+                                   children_attr='children',
+                                   children_id_attr='cn',
             )
-        self.dir = dir
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool._getOb(dir.getId())
         self.createEntry('a', ['b1', 'b2', 'b3'])
         self.createEntry('b1', ['c11', 'c12'])
         self.createEntry('b2')
@@ -364,21 +398,36 @@ class TestLDAPbackingDirectoryHierarchical(CPSDirectoryTestCase):
 
 
 
-class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
+class TestDirectoryEntryLocalRoles(ZopeTestCase):
     # We test entry local roles on LDAPBacking directory as this is the
     # simplest form of directory with minimal dependencies.
 
-    def makeDir(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('testldapbd')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('name', 'CPS String Field')
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        utool = Folder('portal_url')
+        utool.getPortalObject = lambda : self.root.portal
+        self.root.portal.portal_url = utool
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
 
-        dir = self.pd.manage_addCPSDirectory('ldapbackingdir',
-                                             'CPS LDAP Backing Directory')
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'name': FakeField(),
+            })
+        stool._setObject('testldapbd', s)
+
+    def makeDir(self):
+        from Products.CPSDirectory.LDAPBackingDirectory import \
+                                                    LDAPBackingDirectory
+        dtool = self.portal.portal_directories
         # we don't ste ldap host here
         # since it's a fake ldap server
-        dir.manage_changeProperties(
+        dir = LDAPBackingDirectory('members',
             schema='testldapbd',
             schema_search='testldapbd',
             layout='',
@@ -394,9 +443,10 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
             acl_entry_view_roles='BigSmurf; DoPeter',
             acl_entry_edit_roles='BigSmurf; DoPeter',
             )
-        self.dir = dir
-
-        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "manager"')
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.members
+        res = dir.addEntryLocalRole('BigSmurf',
+                'python:user_id == "test_user_1_"')
         self.assertEquals(res, '')
         res = dir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
         self.assertEquals(res, '')
@@ -407,10 +457,12 @@ class TestDirectoryEntryLocalRoles(CPSDirectoryTestCase):
 
         e = {'id': 'peterpan', 'name': 'Peterpan', 'cn' : 'Peter',
              'dn': 'uid=peterpan,ou=personnes,o=nuxeo,c=com',}
-        dir.createEntry(e)
+        self.dir.createEntry(e)
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
         self.makeDir()
 
     def beforeTearDown(self):

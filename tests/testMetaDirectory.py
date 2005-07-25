@@ -23,61 +23,104 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 import unittest
-from Testing import ZopeTestCase
-from CPSDirectoryTestCase import CPSDirectoryTestCase
+from Testing.ZopeTestCase import ZopeTestCase
 from AccessControl import Unauthorized
+from OFS.Folder import Folder
 
-class TestMetaDirectory(CPSDirectoryTestCase):
+from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeSchema
+from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
-    def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
-        self.makeDirs()
+
+class TestMetaDirectory(ZopeTestCase):
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        utool = Folder('portal_url')
+        utool.getPortalObject = lambda : self.root.portal
+        self.root.portal.portal_url = utool
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchemas(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'idd': FakeField(),
+            'foo': FakeField(),
+            'pasglop': FakeField(),
+            })
+        stool._setObject('sfoo', s)
+        s = FakeSchema({
+            'id': FakeField(),
+            'bar': FakeField(),
+            'mail': FakeField(),
+            })
+        stool._setObject('sbar', s)
+        s = FakeSchema({
+            'id': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeField(),
+            'email': FakeField(),
+            })
+        stool._setObject('smeta', s)
 
     def makeDirs(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('sfoo')
-        schema.manage_addField('idd', 'CPS String Field') # different id
-        schema.manage_addField('foo', 'CPS String Field') # kept
-        schema.manage_addField('pasglop', 'CPS String Field') # ignored
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        from Products.CPSDirectory.MetaDirectory import MetaDirectory
+        dtool = self.portal.portal_directories
+        dirfoo = ZODBDirectory('dirfoo', schema='sfoo', id_field='idd',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirfoo.getId(), dirfoo)
 
-        schema = stool.manage_addCPSSchema('sbar')
-        schema.manage_addField('id', 'CPS String Field') # same id
-        schema.manage_addField('bar', 'CPS String Field') # kept
-        schema.manage_addField('mail', 'CPS String Field') # renamed
+        dirbar = ZODBDirectory('dirbar', schema='sbar', id_field='id',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirbar.getId(), dirbar)
 
-        schema = stool.manage_addCPSSchema('smeta')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('foo', 'CPS String Field')
-        schema.manage_addField('bar', 'CPS String Field')
-        schema.manage_addField('email', 'CPS String Field')
+        dirmeta = MetaDirectory('dirmeta', schema='smeta', id_field='id',
+                title_field='bar',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirmeta.getId(), dirmeta)
 
-        dirfoo = self.pd.manage_addCPSDirectory('dirfoo',
-                                                'CPS ZODB Directory')
-        dirfoo.manage_changeProperties(schema='sfoo', id_field='idd')
-
-        dirbar = self.pd.manage_addCPSDirectory('dirbar',
-                                                'CPS ZODB Directory')
-        dirbar.manage_changeProperties(schema='sbar', id_field='id')
-
-        dirmeta = self.pd.manage_addCPSDirectory('dirmeta',
-                                                 'CPS Meta Directory')
-        dirmeta.manage_changeProperties(schema='smeta', id_field='id',
-                                        title_field='bar')
-        dirmeta.setBackingDirectories(
+        dtool.dirmeta.setBackingDirectories(
             ({'dir_id': 'dirfoo',
-              'id_conv': None,
               'field_ignore': ('pasglop',),
               },
              {'dir_id': 'dirbar',
-              'id_conv': None,
               'field_rename': {'mail': 'email'}, # back:meta
               },
              ))
 
-        self.dirfoo = dirfoo
-        self.dirbar = dirbar
-        self.dirmeta = dirmeta
+        self.dirfoo = dtool.dirfoo
+        self.dirbar = dtool.dirbar
+        self.dirmeta = dtool.dirmeta
 
+    def afterSetUp(self):
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchemas()
+        self.makeDirs()
+
+class TestMetaDirectoryNoMissing(TestMetaDirectory):
 
     def test_getEntry(self):
         id = '000'
@@ -343,43 +386,11 @@ class TestMetaDirectory(CPSDirectoryTestCase):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
-class TestMetaDirectoryMissing(CPSDirectoryTestCase):
+class TestMetaDirectoryMissing(TestMetaDirectory):
 
     def afterSetUp(self):
-        CPSDirectoryTestCase.afterSetUp(self)
-        self.makeDirs()
-
-    def makeDirs(self):
-        stool = self.portal.portal_schemas
-        schema = stool.manage_addCPSSchema('sfoo')
-        schema.manage_addField('idd', 'CPS String Field') # different id
-        schema.manage_addField('foo', 'CPS String Field') # kept
-        schema.manage_addField('pasglop', 'CPS String Field') # ignored
-
-        schema = stool.manage_addCPSSchema('sbar')
-        schema.manage_addField('id', 'CPS String Field') # same id
-        schema.manage_addField('bar', 'CPS String Field') # kept
-        schema.manage_addField('mail', 'CPS String Field') # renamed
-
-        schema = stool.manage_addCPSSchema('smeta')
-        schema.manage_addField('id', 'CPS String Field')
-        schema.manage_addField('foo', 'CPS String Field')
-        schema.manage_addField('bar', 'CPS String Field')
-        schema.manage_addField('email', 'CPS String Field')
-
-        dirfoo = self.pd.manage_addCPSDirectory('dirfoo',
-                                                'CPS ZODB Directory')
-        dirfoo.manage_changeProperties(schema='sfoo', id_field='idd')
-
-        dirbar = self.pd.manage_addCPSDirectory('dirbar',
-                                                'CPS ZODB Directory')
-        dirbar.manage_changeProperties(schema='sbar', id_field='id')
-
-        dirmeta = self.pd.manage_addCPSDirectory('dirmeta',
-                                                 'CPS Meta Directory')
-        dirmeta.manage_changeProperties(schema='smeta', id_field='id',
-                                        title_field='bar')
-        dirmeta.setBackingDirectories(
+        TestMetaDirectory.afterSetUp(self)
+        self.dirmeta.setBackingDirectories(
             ({'dir_id': 'dirfoo',
               'field_ignore': ('pasglop',),
               'missing_entry_expr': "python:{'foo': 'defaultfoo'}"
@@ -388,11 +399,6 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
               'field_rename': {'mail': 'email'}, # back:meta
               },
              ))
-
-        self.dirfoo = dirfoo
-        self.dirbar = dirbar
-        self.dirmeta = dirmeta
-
 
     def test_getEntry(self):
         id = 'LDHL'
@@ -564,7 +570,7 @@ class TestMetaDirectoryMissing(CPSDirectoryTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestMetaDirectory))
+    suite.addTest(unittest.makeSuite(TestMetaDirectoryNoMissing))
     suite.addTest(unittest.makeSuite(TestMetaDirectoryMissing))
     return suite
 
