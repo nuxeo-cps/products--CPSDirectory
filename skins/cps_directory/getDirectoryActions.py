@@ -13,40 +13,45 @@ Parameters are:
 Return the updated actions
 """
 
-base_url = context.getBaseUrl(utool=context.portal_url)
+from Products.CMFCore.utils import getToolByName
+
+utool = getToolByName(context, 'portal_url')
+base_url = utool.getBaseUrl()
 
 create_action = {
-    'id':'new_entry',
-    'url':base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
+    'id': 'new_entry',
+    'url': base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
     'name': 'cpsdir_label_create_entry',
     'category': 'object',
     }
 
 search_action = {
-    'id':'search_entry',
-    'url':base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
+    'id': 'search_entry',
+    'url': base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
     'name': 'cpsdir_label_search_entry',
     'category': 'object'
     }
 
 view_action = {
-    'id':'view_entry',
-    'url':base_url+'cpsdirectory_entry_view?dirname='+dirname+'&id='+id,
+    'id': 'view_entry',
+    'url': base_url+'cpsdirectory_entry_view?dirname='+dirname+'&id='+id,
     'name': 'cpsdir_label_view_entry',
     'category': 'object',
     }
 
 edit_action = {
-    'id':'edit_entry',
-    'url':base_url+'cpsdirectory_entry_edit_form?dirname='+dirname+'&id='+id,
+    'id': 'edit_entry',
+    'url': base_url+'cpsdirectory_entry_edit_form?dirname='+dirname+'&id='+id,
     'name': 'cpsdir_label_edit_entry',
     'category': 'object',
     }
 
+confirm_text = context.translation_service('description_confirm_delete')
+confirm_text.encode('ISO-8859-15', 'ignore')
 delete_action = {
-    'id':'delete_entry',
-    'url':base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
-    'onclick': 'return window.confirm(\''+ context.translation_service('description_confirm_delete').encode('ISO-8859-15', 'ignore') +'\')' ,
+    'id': 'delete_entry',
+    'url': base_url+'cpsdirectory_entry_delete?dirname='+dirname+'&id='+id,
+    'onclick': 'return window.confirm(\''+ confirm_text +'\')' ,
     'name': 'cpsdir_label_delete_entry',
     'category': 'object',
     }

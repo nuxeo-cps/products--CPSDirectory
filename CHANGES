@@ -6,7 +6,7 @@ New features:
 - Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
 Bug fixes:
 ~~~~~~~~~~
--
+- Replaced incorrect code producing broken urls using virtual hosting.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - DirectoryWidget handle a root_uid which can be different from the directory
