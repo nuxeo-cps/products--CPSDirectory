@@ -4,6 +4,7 @@ Requires:
 New features:
 ~~~~~~~~~~~~~
 - Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
+- Stricter defaults for the ACLs of a newly-created directory.
 Bug fixes:
 ~~~~~~~~~~
 - Replaced incorrect code producing broken urls using virtual hosting.

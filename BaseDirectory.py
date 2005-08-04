@@ -122,10 +122,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     schema_search = ''
     layout = ''
     layout_search = ''
-    acl_directory_view_roles = 'Manager; Member'
+    acl_directory_view_roles = 'Manager'
     acl_entry_create_roles = 'Manager'
     acl_entry_delete_roles = 'Manager'
-    acl_entry_view_roles = 'Manager; Member'
+    acl_entry_view_roles = 'Manager'
     acl_entry_edit_roles = 'Manager'
     id_field = ''
     title_field = ''
@@ -134,10 +134,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     entry_roles = []
 
-    acl_directory_view_roles_c = ['Manager', 'Member']
+    acl_directory_view_roles_c = ['Manager']
     acl_entry_create_roles_c = ['Manager']
     acl_entry_delete_roles_c = ['Manager']
-    acl_entry_view_roles_c = ['Manager', 'Member']
+    acl_entry_view_roles_c = ['Manager']
     acl_entry_edit_roles_c = ['Manager']
 
     _properties_post_process_split = (
