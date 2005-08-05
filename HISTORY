@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.27.0 [R1 build 2005/08/05-13:54 by ben]
+** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 25426
+Requires:
+~~~~~~~~~
+- CPSUtil > 0.5.3
+New features:
+~~~~~~~~~~~~~
+- Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
+- Stricter defaults for the ACLs of a newly-created directory.
+Bug fixes:
+~~~~~~~~~~
+- Replaced incorrect code producing broken urls using virtual hosting.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- DirectoryWidget handle a root_uid which can be different from the directory
+  root, this enable to display just a part of a hierarchical directory.
+- DirectoryWidget improve xhtml
+
+*******************************************
 ** CPSDirectory V1.26.0 [R1 build 2005/07/13-16:06 by ben]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 24893
 Requires:

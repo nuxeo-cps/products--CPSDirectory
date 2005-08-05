@@ -1,15 +1,12 @@
 Requires:
 ~~~~~~~~~
-- CPSUtil > 0.5.3
+-
 New features:
 ~~~~~~~~~~~~~
-- Adding hierarchical support for LDAPBackingDirectory (and Stacking/Meta)
-- Stricter defaults for the ACLs of a newly-created directory.
+-
 Bug fixes:
 ~~~~~~~~~~
-- Replaced incorrect code producing broken urls using virtual hosting.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- DirectoryWidget handle a root_uid which can be different from the directory
-  root, this enable to display just a part of a hierarchical directory.
-- DirectoryWidget improve xhtml
+-
