@@ -482,7 +482,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Edit an entry in the directory, unrestricted.
         """
         id = entry[self.id_field]
-        dm = self._getDataModel(id)
+        dm = self._getDataModel(id, check_acls=check_acls)
         dm_entry = self._getEntryFromDataModel(dm)
         if check_acls:
             self.checkEditEntryAllowed(id=id, entry=dm_entry)
