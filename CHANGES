@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Fix : members didn't have enough rights to access their preferences
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
