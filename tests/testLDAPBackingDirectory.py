@@ -521,12 +521,6 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
 
 
 def test_suite():
-    # Skip the tests if the ldap python module is not available.
-    try:
-        import ldap
-    except:
-        return ()
-
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectoryHierarchical))

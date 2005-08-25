@@ -44,7 +44,8 @@ from Products.CPSDirectory.BaseDirectory import _replaceProperty
 
 # During testing?
 from inspect import currentframe
-if currentframe(4).f_code.co_filename.endswith('test.py'):
+filename = currentframe(4).f_code.co_filename
+if currentframe(4).f_code.co_filename.count('/ZopeTestCase/'):
     _TESTING = True
 else:
     _TESTING = False
