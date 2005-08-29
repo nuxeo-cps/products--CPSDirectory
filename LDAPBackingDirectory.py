@@ -648,13 +648,18 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                              (dn, self.ldap_base))
 
     security.declarePrivate('connectLDAP')
-    def connectLDAP(self, bind_dn=None, bind_password=None):
+    def connectLDAP(self, bind_dn=None, bind_password=None, retrying=False):
         """Get or initialize a connection to the LDAP server.
 
         If bind_dn and bind_password are provided, bind using them.
         Otherwise bind using the global bind dn and password.
         """
         conn = self._v_conn
+
+        # Saving for retrying
+        bind_dn_orig = bind_dn
+        bind_password_orig = bind_password
+
         if conn is None:
             if self.ldap_use_ssl:
                 proto = 'ldaps'
@@ -703,8 +708,14 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         try:
             conn.simple_bind_s(bind_dn, bind_password)
         except ldap.SERVER_DOWN:
-            raise ConfigurationError("Directory '%s': LDAP server is down"
-                                     % self.getId())
+            # retry with an empty connection only once
+            self._v_conn = None
+            if retrying:
+                raise ConfigurationError("Directory '%s': LDAP server is down"
+                                         % self.getId())
+            else:
+                return self.connectLDAP(bind_dn=bind_dn_orig,
+                        bind_password=bind_password_orig, retrying=True)
         except ldap.INVALID_CREDENTIALS:
             if not using_config_bind:
                 raise
