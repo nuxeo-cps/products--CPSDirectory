@@ -9,6 +9,7 @@ Bug fixes:
 - Fix : members didn't have enough rights to access their preferences
 - Fix : invalidate ldap connection cache once on ldap.SERVER_DOWN error in
   LDAPBackingDirectory
+- Fix: DirectoryVocabulary: getMsgid with default=None was broken
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
