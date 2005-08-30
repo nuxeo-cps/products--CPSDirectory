@@ -7,15 +7,13 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 import unittest
-from Testing import ZopeTestCase
-from CPSDirectoryTestCase import CPSDirectoryTestCase
 from Products.CPSDirectory.DirectoryEntryVocabulary import DirectoryEntryVocabulary
 
 class FakeDir:
     def getEntry(self, id, default=None):
         return None
 
-class TestDirectoryEntryVocabulary(CPSDirectoryTestCase):
+class TestDirectoryEntryVocabulary(unittest.TestCase):
 
     def _getDirectory(self):
         return FakeDir()
