@@ -380,8 +380,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         raised if the entry does not exist.
         """
         try:
+            self.checkViewEntryAllowed()
             return self._getEntryKW(id)
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, Unauthorized):
             if default is not _marker:
                 return default
             else:

@@ -6,6 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
+- Security fix: better restrict access to the getEntry method. ACLs are checked.
 - Fix : members didn't have enough rights to access their preferences
 - Fix : invalidate ldap connection cache once on ldap.SERVER_DOWN error in
   LDAPBackingDirectory

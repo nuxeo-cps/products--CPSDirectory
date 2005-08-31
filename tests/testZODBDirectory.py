@@ -379,10 +379,14 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         self.assert_(self.dir.isVisible())
         self.assert_(self.dir.isCreateEntryAllowed())
         self.assert_(self.dir.searchEntries() is not None)
+        self.assertEquals(self.dir.getEntry('peterpan'), {'id': 'peterpan',
+                                                          'name': 'Peterpan'})
         self.logout()
         self.assert_(not self.dir.isVisible())
         self.assert_(not self.dir.isCreateEntryAllowed())
         self.assertRaises(Unauthorized, self.dir.searchEntries)
+        self.assertRaises(Unauthorized, self.dir.getEntry, 'peterpan')
+        self.assertEquals(self.dir.getEntry('peterpan', default=None), None)
 
 def test_suite():
     suite = unittest.TestSuite()
