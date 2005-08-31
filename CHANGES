@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- Members directory now has a property to set the field for email address.
+-
 Bug fixes:
 ~~~~~~~~~~
 - Security fix: better restrict access to the getEntry method. ACLs are checked.

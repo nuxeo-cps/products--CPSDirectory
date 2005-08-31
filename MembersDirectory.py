@@ -71,8 +71,6 @@ class MembersDirectory(BaseDirectory):
          'label': 'Field for roles'},
         {'id': 'groups_field', 'type': 'string', 'mode': 'w',
          'label': 'Field for groups'},
-        {'id': 'email_field', 'type': 'string', 'mode': 'w',
-         'label': 'Field for email address'},
         )
 
     id_field = 'id'
@@ -80,7 +78,6 @@ class MembersDirectory(BaseDirectory):
     password_field = 'password'
     roles_field = 'roles'
     groups_field = 'groups'
-    email_field = 'email'
 
     # Provide more useful defaults for this directory.
     acl_entry_edit_roles = 'Manager; Owner'
