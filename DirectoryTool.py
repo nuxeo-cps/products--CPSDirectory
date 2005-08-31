@@ -25,6 +25,7 @@ from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass, DTMLFile
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from AccessControl.PermissionRole import PermissionRole
 
 from OFS.Folder import Folder
@@ -68,6 +69,64 @@ class DirectoryTool(UniqueObject, Folder):
                 res.append(dir_id)
         res.sort()
         return res
+
+    security.declarePublic('crossGetList')
+    def crossGetList(self, dir_id, field_id, value):
+        """Return the list of entry ids of 'dir_id' such that 'value' is in
+        'field_id'
+
+        'field_id' is assumed to be a String List Field of 'dir_id'
+
+        This method is used in the computed 'members' field of the groups
+        directory's schema to list all members that belong to some group.
+        """
+
+        dir = self[dir_id]
+        entry_ids = []
+
+        # XXX: we want all entries
+        entries = dir.searchEntries(return_fields=[field_id])
+        for entry in entries:
+            if value in entry[1][field_id]:
+                entry_ids.append(entry[0])
+        return entry_ids
+
+    security.declarePublic('crossSetList')
+    def crossSetList(self, dir_id, field_id, value, entry_ids):
+        """Update the field 'field_id' of 'dir_id' so that only entries of
+        'dir_id' occuring in 'entry_ids' have 'value' in 'field_id'
+
+        'field_id' is assumed to be a String List Field of 'dir_id'
+
+        This method is used in the computed 'members' field of the groups
+        directory's schema to write the list of members that belong to some
+        group.
+        """
+        dir = self[dir_id]
+        if not dir.isVisible():
+            raise Unauthorized('No view access to directory')
+
+        # one pass update of the entries
+        all_entries = dir._searchEntries(return_fields=[dir.id_field, field_id])
+        for entry_id, entry in all_entries:
+            if entry_id in entry_ids:
+                # ensure value is in field_id
+                if value not in entry[field_id]:
+                    entry[field_id].append(value)
+                    new_entry = {
+                        dir.id_field: entry[dir.id_field],
+                        field_id: entry[field_id],
+                    }
+                    dir.editEntry(new_entry)
+            else:
+                # ensure value is not in field_id
+                if value in entry[field_id]:
+                    entry[field_id].remove(value)
+                    new_entry = {
+                        dir.id_field: entry[dir.id_field],
+                        field_id: entry[field_id],
+                    }
+                    dir.editEntry(new_entry)
 
     #
     # ZMI

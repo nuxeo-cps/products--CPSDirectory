@@ -3,7 +3,8 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- added methods to DirectoryTool to allow cross editing of String List Fields 
+  (kind of simple directory joins)
 Bug fixes:
 ~~~~~~~~~~
 - Security fix: better restrict access to the getEntry method. ACLs are checked.
