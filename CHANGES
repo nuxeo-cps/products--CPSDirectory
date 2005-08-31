@@ -14,4 +14,6 @@ Bug fixes:
 - Fix: DirectoryVocabulary: getMsgid with default=None was broken
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- moved integration tests to ftests/ : use `zopectl test -f CPSDirectory` to run
+  them
+- all test in tests/ are now unit and run in less that 2 seconds
