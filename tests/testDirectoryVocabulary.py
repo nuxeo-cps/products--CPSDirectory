@@ -1,6 +1,5 @@
-# TODO:
-# - XXX check that "hack" in __getitem__ for dealing with dependency
-#   between fields is ok
+# TODO: check that "hack" in __getitem__ for dealing with dependency
+# between fields is ok
 
 import os, sys
 
@@ -74,13 +73,6 @@ class TestDirectoryVocabulary(ZopeTestCase):
         for k, v in data.items():
             self.dir.createEntry({'idd': k, 'foo': v})
         self.data = data
-
-    def testIsRegistered(self):
-        from Products.CPSSchemas.VocabulariesTool \
-            import VocabularyTypeRegistry as VTR
-        self.assert_('CPS Directory Vocabulary' in VTR.listTypes())
-        self.assertEquals(VTR.getType('CPS Directory Vocabulary').meta_type,
-            'CPS Directory Vocabulary')
 
     def test__getitem__(self):
         dvoc = self.dvoc
