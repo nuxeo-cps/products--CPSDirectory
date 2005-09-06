@@ -31,6 +31,7 @@ from AccessControl.PermissionRole import PermissionRole
 from OFS.Folder import Folder
 
 from Products.CMFCore.utils import UniqueObject
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
@@ -80,16 +81,11 @@ class DirectoryTool(UniqueObject, Folder):
         This method is used in the computed 'members' field of the groups
         directory's schema to list all members that belong to some group.
         """
-
         dir = self[dir_id]
-        entry_ids = []
-
-        # XXX: we want all entries
-        entries = dir.searchEntries(return_fields=[field_id])
-        for entry in entries:
-            if value in entry[1][field_id]:
-                entry_ids.append(entry[0])
-        return entry_ids
+        stool = getToolByName(self, 'portal_schemas')
+        if field_id not in stool[dir.schema].fields:
+            raise KeyError("%s not in %s's fields" % (field_id, dir_id))
+        return dir.searchEntries(**{field_id: [value]})
 
     security.declarePublic('crossSetList')
     def crossSetList(self, dir_id, field_id, value, entry_ids):
