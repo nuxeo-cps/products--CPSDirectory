@@ -21,6 +21,13 @@
 The Directory Tool manages directories.
 """
 
+try:
+    set
+except NameError:
+    # python 2.3 compat
+    from sets import Set as set
+
+
 from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass, DTMLFile
@@ -101,6 +108,9 @@ class DirectoryTool(UniqueObject, Folder):
         dir = self[dir_id]
         if not dir.isVisible():
             raise Unauthorized('No view access to directory')
+
+        # turning entry_ids into a set to speed up membership tests
+        entry_ids = set(entry_ids)
 
         # one pass update of the entries
         all_entries = dir._searchEntries(return_fields=[dir.id_field, field_id])
