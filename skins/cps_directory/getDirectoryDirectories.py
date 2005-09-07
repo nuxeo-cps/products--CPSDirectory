@@ -21,6 +21,7 @@ members_directory = {
         'groups_field': 'groups',
         'title_field': 'fullname',
         'search_substring_fields': ['id', 'sn', 'givenName', 'email'],
+        'acl_directory_view_roles': 'Manager; Member',
         },
     }
 
@@ -57,6 +58,7 @@ groups_directory = {
         'members_field': 'members',
         'title_field': 'group',
         'search_substring_fields': ['group'],
+        'acl_directory_view_roles': 'Manager; Member',
         },
     }
 

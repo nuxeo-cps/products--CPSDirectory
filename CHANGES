@@ -12,6 +12,7 @@ Bug fixes:
 - Fix : invalidate ldap connection cache once on ldap.SERVER_DOWN error in
   LDAPBackingDirectory
 - Fix: DirectoryVocabulary: getMsgid with default=None was broken
+- #913: explicitely allow Member to view members and groups dirs
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - moved integration tests to ftests/ : use `zopectl test -f CPSDirectory` to run
