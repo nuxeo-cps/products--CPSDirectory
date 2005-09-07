@@ -78,8 +78,8 @@ class DirectoryTool(UniqueObject, Folder):
         res.sort()
         return res
 
-    security.declarePublic('crossGetList')
-    def crossGetList(self, dir_id, field_id, value):
+    security.declarePrivate('_crossGetList')
+    def _crossGetList(self, dir_id, field_id, value):
         """Return the list of entry ids of 'dir_id' such that 'value' is in
         'field_id'
 
@@ -92,10 +92,10 @@ class DirectoryTool(UniqueObject, Folder):
         stool = getToolByName(self, 'portal_schemas')
         if field_id not in stool[dir.schema].fields:
             raise KeyError("%s not in %s's fields" % (field_id, dir_id))
-        return dir.searchEntries(**{field_id: [value]})
+        return dir._searchEntries(**{field_id: [value]})
 
-    security.declarePublic('crossSetList')
-    def crossSetList(self, dir_id, field_id, value, entry_ids):
+    security.declarePrivate('_crossSetList')
+    def _crossSetList(self, dir_id, field_id, value, entry_ids):
         """Update the field 'field_id' of 'dir_id' so that only entries of
         'dir_id' occuring in 'entry_ids' have 'value' in 'field_id'
 
@@ -106,33 +106,37 @@ class DirectoryTool(UniqueObject, Folder):
         group.
         """
         dir = self[dir_id]
-        if not dir.isVisible():
-            raise Unauthorized('No view access to directory')
-
-        # turning entry_ids into a set to speed up membership tests
         entry_ids = set(entry_ids)
-
-        # one pass update of the entries
-        all_entries = dir._searchEntries(return_fields=[dir.id_field, field_id])
-        for entry_id, entry in all_entries:
-            if entry_id in entry_ids:
-                # ensure value is in field_id
-                if value not in entry[field_id]:
-                    entry[field_id].append(value)
-                    new_entry = {
-                        dir.id_field: entry[dir.id_field],
-                        field_id: entry[field_id],
-                    }
-                    dir.editEntry(new_entry)
-            else:
-                # ensure value is not in field_id
-                if value in entry[field_id]:
-                    entry[field_id].remove(value)
-                    new_entry = {
-                        dir.id_field: entry[dir.id_field],
-                        field_id: entry[field_id],
-                    }
-                    dir.editEntry(new_entry)
+        with_value = dir._searchEntries(return_fields=[field_id],
+                                        **{field_id: [value]})
+        ids_with_value = [id for id, e in with_value]
+        for id, entry in with_value:
+            if id in entry_ids:
+                continue
+            # Remove the value from the field
+            values = entry[field_id]
+            if value not in values:
+                # Sanity check, in case the search had weird semantics
+                continue
+            values.remove(value)
+            new_entry = {
+                dir.id_field: id,
+                field_id: values,
+                }
+            entry = dir._editEntry(new_entry)
+        for id in entry_ids.difference(ids_with_value):
+            entry = dir._getEntryKW(id, field_ids=[field_id])
+            # Add the value to the field
+            values = entry[field_id]
+            if value in values:
+                # Sanity check, in case the search had weird semantics
+                continue
+            values.append(value)
+            new_entry = {
+                dir.id_field: id,
+                field_id: values,
+                }
+            entry = dir._editEntry(new_entry) 
 
     #
     # ZMI

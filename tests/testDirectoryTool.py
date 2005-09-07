@@ -75,20 +75,18 @@ class TestDirectoryTool(ZopeTestCase):
         dir.createEntry({'id': 'user1', 'groups': ['group1', 'group2']})
         dir.createEntry({'id': 'user2', 'groups': ['group1', 'group3']})
         dir.createEntry({'id': 'user3', 'groups': []})
-        in_group1 = pd.crossGetList(dir_id, 'groups', 'group1')
+        in_group1 = pd._crossGetList(dir_id, 'groups', 'group1')
         self.assertEquals(in_group1, ['user1', 'user2'])
-        in_group2 = pd.crossGetList(dir_id, 'groups', 'group2')
+        in_group2 = pd._crossGetList(dir_id, 'groups', 'group2')
         self.assertEquals(in_group2, ['user1'])
-        in_group3 = pd.crossGetList(dir_id, 'groups', 'group3')
+        in_group3 = pd._crossGetList(dir_id, 'groups', 'group3')
         self.assertEquals(in_group3, ['user2'])
 
         # Special cases
-        in_group4 = pd.crossGetList(dir.getId(), 'groups', 'group4')
+        in_group4 = pd._crossGetList(dir.getId(), 'groups', 'group4')
         self.assertEquals(in_group4, [])
         self.assertRaises(KeyError,
-                lambda: pd.crossGetList(dir.getId(), 'not_existing', 'group1'))
-        self.assertRaises(Unauthorized,
-                lambda: pd.crossGetList('invisible', 'groups', 'group1'))
+                lambda: pd._crossGetList(dir.getId(), 'not_existing', 'group1'))
 
     def test_crossSetList(self):
         dir, pd = self.dir, self.pd
@@ -98,31 +96,28 @@ class TestDirectoryTool(ZopeTestCase):
         dir.createEntry({'id': 'user2', 'groups': []})
         dir.createEntry({'id': 'user3', 'groups': []})
         # This should not change anything
-        pd.crossSetList(dir_id, 'groups', 'group1', ['user1'])
+        pd._crossSetList(dir_id, 'groups', 'group1', ['user1'])
         self.assertEquals(dir.searchEntries(groups='group1'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group2'), ['user1'])
 
         # Adding users to a new group
-        pd.crossSetList(dir_id, 'groups', 'group3', ['user1', 'user2'])
+        pd._crossSetList(dir_id, 'groups', 'group3', ['user1', 'user2'])
         self.assertEquals(dir.searchEntries(groups='group1'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group2'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group3'),
                                             ['user1', 'user2'])
 
         # Removing users already in group3
-        pd.crossSetList(dir_id, 'groups', 'group3', [])
+        pd._crossSetList(dir_id, 'groups', 'group3', [])
         self.assertEquals(dir.searchEntries(groups='group1'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group2'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group3'), [])
 
-        # Unexisting user is ignored
-        dir.editEntry({'id': 'user1', 'groups': ['group1']})
-        pd.crossSetList(dir_id, 'groups', 'group1', ['fake_user'])
-        self.assertEquals(dir.searchEntries(groups='group1'), [])
-
-        # Invisible directory
-        self.assertRaises(Unauthorized, lambda: pd.crossSetList('invisible',
-                                        'groups', 'group1', ['fake_user']))
+        # Unexisting user triggers KeyError
+        # XXX: is this the same behavior for all directory backends?
+        self.assertRaises(KeyError,
+                lambda:pd._crossSetList(dir_id, 'groups', 'group1',
+                                        ['fake_user']))
 
 
 def test_suite():
