@@ -115,7 +115,7 @@ msgstr "id"
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
-msgstr "label"
+msgstr "eticheta"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -135,7 +135,7 @@ msgstr "Inregistrare creata cu succes"
 
 #, fuzzy
 msgid "label_roles"
-msgstr "Rôles"
+msgstr "Roluri"
 
 msgid "label_groups"
 msgstr "Grupuri"
@@ -183,14 +183,14 @@ msgstr "O inregistrare cu acelasi identificator exista deja."
 
 #, fuzzy
 msgid "label_cpsdir_roles_Member"
-msgstr "Membre"
+msgstr "Membru"
 
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Administrateur"
+msgstr "Administrator"
 
 msgid "button_delete"
-msgstr "Effacer"
+msgstr "Sterge"
 
 msgid "button_search"
-msgstr "Chercher"
+msgstr "Cauta"
