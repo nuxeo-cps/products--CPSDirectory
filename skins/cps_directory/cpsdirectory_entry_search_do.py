@@ -44,7 +44,7 @@ for field, process_meth in process_fields.items():
         item[1][field] = meth(field, value)
 
 if sort_by:
-    items = [(item[1].get(sort_by), item) for item in results]
+    items = [(item[1].get(sort_by, 'ZZZZ').lower(), item) for item in results]
     items.sort()
     if sort_direction == 'desc':
         items.reverse()
