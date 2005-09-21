@@ -3,20 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- added private methods to DirectoryTool to allow cross editing of String List Fields 
-  (kind of simple directory joins). Access rights to directories should be check
-  by the calling environment
+-
 Bug fixes:
 ~~~~~~~~~~
-- Security fix: better restrict access to the getEntry method. ACLs are checked.
-- Fix : members didn't have enough rights to access their preferences
-- Fix : invalidate ldap connection cache once on ldap.SERVER_DOWN error in
-  LDAPBackingDirectory
-- Fix: DirectoryVocabulary: getMsgid with default=None was broken
-- #913: explicitely allow Member to view members and groups dirs
-- #823: sort directory results case insensitively, and by default on name column.
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- moved integration tests to ftests/ : use `zopectl test -f CPSDirectory` to run
-  them
-- all test in tests/ are now unit and run in less that 2 seconds
+-
