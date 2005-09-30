@@ -798,6 +798,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
         #except ldap.NO_SUCH_OBJECT:
         #except ldap.SIZELIMIT_EXCEEDED:
+        # XXX: might try to fetch partial results with ldap.async:
+        # http://python-ldap.sourceforge.net/doc/python-ldap/ldap.async-example.List.html
 
         if keyset is not None:
             LOG('searchLDAP', TRACE, "Putting in cache")
