@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
 "POT-Creation-Date: 2005-06-23 17:27default\n"
-"PO-Revision-Date: 2005-06-15 14:12-0300\n"
+"PO-Revision-Date: 2005-09-29 10:19-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,6 @@ msgstr ""
 "Language-Name: Portuguese Brazilian\n"
 "Domain: default\n"
 "Language-Code: pt_BR\n"
-
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -34,7 +33,7 @@ msgstr "Erro"
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
 #.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
@@ -42,7 +41,7 @@ msgstr ""
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "button_back"
-msgstr ""
+msgstr "Voltar"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -182,16 +181,11 @@ msgstr ""
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Uma entrada com o mesmo identificador já existe"
 
-#, fuzzy
 msgid "label_cpsdir_roles_Member"
-msgstr "Member"
+msgstr "Membro"
 
-#, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Manager"
+msgstr "Administrador"
 
-msgid "button_delete"
-msgstr "Delete"
-
-msgid "button_search"
-msgstr "Search"
+#~ msgid "button_delete"
+#~ msgstr "Delete"

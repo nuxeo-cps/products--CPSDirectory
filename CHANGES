@@ -3,10 +3,13 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
+- updated Brazilian Portuguese translations (Thanks to Mario Olimpio de Menezes
+  <mario [at] curiango.ipen.br>)
 -
 Bug fixes:
 ~~~~~~~~~~
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
+- added translations tests
 -
