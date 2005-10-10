@@ -97,7 +97,7 @@ class MembersDirectory(BaseDirectory):
     security.declarePrivate('_getAdditionalRoles')
     def _getAdditionalRoles(self, id):
         """Get additional user roles provided to ACLs."""
-        if id == getSecurityManager().getUser().getId():
+        if id is not None and id == getSecurityManager().getUser().getId():
             return ('Owner',)
         else:
             return ()

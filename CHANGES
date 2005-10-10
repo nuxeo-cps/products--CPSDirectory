@@ -8,7 +8,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Fix to prevent access by anonymous user to getEntry method.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - added translations tests
