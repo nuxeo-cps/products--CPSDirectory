@@ -90,7 +90,7 @@ class DirectoryTool(UniqueObject, Folder):
         """
         dir = self[dir_id]
         stool = getToolByName(self, 'portal_schemas')
-        if field_id not in stool[dir.schema].fields:
+        if field_id not in stool[dir.schema].keys():
             raise KeyError("%s not in %s's fields" % (field_id, dir_id))
         return dir._searchEntries(**{field_id: [value]})
 
