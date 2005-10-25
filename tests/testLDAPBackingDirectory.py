@@ -519,12 +519,98 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         self.assert_(meth(id='uid=peterpan,ou=personnes,o=nuxeo,c=com'))
         self.assert_(meth(entry={'name': 'Peterpan'}))
 
+class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
+
+    # Test the creation of an entry where the ldap_base_creation is specified
+
+    def afterSetUp(self):
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
+        self.makeDir()
+
+    def beforeTearDown(self):
+        self.logout()
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        utool = Folder('portal_url')
+        utool.getPortalObject = lambda : self.root.portal
+        self.root.portal.portal_url = utool
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'name': FakeField(),
+            })
+        stool._setObject('testldapbd', s)
+
+    def makeDir(self):
+        from Products.CPSDirectory.LDAPBackingDirectory import \
+             LDAPBackingDirectory
+        dtool = self.portal.portal_directories
+        # we don't ste ldap host here
+        # since it's a fake ldap server
+        dir = LDAPBackingDirectory('members',
+            schema='testldapbd',
+            schema_search='testldapbd',
+            layout='',
+            layout_search='',
+            password_field='userPassword',
+            title_field='cn',
+            ldap_base='ou=personnes,o=nuxeo,c=com',
+            ldap_base_creation='ou=devels,ou=personnes,o=nuxeo,c=com',
+            ldap_scope='SUBTREE',
+            ldap_search_classes='person',
+            ldap_rdn_attr='id',
+            acl_directory_view_roles='test_role_1_',
+            acl_entry_create_roles='test_role_1_',
+            acl_entry_delete_roles='test_role_1_',
+            acl_entry_view_roles='test_role_1_',
+            acl_entry_edit_roles='test_role_1_',
+            )
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.members
+
+    def test_creation_under_ldap_base_creation(self):
+
+        dir = self.dir
+        id = 'janguenot'
+        dn = 'id=janguenot,ou=devels,ou=personnes,o=nuxeo,c=com'
+
+        entry = {'id': id, 'foo': 'ouah', 'bar': ['4'],
+                 'cn': 'julien'}
+
+        dir._createEntry(entry)
+
+        self.assertRaises(KeyError, self.dir._createEntry,
+                          entry)
+
+        self.assertEqual(dir.listEntryIds(), [dn])
+        self.assert_(dir._hasEntry(dn))
+
+        e = dir.getEntry(dn)
+        self.assertEquals(e, {'id':'janguenot', 'name':''})
+
+        dir.deleteEntry(dn)
+
+        self.assertEqual(dir.listEntryIds(), [])
+        self.assert_(not dir.hasEntry(id))
+        self.assertRaises(KeyError, dir.getEntry, dn)
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectoryHierarchical))
     suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
+    suite.addTest(unittest.makeSuite(
+        TestLDAPBackingDirectoryWithBaseDNForCreation))
     return suite
 
 

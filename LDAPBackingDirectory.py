@@ -50,7 +50,7 @@ if filename.count('/ZopeTestCase/') or filename.endswith("/test.py"):
 else:
     _TESTING = False
 
-# Import LDAP modules, maybe from testing code
+    # Import LDAP modules, maybe from testing code
 if not _TESTING:
     import ldap
     import ldap.ldapobject
@@ -167,6 +167,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'LDAP use ssl'},
         {'id': 'ldap_base', 'type': 'string', 'mode': 'w',
          'label': 'LDAP base'},
+        {'id': 'ldap_base_creation', 'type': 'string', 'mode': 'w',
+         'label': 'LDAP base for creation'},
         {'id': 'ldap_scope', 'type': 'selection', 'mode': 'w',
          'label': 'LDAP scope', 'select_variable': 'all_ldap_scopes'},
         {'id': 'ldap_search_classes', 'type': 'string', 'mode': 'w',
@@ -200,6 +202,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     ldap_port = 389
     ldap_use_ssl = 0
     ldap_base = ''
+    ldap_base_creation = ''
     ldap_scope = 'ONELEVEL'
     ldap_search_classes = 'person'
     ldap_search_filter = ''
@@ -352,6 +355,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             ava = '%s=%s' % (self.ldap_rdn_attr, rdn)
             if self.ldap_scope_c == ldap.SCOPE_ONELEVEL:
                 base_dn = self.ldap_base
+            elif self.ldap_base_creation:
+                base_dn = self.ldap_base_creation
             else: # ldap.SCOPE_SUBTREE
                 if not entry.has_key('base_dn'):
                     raise ValueError("Missing base_dn in entry")

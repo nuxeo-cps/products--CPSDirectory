@@ -1,3 +1,7 @@
+dn: ou=devels,ou=personnes,o=nuxeo,c=com
+objectClass: organizationalUnit
+ou: devels
+
 dn: uid=admin,ou=personnes,o=nuxeo,c=com
 objectClass: top
 objectClass: person
