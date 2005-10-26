@@ -5,8 +5,12 @@ New features:
 ~~~~~~~~~~~~~
 - updated Brazilian Portuguese translations (Thanks to Mario Olimpio de Menezes
   <mario [at] curiango.ipen.br>)
-- LDAPBackingDirectory supports a ldap_base_creation property that specifies, whithin a SUBTREE ldap scope, under which base the entries will be created
+- LDAPBackingDirectory supports a ldap_base_creation property that specifies, 
+  within a SUBTREE ldap scope, under which base the entries will be created
 - Directories supports several schema definitions (including search schemas).
+- #341: The UserIdentifierWidget checked that a user_id didn't lready exist, 
+  but forgot to set an error message, so you would not see what the problem 
+  was, or which field.
 Bug fixes:
 ~~~~~~~~~~
 - Fix to prevent access by anonymous user to getEntry method.

@@ -338,7 +338,13 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
             datamodel[self.fields[0]] = v
             if kw['layout_mode'] == 'create':
                 portal_registration = getToolByName(self, 'portal_registration')
-                return portal_registration.isMemberIdAllowed(v)
+                if portal_registration.isMemberIdAllowed(v):
+                    return True
+                else:
+                    datastructure.setError(widget_id, 
+                                           'cpsdir_err_entry_already_exists')
+                    return False
+                    
 
         return not err
 
