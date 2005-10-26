@@ -76,9 +76,9 @@ class GroupsDirectory(BaseDirectory):
         portal = getToolByName(self, 'portal_url').getPortalObject()
         aclu = portal.acl_users
         if hasattr(aclu, 'getGroupNames'):
-            return tuple(aclu.getGroupNames())
+            return list(aclu.getGroupNames())
         else:
-            return ()
+            return []
 
     # XXX AT: overriden method, will be unnecesary when _searchEntries returns
     # dependant field values correctly
