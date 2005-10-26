@@ -103,7 +103,7 @@ class IndirectDirectory(BaseDirectory):
             res = []
             # Get all the fields that title may depend on
             field_ids_d = {title_field: None}
-            schema = self._getSchemas()[0]
+            schema = self._getUniqueSchema()
             dep_ids = schema[title_field].read_process_dependent_fields
             for dep_id in dep_ids:
                 field_ids_d[dep_id] = None

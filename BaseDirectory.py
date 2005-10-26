@@ -39,6 +39,7 @@ from Products.CMFCore.Expression import getEngine
 from Products.PageTemplates.TALES import CompilerError
 
 from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSSchemas.Schema import CPSSchema
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
@@ -91,9 +92,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     _propertiesBaseClass = SimpleItemWithProperties
     _properties = SimpleItemWithProperties._properties + (
         {'id': 'schema', 'type': 'string', 'mode': 'w',
-         'label': "Schema"},
+         'label': "Schemas"},
         {'id': 'schema_search', 'type': 'string', 'mode': 'w',
-         'label': "Schema for search"},
+         'label': "Schemas for search"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
@@ -714,31 +715,26 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return rendered, ok, ds
 
     #
-    # Management API
-    #
-
-
-    #
     # Internal
     #
 
     security.declarePrivate('_getSchemas')
-    def _getSchemas(self, search=0):
+    def _getSchemas(self, search=False):
         """Get the schemas for this directory.
 
-        If search=1, get the schemas for a search.
+        If search=True, get the schemas for a search.
 
         Returns a sequence of Schema objects.
         """
         stool = getToolByName(self, 'portal_schemas')
         schemas = []
         if not search:
-            schema_ids = [self.schema]
+            schema_ids = self.schema.split()
         else:
             if self.schema_search:
-                schema_ids = [self.schema_search]
+                schema_ids = self.schema_search.split()
             else:
-                schema_ids = [self.schema]
+                schema_ids = self.schema.split()
         for schema_id in schema_ids:
             schema = stool._getOb(schema_id, None)
             if schema is None:
@@ -747,13 +743,86 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             schemas.append(schema)
         return schemas
 
+    security.declarePrivate('_getSchemasFields')
+    def _getSchemasFields(self, search=False):
+        """Get the schemas fields for this directory
+
+        If search=True, get the schemas keys for a search.
+
+        Returns a sequence of schemas fields
+
+        It doesn't return duplicated fields coming from the differents
+        schemas. (i.e : at least the id of both backends)
+        """
+        fields = []
+        schemas = self._getSchemas(search=search)
+        for schema in schemas:
+            for field in schema.items():
+                if field[0] not in [x[0] for x in fields]:
+                    fields.append(field)
+        return fields
+
+    security.declarePrivate('_getSchemasKeys')
+    def _getSchemasKeys(self, search=False):
+        """Get the schemas keys for this directory
+
+        If search=True, get the schemas keys for a search.
+
+        Returns a sequence of schemas keys.
+
+        It doesn't return duplicated keys coming from the differents
+        schemas. (i.e : at least the id of both backends)
+        """
+        return [x[0] for x in self._getSchemasFields(search=search)]
+
+    security.declarePrivate('_getUniqueSchema')
+    def _getUniqueSchema(self, search=False):
+        """Return a unique schema for this directory.
+
+        We got 2 cases here :
+
+        o only one (1) schema specified :
+
+          return simply the only one
+
+        o Several schemas specified : 
+
+          Generate dynamicaly a *non* persistent CPSSchema instance
+        that aggregates all the fields from the different defined
+        schemas on this directory.
+
+        It the different schemas are defining fields with the same id,
+        then the field defined on the first one declared schema will
+        be taken.
+
+        This is used by the directory adapter storage because only one
+        exists right now for a given directory.
+        """
+        schemas = self._getSchemas(search=search)
+        # Do not generate a schema in this case but return the only
+        # specified schema on this directory.
+        if len(schemas) == 1:
+            return schemas[0]
+        # Generate a CPSSchema and add the aggregated fields on it.
+        # TODO : ensure it's not too costly to generate this
+        schema = CPSSchema(id=self.getId())
+        for field_id, field in self._getSchemasFields(search=search):
+            if field_id not in schema.keys():
+                schema.addSubObject(field)
+        return schema
+
+    security.declarePrivate('_getSchemaFieldById')
+    def _getSchemaFieldById(self, field_id, search=False):
+        """Return a field from the directory's schemas.
+        """
+        for field_id_, field in self._getSchemasFields(search=search):
+            if field_id_ == field_id:
+                return field
+
     security.declarePrivate('_getFieldIds')
     def _getFieldIds(self, search=0):
         """Get the fields ids by querying the schemas."""
-        keys = []
-        for schema in self._getSchemas(search=search):
-            keys.extend(schema.keys())
-        return keys
+        return self._getSchemasKeys()
 
     security.declarePrivate('_getSearchFields')
     def _getSearchFields(self, return_fields=None):
@@ -763,9 +832,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Also compute dependant fields.
         """
         res = []
-        # XXX AT: I dont get why only first schema is used
-        schema = self._getSchemas()[0]
-        all_field_ids = schema.keys()
+        all_field_ids = self._getSchemasKeys()
         field_ids_d = {self.id_field: None}
         if return_fields is not None:
             if return_fields == ['*']:
@@ -777,7 +844,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             dep_ids = []
             for field_id in return_fields:
                 field_ids_d[field_id] = None
-                rpdf = schema[field_id].read_process_dependent_fields
+                field_ = self._getSchemaFieldById(field_id)
+                if field_ is not None:
+                    rpdf = list(field_.read_process_dependent_fields)
                 dep_ids.extend(rpdf)
             for field_id in dep_ids:
                 field_ids_d[field_id] = None
@@ -909,7 +978,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                     return {}
         mapping = {}
         # Put None values by default for all schema items.
-        for field_id in self._getSchemas()[0].keys():
+        for field_id in self._getSchemasKeys():
             mapping[field_id] = None
         # Put filled-in entry items in the namespace.
         mapping.update(entry)
@@ -1016,7 +1085,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def manage_getZMISearchFields(self):
         """Find which fields we can easily search from ZMI."""
         infos = []
-        for schema in self._getSchemas(search=1):
+        for schema in self._getSchemas(search=True):
             for field_id, field in schema.items():
                 mt = field.meta_type
                 if mt in ('CPS String Field',

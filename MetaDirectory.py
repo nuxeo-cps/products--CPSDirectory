@@ -308,8 +308,7 @@ class MetaDirectory(BaseDirectory):
 
         #print 'dir=%s rf=%s query=%s' % (self.id, return_fields, kw)
 
-        schema = self._getSchemas()[0]
-        all_field_ids = schema.keys()
+        all_field_ids = self._getSchemasKeys()
         id_field = self.id_field
 
         # Compute query.

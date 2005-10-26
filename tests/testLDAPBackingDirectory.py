@@ -604,6 +604,179 @@ class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
         self.assert_(not dir.hasEntry(id))
         self.assertRaises(KeyError, dir.getEntry, dn)
 
+class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
+
+    # Test the behavior while adding several schemas on the directory
+
+    def afterSetUp(self):
+        ZopeTestCase.afterSetUp(self)
+        self.makeSite()
+        self.makeSchema()
+        self.makeDir()
+
+    def beforeTearDown(self):
+        self.logout()
+
+    def makeSite(self):
+        self.root = FakeRoot()
+        self.root.portal = Folder('portal')
+        utool = Folder('portal_url')
+        utool.getPortalObject = lambda : self.root.portal
+        self.root.portal.portal_url = utool
+        self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_directories = FakeDirectoryTool()
+        self.portal = self.root.portal
+        self.pd = self.portal.portal_directories
+
+    def makeSchema(self):
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(id='id'),
+            'name': FakeField(id='name'),
+            'fullname' : FakeField(id='fullname',
+                                   read_dep=('givenName', 'name', 'id'))
+            })
+        stool._setObject('testldapbd1', s)
+        s = FakeSchema({
+            'id': FakeField(id='id'),
+            'givenName': FakeField(id='givenName'),
+            'name' : FakeField(id='name'),
+            'fullname' : FakeField(id='fullname',
+                                   read_dep=('givenName', 'name', 'id'))
+            })
+        stool._setObject('testldapbd2', s)
+
+    def makeDir(self):
+        from Products.CPSDirectory.LDAPBackingDirectory import \
+             LDAPBackingDirectory
+        dtool = self.portal.portal_directories
+        # we don't ste ldap host here
+        # since it's a fake ldap server
+        dir = LDAPBackingDirectory('members',
+            schema='testldapbd1 testldapbd2',
+            schema_search='testldapbd1',
+            layout='',
+            layout_search='',
+            password_field='userPassword',
+            title_field='cn',
+            ldap_base='ou=personnes,o=nuxeo,c=com',
+            ldap_base_creation='ou=devels,ou=personnes,o=nuxeo,c=com',
+            ldap_scope='SUBTREE',
+            ldap_search_classes='person',
+            ldap_rdn_attr='id',
+            acl_directory_view_roles='test_role_1_',
+            acl_entry_create_roles='test_role_1_',
+            acl_entry_delete_roles='test_role_1_',
+            acl_entry_view_roles='test_role_1_',
+            acl_entry_edit_roles='test_role_1_',
+            )
+        dtool._setObject(dir.getId(), dir)
+        self.dir = dtool.members
+
+    def test_getSchemas(self):
+
+        schemas = self.dir._getSchemas()
+        self.assertEqual(len(schemas), 2)
+
+    def test_getSchemasForSearch(self):
+
+        search_schemas = self.dir._getSchemas(search=True)
+        self.assertEqual(len(search_schemas), 1)
+
+    def test_getSchemasKeys(self):
+
+        schemas_keys = self.dir._getSchemasKeys()
+        self.assertEqual(len(schemas_keys), 4)
+        # id is not duplicated
+        schemas_keys.sort()
+        self.assertEqual(schemas_keys,
+                         ['fullname', 'givenName', 'id', 'name'])
+
+    def test_getSchemasFields(self):
+
+        schemas_fields = self.dir._getSchemasFields()
+        self.assertEqual(len(schemas_fields), 4)
+        schemas_keys = [x[0] for x in schemas_fields]
+        schemas_keys.sort()
+        self.assertEqual(schemas_keys,
+                         ['fullname', 'givenName', 'id', 'name'])
+        ref_keys = self.dir._getSchemasKeys()
+        ref_keys.sort()
+        self.assertEqual(schemas_keys, ref_keys)
+        
+    def test_getSchemasFieldsForSearch(self):
+
+        schemas_fields = self.dir._getSchemasFields(search=True)
+        self.assertEqual(len(schemas_fields), 3)
+        schemas_keys = [x[0] for x in schemas_fields]
+        schemas_keys.sort()
+        self.assertEqual(schemas_keys,
+                         ['fullname', 'id', 'name'])
+        ref_keys = self.dir._getSchemasKeys(search=True)
+        ref_keys.sort()
+        self.assertEqual(schemas_keys, ref_keys)
+
+    def test_getSchemasKeysForSearch(self):
+
+        schemas_keys = self.dir._getSchemasKeys(search=True)
+        self.assertEqual(len(schemas_keys), 3)
+        # id is not duplicated
+        schemas_keys.sort()
+        self.assertEqual(schemas_keys, ['fullname', 'id', 'name'])
+
+    def test_getSchemaFieldById(self):
+
+        field_id = 'fullname'
+        deps = ['givenName', 'id', 'name']
+
+        # Try to check it from the schema directly.
+        schemas = self.dir._getSchemas()[0]
+        field = schemas[field_id]
+        self.assert_(field)
+        rpdf = list(field.read_process_dependent_fields)
+        rpdf.sort()
+        self.assertEqual(rpdf, deps)
+
+        # Try using the dedicated internal API to fetch the field
+        rpdf = list(
+            self.dir._getSchemaFieldById(
+            field_id).read_process_dependent_fields)
+        rpdf.sort()
+        self.assertEqual(rpdf, deps)
+
+    def test_getUniqueSchema(self):
+
+        schema = self.dir._getUniqueSchema(search=False)
+        self.assert_(schema)
+        from Products.CPSSchemas.Schema import CPSSchema
+        self.assert_(isinstance(schema, CPSSchema))
+
+        fields = self.dir._getSchemasFields()
+        schema_fields = schema.items()
+
+        field_ids = [x[0] for x in fields]
+        schema_field_ids = [x[0] for x in schema_fields]
+
+        field_ids.sort()
+        schema_field_ids.sort()
+        self.assertEqual(field_ids, schema_field_ids)
+
+    def test_getUniqueSchemaForSearch(self):
+            
+        schema = self.dir._getUniqueSchema(search=True)
+        self.assert_(schema)
+        self.assertEqual(self.dir._getSchemas()[0], schema)
+
+        fields = self.dir._getSchemasFields(search=True)
+        schema_fields = schema.items()
+
+        field_ids = [x[0] for x in fields]
+        schema_field_ids = [x[0] for x in schema_fields]
+
+        field_ids.sort()
+        schema_field_ids.sort()
+        self.assertEqual(field_ids, schema_field_ids)
+        
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
@@ -611,6 +784,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
     suite.addTest(unittest.makeSuite(
         TestLDAPBackingDirectoryWithBaseDNForCreation))
+    suite.addTest(unittest.makeSuite(
+        TestLDAPBackingDirectoryWithSeveralSchemas))
     return suite
 
 

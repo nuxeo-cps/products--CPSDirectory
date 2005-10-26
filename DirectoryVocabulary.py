@@ -88,7 +88,7 @@ class DirectoryVocabulary(SimpleItemWithProperties):
         dir = self._getDirectory()
         title_field = dir.title_field
         field_ids_d = {title_field: None}
-        schema = dir._getSchemas()[0]
+        schema = dir._getUniqueSchema()
         dep_ids = schema[title_field].read_process_dependent_fields
         for dep_id in dep_ids:
             field_ids_d[dep_id] = None

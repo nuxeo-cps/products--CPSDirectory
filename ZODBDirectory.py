@@ -101,7 +101,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
 
         # Get all the fields that title may depend on
         field_ids_d = {title_field: None}
-        schema = self._getSchemas()[0]
+        schema = self._getUniqueSchema()
         dep_ids = schema[title_field].read_process_dependent_fields
         for dep_id in dep_ids:
             field_ids_d[dep_id] = None
@@ -199,8 +199,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
-        schema = self._getSchemas()[0]
-        all_field_ids = schema.keys()
+        all_field_ids = self._getSchemasKeys()
 
         # Compute search_types and query.
         search_types = {}
@@ -232,6 +231,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         field_ids = field_ids_d.keys()
 
         # Do the search.
+        schema = self._getUniqueSchema()
         adapter = AttributeStorageAdapter(schema, None,
                                           field_ids=field_ids)
         res = []

@@ -42,9 +42,10 @@ def fromUTF8(s):
     return unicode(s, 'utf-8').encode(default_encoding)
 
 class FakeField:
-    def __init__(self, read_expr=None, read_dep=()):
+    def __init__(self, id='', read_expr=None, read_dep=()):
         self.read_expr = read_expr
         self.read_process_dependent_fields = read_dep
+        self.id = id
     write_ignore_storage = False
     read_ignore_storage = False
     def getDefault(self, datamodel=None):
@@ -65,6 +66,14 @@ class FakeField:
         return [toUTF8(str(value))]
     def convertFromLDAP(self, values):
         return fromUTF8(values[0])
+    def manage_fixupOwnershipAfterAdd(self):
+        pass
+    def manage_afterAdd(self, x, y):
+        pass
+    def getId(self):
+        return self.id
+    def _setId(self, id):
+        self.id = id
 
 class FakeListField(FakeField):
     def getDefault(self, datamodel=None):
@@ -85,6 +94,11 @@ class FakeSchema(Item):
         return self.fields.values()
     def __getitem__(self, key):
         return self.fields[key]
+    def _setObject(self, id_, object_):
+        if id_ not in self.fields.keys():
+            self.fields[id] = object_
+        raise KeyError(
+            "The id '%s' is invalid - it is already in use." %(id_))
 
 _marker = object()
 class FakeSchemasTool(Folder):

@@ -425,7 +425,6 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             for child in children]
         return [entry[0][1].get(field_id) for entry in children_entires]
 
-
     security.declarePrivate('_getParentEntryId')
     def _getParentEntryId(self, id, field_id=None):
         """Return Parent Id of 'id'.
@@ -462,7 +461,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     def _getAdapterForPartialData(self, attrs):
         """Get an adapter for partial data."""
         dir = self
-        schema = self._getSchemas()[0] # XXX
+        schema = self._getUniqueSchema()
         adapter = LDAPBackingStorageAdapter(schema, None, dir, field_ids=attrs)
         return adapter
 
@@ -502,7 +501,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Returns a non-encoded LDAP filter. It will have to be UTF-8
         encoded before being passed to LDAP.
         """
-        all_field_ids = self._getSchemas()[0].keys()
+        all_field_ids = self._getSchemasKeys()
         filter_elems = [self.searchFilter()]
         for key, value in query.items():
             if not key in all_field_ids:
@@ -607,7 +606,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Skips ignored_attrs. Keeps empty attributes if keep_empty.
         """
         ldap_attrs = {}
-        for field_id, field in self._getSchemas()[0].items(): # XXX
+        for field_id, field in self._getSchemasFields():
             if field.write_ignore_storage:
                 continue
             if field_id in ('dn', 'base_dn'):
@@ -630,7 +629,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     def convertDataFromLDAP(self, dn, ldap_entry):
         """Convert LDAP values to a user data mapping."""
         entry = {}
-        for field_id, field in self._getSchemas()[0].items(): # XXX
+        for field_id, field in self._getSchemasFields():
             if not ldap_entry.has_key(field_id):
                 continue
             values = ldap_entry[field_id]
