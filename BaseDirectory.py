@@ -818,6 +818,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         for field_id_, field in self._getSchemasFields(search=search):
             if field_id_ == field_id:
                 return field
+        return None
 
     security.declarePrivate('_getFieldIds')
     def _getFieldIds(self, search=0):
