@@ -816,8 +816,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _getSchemaFieldById(self, field_id, search=False):
         """Return a field from the directory's schemas.
         """
-        for field_id_, field in self._getFieldItems(search=search):
-            if field_id_ == field_id:
+        for id, field in self._getFieldItems(search=search):
+            if id == field_id:
                 return field
         return None
 
