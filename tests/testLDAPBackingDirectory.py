@@ -683,9 +683,9 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         search_schemas = self.dir._getSchemas(search=True)
         self.assertEqual(len(search_schemas), 1)
 
-    def test_getSchemasKeys(self):
+    def test_getFieldIds(self):
 
-        schemas_keys = self.dir._getSchemasKeys()
+        schemas_keys = self.dir._getFieldIds()
         self.assertEqual(len(schemas_keys), 4)
         # id is not duplicated
         schemas_keys.sort()
@@ -694,31 +694,31 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
 
     def test_getSchemasFields(self):
 
-        schemas_fields = self.dir._getSchemasFields()
+        schemas_fields = self.dir._getFieldItems()
         self.assertEqual(len(schemas_fields), 4)
         schemas_keys = [x[0] for x in schemas_fields]
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
                          ['fullname', 'givenName', 'id', 'name'])
-        ref_keys = self.dir._getSchemasKeys()
+        ref_keys = self.dir._getFieldIds()
         ref_keys.sort()
         self.assertEqual(schemas_keys, ref_keys)
         
-    def test_getSchemasFieldsForSearch(self):
+    def test_getFieldItemsForSearch(self):
 
-        schemas_fields = self.dir._getSchemasFields(search=True)
+        schemas_fields = self.dir._getFieldItems(search=True)
         self.assertEqual(len(schemas_fields), 3)
         schemas_keys = [x[0] for x in schemas_fields]
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
                          ['fullname', 'id', 'name'])
-        ref_keys = self.dir._getSchemasKeys(search=True)
+        ref_keys = self.dir._getFieldIds(search=True)
         ref_keys.sort()
         self.assertEqual(schemas_keys, ref_keys)
 
-    def test_getSchemasKeysForSearch(self):
+    def test_getFieldIdsForSearch(self):
 
-        schemas_keys = self.dir._getSchemasKeys(search=True)
+        schemas_keys = self.dir._getFieldIds(search=True)
         self.assertEqual(len(schemas_keys), 3)
         # id is not duplicated
         schemas_keys.sort()
@@ -751,7 +751,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         from Products.CPSSchemas.Schema import CPSSchema
         self.assert_(isinstance(schema, CPSSchema))
 
-        fields = self.dir._getSchemasFields()
+        fields = self.dir._getFieldItems()
         schema_fields = schema.items()
 
         field_ids = [x[0] for x in fields]
@@ -767,7 +767,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         self.assert_(schema)
         self.assertEqual(self.dir._getSchemas()[0], schema)
 
-        fields = self.dir._getSchemasFields(search=True)
+        fields = self.dir._getFieldItems(search=True)
         schema_fields = schema.items()
 
         field_ids = [x[0] for x in fields]

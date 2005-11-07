@@ -9,4 +9,6 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Better name for methods: _getSchemasFields -> _getFieldItems,
+  _getSchemasKeys -> _getFieldIds
+- Fixed algorithm performance details

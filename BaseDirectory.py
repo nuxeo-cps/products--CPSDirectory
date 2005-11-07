@@ -743,57 +743,56 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             schemas.append(schema)
         return schemas
 
-    security.declarePrivate('_getSchemasFields')
-    def _getSchemasFields(self, search=False):
+    security.declarePrivate('_getFieldItems')
+    def _getFieldItems(self, search=False):
         """Get the schemas fields for this directory
 
         If search=True, get the schemas keys for a search.
 
-        Returns a sequence of schemas fields
+        Returns a sequence of fields items (field_id, field)
 
-        It doesn't return duplicated fields coming from the differents
-        schemas. (i.e : at least the id of both backends)
+        Doesn't return duplicate field ids coming from differents schemas.
         """
-        fields = []
+        seen = {}
+        items = []
         schemas = self._getSchemas(search=search)
         for schema in schemas:
-            for field in schema.items():
-                if field[0] not in [x[0] for x in fields]:
-                    fields.append(field)
-        return fields
+            for field_id, field in schema.items():
+                if field_id not in seen:
+                    items.append((field_id, field))
+                    seen[field_id] = None
+        return items
 
-    security.declarePrivate('_getSchemasKeys')
-    def _getSchemasKeys(self, search=False):
+    security.declarePrivate('_getFieldIds')
+    def _getFieldIds(self, search=False):
         """Get the schemas keys for this directory
 
         If search=True, get the schemas keys for a search.
 
-        Returns a sequence of schemas keys.
+        Returns a sequence of field ids.
 
-        It doesn't return duplicated keys coming from the differents
-        schemas. (i.e : at least the id of both backends)
+        Doesn't return duplicate field ids coming from differents schemas.
         """
-        return [x[0] for x in self._getSchemasFields(search=search)]
+        return [x[0] for x in self._getFieldItems(search=search)]
 
     security.declarePrivate('_getUniqueSchema')
     def _getUniqueSchema(self, search=False):
         """Return a unique schema for this directory.
 
-        We got 2 cases here :
+        We have two cases here:
 
-        o only one (1) schema specified :
+         * Only one schema specified:
 
-          return simply the only one
+           simply return it
 
-        o Several schemas specified : 
+         * Several schemas specified:
 
-          Generate dynamicaly a *non* persistent CPSSchema instance
-        that aggregates all the fields from the different defined
-        schemas on this directory.
+           Generate dynamicaly a *non* persistent CPSSchema instance
+           that aggregates all the fields from the different schemas of
+           this directory.
 
-        It the different schemas are defining fields with the same id,
-        then the field defined on the first one declared schema will
-        be taken.
+           It the different schemas define fields with the same id, then
+           the field defined on the first schema will be kept.
 
         This is used by the directory adapter storage because only one
         exists right now for a given directory.
@@ -806,24 +805,21 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         # Generate a CPSSchema and add the aggregated fields on it.
         # TODO : ensure it's not too costly to generate this
         schema = CPSSchema(id=self.getId())
-        for field_id, field in self._getSchemasFields(search=search):
-            if field_id not in schema.keys():
+        seen = {}
+        for field_id, field in self._getFieldItems(search=search):
+            if field_id not in seen:
                 schema.addSubObject(field)
+                seen[field_id] = None
         return schema
 
     security.declarePrivate('_getSchemaFieldById')
     def _getSchemaFieldById(self, field_id, search=False):
         """Return a field from the directory's schemas.
         """
-        for field_id_, field in self._getSchemasFields(search=search):
+        for field_id_, field in self._getFieldItems(search=search):
             if field_id_ == field_id:
                 return field
         return None
-
-    security.declarePrivate('_getFieldIds')
-    def _getFieldIds(self, search=0):
-        """Get the fields ids by querying the schemas."""
-        return self._getSchemasKeys()
 
     security.declarePrivate('_getSearchFields')
     def _getSearchFields(self, return_fields=None):
@@ -833,7 +829,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         Also compute dependant fields.
         """
         res = []
-        all_field_ids = self._getSchemasKeys()
+        all_field_ids = self._getFieldIds()
         field_ids_d = {self.id_field: None}
         if return_fields is not None:
             if return_fields == ['*']:
@@ -845,9 +841,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             dep_ids = []
             for field_id in return_fields:
                 field_ids_d[field_id] = None
-                field_ = self._getSchemaFieldById(field_id)
-                if field_ is not None:
-                    rpdf = list(field_.read_process_dependent_fields)
+                field = self._getSchemaFieldById(field_id)
+                if field is None:
+                    continue
+                rpdf = list(field.read_process_dependent_fields)
                 dep_ids.extend(rpdf)
             for field_id in dep_ids:
                 field_ids_d[field_id] = None
@@ -979,7 +976,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                     return {}
         mapping = {}
         # Put None values by default for all schema items.
-        for field_id in self._getSchemasKeys():
+        for field_id in self._getFieldIds():
             mapping[field_id] = None
         # Put filled-in entry items in the namespace.
         mapping.update(entry)

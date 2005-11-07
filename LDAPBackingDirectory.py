@@ -501,7 +501,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Returns a non-encoded LDAP filter. It will have to be UTF-8
         encoded before being passed to LDAP.
         """
-        all_field_ids = self._getSchemasKeys()
+        all_field_ids = self._getFieldIds()
         filter_elems = [self.searchFilter()]
         for key, value in query.items():
             if not key in all_field_ids:
@@ -606,7 +606,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Skips ignored_attrs. Keeps empty attributes if keep_empty.
         """
         ldap_attrs = {}
-        for field_id, field in self._getSchemasFields():
+        for field_id, field in self._getFieldItems():
             if field.write_ignore_storage:
                 continue
             if field_id in ('dn', 'base_dn'):
@@ -629,7 +629,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     def convertDataFromLDAP(self, dn, ldap_entry):
         """Convert LDAP values to a user data mapping."""
         entry = {}
-        for field_id, field in self._getSchemasFields():
+        for field_id, field in self._getFieldItems():
             if not ldap_entry.has_key(field_id):
                 continue
             values = ldap_entry[field_id]

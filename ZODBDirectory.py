@@ -199,7 +199,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
-        all_field_ids = self._getSchemasKeys()
+        all_field_ids = self._getFieldIds()
 
         # Compute search_types and query.
         search_types = {}

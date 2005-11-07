@@ -220,7 +220,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
         See API in the base class.
         """
         schema = self._getUniqueSchema()
-        all_field_ids = self._getSchemasKeys()
+        all_field_ids = self._getFieldIds()
 
         # Find field_ids needed to compute returned fields.
         attrsd, return_fields = self._getSearchFields(return_fields)
@@ -396,7 +396,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
         """
         quoter = self._getSQLQuoter()
         sql_data = {}
-        for field_id, field in self._getSchemasFields():
+        for field_id, field in self._getFieldItems():
             if field.write_ignore_storage:
                 continue
             if not data.has_key(field_id):

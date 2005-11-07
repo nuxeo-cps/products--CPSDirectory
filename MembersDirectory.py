@@ -231,7 +231,7 @@ class MembersDirectory(BaseDirectory):
                      'CPS String List Field': 'lines',
                     }
 
-        for field_id, field in self._getSchemasFields():
+        for field_id, field in self._getFieldItems():
             # TODO handle id and title as required, ignore them for now
             if field_id in ('id', 'title'):
                 # for now

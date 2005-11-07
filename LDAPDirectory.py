@@ -204,7 +204,7 @@ class LDAPDirectory(BaseDirectory):
         - Keys with value '*' search for an existing field.
         """
         schema = self._getUniqueSchema()
-        all_field_ids = self._getSchemasKeys()
+        all_field_ids = self._getFieldIds()
         # Find attrs needed to compute returned fields.
         attrsd, return_fields = self._getSearchFields(return_fields)
         attrs = attrsd.keys()
@@ -362,7 +362,7 @@ class LDAPDirectory(BaseDirectory):
     def _makeAttrsFromData(self, data, ignore_attrs=[], keep_empty=0):
         # Make attributes. Skip ignore_attrs.
         attrs = {}
-        for field_id, field in self._getSchemasFields():
+        for field_id, field in self._getFieldItems():
             if field.write_ignore_storage:
                 continue
             if field_id in ('dn', 'base_dn'):
