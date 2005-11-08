@@ -1,4 +1,22 @@
 *******************************************
+** CPSDirectory V1.30.1 [R1 build 2005/11/08-16:54 by fguillaume]
+** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 29274
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+-
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Better name for methods: _getSchemasFields -> _getFieldItems,
+  _getSchemasKeys -> _getFieldIds
+- Fixed algorithm performance details
+
+*******************************************
 ** CPSDirectory V1.30.0 [R1 build 2005/11/07-15:17 by fguillaume]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 29081
 Requires:
