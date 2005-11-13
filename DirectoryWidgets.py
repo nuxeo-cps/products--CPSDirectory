@@ -28,11 +28,12 @@ from Globals import InitializeClass
 from types import StringType, ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
-from Products.CPSSchemas.WidgetTypesTool import WidgetTypeRegistry
-from Products.CPSSchemas.Widget import CPSWidgetType
+
+from Products.CPSSchemas.Widget import widgetRegistry
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag
-from Products.CPSSchemas.BasicWidgets import \
-     CPSSelectWidget, CPSMultiSelectWidget, CPSIdentifierWidget
+from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
+from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
+from Products.CPSSchemas.BasicWidgets import CPSIdentifierWidget
 
 
 class EntryMixin:
@@ -94,7 +95,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
 
     In edit mode it uses a SelectWidget for now. XXX
     """
-    meta_type = "CPS Directory Entry Widget"
+    meta_type = 'Directory Entry Widget'
 
     _properties = CPSSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
@@ -178,13 +179,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
 
 InitializeClass(CPSDirectoryEntryWidget)
 
-
-class CPSDirectoryEntryWidgetType(CPSWidgetType):
-    """Directory entry widget type."""
-    meta_type = "CPS Directory Entry Widget Type"
-    cls = CPSDirectoryEntryWidget
-
-InitializeClass(CPSDirectoryEntryWidgetType)
+widgetRegistry.register(CPSDirectoryEntryWidget)
 
 ##################################################
 
@@ -196,7 +191,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
 
     In edit mode it uses a MultiSelectWidget for now. XXX
     """
-    meta_type = "CPS Directory MultiEntries Widget"
+    meta_type = 'Directory MultiEntries Widget'
 
     _properties = CPSMultiSelectWidget._properties + (
         {'id': 'directory', 'type': 'string', 'mode': 'w',
@@ -309,19 +304,13 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
 
 InitializeClass(CPSDirectoryMultiEntriesWidget)
 
-
-class CPSDirectoryMultiEntriesWidgetType(CPSWidgetType):
-    """Directory entry widget type."""
-    meta_type = "CPS Directory MultiEntries Widget Type"
-    cls = CPSDirectoryMultiEntriesWidget
-
-InitializeClass(CPSDirectoryMultiEntriesWidgetType)
+widgetRegistry.register(CPSDirectoryMultiEntriesWidget)
 
 ##################################################
 
 class CPSUserIdentifierWidget(CPSIdentifierWidget):
     """Identifier widget."""
-    meta_type = "CPS User Identifier Widget"
+    meta_type = 'User Identifier Widget'
 
     def validate(self, datastructure, **kw):
         """Validate datastructure and update datamodel."""
@@ -350,18 +339,4 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
 
 InitializeClass(CPSUserIdentifierWidget)
 
-class CPSUserIdentifierWidgetType(CPSWidgetType):
-    """User Identifier Widget Type."""
-    meta_type = "CPS User Identifier Widget Type"
-    cls = CPSUserIdentifierWidget
-
-InitializeClass(CPSUserIdentifierWidgetType)
-
-##################################################
-
-WidgetTypeRegistry.register(CPSDirectoryEntryWidgetType,
-                            CPSDirectoryEntryWidget)
-WidgetTypeRegistry.register(CPSDirectoryMultiEntriesWidgetType,
-                            CPSDirectoryMultiEntriesWidget)
-WidgetTypeRegistry.register(CPSUserIdentifierWidgetType,
-                            CPSUserIdentifierWidget)
+widgetRegistry.register(CPSUserIdentifierWidget)

@@ -36,7 +36,6 @@ def install(self):
                          'CPS Directory Tool')
     installer.verifyDirectories(self.getDirectoryDirectories())
 
-    installer.verifyWidgets(self.getDirectoryWidgetTypes())
     installer.verifySchemas(self.getDirectorySchemas())
     installer.verifyLayouts(self.getDirectoryLayouts())
     installer.verifyVocabularies(self.getDirectoryVocabularies())

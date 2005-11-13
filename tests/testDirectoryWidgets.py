@@ -42,7 +42,7 @@ fakePortal.translation_service = FakeTranslationService()
 class TestDirectoryWidgets(unittest.TestCase):
 
     def test_CPSUserIdentifierWidget(self):
-       wi = CPSUserIdentifierWidget('widget_id', 'notype').__of__(fakePortal)
+       wi = CPSUserIdentifierWidget('widget_id').__of__(fakePortal)
        self.assert_(not wi._checkIdentifier('136ll'))
        self.assert_(not wi._checkIdentifier('é"136ll'))
        wi.id_pat = r'[a-zA-Z0-9@\-\._]*$'
