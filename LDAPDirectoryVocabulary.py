@@ -28,6 +28,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.permissions import View, ManagePortal
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
+from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 
 class LDAPDirectoryVocabulary(SimpleItemWithProperties):
@@ -144,3 +145,5 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
         return 0
 
 InitializeClass(LDAPDirectoryVocabulary)
+
+VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)

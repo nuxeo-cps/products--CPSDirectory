@@ -31,6 +31,7 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.permissions import View
+from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 from DirectoryVocabulary import DirectoryVocabulary
 
@@ -118,3 +119,5 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
         return key in self.keys()
 
 InitializeClass(DirectoryEntryVocabulary)
+
+VocabularyTypeRegistry.register(DirectoryEntryVocabulary)

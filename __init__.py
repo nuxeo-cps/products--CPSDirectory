@@ -42,8 +42,6 @@ try:
 except ImportError:
     has_ldap = 0
 
-from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
-
 import DirectoryTool
 # Register widgets. Don't remove.
 import DirectoryWidgets
@@ -71,6 +69,8 @@ else:
 if has_ldap:
     from LDAPBackingDirectory import LDAPBackingDirectory
 
+
+# Vocabularies
 from DirectoryVocabulary import DirectoryVocabulary
 from DirectoryEntryVocabulary import DirectoryEntryVocabulary
 if has_ldap_delegate:
@@ -103,12 +103,8 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MetaDirectory)
     DirectoryTypeRegistry.register(StackingDirectory)
     DirectoryTypeRegistry.register(SQLDirectory)
-    VocabularyTypeRegistry.register(DirectoryVocabulary)
-    VocabularyTypeRegistry.register(DirectoryEntryVocabulary)
     if has_ldap_delegate:
         DirectoryTypeRegistry.register(LDAPDirectory)
-        VocabularyTypeRegistry.register(LDAPDirectoryVocabulary)
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPBackingDirectory)
     DirectoryTypeRegistry.register(IndirectDirectory)
-    VocabularyTypeRegistry.register(IndirectDirectoryVocabulary)

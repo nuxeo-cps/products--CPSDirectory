@@ -28,6 +28,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.permissions import View, ManagePortal
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
+from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 from DirectoryVocabulary import DirectoryVocabulary
 
@@ -79,3 +80,5 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
 
 
 InitializeClass(IndirectDirectoryVocabulary)
+
+VocabularyTypeRegistry.register(IndirectDirectoryVocabulary)
