@@ -10,3 +10,7 @@ Bug fixes:
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Removed obsolete widget types registration.
+- made cross(S|G)etList methods registered on the
+  CPSSchemas.FieldNamespace.fieldStorageNamespace method registry so that are
+  publicly available in fields' TALES expressions context. They are no longuer
+  part of the DirectoryTool but in a seperate non persistent util module.

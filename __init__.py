@@ -81,6 +81,9 @@ else:
 from IndirectDirectoryVocabulary import IndirectDirectoryVocabulary
 
 
+# register directory specific methods to the FieldNamespace utility
+import FieldNamespace
+
 import UserFolderPatch
 import MemberToolsPatch
 
