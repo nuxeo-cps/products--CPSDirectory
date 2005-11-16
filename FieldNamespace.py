@@ -22,6 +22,12 @@ Register directory-related methods to CPSSchemas' FieldNamespace utility
 so as to be able to make 'joins' with computed String List Fields
 """
 
+try:
+    set
+except NameError:
+    # python 2.3 compat
+    from sets import Set as set
+
 from Products.CPSSchemas.FieldNamespace import fieldStorageNamespace
 from Products.CMFCore.utils import getToolByName
 

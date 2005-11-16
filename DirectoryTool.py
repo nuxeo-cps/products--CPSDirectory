@@ -20,14 +20,6 @@
 
 The Directory Tool manages directories.
 """
-
-try:
-    set
-except NameError:
-    # python 2.3 compat
-    from sets import Set as set
-
-
 from zLOG import LOG, DEBUG
 
 from Globals import InitializeClass, DTMLFile
