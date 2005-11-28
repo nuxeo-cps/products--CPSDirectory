@@ -150,7 +150,7 @@ class MetaDirectory(BaseDirectory):
         """Set the list of backing directories and their infos.
 
         Infos is a sequence of dicts with keys dir_id, id_conv,
-        field_rename, field_ignore.
+        field_rename, field_ignore, missing_entry_expr.
         """
         backing_dir_infos = []
         for info in infos:
