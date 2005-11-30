@@ -484,7 +484,7 @@ class SQLStorageAdapter(BaseStorageAdapter):
             # Creation.
             return self.getDefaultData()
 
-        field_ids = self.getFieldIds()
+        field_ids = self.getReadableFieldIds()
         entry = self._dir._getEntryFromSQL(id, field_ids,
                                            password=self._password)
         return self._getData(entry=entry)
