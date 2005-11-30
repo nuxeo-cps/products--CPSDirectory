@@ -189,7 +189,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         if entry is None:
             if id is not None:
-                entry = self._getEntry(id)
+                try:
+                    entry = self._getEntry(id)
+                except KeyError:
+                    entry = {}
             else:
                 entry = {}
         if id is None:

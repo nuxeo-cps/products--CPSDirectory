@@ -271,7 +271,10 @@ class IndirectDirectory(BaseDirectory):
         if id is not None:
             entry_id = self._getEntryIdForId(id)
             directory_id = self._getDirectoryIdForId(id)
-            directory = self._getDirectory(directory_id)
+            try:
+                directory = self._getDirectory(directory_id)
+            except KeyError:
+                directory = None
         else:
             entry_id = None
             directory = None
@@ -287,11 +290,11 @@ class IndirectDirectory(BaseDirectory):
     security.declarePrivate('_getDirectory')
     def _getDirectory(self, directory_id):
         if directory_id not in self.directory_ids:
-            raise AttributeError("Directory '%s' is not allowed" % directory_id)
+            raise KeyError("Directory '%s' is not allowed" % directory_id)
         dtool = getToolByName(self, 'portal_directories', None)
         directory = getattr(dtool, directory_id, None)
         if directory is None:
-            raise AttributeError("Directory '%s' does not exist" % directory_id)
+            raise KeyError("Directory '%s' does not exist" % directory_id)
         else:
             return directory
 

@@ -470,7 +470,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
 
         Returns converted values.
         """
-        self.checkUnderBase(id)
+        try:
+            self.checkUnderBase(id)
+        except ValueError:
+            raise KeyError(id)
         filter = self.searchFilter()
         try:
             results = self.searchLDAP(id, ldap.SCOPE_BASE, filter,

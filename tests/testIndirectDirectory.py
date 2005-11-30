@@ -193,13 +193,9 @@ class TestIndirectDirectory(ZopeTestCase):
     def test_getDirectory(self):
         self.assertEqual(self.dir._getDirectory('zodbdir'),
                          self.zodbdir)
-        self.assertRaises(AttributeError,
-                          self.dir._getDirectory,
-                          'bidule')
+        self.assertRaises(KeyError, self.dir._getDirectory, 'bidule')
         self.pd.manage_delObjects(['zodbdir'])
-        self.assertRaises(AttributeError,
-                          self.dir._getDirectory,
-                          'zodbdir')
+        self.assertRaises(KeyError, self.dir._getDirectory, 'zodbdir')
 
     def test_getDirectoryIdForId(self):
         self.assertEqual(self.dir._getDirectoryIdForId('truc/muche'),
