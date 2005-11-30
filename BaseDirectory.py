@@ -343,7 +343,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     security.declarePublic('hasEntry')
     def hasEntry(self, id):
         """Does the directory have a given entry?"""
-        self.checkViewEntryAllowed()
+        self.checkViewEntryAllowed(id)
         return self._hasEntry(id)
 
     security.declarePrivate('_hasEntry')

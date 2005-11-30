@@ -8,6 +8,7 @@ Bug fixes:
 ~~~~~~~~~~
 - #618: Fixed use of fields with "read ignore storage" for SQLDirectory and
   LDAPBackingDirectory.
+- fixed hasEntry permission checking.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Removed obsolete widget types registration.
