@@ -2,7 +2,8 @@
 TODO for CPSDirectory
 =====================
 
-$Id$
+:Revision: $Id$
+
 
 - Separate public and private methods to read/write/create entries
   to be able to have private methods that do not check ACLs and
