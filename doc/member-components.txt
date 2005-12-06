@@ -1,47 +1,54 @@
- CPS Directory components related to members
+===========================================
+CPS Directory components related to members
+===========================================
 
-  $Id$
 
-  CPS Directory, when used for members, provides indirections to two
-  basic components:
+:Revision: $Id$
 
-  - The User Folder for basic user information (user id, password, role,
-    groups). It will be accessed directly to get the relevant
-    information. As there is no standardized API for everything, we must
-    take into account:
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
 
-    - Basic User Folder
 
-    - User Folder With Groups
+CPS Directory, when used for members, provides indirections to two
+basic components:
 
-    - LDAP User Folder
+- The User Folder for basic user information (user ID, password,
+  role, groups). It will be accessed directly to get the relevant
+  information. As there is no standardized API for everything, we
+  must take into account:
 
-    - Pluggable User Folder
+  + Basic User Folder
 
-    - GRUF
+  + User Folder With Groups
 
-  - the MemberData Tool for access to member properties. This is dealt
-    with differently according to the user folder:
+  + LDAP User Folder
 
-    - Basic User Folder: standard CMF MemberData Tool
+  + Pluggable User Folder
 
-    - User Folder With Groups: standard CMF MemberData Tool
+  + GRUF
 
-    - LDAP User Folder: CMFLDAP
+- The MemberData Tool for access to member properties. This is
+  dealt with differently according to the user folder:
 
-    - Pluggable User Folder: tool to do
+  + Basic User Folder: standard CMF MemberData Tool
 
-    - GRUF: ?
+  + User Folder With Groups: standard CMF MemberData Tool
 
-    The access needed includes searching members. As there is no
-    standard (or sufficiently powerful) API to do a multi-field search,
-    it must be implemented for each kind of user folder as an addon
-    (probably a monkey-patch XXX) which I'll call the search component.
+  + LDAP User Folder: CMFLDAP
 
-  When searching for multiple field, for instance email='foo' and
-  groups='bar', the work has to be done by the search component which
-  means that the search component must *also* know about roles and
-  groups. The CMF MemberData Tool doesn't know how to do that. Plone has
-  extended the Membership Tool to give it a searchForMembers method that
-  know about name, email, roles, last_login_time. It could be extended
-  to do more.
+  + Pluggable User Folder: tool to do
+
+  + GRUF: ?
+
+  The access needed includes searching members. As there is no
+  standard (or sufficiently powerful) API to do a multi-field search,
+  it must be implemented for each kind of user folder as an add-on
+  (probably a monkey-patch XXX) which I'll call the search component.
+
+When searching for multiple fields, for instance ``email='foo'``
+and ``groups='bar'``, the work has to be done by the search
+component which means that the search component must *also* know
+about roles and groups. The CMF MemberData Tool doesn't know how
+to do that. Plone has extended the Membership Tool to give it a
+searchForMembers method that knows about name, email, roles,
+last_login_time. It could be extended to do more.
