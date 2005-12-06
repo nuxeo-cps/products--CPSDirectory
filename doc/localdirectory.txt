@@ -2,34 +2,44 @@
 LocalDirectory Design
 =====================
 
-$Id$
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
+
 
 Introduction
 ============
 
-A Local Directory is a directory whose purpose is to act as a proxy to a
-directory in the user's home folder.
+A Local Directory is a directory whose purpose is to act as a
+proxy to a directory in the user's home folder.
 
-Reading, writing, creating, deleting and searches are all dispatched
-appropriately to the corresponding directory in the user's home folder.
+Reading, writing, creating, deleting and searches are all
+dispatched appropriately to the corresponding directory in the
+user's home folder.
 
-A Local Directory is typically used to provide personal address books to
-users, storing contacts that only them can have access to, without having to
-create and configure a directory in every user's home folder.
+A Local Directory is typically used to provide personal address
+books to users, storing contacts that only them can have access
+to, without having to create and configure a directory in every
+user's home folder.
+
 
 Warnings
 ========
 
-CHANGES MADE ON THE Local Directory WILL NOT BE REPERCUTED ON THE
-DIRECTORIES THAT HAVE ALREADY BEEN CREATED in the users'home folders.
+**Changes made on the** Local directory **will not be propagated
+to the directories that have already been created** in the user's
+home folder.
 
-After release v. 1.13.0-1, the property 'directory_id' does not refer
-anymore to the id of the directory created in the user's home folder (this
-one will have the same id than the directory with type 'CPS Local
-Directory'), but is used when creating an indirect directory in the user's
-home folder: it is the id of the directory it refers to (entries will be
-links to entries of that directory).
-See features below if you do not even know what that means.
+After release v. 1.13.0-1, the property "directory_id" does not
+refer anymore to the ID of the directory created in the user's
+home folder (this one will have the same ID than the directory
+with type "CPS Local Directory"), but is used when creating an
+indirect directory in the user's home folder: it is the ID of the
+directory it refers to (entries will be links to entries of that
+directory). See features below if you do not even know what that
+means.
+
 
 Features
 ========
@@ -37,26 +47,29 @@ Features
 Setting up properties
 ---------------------
 
-All the properties - except "Ids of the directories it refers to (for an
-Indirect Directory)" aka 'directory_ids' and "Type of local directory" aka
-'directory_type' - will be used to set up the properties of the personal
-directories created in the users'home folders.
-These directories will be named after the name of the Local Directory.
+All the properties - except "Ids of the directories it refers to
+(for an Indirect Directory)", also known as "directory_ids", and
+"Type of local directory", also known as "directory_type", - will
+be used to set up the properties of the personal directories
+created in the user's home folders. These directories will be
+named after the name of the Local Directory.
 
-The property "Type of local directory" aka 'directory_type' make it possible
-to chose wether the directories created in the users'home folders will have
-the type 'CPS ZODB Directory' or 'Indirect Directory'.
+The property "Type of local directory", also known as
+"directory_type", makes it possible to choose whether the
+directories created in the user's home folder will have the type
+"CPS ZODB Directory" or "Indirect Directory".
 
 - A ZODB Directory is the most common kind of directory.
-- An Indirect Directory  is a directory whose purpose is to store "links"
-  towards entries of another directory, so that changes made on the
-  entries do not have to be reported on the two directories. See
-  documentation on the doc/ folder for more information.
+
+- An Indirect Directory is a directory whose purpose is to store
+  "links" to entries of another directory, so that changes made to
+  the entries do not have to be reported on the two directories.
+  See documentation in the ``doc/`` folder for more information.
 
 If you do not know what to use, chose to use ZODB directories.
 
-
-The property "Id of the directoies it refers to (for an Indirect Directory)"
-aka 'directory_ids' is used when creating an indirect directory in the user's
-home folder: it is the ids of the directories it refers to (entries will be
-links to entries of these directories).
+The property "Id of the directories it refers to (for an Indirect
+Directory)", also known as "directory_ids", is used when creating an
+indirect directory in the user's home folder: it is the IDs of the
+directories it refers to (entries will be links to entries of
+these directories).
