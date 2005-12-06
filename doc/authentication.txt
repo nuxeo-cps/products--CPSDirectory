@@ -2,17 +2,22 @@
 Authentication in directories
 =============================
 
-$Id$
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
+
 
 Authentication
 ==============
 
 A directory that supports it may be used for authentication.
-Authentication means several thing:
+Authentication means several things:
 
-- checking that an entry has a correct password associated to it,
+- Checking that an entry has a correct password associated to it.
 
-- changing the password for an entry.
+- Changing the password for an entry.
+
 
 ZODB Directory
 --------------
@@ -20,14 +25,16 @@ ZODB Directory
 In the ZODB Directory, if a password field is specified, then the
 directory will be used for authentication using this field.
 
-Changing the password is currently done by modifying the entry directly.
+Changing the password is currently done by modifying the entry
+directly.
 
 LDAP Backing Directory
 ----------------------
 
-If a password field is specified, then an LDAP bind will be used to
-check the entry's password when authentication is required.
+If a password field is specified, then an LDAP bind will be used
+to check the entry's password when authentication is required.
 
-Changing the password is currently done by modifying the entry directly.
-In the future it will be done by a special API that will use the
-specified password field (only 'userPassword' makes sense for OpenLDAP).
+Changing the password is currently done by modifying the entry
+directly. In the future it will be done by a special API that will
+use the specified password field (only "userPassword" makes sense
+for OpenLDAP).
