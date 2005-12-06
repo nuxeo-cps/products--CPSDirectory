@@ -2,45 +2,52 @@
 StackingDirectory Design
 ========================
 
-$Id$
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
+
 
 Introduction
 ============
 
 A stacking directory is a directory whose purpose is to provide a
-consolidated view of several other directories that all have the same
-schema.
+consolidated view of several other directories that all have the
+same schema.
 
 Reading, writing, creating and searches are dispatched to the
 appropriate backing directory.
 
-A stacking directory is typically used to provide a synthesized 'users'
-directory for the CPSUserFolder, using several backing directories to
-store different kinds of users.
+A stacking directory is typically used to provide a synthesized
+user's directory for the CPSUserFolder, using several backing
+directories to store different kinds of users.
 
 Features
 ========
 
-Several backing directories can be provided, they are used in order when
-looking for an entry.
+Several backing directories can be provided; they are used in
+order when looking for an entry.
 
-An important feature of a stacking directory is that the id field of a
-backing directory may be different than the one of the stacking
-directory itself. However the id field of the stacking directory must
-still be present in the entries of the backing directory.
+An important feature of a stacking directory is that the ID field
+of a backing directory may be different than the one of the
+stacking directory itself. However the ID field of the stacking
+directory must still be present in the entries of the backing
+directory.
 
-This feature is typicaly used with an LDAP backing directory, whose id
-field is 'dn'. The stacking directory's id field can be set to 'uid' for
-instance, and things will still work.
+This feature is typically used with an LDAP backing directory,
+whose ID field is 'dn'. The stacking directory's ID field can be
+set to 'uid' for instance, and things will still work.
+
 
 Finding the backing directory
 -----------------------------
 
-When an entry is looked up, it is looked up in each backing directory in
-order until it is found.
+When an entry is looked up, it is looked up in each backing
+directory in order until it is found.
 
-Searching an entry searches in all backing directories and aggregates
-results.
+Searching an entry searches in all backing directories and
+aggregates results.
 
-When creating an entry, the backing directory in which the entry is to
-be created is specified directly in the stacking directory's properties.
+When creating an entry, the backing directory in which the entry
+is to be created is specified directly in the stacking directory's
+properties.
