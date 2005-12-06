@@ -2,24 +2,29 @@
 IndirectDirectory Design
 ========================
 
-$Id$
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
 
 
 Introduction
 ============
 
-An indirect directory is a directory whose purpose is to store "links"
-towards entries of other directories, so that changes made on the
-entries do not have to be reported on several directories.
+An indirect directory is a directory whose purpose is to store
+"links" to entries in other directories, so that changes made to
+the entries do not have to be reported on several directories.
 
-The directory just stores the names of the directories accepted, and a list
-of new ids, built using the directory id and the entry id, and adding a
-slash between the two ids.
-For instance, the entry 'test' stored in the 'members' directory will be
-stored as 'members/test' in the indirect directory.
+The directory just stores the names of the directories accepted,
+and a list of new IDs, built using the directory ID and the entry
+ID, and adding a slash between the two IDs. For instance, the
+entry ``test`` stored in the ``members`` directory will be stored
+as ``members/test`` in the indirect directory.
 
-An indirect directory is typically used in a personal address book,
-to store personal contacts found in the members directory of the site.
+An indirect directory is typically used in a personal address
+book, to store personal contacts found in the members directory of
+the site.
+
 
 Features
 ========
@@ -27,52 +32,58 @@ Features
 Storing the entries
 -------------------
 
-The indirect directory properties store the ids of the directories it refers
-to, and also the list of entries to link to.
-All the possible entries (e.g. all the entries of the directories accpeted)
-are also available, so that the indirect directory can be managed
-through the ZMI interface, by manipulating a multiple selection.
-When an entry is not anymore in the directory it refers to, the entry is
-still in the list, but the None value is returned when calling for the
-entry.
+The indirect directory properties store the IDs of the directories
+it refers to, and also the list of entries to link to. All the
+possible entries (e.g. all the entries of the directories
+accepted) are also available, so that the indirect directory can
+be managed through the ZMI interface, by manipulating a multiple
+selection. When an entry is no longer in the directory it refers
+to, the entry is still in the list, but the None value is returned
+when calling for the entry.
+
 
 Getting and searching for the entries
 -------------------------------------
 
-The entries are retrieved from the directory it refers to, by using its
-adapters.
-The search is made by performing the search on the directory it refers to,
-using the same search criteria, and then filtering on the search results by
-removing entries that are not in the list of entries the indirect directory
-links to.
+The entries are retrieved from the directory it refers to, by
+using its adapters. The search is made by performing the search on
+the directory it refers to, using the same search criteria, and
+then filtering on the search results by removing entries that are
+not in the list of entries the indirect directory links to.
+
 
 Adding and deleting entries
 ---------------------------
 
-When adding or deleting entries to/from the indirect directory, the actual
-real entries stored in the directory it refers to are not manipulated.
-It is just the list of enty ids that is manipulated.
-An error is raised when the user tries to add an entry that already exists
-in the indirect directory, or when he/she tries to delete an entry that is
-not in the indirect directory.
+When adding or deleting entries to/from the indirect directory,
+the actual real entries stored in the directory it refers to are
+not manipulated. It is just the list of entry IDs that is
+manipulated. An error is raised when the user tries to add an
+entry that already exists in the indirect directory, or when
+he/she tries to delete an entry that is not in the indirect
+directory.
 
 
 Schema and layout to use for indirect directories
 -------------------------------------------------
 
-The schema used should be the same for the indirect directory, and the
-directories it refers to.
+The schema used should be the same for the indirect directory, and
+the directories it refers to.
 
 The layout used should also be the same, except that:
-- All widgets, except the one storing the id should be hidden in layout
-  modes create and edit.
 
-- The better way to set the widget storing the id is to set it as a
-  'CPS Directory Entry Widget', using a vocabulary with type 'CPS Indirect
-  Directory Vocabulary', with the name of the indirect directory in the
-  'directory' property, and with popup mode 'seach'. This widget will
-  present the entries accepted in the directory. It should also
-  be 'read only' in edit mode to prevent errors - there is no point in
-  editing a reference to the actual entry.
-  It would be even better if this widget, in create mode, would not present
-  to the user entries that are already stored in the indirect directory.
+- All widgets, except the one storing the ID should be hidden in
+  layout modes create and edit.
+
+- The better way to set the widget storing the ID is to set it as
+  a "CPS Directory Entry Widget", using a vocabulary with type
+  "CPS Indirect Directory Vocabulary", with the name of the
+  indirect directory in the "directory" property, and with popup
+  mode "search". This widget will present the entries accepted in
+  the directory. It should also be ``read only`` in edit mode to
+  prevent errors: there is no point in editing a reference to the
+  actual entry.
+
+  It would be even better if this widget, in create mode, would
+  not present to the user entries that are already stored in the
+  indirect directory.
