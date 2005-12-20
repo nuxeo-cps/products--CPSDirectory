@@ -39,12 +39,17 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 class MetaDirectory(BaseDirectory):
     """Meta Directory
 
     A directory redirects requests to other backing directories.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Meta Directory'
 

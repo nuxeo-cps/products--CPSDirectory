@@ -40,6 +40,10 @@ from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     """ZODB Directory.
@@ -49,6 +53,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
     The entries are individual subobjects where the values are stored as
     simple attributes.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS ZODB Directory'
 

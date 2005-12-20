@@ -35,6 +35,9 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import SearchSizeLimitExceeded
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
 
 _marker = []
 
@@ -49,6 +52,7 @@ class MembersDirectory(BaseDirectory):
     In the role ACLs for the fields of this directory, the role "Owner"
     is set when you edit your own entry.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Members Directory'
 

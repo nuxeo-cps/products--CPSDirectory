@@ -37,6 +37,10 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 class StackingDirectory(BaseDirectory):
     """Stacking Directory
@@ -44,6 +48,7 @@ class StackingDirectory(BaseDirectory):
     A stacking directory redirects requests to one among several backing
     directories.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Stacking Directory'
 

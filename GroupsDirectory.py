@@ -31,7 +31,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.interfaces import IDirectory
 
+from zope.interface import implements
 
 _marker = []
 
@@ -41,6 +43,7 @@ class GroupsDirectory(BaseDirectory):
 
     A directory that represents the groups.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Groups Directory'
 

@@ -35,6 +35,10 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 class SQLSyntaxError(ValueError):
     """SQL syntax error exception."""
@@ -46,6 +50,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
 
     A directory that connects to an SQL database.
     """
+    implements(IDirectory)
+
     # XXX what about tables where the id is not a string, like an int ?
 
     meta_type = 'CPS SQL Directory'

@@ -20,6 +20,7 @@
 """
 
 from zLOG import LOG, DEBUG
+import re
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -29,7 +30,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
-import re
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 def match_pattern(pattern, value):
     """Tells whether value matches pattern.
@@ -61,6 +65,7 @@ class IndirectDirectory(BaseDirectory):
     <directory>/<id> where <directory> is the id of the directory holding the
     real entry, and <id> is the id of the real entry within this directory.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Indirect Directory'
 

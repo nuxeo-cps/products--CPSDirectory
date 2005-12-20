@@ -31,11 +31,16 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 from Products.CPSDirectory.IndirectDirectory import IndirectDirectory
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 _marker = []
 
 class LocalDirectory(BaseDirectory):
     """A Directory that acts as a Proxy to a directory in the UserHomeFolder.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Local Directory'
 

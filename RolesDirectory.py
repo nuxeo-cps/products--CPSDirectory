@@ -31,12 +31,17 @@ from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
 
 class RolesDirectory(BaseDirectory):
     """Roles Directory.
 
     A directory that represents the roles.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS Roles Directory'
 

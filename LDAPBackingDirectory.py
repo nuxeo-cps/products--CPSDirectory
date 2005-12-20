@@ -42,15 +42,21 @@ from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import _replaceProperty
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
+
 # During testing?
 from inspect import currentframe
-filename = currentframe(4).f_code.co_filename
-if filename.count('/ZopeTestCase/') or filename.endswith("/test.py"):
+filename = currentframe(2).f_code.co_filename
+if '/ZopeTestCase/' in filename or filename.endswith("/testrunner.py"):
     _TESTING = True
 else:
     _TESTING = False
+del filename, currentframe
 
-    # Import LDAP modules, maybe from testing code
+# Import LDAP modules, maybe from testing code
 if not _TESTING:
     import ldap
     import ldap.ldapobject
@@ -143,6 +149,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     list of children can be a list of 'cn' instead of 'dn', this can be set
     using the children_id_attr property.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS LDAP Backing Directory'
 

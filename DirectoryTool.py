@@ -27,22 +27,31 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from AccessControl.PermissionRole import PermissionRole
 
+import Products
 from OFS.Folder import Folder
-
+from OFS.ObjectManager import IFAwareObjectManager
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
-class DirectoryTool(UniqueObject, Folder):
+from Products.CPSDirectory.interfaces import IDirectory
+from Products.CPSDirectory.interfaces import IDirectoryTool
+
+from zope.interface import implements
+
+
+class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
     """Directory Tool
 
     Stores directories.
     """
+    implements(IDirectoryTool)
 
     id = 'portal_directories'
     meta_type = 'CPS Directory Tool'
+    _product_interfaces = (IDirectory,)
 
     security = ClassSecurityInfo()
 
@@ -75,25 +84,17 @@ class DirectoryTool(UniqueObject, Folder):
     #
 
     def all_meta_types(self):
-        # Stripping is done to be able to pass a type in the URL.
-        meta_types = [
-            {'name': dt,
-             # _verifyObjectPaste needs this to be traversable
-             # to a real object.
-             'action': 'manage_addForm_' + dt.replace(' ', ''),
-             'permission': ManagePortal}
-            for dt in DirectoryTypeRegistry.listTypes()]
-        for info in Folder.all_meta_types(self):
-            name = info['name']
+        # Get matching from IFAwareObjectManager
+        all = IFAwareObjectManager.all_meta_types(self)
+        # Add a few others
+        for mt in Products.meta_types:
+            name = mt['name']
             if (name.startswith('Z') and
                 name.endswith('Database Connection')):
-                meta_types.append(info)
+                all.append(mt)
             elif name.endswith('RAM Cache Manager'):
-                meta_types.append(info)
-        return meta_types
-
-    security.declareProtected(ManagePortal, 'manage_addCPSDirectoryForm')
-    manage_addCPSDirectoryForm = DTMLFile('zmi/directory_addform', globals())
+                all.append(mt)
+        return all
 
     security.declareProtected(ManagePortal, 'manage_addCPSDirectory')
     def manage_addCPSDirectory(self, id, meta_type, REQUEST=None, **kw):
@@ -108,11 +109,6 @@ class DirectoryTool(UniqueObject, Folder):
                                       '?manage_tabs_message=Added.')
         else:
             return ob
-
-    security.declareProtected(ManagePortal, 'getDirectoryMetaType')
-    def getDirectoryMetaType(self, meta_type):
-        """Get an unstripped version of a directory meta type."""
-        return DirectoryTypeRegistry.getType(meta_type).meta_type
 
 InitializeClass(DirectoryTool)
 
@@ -131,14 +127,6 @@ class DirectoryTypeRegistry:
         """Register a directory type."""
         mt = cls.meta_type.replace(' ', '')
         self._types[mt] = cls
-        # Monkey-patch a new factory class into the tool
-        name = 'manage_addForm_' + mt
-        def manage_add(self, REQUEST=None, mt=mt):
-            """Add some meta_type directory."""
-            return self.manage_addCPSDirectoryForm(mt=mt, REQUEST=REQUEST)
-        perm = PermissionRole(ManagePortal)
-        setattr(DirectoryTool, name, manage_add)
-        setattr(DirectoryTool, name+'__roles__', perm)
 
     def listTypes(self):
         """List directory types."""

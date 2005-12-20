@@ -1,0 +1,189 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five">
+
+  <adapter
+      factory=".exportimport.DirectoryToolXMLAdapter"
+      provides="Products.GenericSetup.interfaces.IBody"
+      for="Products.CPSDirectory.interfaces.IDirectoryTool
+           Products.GenericSetup.interfaces.ISetupEnviron"
+      />
+
+  <adapter
+      factory=".exportimport.DirectoryXMLAdapter"
+      provides="Products.GenericSetup.interfaces.IBody"
+      for="Products.CPSDirectory.interfaces.IDirectory
+           Products.GenericSetup.interfaces.ISetupEnviron"
+      />
+
+  <five:registerClass
+      class=".MembersDirectory.MembersDirectory"
+      meta_type="CPS Members Directory"
+      addview="addMembersDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".GroupsDirectory.GroupsDirectory"
+      meta_type="CPS Groups Directory"
+      addview="addGroupsDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".RolesDirectory.RolesDirectory"
+      meta_type="CPS Roles Directory"
+      addview="addRolesDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".ZODBDirectory.ZODBDirectory"
+      meta_type="CPS ZODB Directory"
+      addview="addZODBDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".SQLDirectory.SQLDirectory"
+      meta_type="CPS SQL Directory"
+      addview="addSQLDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".LDAPBackingDirectory.LDAPBackingDirectory"
+      meta_type="CPS LDAP Backing Directory"
+      addview="addSQLDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".MetaDirectory.MetaDirectory"
+      meta_type="CPS Meta Directory"
+      addview="addMetaDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".StackingDirectory.StackingDirectory"
+      meta_type="CPS Stacking Directory"
+      addview="addStackingDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".LocalDirectory.LocalDirectory"
+      meta_type="CPS Local Directory"
+      addview="addLocalDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".IndirectDirectory.IndirectDirectory"
+      meta_type="CPS Indirect Directory"
+      addview="addIndirectDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <!-- traversable so that add views can work -->
+
+  <five:traversable
+      class="Products.CPSDirectory.DirectoryTool.DirectoryTool"/>
+
+  <configure package="Products.GenericSetup.browser">
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addMembersDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.MembersDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addGroupsDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.GroupsDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addRolesDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.RolesDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addZODBDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.ZODBDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addSQLDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.SQLDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addLDAPBackingDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.LDAPBackingDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addMetaDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.MetaDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addStackingDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.StackingDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addLocalDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.LocalDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addIndirectDirectory.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.IndirectDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+  </configure>
+
+</configure>

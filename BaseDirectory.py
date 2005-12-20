@@ -506,13 +506,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         raise NotImplementedError
 
-    security.declarePublic('getNewEntry')
-    def getNewEntry(self, id):
-        """Return a new clean entry for entry_id.
-        """
-        raise NotImplementedError
-
-
     #
     # Hierarchical support
     #

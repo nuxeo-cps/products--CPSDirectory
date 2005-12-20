@@ -34,6 +34,11 @@ from Products.CPSSchemas.BasicFields import CPSStringListField, CPSDateTimeField
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
+from Products.CPSDirectory.interfaces import IDirectory
+
+from zope.interface import implements
+
+
 try:
     from Products.LDAPUserGroupsFolder.LDAPDelegate import \
          LDAPDelegate, ldap, to_utf8
@@ -61,6 +66,7 @@ class LDAPDirectory(BaseDirectory):
     - 'base_dn' is read-only except during creation where it can be used
     to specify a subbranch.
     """
+    implements(IDirectory)
 
     meta_type = 'CPS LDAP Directory'
 
