@@ -180,11 +180,11 @@ msgstr "Membre"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Attention l'entré n'a pas été supprimé ! pour supprimer l'entré il vous faut "
-"d'abord supprimer toutes les sous entrés."
+"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous faut "
+"d'abord supprimer toutes les sous-entrées."
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Une entrée existe déjà avec le même identifiant"
+msgstr "Une entrée existe déjà avec le même identifiant."
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membre"
