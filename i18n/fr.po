@@ -184,7 +184,7 @@ msgstr ""
 "d'abord supprimer toutes les sous entrés."
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Une entré existe déjà avec le même identifiant"
+msgstr "Une entrée existe déjà avec le même identifiant"
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membre"
