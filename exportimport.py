@@ -42,7 +42,7 @@ def exportDirectoryTool(context):
     logger = context.getLogger('directories')
     tool = getToolByName(site, 'portal_directories', None)
     if tool is None:
-        logger.blather("Nothing to export.")
+        logger.info("Nothing to export.")
         return
 
     exporter = zapi.queryMultiAdapter((tool, context), IBody)
@@ -92,7 +92,7 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
         node.appendChild(self._extractProperties())
         node.appendChild(self._extractObjects())
 
-        self._logger.blather("Directory tool exported.")
+        self._logger.info("Directory tool exported.")
         return node
 
     def _importNode(self, node):
@@ -104,8 +104,7 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
 
         self._initProperties(node)
         self._initObjects(node)
-
-        self._logger.blather("Directory tool imported.")
+        self._logger.info("Directory tool imported.")
 
 class DirectoryXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     """XML importer and exporter for a directory.
@@ -123,7 +122,7 @@ class DirectoryXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
         node.appendChild(self._extractProperties())
         node.appendChild(self._extractEntryLR())
 
-        self._logger.blather("%r directory exported." % self.context.getId())
+        self._logger.info("%r directory exported." % self.context.getId())
         return node
 
     def _extractEntryLR(self):
@@ -148,7 +147,7 @@ class DirectoryXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
         self._initProperties(node)
         self._initEntryLR(node)
 
-        self._logger.blather("%r directory imported." % self.context.getId())
+        self._logger.info("%r directory imported." % self.context.getId())
 
     def _purgeEntryLR(self):
         self.context.entry_roles = []
