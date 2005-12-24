@@ -47,6 +47,7 @@ class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
 
     Stores directories.
     """
+
     implements(IDirectoryTool)
 
     id = 'portal_directories'
@@ -96,23 +97,21 @@ class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
                 all.append(mt)
         return all
 
-    security.declareProtected(ManagePortal, 'manage_addCPSDirectory')
-    def manage_addCPSDirectory(self, id, meta_type, REQUEST=None, **kw):
-        """Add a directory, called from the ZMI."""
-        container = self
-        cls = DirectoryTypeRegistry.getType(meta_type)
-        ob = cls(id, **kw)
-        container._setObject(id, ob)
-        ob = container._getOb(id)
-        if REQUEST is not None:
-            REQUEST.RESPONSE.redirect(ob.absolute_url()+'/manage_workspace'
-                                      '?manage_tabs_message=Added.')
-        else:
-            return ob
+    # BBB for old installers/importers, will be removed in CPS 3.5
+    security.declarePrivate('manage_addCPSDirectory')
+    def manage_addCPSDirectory(self, id, meta_type, **kw):
+        import Products
+        for mt in Products.meta_types:
+            if mt['name'] == meta_type:
+                klass = mt['instance']
+                self._setObject(id, klass(id, **kw))
+                return self._getOb(id)
+        raise ValueError("Unknown meta_type %r" % meta_type)
 
 InitializeClass(DirectoryTool)
 
 
+# BBB for old installers/importers, will be removed in CPS 3.5
 class DirectoryTypeRegistry:
     """Registry of the available directory types.
 

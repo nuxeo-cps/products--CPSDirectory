@@ -19,60 +19,39 @@
 """Directory Tool XML Adapter.
 """
 
-from zope.app import zapi
-
+from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import ObjectManagerHelpers
 from Products.GenericSetup.utils import PropertyManagerHelpers
-from Products.CMFCore.utils import getToolByName
+from Products.CPSUtil.PropertiesPostProcessor import (
+    PostProcessingPropertyManagerHelpers)
 
-from Products.GenericSetup.interfaces import IBody
 from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
 
-_FILENAME = 'directories.xml'
 
+TOOL = 'portal_directories'
+NAME = 'directories'
 
 def exportDirectoryTool(context):
     """Export directory tool and directories as a set of XML files.
     """
     site = context.getSite()
-    logger = context.getLogger('directories')
-    tool = getToolByName(site, 'portal_directories', None)
+    tool = getToolByName(site, TOOL, None)
     if tool is None:
+        logger = context.getLogger(NAME)
         logger.info("Nothing to export.")
         return
-
-    exporter = zapi.queryMultiAdapter((tool, context), IBody)
-    if exporter is None:
-        logger.warning("Export adapter misssing.")
-        return
-
-    context.writeDataFile(_FILENAME, exporter.body, exporter.mime_type)
-    exportObjects(tool, 'directories', context)
-
+    exportObjects(tool, '', context)
 
 def importDirectoryTool(context):
     """Import directory tool and directories from XML files.
     """
     site = context.getSite()
-    logger = context.getLogger('directories')
-    tool = getToolByName(site, 'portal_directories')
-
-    body = context.readDataFile(_FILENAME)
-    if body is None:
-        logger.info("Nothing to import.")
-        return
-
-    importer = zapi.queryMultiAdapter((tool, context), IBody)
-    if importer is None:
-        logger.warning("Import adapter misssing.")
-        return
-
-    importer.body = body
-    importObjects(tool, 'directories', context)
+    tool = getToolByName(site, TOOL)
+    importObjects(tool, '', context)
 
 
 class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
@@ -106,7 +85,8 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
         self._initObjects(node)
         self._logger.info("Directory tool imported.")
 
-class DirectoryXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
+class DirectoryXMLAdapter(XMLAdapterBase,
+                          PostProcessingPropertyManagerHelpers):
     """XML importer and exporter for a directory.
     """
 

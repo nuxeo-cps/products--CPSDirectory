@@ -97,6 +97,39 @@
       global="False"
       />
 
+
+  <five:registerClass
+      class=".DirectoryVocabulary.DirectoryVocabulary"
+      meta_type="CPS Directory Vocabulary"
+      addview="addDirectoryVocabulary.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".DirectoryEntryVocabulary.DirectoryEntryVocabulary"
+      meta_type="CPS Directory Entry Vocabulary"
+      addview="addDirectoryEntryVocabulary.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".IndirectDirectoryVocabulary.IndirectDirectoryVocabulary"
+      meta_type="CPS Indirect Directory Vocabulary"
+      addview="addIndirectDirectoryVocabulary.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      class=".LDAPDirectoryVocabulary.LDAPDirectoryVocabulary"
+      meta_type="CPS LDAP Directory Vocabulary"
+      addview="addLDAPDirectoryVocabulary.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
   <!-- traversable so that add views can work -->
 
   <five:traversable
@@ -181,6 +214,39 @@
         name="addIndirectDirectory.html"
         template="addWithPresettings.pt"
         class="Products.CPSDirectory.browser.IndirectDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addDirectoryVocabulary.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.DirectoryVocabularyAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addDirectoryEntryVocabulary.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.DirectoryEntryVocabularyAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addIndirectDirectoryVocabulary.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.IndirectDirectoryVocabularyAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="zope.app.container.interfaces.IAdding"
+        name="addLDAPDirectoryVocabulary.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.LDAPDirectoryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 

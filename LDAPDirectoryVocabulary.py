@@ -30,6 +30,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
+from zope.interface import implements
+from Products.CPSSchemas.interfaces import IPropertyVocabulary
+
 
 class LDAPDirectoryVocabulary(SimpleItemWithProperties):
     """LDAP Directory Vocabulary
@@ -38,6 +41,8 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
 
     The keys are the entry DNS, and the values are the entry titles.
     """
+
+    implements(IPropertyVocabulary)
 
     meta_type = "CPS LDAP Directory Vocabulary"
 

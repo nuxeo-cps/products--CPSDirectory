@@ -32,6 +32,10 @@ from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 from DirectoryVocabulary import DirectoryVocabulary
 
+from zope.interface import implements
+from Products.CPSSchemas.interfaces import IPropertyVocabulary
+
+
 class IndirectDirectoryVocabulary(DirectoryVocabulary):
     """Indirect Directory Vocabulary
 
@@ -41,6 +45,8 @@ class IndirectDirectoryVocabulary(DirectoryVocabulary):
     The keys are the entry ids, and the values are the entry titles.
 
     """
+
+    implements(IPropertyVocabulary)
 
     meta_type = "CPS Indirect Directory Vocabulary"
 

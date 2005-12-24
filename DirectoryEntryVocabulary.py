@@ -35,6 +35,10 @@ from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
 from DirectoryVocabulary import DirectoryVocabulary
 
+from zope.interface import implements
+from Products.CPSSchemas.interfaces import IPropertyVocabulary
+
+
 class DirectoryEntryVocabulary(DirectoryVocabulary):
     """Directory Entry Vocabulary
 
@@ -47,6 +51,8 @@ class DirectoryEntryVocabulary(DirectoryVocabulary):
     You may use DirectoryEntryVocabulary with whatever sort of directory (LDAP
     or whatever)
     """
+
+    implements(IPropertyVocabulary)
 
     meta_type = "CPS Directory Entry Vocabulary"
 

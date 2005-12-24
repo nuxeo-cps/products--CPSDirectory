@@ -31,6 +31,9 @@ from Products.CMFCore.utils import SimpleItemWithProperties
 
 from Products.CPSSchemas.VocabulariesTool import VocabularyTypeRegistry
 
+from zope.interface import implements
+from Products.CPSSchemas.interfaces import IPropertyVocabulary
+
 
 class DirectoryVocabulary(SimpleItemWithProperties):
     """Directory Vocabulary
@@ -42,6 +45,8 @@ class DirectoryVocabulary(SimpleItemWithProperties):
     For LDAP directories, if 'Use DN as key' is checked, then the keys
     are the entry DNs instead of the entry ids.
     """
+
+    implements(IPropertyVocabulary)
 
     meta_type = "CPS Directory Vocabulary"
 
