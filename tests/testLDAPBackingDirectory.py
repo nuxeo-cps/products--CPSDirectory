@@ -7,6 +7,19 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from zLOG import LOG, DEBUG, TRACE, ERROR, INFO
+import_ldap_ok = True
+try:
+    # The fake ldap module implementation in the tests directory doesn't define
+    # the PORT constant.
+    from ldap import PORT
+except ImportError, err:
+     if sys.exc_info()[2].tb_next is not None:
+         # ImportError was caused deeper
+         raise
+     import_ldap_ok = False
+     msg = "python-ldap is not installed, no LDAP support will be available"
+     LOG("CPSDirectory.browser", INFO, msg)
+
 import unittest
 from Testing.ZopeTestCase import ZopeTestCase
 
@@ -703,7 +716,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         ref_keys = self.dir._getFieldIds()
         ref_keys.sort()
         self.assertEqual(schemas_keys, ref_keys)
-        
+
     def test_getFieldItemsForSearch(self):
 
         schemas_fields = self.dir._getFieldItems(search=True)
@@ -762,7 +775,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         self.assertEqual(field_ids, schema_field_ids)
 
     def test_getUniqueSchemaForSearch(self):
-            
+
         schema = self.dir._getUniqueSchema(search=True)
         self.assert_(schema)
         self.assertEqual(self.dir._getSchemas()[0], schema)
@@ -776,16 +789,21 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         field_ids.sort()
         schema_field_ids.sort()
         self.assertEqual(field_ids, schema_field_ids)
-        
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
-    suite.addTest(unittest.makeSuite(TestLDAPbackingDirectoryHierarchical))
-    suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
-    suite.addTest(unittest.makeSuite(
-        TestLDAPBackingDirectoryWithBaseDNForCreation))
-    suite.addTest(unittest.makeSuite(
-        TestLDAPBackingDirectoryWithSeveralSchemas))
+    if import_ldap_ok:
+        print "LDAP AVAILABLE"
+        suite.addTest(unittest.makeSuite(TestLDAPbackingDirectory))
+        suite.addTest(unittest.makeSuite(TestLDAPbackingDirectoryHierarchical))
+        suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
+        suite.addTest(unittest.makeSuite(
+            TestLDAPBackingDirectoryWithBaseDNForCreation))
+        suite.addTest(unittest.makeSuite(
+            TestLDAPBackingDirectoryWithSeveralSchemas))
+    else:
+        print "LDAP NOT available"
     return suite
 
 

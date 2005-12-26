@@ -1,7 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:five="http://namespaces.zope.org/five">
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
 
   <adapter
       factory=".exportimport.DirectoryToolXMLAdapter"
@@ -58,6 +59,7 @@
       />
 
   <five:registerClass
+      zcml:condition="installed ldap"
       class=".LDAPBackingDirectory.LDAPBackingDirectory"
       meta_type="CPS LDAP Backing Directory"
       addview="addSQLDirectory.html"
@@ -123,6 +125,7 @@
       />
 
   <five:registerClass
+      zcml:condition="installed ldap"
       class=".LDAPDirectoryVocabulary.LDAPDirectoryVocabulary"
       meta_type="CPS LDAP Directory Vocabulary"
       addview="addLDAPDirectoryVocabulary.html"
@@ -178,6 +181,7 @@
         />
 
     <browser:page
+        zcml:condition="installed ldap"
         for="zope.app.container.interfaces.IAdding"
         name="addLDAPBackingDirectory.html"
         template="addWithPresettings.pt"
@@ -243,6 +247,7 @@
         />
 
     <browser:page
+        zcml:condition="installed ldap"
         for="zope.app.container.interfaces.IAdding"
         name="addLDAPDirectoryVocabulary.html"
         template="addWithPresettings.pt"

@@ -17,6 +17,19 @@
 #
 # $Id$
 
+import sys
+from zLOG import LOG, INFO
+import_ldap_ok = True
+try:
+     import ldap
+except ImportError, err:
+     if sys.exc_info()[2].tb_next is not None:
+         # ImportError was caused deeper
+         raise
+     import_ldap_ok = False
+     msg = "python-ldap is not installed, no LDAP support will be available"
+     LOG("CPSDirectory.browser", INFO, msg)
+
 from Products.CPSUtil.browser import BaseAddView
 from Products.CPSSchemas.browser import BaseVocabularyAddView
 
@@ -25,7 +38,8 @@ from Products.CPSDirectory.GroupsDirectory import GroupsDirectory
 from Products.CPSDirectory.RolesDirectory import RolesDirectory
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 from Products.CPSDirectory.SQLDirectory import SQLDirectory
-from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
+if import_ldap_ok:
+    from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
 from Products.CPSDirectory.MetaDirectory import MetaDirectory
 from Products.CPSDirectory.StackingDirectory import StackingDirectory
 from Products.CPSDirectory.LocalDirectory import LocalDirectory
@@ -36,8 +50,9 @@ from Products.CPSDirectory.DirectoryEntryVocabulary import (
     DirectoryEntryVocabulary)
 from Products.CPSDirectory.IndirectDirectoryVocabulary import (
     IndirectDirectoryVocabulary)
-from Products.CPSDirectory.LDAPDirectoryVocabulary import (
-    LDAPDirectoryVocabulary)
+if import_ldap_ok:
+    from Products.CPSDirectory.LDAPDirectoryVocabulary import (
+        LDAPDirectoryVocabulary)
 
 
 class BaseDirectoryAddView(BaseAddView):
@@ -67,9 +82,10 @@ class SQLDirectoryAddView(BaseDirectoryAddView):
     """Add view for SQLDirectory."""
     klass = SQLDirectory
 
-class LDAPBackingDirectoryAddView(BaseDirectoryAddView):
-    """Add view for LDAPBackingDirectory."""
-    klass = LDAPBackingDirectory
+if import_ldap_ok:
+    class LDAPBackingDirectoryAddView(BaseDirectoryAddView):
+        """Add view for LDAPBackingDirectory."""
+        klass = LDAPBackingDirectory
 
 class MetaDirectoryAddView(BaseDirectoryAddView):
     """Add view for MetaDirectory."""
@@ -100,6 +116,7 @@ class IndirectDirectoryVocabularyAddView(BaseVocabularyAddView):
     """Add view for IndirectDirectoryVocabulary."""
     klass = IndirectDirectoryVocabulary
 
-class LDAPDirectoryVocabularyAddView(BaseVocabularyAddView):
-    """Add view for LDAPDirectoryVocabulary."""
-    klass = LDAPDirectoryVocabulary
+if import_ldap_ok:
+    class LDAPDirectoryVocabularyAddView(BaseVocabularyAddView):
+        """Add view for LDAPDirectoryVocabulary."""
+        klass = LDAPDirectoryVocabulary
