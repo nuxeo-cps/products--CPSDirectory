@@ -28,6 +28,10 @@ from Products.GenericSetup.utils import PropertyManagerHelpers
 from Products.CPSUtil.PropertiesPostProcessor import (
     PostProcessingPropertyManagerHelpers)
 
+from zope.component import adapts
+from zope.interface import implements
+from Products.GenericSetup.interfaces import IBody
+from Products.GenericSetup.interfaces import ISetupEnviron
 from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
 
@@ -59,10 +63,11 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
     """XML importer and exporter for DirectoryTool.
     """
 
-    # BBB: use adapts() in 2.9
-    __used_for__ = IDirectoryTool
+    adapts(IDirectoryTool, ISetupEnviron)
+    implements(IBody)
 
-    _LOGGER_ID = 'directories'
+    _LOGGER_ID = NAME
+    name = NAME
 
     def _exportNode(self):
         """Export the object as a DOM node.
@@ -90,10 +95,10 @@ class DirectoryXMLAdapter(XMLAdapterBase,
     """XML importer and exporter for a directory.
     """
 
-    # BBB: use adapts() in 2.9
-    __used_for__ = IDirectory
+    adapts(IDirectory, ISetupEnviron)
+    implements(IBody)
 
-    _LOGGER_ID = 'directories'
+    _LOGGER_ID = NAME
 
     def _exportNode(self):
         """Export the object as a DOM node.
