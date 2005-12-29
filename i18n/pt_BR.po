@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2005-06-23 17:27default\n"
+"POT-Creation-Date: 2005-12-29 16:08default\n"
 "PO-Revision-Date: 2005-09-29 10:19-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -26,22 +26,6 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Erro"
-
-#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
-msgid "Title"
-msgstr "Título"
-
-#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
-#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "button_back"
-msgstr "Voltar"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -186,6 +170,12 @@ msgstr "Membro"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
+
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#~ msgid "button_back"
+#~ msgstr "Voltar"
 
 #~ msgid "button_delete"
 #~ msgstr "Delete"

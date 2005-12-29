@@ -3,39 +3,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2005-06-23 17:27default\n"
+"POT-Creation-Date: 2005-12-29 16:08default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language-Code: LL\n"
-"Language-Name: Language\n"
-"Preferred-encodings: utf-8 latin1\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-encodings: latin9 utf-8\n"
 "Domain: default\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
-msgstr ""
-
-#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
-msgid "Title"
-msgstr ""
-
-#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
-#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "button_back"
 msgstr ""
 
 #.   <p>Choose a directory</p>

@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mg\n"
-"POT-Creation-Date: 2005-06-23 17:27default\n"
+"POT-Creation-Date: 2005-12-29 16:08default\n"
 "PO-Revision-Date: 2004-11-24 14:00+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -31,22 +31,6 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Diso"
-
-#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
-msgid "Title"
-msgstr ""
-
-#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
-#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "button_back"
-msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -196,6 +180,12 @@ msgstr "Membre"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrateur"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "button_back"
+msgstr "Retour"
 
 msgid "button_delete"
 msgstr "Effacer"

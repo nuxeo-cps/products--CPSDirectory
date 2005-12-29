@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-03 15:40default\n"
+"POT-Creation-Date: 2005-06-23 17:27default\n"
 "PO-Revision-Date: 2005-03-14 09:52+0100\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Language-Name: German\n"
 "Domain: default\n"
 
-#.   <em content="err" style="color:red">Error</em>
+#.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_edit.pt
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Fehler"
 
-#.   <a content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}" href="">
+#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
 #.                 Title
 #.               </a>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -32,24 +32,13 @@ msgstr "Fehler"
 msgid "Title"
 msgstr "Titel"
 
-#.   <input type="button" class="context" value="button_back" onclick="javascript:history.back()" />
-#.   <input value="button_back" type="submit" name="back" onclick="history.back()" class="standalone" />
+#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
+#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #: ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "button_back"
 msgstr "Zurück"
-
-#.   <input attributes="onclick python:'return window.confirm(\'%s\')'
-#.               % cpsmcat('description_confirm_delete')" type="submit" class="destructive" value="button_delete" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-msgid "button_delete"
-msgstr "Löschen"
-
-#.   <input type="submit" class="standalone" value="button_search" name="cpsdirectory_search_button" />
-#: from ../skins/cps_directory/layout_dir_search.pt
-msgid "button_search"
-msgstr "Suchen"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -197,6 +186,12 @@ msgstr "Member"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
+
+msgid "button_delete"
+msgstr "Löschen"
+
+msgid "button_search"
+msgstr "Suchen"
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"

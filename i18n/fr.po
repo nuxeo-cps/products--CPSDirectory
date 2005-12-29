@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2005-06-23 17:27default\n"
+"POT-Creation-Date: 2005-12-29 16:08default\n"
 "PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -30,22 +30,6 @@ msgstr ""
 #: ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Erreur"
-
-#.   <a href="" content="dir/title_or_id" attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}">
-#.                 Title
-#.               </a>
-#: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
-msgid "Title"
-msgstr "Titre"
-
-#.   <input onclick="javascript:history.back()" type="button" class="context" value="button_back" />
-#.   <input name="back" onclick="history.back()" type="submit" class="standalone" value="button_back" />
-#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "button_back"
-msgstr "Retour"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -180,8 +164,8 @@ msgstr "Membre"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous faut "
-"d'abord supprimer toutes les sous-entrées."
+"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous "
+"faut d'abord supprimer toutes les sous-entrées."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Une entrée existe déjà avec le même identifiant."
@@ -191,6 +175,12 @@ msgstr "Membre"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrateur"
+
+#~ msgid "Title"
+#~ msgstr "Titre"
+
+#~ msgid "button_back"
+#~ msgstr "Retour"
 
 #~ msgid "button_delete"
 #~ msgstr "Effacer"
