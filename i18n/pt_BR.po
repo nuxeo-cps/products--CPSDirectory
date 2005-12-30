@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2005-12-29 16:08default\n"
-"PO-Revision-Date: 2005-09-29 10:19-0300\n"
+"POT-Creation-Date: 2005-12-30 12:41default\n"
+"PO-Revision-Date: 2005-12-19 15:12-0200\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -176,6 +176,3 @@ msgstr "Administrador"
 
 #~ msgid "button_back"
 #~ msgstr "Voltar"
-
-#~ msgid "button_delete"
-#~ msgstr "Delete"
