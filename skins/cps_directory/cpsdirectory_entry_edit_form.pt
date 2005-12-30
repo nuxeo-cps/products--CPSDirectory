@@ -15,7 +15,7 @@
   global portal_status_message python: portal_status_message or (validate and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) or '';
   "/>
 <metal:block use-macro="here/main_template/macros/master">
-  <metal:block fill-slot="css_slot">
+  <metal:block fill-slot="style_slot">
     <tal:block define="dummy
       python:context.setDirectoryBreadCrumbs(request, dirname, dir, dirtitle)"/>
     <tal:block define="global actions

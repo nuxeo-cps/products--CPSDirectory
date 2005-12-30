@@ -10,7 +10,7 @@
   global title ds/?title_field|id;
   "/>
 <metal:block use-macro="here/main_template/macros/master">
-  <metal:block fill-slot="css_slot">
+  <metal:block fill-slot="style_slot">
     <tal:block define="dummy
       python:context.setDirectoryBreadCrumbs(request, dirname, dir, dirtitle)"/>
     <tal:block define="global actions

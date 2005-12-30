@@ -16,3 +16,4 @@ New internal features:
   CPSSchemas.FieldNamespace.fieldStorageNamespace method registry so that are
   publicly available in fields' TALES expressions context. They are no longuer
   part of the DirectoryTool but in a seperate non persistent util module.
+- CPS css_slot was renamed style_slot to comply with later CMF/Zope 3 standard.
