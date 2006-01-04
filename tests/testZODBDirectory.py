@@ -37,7 +37,7 @@ class TestZODBDirectory(ZopeTestCase):
     def makeDir(self):
         from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         dtool = self.portal.portal_directories
-        dir = ZODBDirectory('zodbdir',
+        zdir = ZODBDirectory('zodbdir',
                            id_field='idd',
                            title_field='foo',
                            schema='testzodb',
@@ -51,7 +51,7 @@ class TestZODBDirectory(ZopeTestCase):
                            acl_entry_view_roles='test_role_1_',
                            acl_entry_edit_roles='test_role_1_',
                            )
-        dtool._setObject(dir.getId(), dir)
+        dtool._setObject(zdir.getId(), zdir)
         self.dir = dtool.zodbdir
 
     def afterSetUp(self):
@@ -71,122 +71,122 @@ class TestZODBDirectory(ZopeTestCase):
         self.assert_(not self.dir.isCreateEntryAllowed())
 
     def testEmpty(self):
-        dir = self.dir
-        self.assertEqual(dir.listEntryIds(), [])
+        zdir = self.dir
+        self.assertEqual(zdir.listEntryIds(), [])
 
     def testCreation(self):
-        dir = self.dir
+        zdir = self.dir
         id = 'chien'
         entry = {'idd': id, 'foo': 'ouah', 'bar': ['4']}
 
-        self.assertEqual(dir.listEntryIds(), [])
-        self.assert_(not dir.hasEntry(id))
-        self.assertRaises(KeyError, dir.getEntry, id)
+        self.assertEqual(zdir.listEntryIds(), [])
+        self.assert_(not zdir.hasEntry(id))
+        self.assertRaises(KeyError, zdir.getEntry, id)
 
-        dir.createEntry(entry)
-        self.assertRaises(KeyError, dir.createEntry, {'idd': id})
+        zdir.createEntry(entry)
+        self.assertRaises(KeyError, zdir.createEntry, {'idd': id})
 
-        self.assertEqual(dir.listEntryIds(), [id])
-        self.assertEqual(dir.listEntryIdsAndTitles(), [(id, 'ouah')])
-        self.assert_(dir.hasEntry(id))
+        self.assertEqual(zdir.listEntryIds(), [id])
+        self.assertEqual(zdir.listEntryIdsAndTitles(), [(id, 'ouah')])
+        self.assert_(zdir.hasEntry(id))
 
-        e = dir.getEntry(id)
+        e = zdir.getEntry(id)
         self.assertEquals(e, {'idd': id, 'foo': 'ouah', 'bar': ['4']})
 
-        dir.deleteEntry(id)
+        zdir.deleteEntry(id)
 
-        self.assertEqual(dir.listEntryIds(), [])
-        self.assertEqual(dir.listEntryIdsAndTitles(), [])
-        self.assert_(not dir.hasEntry(id))
-        self.assertRaises(KeyError, dir.getEntry, id)
+        self.assertEqual(zdir.listEntryIds(), [])
+        self.assertEqual(zdir.listEntryIdsAndTitles(), [])
+        self.assert_(not zdir.hasEntry(id))
+        self.assertRaises(KeyError, zdir.getEntry, id)
 
     def testSearch(self):
-        dir = self.dir
+        zdir = self.dir
 
         id1 = 'tree'
         foo1 = 'green'
         bar1 = ['a123', 'gra']
         e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
-        dir.createEntry(e1)
+        zdir.createEntry(e1)
 
         id2 = 'sea'
         foo2 = 'blue'
         bar2 = ['812A', 'gra']
         e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
-        dir.createEntry(e2)
+        zdir.createEntry(e2)
 
         ids = [id1, id2]
         ids.sort()
 
         ### Without substrings
-        dir.search_substring_fields = []
+        zdir.search_substring_fields = []
 
         # Basic searches
-        res = dir.searchEntries(idd=id1)
+        res = zdir.searchEntries(idd=id1)
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
+        res = zdir.searchEntries(idd=[id1])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo1)
+        res = zdir.searchEntries(foo=foo1)
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1])
+        res = zdir.searchEntries(foo=[foo1])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1, foo2])
+        res = zdir.searchEntries(foo=[foo1, foo2])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2, 'hop'])
+        res = zdir.searchEntries(foo=[foo1, foo2, 'hop'])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, '81'])
+        res = zdir.searchEntries(foo=[foo1, '81'])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='a123')
+        res = zdir.searchEntries(bar='a123')
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar=['a123'])
+        res = zdir.searchEntries(bar=['a123'])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='gra')
+        res = zdir.searchEntries(bar='gra')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gra'])
+        res = zdir.searchEntries(bar=['gra'])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['a123', '8'])
+        res = zdir.searchEntries(bar=['a123', '8'])
         self.assertEquals(res, [id1])
 
         # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
+        res = zdir.searchEntries(idd=id1, foo=[foo1], bar='gra')
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo2, bar='gra')
+        res = zdir.searchEntries(foo=foo2, bar='gra')
         self.assertEquals(res, [id2])
-        res = dir.searchEntries(foo=[foo1, foo2], bar='gra')
+        res = zdir.searchEntries(foo=[foo1, foo2], bar='gra')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2], bar='a123')
+        res = zdir.searchEntries(foo=[foo1, foo2], bar='a123')
         self.assertEquals(res, [id1])
 
         # Failing substring searches
-        res = dir.searchEntries(idd='re')
+        res = zdir.searchEntries(idd='re')
         self.assertEquals(res, [])
-        res = dir.searchEntries(idd='tre')
+        res = zdir.searchEntries(idd='tre')
         self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
+        res = zdir.searchEntries(idd='TREE')
         self.assertEquals(res, [])
-        res = dir.searchEntries(foo='e')
+        res = zdir.searchEntries(foo='e')
         self.assertEquals(res, [])
-        res = dir.searchEntries(bar='812a')
+        res = zdir.searchEntries(bar='812a')
         self.assertEquals(res, [])
-        res = dir.searchEntries(bar='gr')
+        res = zdir.searchEntries(bar='gr')
         self.assertEquals(res, [])
-        res = dir.searchEntries(bar=['gr'])
+        res = zdir.searchEntries(bar=['gr'])
         self.assertEquals(res, [])
-        res = dir.searchEntries(foo='E', bar='12')
+        res = zdir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, [])
 
         # Searches with return fields
-        res = dir.searchEntries(foo='green', return_fields=['*'])
+        res = zdir.searchEntries(foo='green', return_fields=['*'])
         self.assertEquals(res, [(id1, e1)])
-        res = dir.searchEntries(foo='green', return_fields=['idd'])
+        res = zdir.searchEntries(foo='green', return_fields=['idd'])
         self.assertEquals(res, [(id1, {'idd': id1})])
-        res = dir.searchEntries(foo='green', return_fields=['foo'])
+        res = zdir.searchEntries(foo='green', return_fields=['foo'])
         self.assertEquals(res, [(id1, {'foo': foo1})])
-        res = dir.searchEntries(foo='green', return_fields=['foo', 'idd'])
+        res = zdir.searchEntries(foo='green', return_fields=['foo', 'idd'])
         self.assertEquals(res, [(id1, {'idd': id1, 'foo': foo1})])
-        res = dir.searchEntries(foo='green', return_fields=['foo', 'bar'])
+        res = zdir.searchEntries(foo='green', return_fields=['foo', 'bar'])
         self.assertEquals(res, [(id1, {'foo': foo1, 'bar': bar1})])
-        res = dir.searchEntries(foo='green', return_fields=['zblurg'])
+        res = zdir.searchEntries(foo='green', return_fields=['zblurg'])
         self.assertEquals(res, [(id1, {})])
 
     def testCache(self):
@@ -252,76 +252,76 @@ class TestZODBDirectory(ZopeTestCase):
         self.failIf(res is previous)
 
     def testSearchSubstrings(self):
-        dir = self.dir
+        zdir = self.dir
 
         id1 = 'tree'
         foo1 = 'green'
         bar1 = ['a123', 'gra']
         e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
-        dir.createEntry(e1)
+        zdir.createEntry(e1)
 
         id2 = 'sea'
         foo2 = 'blue'
         bar2 = ['812A', 'gra']
         e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
-        dir.createEntry(e2)
+        zdir.createEntry(e2)
 
         ids = [id1, id2]
         ids.sort()
 
         ### With substrings
-        dir.search_substring_fields = ['foo', 'bar']
+        zdir.search_substring_fields = ['foo', 'bar']
 
         # Basic searches
-        res = dir.searchEntries(idd=id1)
+        res = zdir.searchEntries(idd=id1)
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
+        res = zdir.searchEntries(idd=[id1])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo1)
+        res = zdir.searchEntries(foo=foo1)
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1])
+        res = zdir.searchEntries(foo=[foo1])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=[foo1, foo2])
+        res = zdir.searchEntries(foo=[foo1, foo2])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2, 'hop'])
+        res = zdir.searchEntries(foo=[foo1, foo2, 'hop'])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, '81'])
+        res = zdir.searchEntries(foo=[foo1, '81'])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='a123')
+        res = zdir.searchEntries(bar='a123')
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar=['a123'])
+        res = zdir.searchEntries(bar=['a123'])
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(bar='gra')
+        res = zdir.searchEntries(bar='gra')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gra'])
+        res = zdir.searchEntries(bar=['gra'])
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['a123', '8'])
+        res = zdir.searchEntries(bar=['a123', '8'])
         self.assertEquals(res, [id1])
 
         # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
+        res = zdir.searchEntries(idd=id1, foo=[foo1], bar='gra')
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(foo=foo2, bar='gra')
+        res = zdir.searchEntries(foo=foo2, bar='gra')
         self.assertEquals(res, [id2])
-        res = dir.searchEntries(foo=[foo1, foo2], bar='gra')
+        res = zdir.searchEntries(foo=[foo1, foo2], bar='gra')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(foo=[foo1, foo2], bar='a123')
+        res = zdir.searchEntries(foo=[foo1, foo2], bar='a123')
         self.assertEquals(res, [id1])
 
         # Substring searches
-        res = dir.searchEntries(idd='re')
+        res = zdir.searchEntries(idd='re')
         self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
+        res = zdir.searchEntries(idd='TREE')
         self.assertEquals(res, [])
-        res = dir.searchEntries(foo='e')
+        res = zdir.searchEntries(foo='e')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar='812a')
+        res = zdir.searchEntries(bar='812a')
         self.assertEquals(res, [id2])
-        res = dir.searchEntries(bar='gr')
+        res = zdir.searchEntries(bar='gr')
         self.assertEquals(res, ids)
-        res = dir.searchEntries(bar=['gr'])
+        res = zdir.searchEntries(bar=['gr'])
         self.assertEquals(res, [])
-        res = dir.searchEntries(foo='E', bar='12')
+        res = zdir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
 class TestDirectoryEntryLocalRoles(ZopeTestCase):
@@ -350,7 +350,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
     def makeDir(self):
         from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         dtool = self.portal.portal_directories
-        dir = ZODBDirectory('members',
+        zdir = ZODBDirectory('members',
                            id_field='id',
                            title_field='name',
                            schema='testzodb',
@@ -364,16 +364,16 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
                            acl_entry_view_roles='BigSmurf; DoPeter',
                            acl_entry_edit_roles='BigSmurf; DoPeter',
                            )
-        dtool._setObject(dir.getId(), dir)
+        dtool._setObject(zdir.getId(), zdir)
         self.dir = dtool.members
 
-        res = dir.addEntryLocalRole('BigSmurf', 'python:user_id == "test_user_1_"')
+        res = zdir.addEntryLocalRole('BigSmurf', 'python:user_id == "test_user_1_"')
         self.assertEquals(res, '')
-        res = dir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
+        res = zdir.addEntryLocalRole('DoAlbator', 'python:id == "albator"')
         self.assertEquals(res, '')
-        res = dir.addEntryLocalRole('DoChapi', 'python:name == "ChapiChapo"')
+        res = zdir.addEntryLocalRole('DoChapi', 'python:name == "ChapiChapo"')
         self.assertEquals(res, '')
-        res = dir.addEntryLocalRole('DoPeter', 'python:name == "Peterpan"')
+        res = zdir.addEntryLocalRole('DoPeter', 'python:name == "Peterpan"')
         self.assertEquals(res, '')
 
         e = {'id': 'peterpan', 'name': 'Peterpan'}
