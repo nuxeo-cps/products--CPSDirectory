@@ -6,6 +6,8 @@ from Testing.ZopeTestCase import ZopeTestCase
 from AccessControl import Unauthorized
 from OFS.Folder import Folder
 
+from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
+
 from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
@@ -186,6 +188,68 @@ class TestZODBDirectory(ZopeTestCase):
         self.assertEquals(res, [(id1, {'foo': foo1, 'bar': bar1})])
         res = dir.searchEntries(foo='green', return_fields=['zblurg'])
         self.assertEquals(res, [(id1, {})])
+
+    def testCache(self):
+        zdir = self.dir
+        dtool = self.portal.portal_directories
+
+        # REQUEST is necessary for ZCacheable methods.
+        # Note that these swallow AttributeErrors, making them look as a
+        # cache misses
+        zdir.REQUEST = self.app.REQUEST
+        
+        man_id = 'cache_manager'
+        dtool._setObject(man_id, RAMCacheManager(man_id))
+        zdir.ZCacheable_setManagerId(man_id)
+        self.assert_(zdir.ZCacheable_isCachingEnabled())
+        self.assert_(zdir.ZCacheable_getManager() == dtool[man_id])
+        id1 = 'tree'
+        foo1 = 'green'
+        bar1 = ['a123', 'gra']
+        e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
+        zdir.createEntry(e1)
+
+        id2 = 'sea'
+        foo2 = 'blue'
+        bar2 = ['812A', 'gra']
+        e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
+        zdir.createEntry(e2)
+        
+        # filling the cache
+        res = zdir.searchEntries(idd=id1)
+        self.assertEquals(res, [id1])
+        previous = res
+
+        # avoiding worst side-effects
+        res = zdir.searchEntries(idd=id2)
+        self.assertEquals(res, [id2])
+
+        # return_fields is part of the keys:
+        res = zdir.searchEntries(idd=id1, return_fields=['foo'])
+        self.assertEquals(res, [(id1, {'foo': foo1})])
+
+        # replayed searches should come from cache
+        res = zdir.searchEntries(idd=id1)
+        self.assert_(res is previous)
+
+        # editing entries clears the cache
+        e2['foo'] = 'foo_new'
+        zdir.editEntry(e2)
+        previous = res
+        res = zdir.searchEntries(idd=id1)
+        self.failIf(res is previous)
+
+        # deleting entry clears the cache
+        zdir.deleteEntry(id2)
+        previous = res
+        res = zdir.searchEntries(idd=id1)
+        self.failIf(res is previous)
+
+        # adding entries clears the cache
+        zdir.createEntry(e2)
+        previous = res
+        res = zdir.searchEntries(idd=id1)
+        self.failIf(res is previous)
 
     def testSearchSubstrings(self):
         dir = self.dir

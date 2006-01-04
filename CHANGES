@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- #631: ZODBDirectory now support caching
 Bug fixes:
 ~~~~~~~~~~
 - #618: Fixed use of fields with "read ignore storage" for SQLDirectory and

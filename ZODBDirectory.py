@@ -30,6 +30,7 @@ from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
 from AccessControl.Role import RoleManager
 from OFS.SimpleItem import Item_w__name__
+from OFS.Cache import Cacheable
 
 from Products.CMFCore.permissions import ManagePortal
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
@@ -45,7 +46,8 @@ from Products.CPSDirectory.interfaces import IDirectory
 from zope.interface import implements
 
 
-class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
+class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
+                    BaseDirectory, Cacheable):
     """ZODB Directory.
 
     A directory that stores its data in the ZODB.
@@ -83,11 +85,16 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         BaseDirectory.manage_options[:1] + # Properties
         BTreeFolder2.manage_options[0:1] + # Contents
         BaseDirectory.manage_options[1:]
-        )
+        ) + Cacheable.manage_options
 
     #
     # API
     #
+
+    def _postProcessProperties(self):
+        """Post-processing after properties change."""
+        PropertiesPostProcessor._postProcessProperties(self)
+        self.ZCacheable_invalidate()
 
     security.declarePrivate('listEntryIds')
     def listEntryIds(self):
@@ -184,6 +191,12 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         if not self.isUserModified():
             self.setUserModified(True)
 
+    security.declarePrivate('_editEntry')
+    def _editEntry(self, entry, check_acls=False):
+        """ unrestricted method to edit an entry and invalidate the cache. """
+        BaseDirectory._editEntry(self, entry, check_acls)
+        self.ZCacheable_invalidate()
+        
     security.declarePublic('deleteEntry')
     def deleteEntry(self, id):
         """@summary: Delete an entry in the directory.
@@ -199,11 +212,24 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
         self._delObject(id)
         if not self.isUserModified():
             self.setUserModified(True)
+        self.ZCacheable_invalidate()        
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
         """Search for entries in the directory.
         """
+        if self.ZCacheable_isCachingEnabled():
+            keyset = {'return_fields' : return_fields}
+            keyset.update(kw)
+            LOG('ZODBDirectory._searchEntries', TRACE, "Searching cache for %s" % (keyset,))
+            from_cache = self.ZCacheable_get(keywords=keyset)
+            if from_cache is not None:
+                LOG('ZODBDirectory._searchEntries', TRACE, " -> results=%s" %
+                    (from_cache[:20],))
+                return from_cache
+        else:
+            keyset = None
+
         all_field_ids = self._getFieldIds()
 
         # Compute search_types and query.
@@ -272,6 +298,11 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2, BaseDirectory):
                 for key in return_fields:
                     d[key] = entry[key]
                 res.append((id, d))
+
+        if keyset is not None:
+            LOG('ZODBDirectory._searchEntries', TRACE, "Putting in cache")
+            self.ZCacheable_set(res, keywords=keyset)            
+
         return res
 
     #
