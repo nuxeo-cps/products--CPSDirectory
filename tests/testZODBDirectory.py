@@ -216,17 +216,15 @@ class TestZODBDirectory(ZopeTestCase):
         zdir.createEntry(e2)
         
         # filling the cache
-        res = zdir.searchEntries(idd=id1)
-        self.assertEquals(res, [id1])
-        previous = res
+        previous = zdir.searchEntries(idd=id1)
 
         # avoiding worst side-effects
         res = zdir.searchEntries(idd=id2)
-        self.assertEquals(res, [id2])
+        self.failIf(res is previous)
 
         # return_fields is part of the keys:
         res = zdir.searchEntries(idd=id1, return_fields=['foo'])
-        self.assertEquals(res, [(id1, {'foo': foo1})])
+        self.failIf(res is previous)
 
         # replayed searches should come from cache
         res = zdir.searchEntries(idd=id1)
