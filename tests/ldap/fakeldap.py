@@ -47,25 +47,16 @@ class LogFile:
         # todo
         pass
 
-def insulate(s):
-    """ Make an insulated copy of a string. 
+class InsulatedString(str):
+    """ To make a copy of a string that's different from the original one.
 
     >>> s = 'spam'
-    >>> t = insulate('s')
-    >>> t == s
+    >>> InsulatedString(s) == s
     True
-    >>> t is s
-    False
-    >>> s = ''
-    >>> insulate('s') is s
+    >>> InsulatedString(s) is s
     False
     """
-
-    assert isinstance(s, str)
-    if s:
-        return s[:-1] + s[-1]
-    else: 
-        return ''
+    
 
 class LdifReader:
     """ this class reads an ldif file
@@ -312,7 +303,7 @@ class LdifReader:
 
         if attributes is None:
             # insulation is for cache tests
-            return [(insulate(entry['dn'][0]), entry) for entry
+            return [(InsulatedString(entry['dn'][0]), entry) for entry
                     in filtered_entries]
 
         results = []
@@ -325,7 +316,7 @@ class LdifReader:
                     result_entry[attribute] = filtered_entry[attribute]
 
             # insulation is for cache tests
-            result = (insulate(filtered_entry['dn'][0]), result_entry)
+            result = (InsulatedString(filtered_entry['dn'][0]), result_entry)
             results.append(result)
 
 
