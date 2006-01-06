@@ -34,6 +34,9 @@ MODULE_DIR = path.dirname(__file__) + '/'
 CONF_FILE = MODULE_DIR + 'fakeldap.conf'
 
 
+MOD_ADD = 0
+MOD_DELETE = 1
+MOD_REPLACE = 2
 
 class LogFile:
     """ a log class"""
@@ -43,6 +46,26 @@ class LogFile:
     def write(self, msg):
         # todo
         pass
+
+def insulate(s):
+    """ Make an insulated copy of a string. 
+
+    >>> s = 'spam'
+    >>> t = insulate('s')
+    >>> t == s
+    True
+    >>> t is s
+    False
+    >>> s = ''
+    >>> insulate('s') is s
+    False
+    """
+
+    assert isinstance(s, str)
+    if s:
+        return s[:-1] + s[-1]
+    else: 
+        return ''
 
 class LdifReader:
     """ this class reads an ldif file
@@ -165,17 +188,17 @@ class LdifReader:
         # resync memory
         self.ldif_content = content
         self.load_ldif()
-        # XXX see if we want to resync file
+        # XXX see if we want to resync file here and in editEntry, deleteEntry
         #print str(self.ldif_entries)
 
 
     def render_entries(self,entries):
-        content = ''
+        content = []
         for entry in entries:
-            for line in entry:
-                line = line['key'] + ': '+ line['value']
-                content += line+'\n'
-            content += '\n'
+            for key, values in entry.items():
+               lines = ['%s: %s\n' % (key, value) for value in values]
+               content.extend(lines)
+            content.append('\n')
 
         return content
 
@@ -183,6 +206,18 @@ class LdifReader:
         entry = self._findEntry(dn)
         if entry is not None:
             self.ldif_entries.remove(entry)
+            # we need to resync the content
+            self.ldif_content = self.render_entries(self.ldif_entries)
+        
+    def editEntry(self, dn, mod_list):
+        entry = self._findEntry(dn)
+        if entry is not None:
+            for kind, key, val in mod_list:
+                if kind == MOD_DELETE: 
+                    del entry[key]
+                else:
+                    entry[key] = val
+
             # we need to resync the content
             self.ldif_content = self.render_entries(self.ldif_entries)
 
@@ -261,6 +296,9 @@ class LdifReader:
                 numpoints = 0
 
                 for cfilter in filters:
+                    if cfilter['value'] == '*':
+                        numpoints += 1
+                        continue
                     if ldif_entry.has_key(cfilter['key']):
                         for lfilter in ldif_entry[cfilter['key']]:
                             if cfilter['value'] == lfilter:
@@ -272,6 +310,11 @@ class LdifReader:
                     #self.vislog('found entry : %s' %str(ldif_entry))
                     filtered_entries.append(ldif_entry)
 
+        if attributes is None:
+            # insulation is for cache tests
+            return [(insulate(entry['dn'][0]), entry) for entry
+                    in filtered_entries]
+
         results = []
         for filtered_entry in filtered_entries:
             # adding fields
@@ -281,7 +324,8 @@ class LdifReader:
                 if filtered_entry.has_key(attribute):
                     result_entry[attribute] = filtered_entry[attribute]
 
-            result = (filtered_entry['dn'][0], result_entry)
+            # insulation is for cache tests
+            result = (insulate(filtered_entry['dn'][0]), result_entry)
             results.append(result)
 
 
@@ -330,6 +374,11 @@ class FakeLdap:
 
         self.dif_reader.addEntry(entry)
 
+    def modify_s(self, dn, mod_list):
+        """ modifies an entry """
+
+        self.ldap_logcall('modify_s')
+        self.dif_reader.editEntry(dn, mod_list)
 
     def ldap_logcall(self, msg):
         self.logger.write(msg)
@@ -337,7 +386,6 @@ class FakeLdap:
 
     def search_s(self, base, scope, filterstr='(objectClass=*)',
         attrlist=None, attrsonly=0):
-
 
         results =  self.dif_reader.search(base, scope, filterstr, attrlist)
 
