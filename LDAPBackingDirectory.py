@@ -48,8 +48,9 @@ from zope.interface import implements
 
 
 # During testing?
+# XXX GR this isn't robust: depends on the frame number, which may change again
 from inspect import currentframe
-filename = currentframe(2).f_code.co_filename
+filename = currentframe(3).f_code.co_filename
 if '/ZopeTestCase/' in filename or filename.endswith("/testrunner.py"):
     _TESTING = True
 else:
