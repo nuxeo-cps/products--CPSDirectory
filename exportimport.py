@@ -115,7 +115,7 @@ class DirectoryXMLAdapter(XMLAdapterBase,
         entry_lr = self.context.listEntryLocalRoles()
         entry_lr.sort()
         for role, expr in entry_lr:
-            child = self._doc.createElement('entry-local-role')
+            child = self._doc.createElement('entry-local-roles')
             child.setAttribute('role', role)
             child.appendChild(self._doc.createTextNode(expr))
             fragment.appendChild(child)
