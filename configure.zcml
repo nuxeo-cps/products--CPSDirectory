@@ -7,14 +7,14 @@
   <adapter
       factory=".exportimport.DirectoryToolXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
-      for="Products.CPSDirectory.interfaces.IDirectoryTool
+      for=".interfaces.IDirectoryTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
   <adapter
       factory=".exportimport.DirectoryXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
-      for="Products.CPSDirectory.interfaces.IDirectory
+      for=".interfaces.IDirectory
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
@@ -136,7 +136,7 @@
   <!-- traversable so that add views can work -->
 
   <five:traversable
-      class="Products.CPSDirectory.DirectoryTool.DirectoryTool"/>
+      class=".DirectoryTool.DirectoryTool"/>
 
   <configure package="Products.GenericSetup.browser">
 
@@ -144,7 +144,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addMembersDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.MembersDirectoryAddView"
+        class=".browser.MembersDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -152,7 +152,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addGroupsDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.GroupsDirectoryAddView"
+        class=".browser.GroupsDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -160,7 +160,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addRolesDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.RolesDirectoryAddView"
+        class=".browser.RolesDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -168,7 +168,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addZODBDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.ZODBDirectoryAddView"
+        class=".browser.ZODBDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -176,7 +176,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addSQLDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.SQLDirectoryAddView"
+        class=".browser.SQLDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -185,7 +185,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addLDAPBackingDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.LDAPBackingDirectoryAddView"
+        class=".browser.LDAPBackingDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -193,7 +193,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addMetaDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.MetaDirectoryAddView"
+        class=".browser.MetaDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -201,7 +201,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addStackingDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.StackingDirectoryAddView"
+        class=".browser.StackingDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -209,7 +209,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addLocalDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.LocalDirectoryAddView"
+        class=".browser.LocalDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -217,7 +217,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addIndirectDirectory.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.IndirectDirectoryAddView"
+        class=".browser.IndirectDirectoryAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -226,7 +226,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addDirectoryVocabulary.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.DirectoryVocabularyAddView"
+        class=".browser.DirectoryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -234,7 +234,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addDirectoryEntryVocabulary.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.DirectoryEntryVocabularyAddView"
+        class=".browser.DirectoryEntryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -242,7 +242,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addIndirectDirectoryVocabulary.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.IndirectDirectoryVocabularyAddView"
+        class=".browser.IndirectDirectoryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 
@@ -251,7 +251,7 @@
         for="zope.app.container.interfaces.IAdding"
         name="addLDAPDirectoryVocabulary.html"
         template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.LDAPDirectoryVocabularyAddView"
+        class=".browser.LDAPDirectoryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 
