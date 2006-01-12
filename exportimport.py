@@ -27,6 +27,7 @@ from Products.GenericSetup.utils import ObjectManagerHelpers
 from Products.GenericSetup.utils import PropertyManagerHelpers
 from Products.CPSUtil.PropertiesPostProcessor import (
     PostProcessingPropertyManagerHelpers)
+from Products.CPSUtil.cachemanagersetup import CacheableHelpers
 
 from zope.component import adapts
 from zope.interface import implements
@@ -90,7 +91,7 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
         self._initObjects(node)
         self._logger.info("Directory tool imported.")
 
-class DirectoryXMLAdapter(XMLAdapterBase,
+class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
                           PostProcessingPropertyManagerHelpers):
     """XML importer and exporter for a directory.
     """
@@ -106,6 +107,9 @@ class DirectoryXMLAdapter(XMLAdapterBase,
         node = self._getObjectNode('object')
         node.appendChild(self._extractProperties())
         node.appendChild(self._extractEntryLR())
+        child = self._extractCacheableManagerAssociation()
+        if child is not None:
+            node.appendChild(child)
 
         self._logger.info("%r directory exported." % self.context.getId())
         return node
@@ -128,9 +132,11 @@ class DirectoryXMLAdapter(XMLAdapterBase,
         if self.environ.shouldPurge():
             self._purgeProperties()
             self._purgeEntryLR()
+            self._purgeCacheableManagerAssociation()
 
         self._initProperties(node)
         self._initEntryLR(node)
+        self._initCacheableManagerAssociation(node)
 
         self._logger.info("%r directory imported." % self.context.getId())
 
