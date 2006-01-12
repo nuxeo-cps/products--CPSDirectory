@@ -38,6 +38,7 @@ from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 
+from Products.CPSDirectory.utils import QueryMatcher
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
@@ -230,65 +231,25 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         else:
             keyset = None
 
-        all_field_ids = self._getFieldIds()
-
-        # Compute search_types and query.
-        search_types = {}
-        query = {}
-        for key, value in kw.items():
-            if key not in all_field_ids:
-                continue
-            if not value:
-                # Ignore empty searches.
-                continue
-            if isinstance(value, StringType):
-                if key in self.search_substring_fields:
-                    search_types[key] = 'substring'
-                    value = value.lower()
-                else:
-                    search_types[key] = 'exact'
-            elif isinstance(value, ListType) or isinstance(value, TupleType):
-                search_types[key] = 'list'
-            else:
-                raise ValueError("Bad value %s for '%s'" % (`value`, key))
-            query[key] = value
+        matcher = QueryMatcher(kw, accepted_keys=self._getFieldIds(),
+                               substring_keys=self.search_substring_fields)
 
         # Compute needed fields from object.
         # All fields we need to return.
         field_ids_d, return_fields = self._getSearchFields(return_fields)
         # Add all fields the search is made on.
-        for key in query.keys():
-            field_ids_d[key] = None
-        field_ids = field_ids_d.keys()
+        field_ids = matcher.getKeysSet().union(field_ids_d)
 
         # Do the search.
         schema = self._getUniqueSchema()
         adapter = AttributeStorageAdapter(schema, None,
-                                          field_ids=field_ids)
+                                          field_ids=list(field_ids))
         res = []
         for id, ob in self.objectItems():
             adapter.setContextObject(ob)
             entry = adapter.getData()
             adapter.finalizeDefaults(entry)
-            ok = 1
-            for key, value in query.items():
-                searched = entry[key]
-                if isinstance(searched, StringType):
-                    searched = (searched,)
-                matched = 0
-                for item in searched:
-                    if search_types[key] == 'list':
-                        matched = item in value
-                    elif search_types[key] == 'substring':
-                        matched = item.lower().find(value) != -1
-                    else: # search_types[key] == 'exact':
-                        matched = item == value
-                    if matched:
-                        break
-                if not matched:
-                    ok = 0
-                    break
-            if not ok:
+            if not matcher.match(entry):
                 continue
             # Compute result to return.
             if return_fields is None:
