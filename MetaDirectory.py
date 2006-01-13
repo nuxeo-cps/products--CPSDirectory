@@ -35,6 +35,8 @@ from Products.CMFCore.Expression import getEngine
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 
+from Products.CPSDirectory.utils import QueryMatcher
+
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
@@ -428,38 +430,45 @@ class MetaDirectory(BaseDirectory):
             if acc_res is None:
                 acc_res = res
             else:
-                if not has_missing_entries:
-                    # If we don't care about ordering, do intelligent intersection
+                if has_missing_entries:
+                    b_matcher = QueryMatcher(
+                        b_query,
+                        accepted_keys=b_dir._getFieldIds(),
+                        substring_keys=b_dir.search_substring_fields)
+                    missing_matches = b_matcher.match(missing_entry)
+                else:
+                    # We don't care about ordering, let's prepare for
+                    # quickest intersection by making acc_res the smaller one
                     if len(acc_res) > len(res):
-                        # Make acc_res be always the smaller one
                         acc_res, res = res, acc_res
+                
                 resids_d = {}
                 if return_fields is None:
-                    if has_missing_entries:
-                        # Keep all the ids we already have
-                        pass
+                    res_set = set(res)
+                    if has_missing_entries and missing_matches:
+                        # previous results that matched the query or aren't in
+                        # current backing 
+                        acc_res = [id for id in acc_res
+                                   if id in res_set or not b_dir._hasEntry(id)]
                     else:
-                        # Intersect
-                        for id in res:
-                            resids_d[id] = None
-                        acc_res = [id for id in acc_res if resids_d.has_key(id)]
+                        acc_res = [id for id in acc_res if id in res_set]
                 else:
                     # Intersect and merge values for matching
-                    for id, d in res:
-                        resids_d[id] = d
-                    old_res = acc_res
-                    acc_res = []
-                    for id, old_d in old_res:
-                        new_d = resids_d.get(id)
-                        if new_d is None:
-                            if has_missing_entries:
-                                new_d = missing_entry
-                            else:
-                                # Not present in both sets.
-                                continue
-                        old_d.update(new_d)
-                        acc_res.append((id, old_d))
-            #print ' now acc_res=%s' % `acc_res`
+                    res_d = dict(res)
+                    if has_missing_entries and missing_matches:
+                        # previous results that matched the query or aren't in
+                        # current backing
+                        acc_res = [(id,d) \
+                                    for (id,d) in acc_res
+                                    if id in res_d or not b_dir._hasEntry(id)]
+                        for (id,d) in acc_res:
+                            d.update(res_d.get(id, missing_entry))
+                    else:
+                        acc_res = [(id,d)
+                                   for (id,d) in acc_res
+                                   if id in res_d]
+                        for (id,d) in acc_res:
+                            d.update(res_d[id])
 
         if acc_res is None:
             # No directories entries contributed at all...

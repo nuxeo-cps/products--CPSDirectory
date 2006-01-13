@@ -496,7 +496,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
 
     # XXX must have test with a search on a field from a missing entry
 
-    def XXXXXXXXXXXtest_searchEntries(self):
+    def test_searchEntries(self):
         # TODO FIXME: the code doesn't treat the case where we
         # do a search on an attribute that's in the missing entry.
         dir = self.dirmeta
@@ -507,23 +507,39 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         dir.createEntry(entry2)
         entry3 = {'id': 'CCC', 'foo': 'oo', 'bar': 'rab', 'email': 'yo@mama'}
         dir.createEntry(entry3)
+        barentry = {'id': 'DDD', 'bar': 'baronly', 'mail' : 'brian@spam'}
+        self.dirbar.createEntry(barentry)
+        self.failIf(self.dirfoo._hasEntry('DDD'))
 
         # Simple
         ids = dir.searchEntries()
         ids.sort()
-        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC', 'DDD'])
 
         ids = dir.searchEntries(id='AAA')
         self.assertEquals(ids, ['AAA'])
+        
         ids = dir.searchEntries(foo='oo')
         ids.sort()
         self.assertEquals(ids, ['BBB', 'CCC'])
+
+        ids = dir.searchEntries(bar='baronly', foo='defaultfoo')
+        ids.sort()
+        self.assertEquals(ids, ['DDD'])
+        
+        ids = dir.searchEntries(foo='oo')
+        ids.sort()
+        self.assertEquals(ids, ['BBB', 'CCC'])
+        
         ids = dir.searchEntries(bar='rab')
         ids.sort()
         self.assertEquals(ids, ['AAA', 'CCC'])
+        
+        # unknown field: equivalent to an empty search
         ids = dir.searchEntries(hooooole='ohle')
         ids.sort()
-        self.assertEquals(ids, ['AAA', 'BBB', 'CCC'])
+        self.assertEquals(ids, ['AAA', 'BBB', 'CCC', 'DDD'])
+        
         ids = dir.searchEntries(email='evil@hell')
         self.assertEquals(ids, ['BBB'])
 
@@ -532,13 +548,20 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         res.sort()
         self.assertEquals(res, [('AAA', {'email': 'lame@at'}),
                                 ('BBB', {'email': 'evil@hell'}),
-                                ('CCC', {'email': 'yo@mama'})])
+                                ('CCC', {'email': 'yo@mama'}),
+                                ('DDD', {'email': 'brian@spam'}),
+                                ])
+
         res = dir.searchEntries(foo='oo', return_fields=['email', 'pasglop'])
         res.sort()
         self.assertEquals(res, [('BBB', {'email': 'evil@hell'}),
                                 ('CCC', {'email': 'yo@mama'})])
+
         res = dir.searchEntries(email='lame@at', return_fields=['foo'])
         self.assertEquals(res, [('AAA', {'foo': 'oof'})])
+
+        res = dir.searchEntries(email='brian@spam', return_fields=['foo'])
+        self.assertEquals(res, [('DDD', {'foo': 'defaultfoo'})])
 
         res = dir.searchEntries(foo='oof', return_fields=['id'])
         self.assertEquals(res, [('AAA', {'id': 'AAA'})])
@@ -546,18 +569,31 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         # Not strictly defined but test it anyway
         res = dir.searchEntries(return_fields=['blort'])
         res.sort()
-        self.assertEquals(res, [('AAA', {}), ('BBB', {}), ('CCC', {})])
+        self.assertEquals(res, [('AAA', {}), ('BBB', {}),
+                                ('CCC', {}),('DDD', {}),
+                                ])
+
         res = dir.searchEntries(return_fields=['id'])
         res.sort()
+
         self.assertEquals(res, [('AAA', {'id':'AAA'}),
                                 ('BBB', {'id':'BBB'}),
-                                ('CCC', {'id':'CCC'})])
+                                ('CCC', {'id':'CCC'}),
+                                ('DDD', {'id':'DDD'})
+                                ])
 
         # Fields coming from both dirs
         res = dir.searchEntries(foo='oo', return_fields=['email', 'foo'])
         res.sort()
         self.assertEquals(res, [('BBB', {'foo': 'oo', 'email': 'evil@hell'}),
                                 ('CCC', {'foo': 'oo', 'email': 'yo@mama'})])
+
+        res = dir.searchEntries(foo='defaultfoo',
+                                return_fields=['email', 'foo'])
+        res.sort()
+        self.assertEquals(res, [('DDD', {'foo': 'defaultfoo',
+                                         'email': 'brian@spam'}),
+                                ])
 
     def testBasicSecurity(self):
         self.assert_(self.dirmeta.isVisible())
