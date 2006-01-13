@@ -453,13 +453,7 @@ class MetaDirectory(BaseDirectory):
             if acc_res is None:
                 acc_res = res
             else:
-                if has_missing_entries:
-                    b_matcher = QueryMatcher(
-                        b_query,
-                        accepted_keys=b_dir._getFieldIds(),
-                        substring_keys=b_dir.search_substring_fields)
-                    missing_matches = b_matcher.match(missing_entry)
-                else:
+                if not b_matched:
                     # We don't care about ordering, let's prepare for
                     # quickest intersection by making acc_res the smaller one
                     if len(acc_res) > len(res):
@@ -468,7 +462,7 @@ class MetaDirectory(BaseDirectory):
                 resids_d = {}
                 if return_fields is None:
                     res_set = set(res)
-                    if has_missing_entries and missing_matches:
+                    if b_matched:
                         # previous results that matched the query or aren't in
                         # current backing 
                         acc_res = [id for id in acc_res
@@ -478,7 +472,7 @@ class MetaDirectory(BaseDirectory):
                 else:
                     # Intersect and merge values for matching
                     res_d = dict(res)
-                    if has_missing_entries and missing_matches:
+                    if b_matched:
                         # previous results that matched the query or aren't in
                         # current backing
                         acc_res = [(id,d) \
