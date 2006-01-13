@@ -344,6 +344,15 @@ class MetaDirectory(BaseDirectory):
                 b_key = field_rename_back.get(key, key)
                 if b_key in b_field_ids:
                     b_query[b_key] = value
+                    
+            # checks if there's a missing entry and it matches the query
+            missing_entry = info.get('missing_entry')
+            if missing_entry is not None:
+                matcher = QueryMatcher(b_query, accepted_keys=b_field_ids,
+                                   substring_keys=b_dir.search_substring_fields)
+                b_matched = matcher.match(missing_entry)
+            else:
+                b_matched = False
 
             # Get return fields
             if return_fields is None:
@@ -370,38 +379,52 @@ class MetaDirectory(BaseDirectory):
                         continue
                     b_return_fields.append(b_fid)
 
-            b_queries.append((info, b_return_fields, b_query))
+            b_queries.append((info, b_return_fields, b_query, b_matched))
 
         # Find in what order to do the searches.
-        # Search backing dirs with a missing_entry last so that we can intersect
-        # with a fixed base.
+        # criterium: (normal < empty queries < matching missing_entry)
+
+        # Search backing dirs with a matching missing_entry arelast
+        # so that we can intersect with a fixed base.
+
+        # Search backing dirs with empty queries are after normal ones, so
+        # that the filtering algorithm will see that they aren't needed
+        # to get a base list of entries to start the intersection process
         qs = []
         for qt in b_queries:
-            info, b_return_fields, b_query = qt
-            t = (int(info['missing_entry'] is not None), qt)
+            info, b_return_fields, b_query, b_matched = qt
+            if b_matched:
+                order = 2
+            elif not b_query:
+                order = 1
+            else:
+                order = 0
+            t = (order, qt)
             qs.append(t)
         qs.sort()
         b_queries = [t[1] for t in qs]
 
-        # Remove useless queries.
+        if getattr(self, 'pdb', False):
+            import pdb; pdb.set_trace()
+
+        # Remove useless queries:
         qs = []
-        has_b_with_all_entries = 0
+        base_list_provides = False
         for qt in b_queries:
-            info, b_return_fields, b_query = qt
-            if not b_return_fields and not b_query and has_b_with_all_entries:
+            info, b_return_fields, b_query, b_matched = qt
+            if not b_return_fields and not b_query and base_list_provides:
                 # This query gets us no info and returns everything
-                # We must not skip it though if there would be no normal backing
-                # directories left to get a base list of entries.
+                # We must not skip it though if it's the first one to provide
+                # a base list of entries, see comment above about the ordering
                 #print ' ignoring query on %s' % info['dir_id']
                 continue
-            if info['missing_entry'] is None:
-                has_b_with_all_entries = 1
+            base_list_provides = base_list_provides or (not b_matched)
             qs.append(qt)
         b_queries = qs
 
         # Do searches
         acc_res = None
-        for info, b_return_fields, b_query in b_queries:
+        for info, b_return_fields, b_query, b_matched in b_queries:
             b_dir = info['dir']
             missing_entry = info['missing_entry']
             has_missing_entries = missing_entry is not None

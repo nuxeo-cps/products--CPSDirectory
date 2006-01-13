@@ -72,6 +72,11 @@ class TestMetaDirectory(ZopeTestCase):
     def makeDirs(self):
         from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         from Products.CPSDirectory.MetaDirectory import MetaDirectory
+        class LoggerZODBDirectory(ZODBDirectory):
+            def _searchEntries(self, *args, **kwargs):
+                self.tests_called_search = True
+                return ZODBDirectory._searchEntries(self, *args, **kwargs)
+
         dtool = self.portal.portal_directories
         dirfoo = ZODBDirectory('dirfoo', schema='sfoo', id_field='idd',
                 acl_directory_view_roles='test_role_1_',
@@ -82,7 +87,7 @@ class TestMetaDirectory(ZopeTestCase):
                 )
         dtool._setObject(dirfoo.getId(), dirfoo)
 
-        dirbar = ZODBDirectory('dirbar', schema='sbar', id_field='id',
+        dirbar = LoggerZODBDirectory('dirbar', schema='sbar', id_field='id',
                 acl_directory_view_roles='test_role_1_',
                 acl_entry_create_roles='test_role_1_',
                 acl_entry_delete_roles='test_role_1_',
@@ -526,6 +531,15 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         ids = dir.searchEntries(bar='baronly', foo='defaultfoo')
         ids.sort()
         self.assertEquals(ids, ['DDD'])
+        
+        # produces empty search in dirbar but query cannot match dirfoo's
+        # missing entry. search in dirbar shouldn't be done at all (bug #995)
+        self.dirbar.tests_called_search = False
+        ids = dir.searchEntries(foo='oo')
+        ids.sort()
+        self.assertEquals(ids, ['BBB', 'CCC'])
+        self.failIf(self.dirbar.tests_called_search)
+        self.dirbar.tests_called_search = True
         
         ids = dir.searchEntries(foo='oo')
         ids.sort()
