@@ -69,7 +69,8 @@ class IDirectory(Interface):
         The search is done:
 
           - As a substring case-independent search for fields in
-            search_substring_fields.
+            search_substring_fields, if the directory has a property with this
+            id (MetaDirectory doesn't, see its documentation)
 
           - As an exact search for all other fields.
 

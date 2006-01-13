@@ -10,6 +10,7 @@ Bug fixes:
   LDAPBackingDirectory.
 - Fixed hasEntry permission checking.
 - #995: MetaDirectory sometimes does useless searches in some backings
+- Interface clarification about MetaDirectory and substring searches
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Removed obsolete widget types registration.

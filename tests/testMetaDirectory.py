@@ -127,6 +127,11 @@ class TestMetaDirectory(ZopeTestCase):
 
 class TestMetaDirectoryNoMissing(TestMetaDirectory):
 
+    def test_properties(self):
+        props = self.dirmeta.propertyIds()
+        self.assert_(props)
+        self.failIf('search_substring_fields' in props)
+
     def test_getEntry(self):
         id = '000'
         self.assertRaises(KeyError, self.dirmeta.getEntry, id)
@@ -318,31 +323,33 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         res.sort()
         self.assertEquals(res, [('DDD', {}), ('EEE', {})])
 
-    def xxxtestSearchSubstrings(self):
-        dir = self.dir
+    def testSearchSubstrings(self):
+        # most of this test is a copy/paste from the one in ZODB Directory
+        dir = self.dirmeta
+
+        ### allow substrings in backings
+        self.dirbar.search_substring_fields = ['bar']
+        self.dirfoo.search_substring_fields = ['foo']
 
         id1 = 'tree'
         foo1 = 'green'
         bar1 = ['a123', 'gra']
-        e1 = {'idd': id1, 'foo': foo1, 'bar': bar1}
+        e1 = {'id': id1, 'foo': foo1, 'bar': bar1}
         dir.createEntry(e1)
 
         id2 = 'sea'
         foo2 = 'blue'
         bar2 = ['812A', 'gra']
-        e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
+        e2 = {'id': id2, 'foo': foo2, 'bar': bar2}
         dir.createEntry(e2)
 
         ids = [id1, id2]
         ids.sort()
 
-        ### With substrings
-        dir.search_substring_fields = ['foo', 'bar']
-
         # Basic searches
-        res = dir.searchEntries(idd=id1)
+        res = dir.searchEntries(id=id1)
         self.assertEquals(res, [id1])
-        res = dir.searchEntries(idd=[id1])
+        res = dir.searchEntries(id=[id1])
         self.assertEquals(res, [id1])
         res = dir.searchEntries(foo=foo1)
         self.assertEquals(res, [id1])
@@ -366,7 +373,7 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         self.assertEquals(res, [id1])
 
         # Multi-field searches
-        res = dir.searchEntries(idd=id1, foo=[foo1], bar='gra')
+        res = dir.searchEntries(id=id1, foo=[foo1], bar='gra')
         self.assertEquals(res, [id1])
         res = dir.searchEntries(foo=foo2, bar='gra')
         self.assertEquals(res, [id2])
@@ -376,9 +383,9 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         self.assertEquals(res, [id1])
 
         # Substring searches
-        res = dir.searchEntries(idd='re')
+        res = dir.searchEntries(id='re')
         self.assertEquals(res, [])
-        res = dir.searchEntries(idd='TREE')
+        res = dir.searchEntries(id='TREE')
         self.assertEquals(res, [])
         res = dir.searchEntries(foo='e')
         self.assertEquals(res, ids)
@@ -608,6 +615,13 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         self.assertEquals(res, [('DDD', {'foo': 'defaultfoo',
                                          'email': 'brian@spam'}),
                                 ])
+
+        # Substring on the missing
+        self.dirfoo.search_substring_fields = ['foo']
+        res = dir.searchEntries(bar='baronly', foo='default',
+                                return_fields=['foo']) 
+        res.sort()
+        self.assertEquals(res, [('DDD', {'foo': 'defaultfoo'})])
 
     def testBasicSecurity(self):
         self.assert_(self.dirmeta.isVisible())

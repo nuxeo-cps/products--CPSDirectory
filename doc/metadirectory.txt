@@ -77,6 +77,9 @@ meta-directory (StackingDirectory is a directory that can do id
 conversion from the backing directory, use that one if you need
 it).
 
+Substring search behaviour is completely handled by the backings
+and applies to the missing entry as well. 
+Therefore a meta-directory has no property search_substring_fields
 
 Cross-references
 ----------------

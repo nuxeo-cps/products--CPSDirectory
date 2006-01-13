@@ -55,6 +55,9 @@ class MetaDirectory(BaseDirectory):
 
     meta_type = 'CPS Meta Directory'
 
+    _properties = tuple(prop for prop in BaseDirectory._properties
+                        if prop['id'] != 'search_substring_fields')
+
     security = ClassSecurityInfo()
 
     backing_dir_infos = ()
