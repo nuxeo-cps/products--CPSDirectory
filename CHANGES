@@ -9,6 +9,7 @@ Bug fixes:
 - #618: Fixed use of fields with "read ignore storage" for SQLDirectory and
   LDAPBackingDirectory.
 - Fixed hasEntry permission checking.
+- #995: MetaDirectory sometimes does useless searches in some backings
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Removed obsolete widget types registration.
@@ -17,3 +18,5 @@ New internal features:
   publicly available in fields' TALES expressions context. They are no longuer
   part of the DirectoryTool but in a seperate non persistent util module.
 - CPS css_slot was renamed style_slot to comply with later CMF/Zope 3 standard.
+- CPSDirectory.utils.QueryMatcher: small object to prepare queries/match them with
+  entries.
