@@ -407,9 +407,6 @@ class MetaDirectory(BaseDirectory):
         qs.sort()
         b_queries = [t[1] for t in qs]
 
-        if getattr(self, 'pdb', False):
-            import pdb; pdb.set_trace()
-
         # Remove useless queries:
         qs = []
         base_list_provides = False
