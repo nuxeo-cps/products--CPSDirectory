@@ -129,7 +129,6 @@ class TestDirectoryTool(ZopeTestCase):
         self.assertEquals(dir.searchEntries(groups='group2'),
                           ['iliketuples', 'user1'])
 
-
         # Unexisting user triggers KeyError
         # XXX: is this the same behavior for all directory backends?
         self.assertRaises(KeyError,
