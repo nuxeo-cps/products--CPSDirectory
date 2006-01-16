@@ -336,7 +336,6 @@ class MetaDirectory(BaseDirectory):
         for info in self.getBackingDirectories():
             b_dir = info['dir']
             field_ignore = info['field_ignore']
-            field_rename = info['field_rename']
             field_rename_back = info['field_rename_back']
             b_field_ids = b_dir._getFieldIds()
             b_id_field = b_dir.id_field
@@ -427,6 +426,7 @@ class MetaDirectory(BaseDirectory):
         for info, b_return_fields, b_query, b_matched in b_queries:
             b_dir = info['dir']
             missing_entry = info['missing_entry']
+            b_field_rename = info['field_rename']
             has_missing_entries = missing_entry is not None
 
             # Do query
@@ -444,7 +444,7 @@ class MetaDirectory(BaseDirectory):
                 for id, b_entry in b_res:
                     entry = {}
                     for b_fid, value in b_entry.items():
-                        fid = field_rename.get(b_fid, b_fid)
+                        fid = b_field_rename.get(b_fid, b_fid)
                         entry[fid] = value
                     res.append((id, entry))
 

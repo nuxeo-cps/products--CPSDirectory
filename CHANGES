@@ -11,6 +11,8 @@ Bug fixes:
 - Fixed hasEntry permission checking.
 - #995: MetaDirectory sometimes does useless searches in some backings
 - Interface clarification about MetaDirectory and substring searches
+- #1266: Metadirectory doesn't rename properly the fields of the 
+         backing directories
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - Removed obsolete widget types registration.

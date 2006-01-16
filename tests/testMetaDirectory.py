@@ -111,8 +111,8 @@ class TestMetaDirectory(ZopeTestCase):
               'field_ignore': ('pasglop',),
               },
              {'dir_id': 'dirbar',
-              'field_rename': {'mail': 'email'}, # back:meta
-              },
+              'field_rename': {'mail': 'email'}, # convention is back:meta
+                 },
              ))
 
         self.dirfoo = dtool.dirfoo
@@ -322,6 +322,84 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         res = dir.searchEntries(pasglop='arg', return_fields=['pasglop'])
         res.sort()
         self.assertEquals(res, [('DDD', {}), ('EEE', {})])
+
+    def test_searchEntries_renames_1266(self):
+        # use-case of bug #1266: renames couldn't work in _searchEntries
+        # for two dirs at once
+        dir = self.dirmeta
+        dir.setBackingDirectories(
+            ({'dir_id': 'dirfoo',
+              'field_rename': {'pasglop': 'glop',}, # convention is back:meta
+              },
+             {'dir_id': 'dirbar',
+              'field_rename': {'mail': 'email'}, 
+                 },
+             ))
+
+        fooentry = {'idd': 'DDD', 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': 'DDD', 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        res = dir.searchEntries(id='DDD', return_fields=['glop', 'email', ])
+        self.assertEquals(res, [('DDD', {'glop' : 'arg', 'email': 'me@here'})])
+        
+    def test_searchEntries_renames_notinj(self):
+        # two different ids in the meta but same field ids in backings
+
+        dtool = self.portal.portal_directories
+        stool = self.portal.portal_schemas
+
+        # we need a new backing        
+        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+        from Products.CPSDirectory.MetaDirectory import MetaDirectory
+        dirbabar = ZODBDirectory('dirbabar', schema='sbar', id_field='id',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirbabar.getId(), dirbabar)
+        self.dirbabar = dtool.dirbabar
+
+        s = FakeSchema({
+            'id': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeField(),
+            'email': FakeField(),
+            'email_babar' : FakeField(),
+            })
+        stool._setObject('smeta_babar', s)
+
+        dirmeta_babar = MetaDirectory('dirmeta_babar',
+                                     schema='smeta_babar', id_field='id',
+                title_field='bar',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirmeta_babar.getId(), dirmeta_babar)
+
+        dir = dtool.dirmeta_babar
+        dir.setBackingDirectories( 
+            ({'dir_id': 'dirbar',
+              'field_rename': {'mail': 'email'}, # convention is back:meta
+                 },
+             {'dir_id': 'dirbabar',
+              'field_rename': {'mail': 'email_babar'}, 
+                 },
+             ))
+
+        barentry = {'id': 'DDD', 'bar': 'brr', 'mail': 'me@here'}
+        babarentry = {'id': 'DDD', 'bar': 'sss', 'mail': 'babar@here'}
+        self.dirbar.createEntry(barentry)
+        self.dirbabar.createEntry(babarentry)
+        res = dir.searchEntries(id='DDD',
+                                return_fields=['email', 'email_babar'])
+        self.assertEquals(res, [('DDD', {'email_babar' : 'babar@here',
+                                         'email': 'me@here'})])
 
     def testSearchSubstrings(self):
         # most of this test is a copy/paste from the one in ZODB Directory
