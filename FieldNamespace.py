@@ -69,7 +69,7 @@ def crossSetList(self, dir_id, field_id, value, entry_ids):
         if id in entry_ids:
             continue
         # Remove the value from the field
-        values = entry[field_id]
+        values = list(entry[field_id])
         if value not in values:
             # Sanity check, in case the search had weird semantics
             continue
@@ -82,7 +82,7 @@ def crossSetList(self, dir_id, field_id, value, entry_ids):
     for id in entry_ids.difference(ids_with_value):
         entry = dir._getEntryKW(id, field_ids=[field_id])
         # Add the value to the field
-        values = entry[field_id]
+        values = list(entry[field_id])
         if value in values:
             # Sanity check, in case the search had weird semantics
             continue
