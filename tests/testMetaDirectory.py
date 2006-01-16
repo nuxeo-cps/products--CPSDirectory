@@ -506,8 +506,6 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         self.assertEquals(res, [('DDD', {'foo': 'ouah'}),
                                 ('EEE', {'foo': 'defaultfoo'})])
 
-    # XXX must have test with a search on a field from a missing entry
-
     def test_searchEntries(self):
         # TODO FIXME: the code doesn't treat the case where we
         # do a search on an attribute that's in the missing entry.
