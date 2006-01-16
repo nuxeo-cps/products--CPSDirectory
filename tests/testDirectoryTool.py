@@ -121,6 +121,15 @@ class TestDirectoryTool(ZopeTestCase):
         self.assertEquals(dir.searchEntries(groups='group2'), ['user1'])
         self.assertEquals(dir.searchEntries(groups='group3'), [])
 
+        # Regression test for bug #1265 (tuple safeness)
+        dir.createEntry({'id': 'iliketuples', 'groups': ('group2',)})
+        # removing user1 out of group1 and putting iliketuples instead
+        crossSetList(portal, dir_id, 'groups', 'group1', ['iliketuples'])
+        self.assertEquals(dir.searchEntries(groups='group1'), ['iliketuples'])
+        self.assertEquals(dir.searchEntries(groups='group2'),
+                          ['iliketuples', 'user1'])
+
+
         # Unexisting user triggers KeyError
         # XXX: is this the same behavior for all directory backends?
         self.assertRaises(KeyError,
