@@ -62,7 +62,7 @@
       zcml:condition="installed ldap"
       class=".LDAPBackingDirectory.LDAPBackingDirectory"
       meta_type="CPS LDAP Backing Directory"
-      addview="addSQLDirectory.html"
+      addview="addLDAPBackingDirectory.html"
       permission="cmf.ManagePortal"
       global="False"
       />
