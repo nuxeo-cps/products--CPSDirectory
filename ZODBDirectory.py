@@ -188,7 +188,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
             except (AttributeError, KeyError):
                 # ExtensionClasses raise KeyError... duh.
                 pass
-        self.editEntry(entry)
+        self._editEntry(entry)
         if not self.isUserModified():
             self.setUserModified(True)
 
