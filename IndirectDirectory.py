@@ -178,14 +178,13 @@ class IndirectDirectory(BaseDirectory):
                     raise KeyError("Entry '%s' does not exist in directory '%s'"
                                    % (entry_id, directory_id,))
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory.
 
         Deleting an entry from the indirect directory consists in removing the
         indirect id from the list of references.
         """
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist !" % id)
         object_ids_list = list(self.object_ids)

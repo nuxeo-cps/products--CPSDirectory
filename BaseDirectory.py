@@ -504,6 +504,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def deleteEntry(self, id):
         """Delete an entry in the directory.
         """
+        self.checkDeleteEntryAllowed(id=id)
+        self._deleteEntry(id)
+
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
+        """Delete an entry in the directory, unrestricted.
+        """
         raise NotImplementedError
 
     #

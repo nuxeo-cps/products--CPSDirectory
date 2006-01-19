@@ -206,10 +206,9 @@ class SQLDirectory(BaseDirectory, Cacheable):
         # XXX depends on SQL dialect
         return None
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("No entry %s" % `id`)
         sql = "DELETE FROM %(table)s WHERE %(idf)s = %(id)s" % {

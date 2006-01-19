@@ -337,10 +337,9 @@ class LDAPDirectory(BaseDirectory):
             id = rdn + ',' + base
             return id
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed(id=id)
         user_dn = self._getLDAPEntry(id)['dn']
         msg = self._delegate.delete(dn=to_utf8(user_dn))
         if msg:

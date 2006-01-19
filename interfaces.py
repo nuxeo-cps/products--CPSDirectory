@@ -130,6 +130,10 @@ class IDirectory(Interface):
         or None.
         """
 
+    def _deleteEntry(id):
+        """Delete an entry in the directory, unrestricted.
+        """
+
     def _getEntry(id, **kw):
         """Get entry filtered by processes but not acls.
         """

@@ -275,12 +275,12 @@ class LocalDirectory(BaseDirectory):
         except AttributeError:
             raise NotImplementedError
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory.
         """
         ob = self._getContent()
-        return ob.deleteEntry(id)
+        return ob._deleteEntry(id)
 
     # These next two are probably not needed, since they are internal.
     security.declarePrivate('_getAdapters')

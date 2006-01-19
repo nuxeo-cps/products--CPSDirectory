@@ -153,10 +153,9 @@ class StackingDirectory(BaseDirectory):
         adapter = self._getAdapters(id, creation=1)[0]
         adapter._setData(data=entry)
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         id_field = self.id_field
@@ -165,7 +164,7 @@ class StackingDirectory(BaseDirectory):
             if id_field == b_dir.id_field:
                 # Use primary id
                 try:
-                    b_dir.deleteEntry(id)
+                    b_dir._deleteEntry(id)
                     done = 1
                 except KeyError:
                     pass
@@ -179,7 +178,7 @@ class StackingDirectory(BaseDirectory):
                             "Got several entries when asking %s about %s=%s" %
                             (b_dir.getId(), id_field, id))
                     for b_id in b_ids:
-                        b_dir.deleteEntry(b_id)
+                        b_dir._deleteEntry(b_id)
                     done = 1
         if not done:
             raise KeyError(id)

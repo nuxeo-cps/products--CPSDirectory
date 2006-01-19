@@ -288,10 +288,9 @@ class MetaDirectory(BaseDirectory):
             adapter.setContextObject(id)
         dm._commit()
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         for info in self.getBackingDirectories():
@@ -299,7 +298,7 @@ class MetaDirectory(BaseDirectory):
             # Get id XXX maybe convert
             b_id = id
             try:
-                b_dir.deleteEntry(b_id)
+                b_dir._deleteEntry(b_id)
             except KeyError:
                 if info['missing_entry'] is None:
                     raise

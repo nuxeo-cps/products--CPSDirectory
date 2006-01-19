@@ -181,10 +181,9 @@ class GroupsDirectory(BaseDirectory):
         aclu.userFolderAddGroup(group)
         self.editEntry(entry)
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory."""
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("Group '%s' does not exist" % id)
         aclu = self.acl_users

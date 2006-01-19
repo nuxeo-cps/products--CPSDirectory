@@ -197,9 +197,9 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         """ unrestricted method to edit an entry and invalidate the cache. """
         BaseDirectory._editEntry(self, entry, check_acls)
         self.ZCacheable_invalidate()
-        
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """@summary: Delete an entry in the directory.
 
         Set the isUserModified flag
@@ -207,13 +207,12 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         @param id: entry identifiant
         @type id: @String
         """
-        self.checkDeleteEntryAllowed(id=id)
         if not self._hasEntry(id):
             raise KeyError("Entry '%s' does not exist" % id)
         self._delObject(id)
         if not self.isUserModified():
             self.setUserModified(True)
-        self.ZCacheable_invalidate()        
+        self.ZCacheable_invalidate()
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):

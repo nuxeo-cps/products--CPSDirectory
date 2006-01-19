@@ -215,11 +215,10 @@ class RolesDirectory(BaseDirectory):
         aclu.userFolderAddRole(role)
         self.editEntry(entry)
 
-    security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    security.declarePrivate('_deleteEntry')
+    def _deleteEntry(self, id):
         """Delete an entry in the directory.
         """
-        self.checkDeleteEntryAllowed(id=id)
         aclu = self.acl_users
         aclu.userFolderDelRoles( (id,))
 
