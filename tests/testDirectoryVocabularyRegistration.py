@@ -4,8 +4,7 @@ from Testing import ZopeTestCase
 import unittest
 
 # Installing CPSDirectory to trigger registrations
-product_name = __name__.split('.')[0]
-ZopeTestCase.installProduct(product_name)
+ZopeTestCase.installProduct('CPSDirectory')
 
 class TestDirectoryVocabularyRegistration(unittest.TestCase):
 

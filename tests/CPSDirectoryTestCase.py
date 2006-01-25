@@ -1,82 +1,41 @@
-from Testing import ZopeTestCase
+# Copyright (c) 2003-2006 Nuxeo SAS <http://nuxeo.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# $Id$
 
-from Products.ExternalMethod.ExternalMethod import ExternalMethod
-from Products.CMFDefault.Portal import manage_addCMFSite
+from Products.CPSDefault.tests.CPSTestCase import CPSTestCase, MANAGER_ID
 
-# needed products
-ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
-ZopeTestCase.installProduct('CMFCore')
-ZopeTestCase.installProduct('CMFDefault')
-ZopeTestCase.installProduct('MailHost')
-ZopeTestCase.installProduct('CPSSchemas')
-ZopeTestCase.installProduct('CPSDocument')
-ZopeTestCase.installProduct('CPSInstaller')
-ZopeTestCase.installProduct('CPSDirectory')
-ZopeTestCase.installProduct('CPSUserFolder')
+# XXX FIXME: use a special profile installing what's needed for CPSDirectory to
+# work, e.g:
+# - CMF
+# - CPSUserFolder
+# - CPSDocument FlexibleTypeInformation
+# - CPSSchemas tools
+# - CPSDirectory
+# - default portal, user folder, directories, layouts and schemas
 
-# mandatory for CPSSchemas
-ZopeTestCase.installProduct('PortalTransforms')
-ZopeTestCase.installProduct('Epoz')
-# mandatory for CPSDocument
-ZopeTestCase.installProduct('Localizer')
-ZopeTestCase.installProduct('TranslationService')
-
-portal_name = 'portal'
-
-class CPSDirectoryTestCase(ZopeTestCase.PortalTestCase):
-
-    def getPortal(self):
-        if not hasattr(self.app, portal_name):
-            manage_addCMFSite(self.app,
-                              portal_name)
-        return self.app[portal_name]
+class CPSDirectoryTestCase(CPSTestCase):
 
     def afterSetUp(self):
-        # setup a user folder with groups instead of the standard user folder
-        self.portal.manage_delObjects(['acl_users'])
-        self.portal.manage_addProduct['CPSUserFolder'].addUserFolderWithGroups()
-        # add back test_user_1_ that's been deleted in old acl_users, and add
-        # the Manager role
-        self.portal.acl_users._doAddUser('test_user_1_', '', ['Manager'], [])
-
-        self.login('test_user_1_')
-
-        # Set portal
-        self.portal = self.getPortal()
-
-        # Install CPSDocument using the CMF installer, its installer will call
-        # the CPSSchemas installer.
-        cpsdocument_cmf_installer = ExternalMethod('cpsdocument_cmf_installer',
-                                                   '',
-                                                   'CPSDocument.install',
-                                                   'cmfinstall')
-        self.portal._setObject('cpsdocument_cmf_installer',
-                               cpsdocument_cmf_installer)
-        self.portal.cpsdocument_cmf_installer()
-        # Install CPSDirectory
-        cpsdirectory_installer = ExternalMethod('cpsdirectory_installer',
-                                                '',
-                                                'CPSDirectory.install',
-                                                'install')
-        self.portal._setObject('cpsdirectory_installer', cpsdirectory_installer)
-        self.portal.cpsdirectory_installer()
-
+        self.login(MANAGER_ID)
+        CPSTestCase.afterSetUp(self)
         # set useful nammings
         self.pd = self.portal.portal_directories
         self.pv = self.portal.portal_vocabularies
 
-        # login as default CPS Manager
-        try:
-            self.login('manager')
-        except AttributeError:
-            manager_entry = {
-                'id': 'manager',
-                'sn': 'CPS',
-                'givenName': 'Manager',
-                'roles': ['Manager'],
-                }
-            self.pd.members.createEntry(manager_entry)
-            self.login('manager')
-
     def beforeTearDown(self):
+        CPSTestCase.beforeTearDown(self)
         self.logout()
