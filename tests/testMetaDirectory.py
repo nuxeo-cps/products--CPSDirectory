@@ -345,6 +345,7 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         
     def test_searchEntries_renames_notinj(self):
         # two different ids in the meta but same field ids in backings
+        # XXX an entire test case for this setting would be more appropriate
 
         dtool = self.portal.portal_directories
         stool = self.portal.portal_schemas
@@ -512,7 +513,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         ids.sort()
         okids = ['LDA', 'LDB']
         self.assertEquals(okids, ids)
-
+v
     def test_hasEntry(self):
         id = 'XOR'
         self.failIf(self.dirmeta.hasEntry(id))
@@ -585,8 +586,6 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
                                 ('EEE', {'foo': 'defaultfoo'})])
 
     def test_searchEntries(self):
-        # TODO FIXME: the code doesn't treat the case where we
-        # do a search on an attribute that's in the missing entry.
         dir = self.dirmeta
 
         entry1 = {'id': 'AAA', 'foo': 'oof', 'bar': 'rab', 'email': 'lame@at'}
@@ -615,8 +614,9 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         ids.sort()
         self.assertEquals(ids, ['DDD'])
         
-        # produces empty search in dirbar but query cannot match dirfoo's
-        # missing entry. search in dirbar shouldn't be done at all (bug #995)
+        # used to produce empty search in dirbar. Since query cannot match
+        # dirfoo's missing entry. search in dirbar shouldn't be done at all
+        # (see https://svn.nuxeo.org/trac/pub/ticket/995)
         self.dirbar.tests_called_search = False
         ids = dir.searchEntries(foo='oo')
         ids.sort()
