@@ -35,6 +35,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     #
     # Members
     #
+
     def testDefaultMembers(self):
         members = self.pd.members
 
@@ -105,9 +106,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
                              })
         member_ids = [member_id1, member_id2]
 
-        ### Without substrings, cache is cleared when changing config
-        members.manage_changeProperties(search_substring_fields=[])
-
         # Basic searches
         res = members.searchEntries(id=member_id1)
         self.assertEquals(res, [member_id1])
@@ -124,35 +122,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         res = members.searchEntries(id=member_id1, email=[member_email2])
         self.assertEquals(res, [])
 
-        # Failing substring searches
-        res = members.searchEntries(id='new_mem')
-        self.assertEquals(res, [])
-        res = members.searchEntries(email='exam')
-        self.assertEquals(res, [])
-        res = members.searchEntries(email='example@mail') # different case
-        self.assertEquals(res, [])
-
-        ### With substrings, cache is cleared when changing config
-        members.manage_changeProperties(
-            search_substring_fields=['id', 'email'])
-
-        # Basic searches
-        res = members.searchEntries(id=member_id1)
-        self.assertEquals(res, [member_id1])
-        res = members.searchEntries(id=[member_id1])
-        self.assertEquals(res, [member_id1])
-        res = members.searchEntries(email=member_email1)
-        self.assertEquals(res, [member_id1])
-        res = members.searchEntries(email=[member_email1])
-        self.assertEquals(res, [member_id1])
-
-        # Multi-field searches
-        res = members.searchEntries(id=member_id1, email=[member_email1])
-        self.assertEquals(res, [member_id1])
-        res = members.searchEntries(id=member_id1, email=[member_email2])
-        self.assertEquals(res, [])
-
-        # Substring searches
+        # Substring searches: id and email are set as substring fields
         res = members.searchEntries(id='new_mem')
         self.assertEquals(res, member_ids)
         res = members.searchEntries(email='EXAM')
@@ -175,6 +145,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     #
     # Groups
     #
+
     def testDefaultGroups(self):
         groups = self.pd.groups
         self.assertEquals(groups.listEntryIds(), [])
@@ -227,9 +198,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         members.createEntry({'id': member_id2, 'groups': [group_id,]})
         member_ids = [member_id1, member_id2]
 
-        ### Without substrings, cache is cleared when changing config
-        groups.manage_changeProperties(search_substring_fields=[])
-
         # Basic searches
         res = groups.searchEntries(members=member_ids)
         self.assertEquals(res, [group_id])
@@ -246,36 +214,9 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         res = groups.searchEntries(members=member_id1, group=group_id)
         self.assertEquals(res, [group_id])
 
-        # Failing substring searches
+        # Substring searches: group is set as substring fields
         res = groups.searchEntries(members='new_mem')
-        self.assertEquals(res, [])
-        res = groups.searchEntries(group='new_gro')
-        self.assertEquals(res, [])
-
-
-        ### With substrings, cache is cleared when changing config
-        groups.manage_changeProperties(
-            search_substring_fields=['group', 'members'])
-
-        # Basic searches
-        res = groups.searchEntries(members=member_ids)
-        self.assertEquals(res, [group_id])
-        res = groups.searchEntries(members=[member_id1])
-        self.assertEquals(res, [group_id])
-        res = groups.searchEntries(members=member_id1)
-        self.assertEquals(res, [group_id])
-        res = groups.searchEntries(group=group_id)
-        self.assertEquals(res, [group_id])
-        res = groups.searchEntries(group=[group_id])
-        self.assertEquals(res, [group_id])
-
-        # Multi-field searches
-        res = groups.searchEntries(members=member_id1, group=group_id)
-        self.assertEquals(res, [group_id])
-
-        # Substring searches
-        res = groups.searchEntries(members='new_mem')
-        self.assertEquals(res, [group_id])
+        self.assertEquals(res, []) # do not substring on members
         res = groups.searchEntries(group='new_group')
         self.assertEquals(res, [group_id])
         res = groups.searchEntries(group='new_gro')
@@ -288,35 +229,27 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
     #
     # Roles
     #
-    # FIXME: this test is desactivated because new roles can be added by
-    # other products
-    def _testDefaultRoles(self):
-        # XXX this test assumes too much about existing roles.
+
+    def testDefaultRoles(self):
         roles = self.pd.roles
-
-        okroles1 = ['Manager', 'Member', 'Reviewer',
-                    'SectionManager', 'SectionReader', 'SectionReviewer',
-                    'WorkspaceManager', 'WorkspaceMember', 'WorkspaceReader']
-        okroles2 = okroles1[:] + ['ForumModerator', 'ForumPoster']
-        okroles1.sort()
-        okroles2.sort()
-
+        okroles = ['Manager', 'Member']
         res = roles.listEntryIds()
         res.sort()
-        if res == okroles2:
-            okroles = okroles2
-        else:
-            okroles = okroles1
         self.assertEquals(res, okroles)
 
         res = roles.searchEntries()
         res.sort()
         self.assertEquals(res, okroles)
 
+        res = roles.searchEntries(role='Manager')
+        res.sort()
+        self.assertEquals(res, ['Manager'])
+
         for role in okroles:
             self.assertRaises(KeyError, roles.createEntry, {'role': role})
-        for role in ('Anonymous', 'Authenticated', 'Owner', ''):
-            self.assertRaises(KeyError, roles.createEntry, {'role': role})
+        # XXX AT: dont think this is still ok (?)
+        #for role in ('Anonymous', 'Authenticated', 'Owner', ''):
+        #    self.assertRaises(KeyError, roles.createEntry, {'role': role})
 
     def testRoleCreation(self):
         roles = self.pd.roles
@@ -335,9 +268,8 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
 
         self.assertRaises(KeyError, roles.createEntry, {'role': role_id})
 
-        # XXX: not implemented yet
-        #roles.deleteEntry(role_id)
-        #self.assert_(not roles.hasEntry(role_id))
+        roles.deleteEntry(role_id)
+        self.assert_(not roles.hasEntry(role_id))
 
     def testRoleSearch(self):
         roles = self.pd.roles
@@ -351,9 +283,6 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         members.createEntry({'id': member_id2, 'roles': [role_id,]})
         member_ids = [member_id1, member_id2]
 
-        ### Without substrings, cache is cleared when changing config
-        roles.manage_changeProperties(search_substring_fields=[])
-
         # Basic searches
         res = roles.searchEntries(members=member_ids)
         self.assertEquals(res, [role_id])
@@ -370,46 +299,15 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         res = roles.searchEntries(members=member_id1, role=role_id)
         self.assertEquals(res, [role_id])
 
-        # Failing substring searches
+        # Substring searches: only role is set as substring fields
         res = roles.searchEntries(members='new_mem')
-        self.assertEquals(res, [])
-        res = roles.searchEntries(role='new_rol')
-        self.assertEquals(res, [])
-
-        ### With substrings, cache is cleared when changing config
-        roles.manage_changeProperties(
-            search_substring_fields=['role', 'members'])
-
-        # Basic searches
-        res = roles.searchEntries(members=member_ids)
-        self.assertEquals(res, [role_id])
-        res = roles.searchEntries(members=[member_id1])
-        self.assertEquals(res, [role_id])
-        res = roles.searchEntries(members=member_id1)
-        self.assertEquals(res, [role_id])
-        res = roles.searchEntries(role=role_id)
-        self.assertEquals(res, [role_id])
-        res = roles.searchEntries(role=[role_id])
-        self.assertEquals(res, [role_id])
-
-        # Multi-field searches
-        res = roles.searchEntries(members=member_id1, role=role_id)
-        self.assertEquals(res, [role_id])
-
-        # Substring searches
-        res = roles.searchEntries(members='new_mem')
-        self.assertEquals(res, [role_id]) # never substring on members
+        self.assertEquals(res, []) # do not substring on members
         res = roles.searchEntries(role='new_rol')
         self.assertEquals(res, [role_id])
         res = roles.searchEntries(role='ew_rol')
         self.assertEquals(res, [role_id])
         res = roles.searchEntries(role=['new_rol']) # list implies exact match
         self.assertEquals(res, [])
-
-
-    #
-    # TODO: add a more complex scenario here
-    #
 
 
 def test_suite():
