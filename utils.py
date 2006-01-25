@@ -67,9 +67,6 @@ class QueryMatcher:
         """ Does the entry match the query ? Boolean valued.
         """
         search_types = self.match_types
-        # ignore empty queries
-        if not self.query:
-            return False
         ok = 1
         for key, value in self.query.items():
             searched = entry[key]
