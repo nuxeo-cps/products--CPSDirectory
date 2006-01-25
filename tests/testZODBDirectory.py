@@ -159,6 +159,12 @@ class TestZODBDirectory(ZopeTestCase):
         # FIXME?
         # self.assertEquals(res, ids)
 
+        # empty searches should not return anything
+        res = zdir.searchEntries(return_fields=['id'])
+        # FIXME, bug exists when return fields are provided (searchEntries()
+        # does not return anything)
+        #self.assertEquals(res, ids)
+
         # Multi-field searches
         res = zdir.searchEntries(idd=id1, foo=[foo1], bar='gra')
         self.assertEquals(res, [id1])
