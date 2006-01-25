@@ -66,8 +66,10 @@ class QueryMatcher:
     def match(self, entry):
         """ Does the entry match the query ? Boolean valued.
         """
-        
         search_types = self.match_types
+        # ignore empty queries
+        if not self.query:
+            return False
         ok = 1
         for key, value in self.query.items():
             searched = entry[key]
@@ -75,6 +77,7 @@ class QueryMatcher:
                 searched = (searched,)
             matched = 0
             for item in searched:
+                # FIXME? No wild cards like * are currently accepted
                 if search_types[key] == 'list':
                     matched = item in value
                 elif search_types[key] == 'substring':
@@ -87,7 +90,3 @@ class QueryMatcher:
                 ok = 0
                 break
         return ok == 1
-
-
-
-        

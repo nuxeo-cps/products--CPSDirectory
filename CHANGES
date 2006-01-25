@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Searches on ZODB directories using invalid keys returned all entries
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
