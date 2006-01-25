@@ -233,6 +233,10 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         matcher = QueryMatcher(kw, accepted_keys=self._getFieldIds(),
                                substring_keys=self.search_substring_fields)
 
+        # ignore empty queries
+        if not matcher.query:
+            return []
+
         # Compute needed fields from object.
         # All fields we need to return.
         field_ids_d, return_fields = self._getSearchFields(return_fields)
@@ -261,7 +265,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
 
         if keyset is not None:
             LOG('ZODBDirectory._searchEntries', TRACE, "Putting in cache")
-            self.ZCacheable_set(res, keywords=keyset)            
+            self.ZCacheable_set(res, keywords=keyset)
 
         return res
 

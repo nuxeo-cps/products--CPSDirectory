@@ -147,6 +147,17 @@ class TestZODBDirectory(ZopeTestCase):
         res = zdir.searchEntries(bar=['a123', '8'])
         self.assertEquals(res, [id1])
 
+        # search on inexistent keys should not return all entries
+        res = zdir.searchEntries(blurp='haha')
+        self.assertEquals(res, [])
+
+        # search that was possible on members/groups/roles
+        # directories and should be made on ZODB directories now that they are
+        # the default CPS directories (?)
+        res = zdir.searchEntries(idd='*')
+        # FIXME?
+        # self.assertEquals(res, ids)
+
         # Multi-field searches
         res = zdir.searchEntries(idd=id1, foo=[foo1], bar='gra')
         self.assertEquals(res, [id1])
@@ -157,7 +168,7 @@ class TestZODBDirectory(ZopeTestCase):
         res = zdir.searchEntries(foo=[foo1, foo2], bar='a123')
         self.assertEquals(res, [id1])
 
-        # Failing substring searches
+        # no search_substring_fields are set: no results
         res = zdir.searchEntries(idd='re')
         self.assertEquals(res, [])
         res = zdir.searchEntries(idd='tre')
@@ -197,7 +208,7 @@ class TestZODBDirectory(ZopeTestCase):
         # Note that these swallow AttributeErrors, making them look as a
         # cache misses
         zdir.REQUEST = self.app.REQUEST
-        
+
         man_id = 'cache_manager'
         dtool._setObject(man_id, RAMCacheManager(man_id))
         zdir.ZCacheable_setManagerId(man_id)
@@ -214,7 +225,7 @@ class TestZODBDirectory(ZopeTestCase):
         bar2 = ['812A', 'gra']
         e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
         zdir.createEntry(e2)
-        
+
         # filling the cache
         previous = zdir.searchEntries(idd=id1)
 
