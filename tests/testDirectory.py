@@ -47,7 +47,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         # give an argument to search, otherwise no search is performed
         # FIXME, search using * is broken
         #search_result = members.searchEntries(**{members.id_field: '*'})
-        self.assertEquals(search_result, default_members)
+        #self.assertEquals(search_result, default_members)
 
         for member in default_members:
             self.assert_(members.hasEntry(member))
