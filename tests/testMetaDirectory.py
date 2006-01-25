@@ -513,7 +513,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         ids.sort()
         okids = ['LDA', 'LDB']
         self.assertEquals(okids, ids)
-v
+
     def test_hasEntry(self):
         id = 'XOR'
         self.failIf(self.dirmeta.hasEntry(id))
