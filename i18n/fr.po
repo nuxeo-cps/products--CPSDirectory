@@ -42,14 +42,14 @@ msgstr "Choix de l'annuaire"
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr "Créer une nouvelle entrée"
+msgstr "Créer"
 
 #.   <span>Edit entry</span>
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
-msgstr "Modifier l'entrée"
+msgstr "Modifier"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
@@ -62,7 +62,7 @@ msgstr "Résultats de la recherche"
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
-msgstr "Chercher une entrée"
+msgstr "Chercher"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -81,7 +81,7 @@ msgstr "Liste des annuaires"
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
-msgstr "Voir l'entrée"
+msgstr "Voir"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -145,7 +145,7 @@ msgid "label_full_name"
 msgstr "Nom complet"
 
 msgid "cpsdir_label_delete_entry"
-msgstr "Supprimer l'entrée"
+msgstr "Supprimer"
 
 msgid "cpsdir_help_homeless"
 msgstr ""

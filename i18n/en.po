@@ -42,14 +42,14 @@ msgstr "Choose a directory"
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr "Create a new entry"
+msgstr "Create"
 
 #.   <span>Edit entry</span>
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
-msgstr "Edit entry"
+msgstr "Edit"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
@@ -62,7 +62,7 @@ msgstr "Search results"
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
-msgstr "Search an entry"
+msgstr "Search"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -81,7 +81,7 @@ msgstr "Up to Directories"
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
-msgstr "View entry"
+msgstr "View"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -144,7 +144,7 @@ msgid "label_full_name"
 msgstr "Full Name"
 
 msgid "cpsdir_label_delete_entry"
-msgstr "Delete entry"
+msgstr "Delete"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
