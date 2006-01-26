@@ -149,6 +149,8 @@ class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
                 continue
             role = str(child.getAttribute('role'))
             expr = self._getNodeText(child)
+            # delete if it exists
+            self.context.delEntryLocalRole(role)
             res = self.context.addEntryLocalRole(role, expr)
             if res:
                 # Compilation problem
