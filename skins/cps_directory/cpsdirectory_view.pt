@@ -23,9 +23,10 @@
       <p i18n:translate="choose_a_directory">Choose a directory</p>
       <dl>
         <tal:block repeat="dirname directories">
-          <tal:block define="dir dirtool/?dirname">
+          <tal:block define="dir dirtool/?dirname;
+            diricon python:here.getDirectoryIcon(dirname);">
           <dt>
-            <img tal:replace="structure python:here.getImgTag('UserFolder_icon.png', base_url=base_url)">
+            <img tal:replace="structure python:here.getImgTag(diricon, base_url=base_url)">
             <a href=""  i18n:translate=""
                tal:attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}"
                tal:content="dir/title_or_id">
