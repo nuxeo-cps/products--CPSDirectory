@@ -321,8 +321,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
                 LOG('_execute', TRACE, "Searching cache for %s" % (keyset,))
                 res = self.ZCacheable_get(keywords=keyset)
                 if res is not None:
-                    LOG('_execute', TRACE, " -> results=%s" %
-                        (res[0], res[1][:20],))
+                    LOG('_execute', TRACE, " -> results=%s" % (res[:20],))
                     return res
             else:
                 self.ZCacheable_invalidate()

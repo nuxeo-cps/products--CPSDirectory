@@ -22,7 +22,7 @@
 from zLOG import LOG, DEBUG, TRACE
 
 from cgi import escape
-from types import ListType, TupleType, StringType
+from copy import deepcopy
 from Globals import Persistent
 from Globals import InitializeClass
 from Acquisition import Implicit
@@ -221,12 +221,13 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         if self.ZCacheable_isCachingEnabled():
             keyset = {'return_fields' : return_fields}
             keyset.update(kw)
-            LOG('ZODBDirectory._searchEntries', TRACE, "Searching cache for %s" % (keyset,))
+            LOG('ZODBDirectory._searchEntries', TRACE,
+                "Searching cache for %s" % (keyset,))
             from_cache = self.ZCacheable_get(keywords=keyset)
             if from_cache is not None:
                 LOG('ZODBDirectory._searchEntries', TRACE, " -> results=%s" %
                     (from_cache[:20],))
-                return from_cache
+                return deepcopy(from_cache)
         else:
             keyset = None
 
@@ -263,7 +264,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
             LOG('ZODBDirectory._searchEntries', TRACE, "Putting in cache")
             self.ZCacheable_set(res, keywords=keyset)
 
-        return res
+        return deepcopy(res)
 
     #
     # Internal

@@ -218,9 +218,12 @@ class TestZODBDirectory(ZopeTestCase):
 
         man_id = 'cache_manager'
         dtool._setObject(man_id, RAMCacheManager(man_id))
+        dtool.REQUEST = self.app.REQUEST
+        getCacheReport = dtool.cache_manager.getCacheReport
         zdir.ZCacheable_setManagerId(man_id)
         self.assert_(zdir.ZCacheable_isCachingEnabled())
-        self.assert_(zdir.ZCacheable_getManager() == dtool[man_id])
+        self.assertEquals(zdir.ZCacheable_getManager(), dtool[man_id])
+
         id1 = 'tree'
         foo1 = 'green'
         bar1 = ['a123', 'gra']
@@ -233,39 +236,67 @@ class TestZODBDirectory(ZopeTestCase):
         e2 = {'idd': id2, 'foo': foo2, 'bar': bar2}
         zdir.createEntry(e2)
 
+        # cache not used yet
+        self.assertEquals(getCacheReport(), [])
+
         # filling the cache
-        previous = zdir.searchEntries(idd=id1)
+        res = zdir.searchEntries(idd=id1)
+        self.assertEquals(res, [id1])
+
+        # check cache is filled
+        self.assertEquals(len(getCacheReport()), 1)
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 0)
+
+        # check initial result not incorrectly mutable in cache
+        res.append('babar')
+        res2 = zdir.searchEntries(idd=id1)
+        self.assertEquals(res2, [id1])
+
+        # check cached result not incorrectly mutable
+        res.append('bibi')
+        res2 = zdir.searchEntries(idd=id1)
+        self.assertEquals(res2, [id1])
+
+        # check cache is used
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 2)
 
         # avoiding worst side-effects
-        res = zdir.searchEntries(idd=id2)
-        self.failIf(res is previous)
+        self.assertEquals(zdir.searchEntries(idd=id2), [id2])
+
+        # check cache is filled
+        self.assertEquals(len(getCacheReport()), 1)
+        self.assertEquals(getCacheReport()[0]['entries'], 2)
 
         # return_fields is part of the keys:
         res = zdir.searchEntries(idd=id1, return_fields=['foo'])
-        self.failIf(res is previous)
+        self.assertEquals(res, [(id1, {'foo': foo1})])
 
-        # replayed searches should come from cache
-        res = zdir.searchEntries(idd=id1)
-        self.assert_(res is previous)
+        # check not incorrectly mutable
+        res.append('babar')
+        res[0][1]['zap'] = 'zip'
+        res2 = zdir.searchEntries(idd=id1, return_fields=['foo'])
+        self.assertEquals(res2, [(id1, {'foo': foo1})])
 
         # editing entries clears the cache
         e2['foo'] = 'foo_new'
         zdir.editEntry(e2)
-        previous = res
-        res = zdir.searchEntries(idd=id1)
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(idd=id1), [id1])
+        self.assertEquals(len(getCacheReport()), 1)
 
         # deleting entry clears the cache
         zdir.deleteEntry(id2)
-        previous = res
-        res = zdir.searchEntries(idd=id1)
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(idd=id1), [id1])
+        self.assertEquals(len(getCacheReport()), 1)
 
         # adding entries clears the cache
         zdir.createEntry(e2)
-        previous = res
-        res = zdir.searchEntries(idd=id1)
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(idd=id1), [id1])
+        self.assertEquals(len(getCacheReport()), 1)
 
     def testSearchSubstrings(self):
         zdir = self.dir

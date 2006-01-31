@@ -307,9 +307,11 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         # Note that these swallow AttributeErrors, making them look as a
         # cache misses
         zdir.REQUEST = self.app.REQUEST
-        
+
         man_id = 'cache_manager'
         dtool._setObject(man_id, RAMCacheManager(man_id))
+        dtool.REQUEST = self.app.REQUEST
+        getCacheReport = dtool.cache_manager.getCacheReport
         zdir.ZCacheable_setManagerId(man_id)
         self.assert_(zdir.ZCacheable_isCachingEnabled())
         self.assertEquals(zdir.ZCacheable_getManager(), dtool[man_id])
@@ -317,9 +319,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         id1 = 'tree'
         foo1 = 'green'
         bar1 = ['a123', 'gra']
-
         dn1 = 'uid=tree,ou=personnes,o=nuxeo,c=com'
-
         e1 = {'id': id1, 'dn' : dn1, 'foo': foo1, 'bar': bar1, 'cn' : 'e1'}
         zdir.createEntry(e1)
 
@@ -328,46 +328,71 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         bar2 = ['812A', 'gra']
         dn2 = 'uid=sea,ou=personnes,o=nuxeo,c=com'
         e2 = {'id': id2, 'dn' : dn2, 'foo': foo2, 'bar': bar2,  'cn' : 'e1'}
-
         zdir.createEntry(e2)
-        
+
+        # cache not used yet
+        self.assertEquals(getCacheReport(), [])
+
         # filling the cache
         res = zdir.searchEntries(id=id1)
-        self.assertEquals(len(res), 1)
-        previous = res[0]
+        self.assertEquals(res, [dn1])
+
+        # check cache is filled
+        self.assertEquals(len(getCacheReport()), 1)
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 0)
+
+        # check initial result not incorrectly mutable in cache
+        res.append('babar')
+        res2 = zdir.searchEntries(id=id1)
+        self.assertEquals(res2, [dn1])
+
+        # check cached result not incorrectly mutable
+        res.append('bibi')
+        res2 = zdir.searchEntries(id=id1)
+        self.assertEquals(res2, [dn1])
+
+        # check cache is used
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 2)
 
         # avoiding worst side-effects
-        res = zdir.searchEntries(id=id2)[0]
-        self.failIf(res is previous)
+        self.assertEquals(zdir.searchEntries(id=id2), [dn2])
+
+        # check cache is filled
+        self.assertEquals(len(getCacheReport()), 1)
+        self.assertEquals(getCacheReport()[0]['entries'], 2)
 
         # changing return_fields makes a difference for the cache
-        res = zdir.searchEntries(id=id1, return_fields=['foo'])[0]
-        self.failIf(res is previous)
+        res = zdir.searchEntries(id=id1, return_fields=['bar'])
+        self.assertEquals(res, [(dn1, {'dn': dn1, 'bar': ['a123', 'gra']})])
 
-        # replayed searches should come from cache
-        res = zdir.searchEntries(id=id1)[0]
-        self.assert_(res is previous)
+        # check not incorrectly mutable
+        res.append('babar')
+        res[0][1]['zap'] = 'zip'
+        res[0][1]['bar'].append('zop')
+        res2 = zdir.searchEntries(id=id1, return_fields=['bar'])
+        self.assertEquals(res2, [(dn1, {'dn': dn1, 'bar': ['a123', 'gra']})])
 
         # editing entries clears the cache
         e2['foo'] = 'foo_new'
         zdir.editEntry(e2)
-        previous = res
-        res = zdir.searchEntries(id=id1)[0]
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(id=id1), [dn1])
+        self.assertEquals(len(getCacheReport()), 1)
 
         # deleting entry clears the cache
         zdir.deleteEntry(dn2)
-        previous = res
-        res = zdir.searchEntries(id=id1)[0]
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(id=id1), [dn1])
+        self.assertEquals(len(getCacheReport()), 1)
 
         # adding entries clears the cache
         zdir.createEntry(e2)
-        previous = res
-        res = zdir.searchEntries(id=id1)[0]
-        self.failIf(res is previous)
+        self.assertEquals(len(getCacheReport()), 0)
+        self.assertEquals(zdir.searchEntries(id=id1), [dn1])
+        self.assertEquals(len(getCacheReport()), 1)
 
-        
 
 class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
 

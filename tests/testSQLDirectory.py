@@ -137,6 +137,46 @@ class TestSQLDirectory(ZopeTestCase):
         res = dir.searchEntries(sn=['Man', 'Blob'])
         self.assertEquals(res, ['sman', 'batman'])
 
+    def test_caching(self):
+        from Products.StandardCacheManagers.RAMCacheManager import (
+            RAMCacheManager)
+        self.makeEntries()
+        dir = self.dir
+        #dir.REQUEST = self.app.REQUEST
+        dtool = self.portal.portal_directories
+        dtool.REQUEST = self.app.REQUEST
+
+        man_id = 'cache_manager'
+        dtool._setObject(man_id, RAMCacheManager(man_id))
+        getCacheReport = dtool.cache_manager.getCacheReport
+        dir.ZCacheable_setManagerId(man_id)
+
+        # cache not used yet
+        self.assertEquals(getCacheReport(), [])
+
+        # filling the cache
+        res = dir.searchEntries(uid='sman')
+        self.assertEquals(res, ['sman'])
+
+        # check cache is filled
+        self.assertEquals(len(getCacheReport()), 1)
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 0)
+
+        # check initial result not incorrectly mutable in cache
+        res.append('babar')
+        res = dir.searchEntries(uid='sman')
+        self.assertEquals(res, ['sman'])
+
+        # check cached result not incorrectly mutable
+        res.append('bibi')
+        res = dir.searchEntries(uid='sman')
+        self.assertEquals(res, ['sman'])
+
+        # check cache is used
+        self.assertEquals(getCacheReport()[0]['entries'], 1)
+        self.assertEquals(getCacheReport()[0]['hits'], 2)
+
     def test_listEntryIdsAndTitles(self):
         self.makeEntries()
         dir = self.dir
