@@ -9,6 +9,7 @@ Bug fixes:
 - Searches on ZODB directories using invalid keys returned all entries
 - Existing entry local roles where not deleted before being imported.
 - #1338: fixed mutability problem in ZODB directory caching.
+- searchEntries returns only the entries with View ACL roles (#1346)
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

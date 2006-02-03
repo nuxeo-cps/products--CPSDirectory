@@ -465,7 +465,9 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return_fields=['*'] means to return all available fields.
         """
         self.checkSearchEntriesAllowed()
-        return self._searchEntries(return_fields=return_fields, **kw)
+        entries = self._searchEntries(return_fields=return_fields, **kw)
+        # Show only entries where View is allowed
+        return [entry for entry in entries if self.isViewEntryAllowed(entry[0])]
 
     security.declarePrivate('_searchEntries')
     def _searchEntries(self, return_fields=None, **kw):
