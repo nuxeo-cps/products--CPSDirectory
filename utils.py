@@ -21,7 +21,6 @@ used by CPSDirectory classes. """
 
 from types import ListType, TupleType, StringType
 
-
 class QueryMatcher:
     """ Hold/prepare a query and allow to match entries against it.
 
@@ -78,7 +77,7 @@ class QueryMatcher:
                 if search_types[key] == 'list':
                     matched = item in value
                 elif search_types[key] == 'substring':
-                    matched = item.lower().find(value) != -1
+                    matched = item.lower().find(value) != -1 or value == '*'
                 else: # search_types[key] == 'exact':
                     matched = item == value
                 if matched:

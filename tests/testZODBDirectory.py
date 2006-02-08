@@ -118,6 +118,15 @@ class TestZODBDirectory(ZopeTestCase):
         ids = [id1, id2]
         ids.sort()
 
+        ### With substrings
+        zdir.search_substring_fields = ['idd']
+
+        # search that was possible on members/groups/roles
+        # directories and should be made on ZODB directories now that they are
+        # the default CPS directories (?)
+        res = zdir.searchEntries(idd='*')
+        self.assertEquals(res, ids)
+
         ### Without substrings
         zdir.search_substring_fields = []
 
@@ -152,15 +161,8 @@ class TestZODBDirectory(ZopeTestCase):
         # FIXME
         #self.assertEquals(res, [])
 
-        # search that was possible on members/groups/roles
-        # directories and should be made on ZODB directories now that they are
-        # the default CPS directories (?)
-        res = zdir.searchEntries(idd='*')
-        # FIXME?
-        # self.assertEquals(res, ids)
-
         # empty searches should not return anything
-        res = zdir.searchEntries(return_fields=['id'])
+        res = zdir.searchEntries(return_fields=['idd'])
         # FIXME, bug exists when return fields are provided (searchEntries()
         # does not return anything)
         #self.assertEquals(res, ids)
