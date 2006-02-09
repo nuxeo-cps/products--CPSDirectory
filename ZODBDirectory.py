@@ -42,7 +42,6 @@ from Products.CPSDirectory.utils import QueryMatcher
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
-from Products.CPSDirectory.interfaces import IDirectory
 from Products.CPSDirectory.interfaces import IContentishDirectory
 
 from zope.interface import implements
