@@ -10,6 +10,7 @@ Bug fixes:
 - Existing entry local roles where not deleted before being imported.
 - #1338: fixed mutability problem in ZODB directory caching.
 - #1311: searching for * should return all results on ZODBDirectory
+- #1052: empty searches will not return any results
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

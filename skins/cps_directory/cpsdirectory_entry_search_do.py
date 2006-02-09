@@ -29,6 +29,10 @@ for field in result_fields:
     if field.get('process'):
         process_fields[field['id']] = field['process']
 
+# empty search will not return anything
+if not mapping:
+    return dir.cpsdirectory_entry_search_results(results=[]), 'results'
+
 try:
     results = dir.searchEntries(return_fields=return_fields, **mapping)
 except SearchSizeLimitExceeded, e:

@@ -165,6 +165,9 @@ class TestZODBDirectory(ZopeTestCase):
         res = zdir.searchEntries(return_fields=['id'])
         # FIXME, bug exists when return fields are provided (searchEntries()
         # does not return anything)
+        #
+        # XXX DIV: protection against empty searches was implemented at the
+        # zpt level, so this test is not needed anymore, right?
         #self.assertEquals(res, [])
 
         # Multi-field searches
