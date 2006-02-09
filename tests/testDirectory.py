@@ -81,7 +81,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
             'password': '',
             'confirm': '',
             'groups': [],
-            'roles': [],
+            'roles': ['Member'],
             'homeless': 0,
             }
         self.assertEquals(entry, entry_desc)
