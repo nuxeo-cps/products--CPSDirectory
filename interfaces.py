@@ -456,3 +456,7 @@ class IDirectory(Interface):
         Returns '' if no error, or the error text if a compilation
         error occured.
         """
+
+class IContentishDirectory(Interface):
+    """Directory with content
+    """

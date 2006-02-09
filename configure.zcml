@@ -18,6 +18,13 @@
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
+  <adapter
+      factory=".exportimport.ContentishDirectoryXMLAdapter"
+      provides="Products.GenericSetup.interfaces.IBody"
+      for=".interfaces.IContentishDirectory
+           Products.GenericSetup.interfaces.ISetupEnviron"
+      />
+
   <five:registerClass
       class=".MembersDirectory.MembersDirectory"
       meta_type="CPS Members Directory"

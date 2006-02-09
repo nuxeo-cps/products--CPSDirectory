@@ -11,6 +11,8 @@ Bug fixes:
 - #1338: fixed mutability problem in ZODB directory caching.
 - #1311: searching for * should return all results on ZODBDirectory
 - #1052: empty searches will not return any results
+- #1294: even when importing a base profile, directory content shouldn't be 
+  erased.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

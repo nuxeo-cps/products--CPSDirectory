@@ -35,7 +35,7 @@ from Products.GenericSetup.interfaces import IBody
 from Products.GenericSetup.interfaces import ISetupEnviron
 from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
-
+from Products.CPSDirectory.interfaces import IContentishDirectory
 
 TOOL = 'portal_directories'
 NAME = 'directories'
@@ -90,6 +90,18 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
         self._initProperties(node)
         self._initObjects(node)
         self._logger.info("Directory tool imported.")
+
+    def _purgeObjects(self):
+        parent = self.context
+        for obj_id in parent.objectIds():
+            dir = parent._getOb(obj_id)
+            # it's a Directory with content (potentially)
+            if IContentishDirectory.providedBy(dir):
+                # if the directory has entries, don't delete it
+                if dir.searchEntries():
+                    continue
+            parent._delObject(obj_id)
+
 
 class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
                           PostProcessingPropertyManagerHelpers):
@@ -155,3 +167,10 @@ class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
             if res:
                 # Compilation problem
                 raise ValueError(res)
+
+class ContentishDirectoryXMLAdapter(DirectoryXMLAdapter):
+    """XML importer and exporter for a directory.
+    """
+
+    adapts(IContentishDirectory, ISetupEnviron)
+    implements(IBody)
