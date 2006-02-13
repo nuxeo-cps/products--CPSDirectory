@@ -25,14 +25,6 @@
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
-  <adapter
-      factory=".exportimport.DirectoryEntryXMLAdapter"
-      provides="Products.GenericSetup.interfaces.IBody"
-      for=".interfaces.IDirectoryEntry
-           Products.GenericSetup.interfaces.ISetupEnviron"
-      />
-
-
   <five:registerClass
       class=".MembersDirectory.MembersDirectory"
       meta_type="CPS Members Directory"
@@ -144,13 +136,6 @@
       class=".LDAPDirectoryVocabulary.LDAPDirectoryVocabulary"
       meta_type="CPS LDAP Directory Vocabulary"
       addview="addLDAPDirectoryVocabulary.html"
-      permission="cmf.ManagePortal"
-      global="False"
-      />
-
-  <five:registerClass
-      class=".ZODBDirectory.ZODBDirectoryEntry"
-      meta_type="CPS ZODB Directory Entry"
       permission="cmf.ManagePortal"
       global="False"
       />

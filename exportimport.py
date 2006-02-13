@@ -32,16 +32,10 @@ from Products.CPSUtil.cachemanagersetup import CacheableHelpers
 from zope.component import adapts
 from zope.interface import implements
 from Products.GenericSetup.interfaces import IBody
-from Products.GenericSetup.interfaces import INode
 from Products.GenericSetup.interfaces import ISetupEnviron
 from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
-from Products.CPSDirectory.interfaces import IDirectoryEntry
 from Products.CPSDirectory.interfaces import IContentishDirectory
-
-from zope.app import zapi
-
-import Products
 
 TOOL = 'portal_directories'
 NAME = 'directories'
@@ -104,7 +98,7 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
             # it's a Directory with content (potentially)
             if IContentishDirectory.providedBy(dir):
                 # if the directory has entries, don't delete it
-                if dir._searchEntries():
+                if dir.searchEntries():
                     continue
             parent._delObject(obj_id)
 
@@ -123,7 +117,6 @@ class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
         """Export the object as a DOM node.
         """
         node = self._getObjectNode('object')
-        node.appendChild(self._extractObjects())
         node.appendChild(self._extractProperties())
         node.appendChild(self._extractEntryLR())
         child = self._extractCacheableManagerAssociation()
@@ -181,149 +174,3 @@ class ContentishDirectoryXMLAdapter(DirectoryXMLAdapter):
 
     adapts(IContentishDirectory, ISetupEnviron)
     implements(IBody)
-
-    def _extractObjects(self):
-        fragment = self._doc.createDocumentFragment()
-        for item in self.context._searchEntries():
-            entry = self.context._getOb(item)
-            exporter = zapi.queryMultiAdapter((entry, self.environ), INode)
-            if not exporter:
-                raise ValueError("Entry %s cannot be adapted to INode" % entry)
-            fragment.appendChild(exporter.node)
-        return fragment
-
-    def _initObjects(self, node):
-        parent = self.context
-        entries = parent._searchEntries()
-        for child in node.childNodes:
-            if child.nodeName != 'object':
-                continue
-            if child.hasAttribute('deprecated'):
-                continue
-            obj_id = str(child.getAttribute('name'))
-            if obj_id not in entries:
-                meta_type = str(child.getAttribute('meta_type'))
-                __traceback_info__ = obj_id, meta_type
-                for mt_info in Products.meta_types:
-                    if mt_info['name'] == meta_type:
-                        parent._setObject(obj_id, mt_info['instance'](obj_id))
-                        break
-                else:
-                    raise ValueError("unknown meta_type '%s'" % meta_type)
-            obj = getattr(parent, obj_id)
-            importer = zapi.queryMultiAdapter((obj, self.environ), INode)
-            if importer:
-                importer.node = child
-
-    def _exportNode(self):
-        """Export the object as a DOM node.
-        """
-        node = self._getObjectNode('object')
-        node.appendChild(self._extractObjects())
-        node.appendChild(self._extractProperties())
-        node.appendChild(self._extractEntryLR())
-        child = self._extractCacheableManagerAssociation()
-        if child is not None:
-            node.appendChild(child)
-
-        self._logger.info("%r directory exported." % self.context.getId())
-        return node
-
-    def _importNode(self, node):
-        """Import the object from the DOM node.
-        """
-        self._initProperties(node)
-        self._initEntryLR(node)
-        # XXX disabled for now, until I fix the base profile import
-        #self._initObjects(node)
-
-        self._logger.info("%r directory imported." % self.context.getId())
-
-
-class DirectoryEntryXMLAdapter(XMLAdapterBase,
-                               PropertyManagerHelpers):
-    """XML importer and exporter for a directory.
-    """
-
-    adapts(IDirectoryEntry, ISetupEnviron)
-    implements(IBody)
-    __used_for__ = IDirectoryEntry
-
-    _LOGGER_ID = NAME
-
-    def _exportNode(self):
-        """Export the object as a DOM node.
-        """
-        node = self._getObjectNode('object')
-        # XXX: maybe extractObject isn't needed, after all
-        node.appendChild(self._extractProperties())
-        self._logger.info("%r directory entry exported." % self.context.getId())
-        return node
-
-    def _importNode(self, node):
-        """Import the object from the DOM node.
-        """
-        self._initProperties(node)
-        self._logger.info("%s imported." % self.context.getId())
-
-    def _extractProperties(self):
-        fragment = self._doc.createDocumentFragment()
-        entry = self.context
-        self._logger.info("directory entry: %s" % entry)
-
-        for key, value in entry.__dict__.items():
-            ### FIXME: maybe _owner should be exported
-            if key not in ['__name__', 'id', '_owner']:
-                node = self._doc.createElement('property')
-                node.setAttribute('name', key)
-                if isinstance(value, (tuple, list)):
-                    for item in value:
-                        child = self._doc.createElement('element')
-                        # XXX item should be encoded?
-                        child.setAttribute('value', item.decode('ISO-8859-15').encode('utf-8'))
-                        node.appendChild(child)
-                else:
-                    if isinstance(value, bool):
-                        prop = str(bool(value))
-                    elif isinstance(value, basestring):
-                        # XXX value should be encoded?
-                        prop = str(value.decode('ISO-8859-15').encode('utf-8'))
-                    else:
-                        raise ValueError("item: {'%s': '%s'} cannot be exported" % (key, value))
-                    child = self._doc.createTextNode(prop)
-                    node.appendChild(child)
-                fragment.appendChild(node)
-        return fragment
-
-    def _initProperties(self, node):
-        self.context.i18n_domain = node.getAttribute('i18n:domain')
-        for child in node.childNodes:
-            if child.nodeName != 'property':
-                continue
-            obj = self.context
-            prop_id = str(child.getAttribute('name'))
-
-            elements = []
-            for sub in child.childNodes:
-                if sub.nodeName == 'element':
-                    elements.append(sub.getAttribute('value').encode('utf-8'))
-
-            if elements:
-                prop_value = tuple(elements) or ()
-            elif prop_map.get('type') == 'boolean':
-                prop_value = self._convertToBoolean(self._getNodeText(child))
-            else:
-                # if we pass a *string* to _updateProperty, all other values
-                # are converted to the right type
-                prop_value = self._getNodeText(child).encode('utf-8')
-
-            if not self._convertToBoolean(child.getAttribute('purge')
-                                          or 'True'):
-                # If the purge attribute is False, merge sequences
-                prop = obj.getProperty(prop_id)
-                if isinstance(prop, (tuple, list)):
-                    prop_value = (tuple([p for p in prop
-                                         if p not in prop_value]) +
-                                  tuple(prop_value))
-
-            obj._updateProperty(prop_id, prop_value)

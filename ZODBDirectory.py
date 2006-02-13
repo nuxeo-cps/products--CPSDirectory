@@ -43,7 +43,6 @@ from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 from Products.CPSDirectory.interfaces import IContentishDirectory
-from Products.CPSDirectory.interfaces import IDirectoryEntry
 
 from zope.interface import implements
 
@@ -301,10 +300,7 @@ class ZODBDirectoryEntry(Item_w__name__,
     Stores all data from an entry.
     """
     # Item_w__name__ is used so that the 'id' attribute is free.
-    implements(IDirectoryEntry)
-    
-    meta_type = 'CPS ZODB Directory Entry'
-    
+
     security = ClassSecurityInfo()
 
     __name__ = 'no__name__'

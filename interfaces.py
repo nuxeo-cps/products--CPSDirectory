@@ -460,12 +460,3 @@ class IDirectory(Interface):
 class IContentishDirectory(Interface):
     """Directory with content
     """
-
-class IDirectoryEntry(Interface):
-    """Directory entry
-    """
-    def getId(self):
-        """Return the id of the object."""
-
-    def manage_main(self, REQUEST=None, RESPONSE=None):
-        """View object. XXX"""
