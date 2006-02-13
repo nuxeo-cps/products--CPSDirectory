@@ -234,7 +234,8 @@ class ContentishDirectoryXMLAdapter(DirectoryXMLAdapter):
         """
         self._initProperties(node)
         self._initEntryLR(node)
-        self._initObjects(node)
+        # XXX disabled for now, until I fix the base profile import
+        #self._initObjects(node)
 
         self._logger.info("%r directory imported." % self.context.getId())
 
@@ -295,5 +296,34 @@ class DirectoryEntryXMLAdapter(XMLAdapterBase,
         return fragment
 
     def _initProperties(self, node):
-        ### TODO to be implemented
-        pass
+        self.context.i18n_domain = node.getAttribute('i18n:domain')
+        for child in node.childNodes:
+            if child.nodeName != 'property':
+                continue
+            obj = self.context
+            prop_id = str(child.getAttribute('name'))
+
+            elements = []
+            for sub in child.childNodes:
+                if sub.nodeName == 'element':
+                    elements.append(sub.getAttribute('value').encode('utf-8'))
+
+            if elements:
+                prop_value = tuple(elements) or ()
+            elif prop_map.get('type') == 'boolean':
+                prop_value = self._convertToBoolean(self._getNodeText(child))
+            else:
+                # if we pass a *string* to _updateProperty, all other values
+                # are converted to the right type
+                prop_value = self._getNodeText(child).encode('utf-8')
+
+            if not self._convertToBoolean(child.getAttribute('purge')
+                                          or 'True'):
+                # If the purge attribute is False, merge sequences
+                prop = obj.getProperty(prop_id)
+                if isinstance(prop, (tuple, list)):
+                    prop_value = (tuple([p for p in prop
+                                         if p not in prop_value]) +
+                                  tuple(prop_value))
+
+            obj._updateProperty(prop_id, prop_value)
