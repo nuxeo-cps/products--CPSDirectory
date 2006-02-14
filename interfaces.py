@@ -457,6 +457,6 @@ class IDirectory(Interface):
         error occured.
         """
 
-class IContentishDirectory(Interface):
+class IContentishDirectory(IDirectory):
     """Directory with content
     """
