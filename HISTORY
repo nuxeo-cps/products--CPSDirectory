@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.31.1 [R1 build 2006/02/17-20:17 by fermigier]
+** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 32986
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- Searches on ZODB directories using invalid keys returned all entries
+- Existing entry local roles where not deleted before being imported.
+- #1338: fixed mutability problem in ZODB directory caching.
+- #1311: searching for * should return all results on ZODBDirectory
+- #1052: empty searches will not return any results
+- #1294: even when importing a base profile, directory content shouldn't be 
+  erased.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
+*******************************************
 ** CPSDirectory V1.31.0 [R1 build 2006/01/23-17:17 by fermigier]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 31955
 Requires:
