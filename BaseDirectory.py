@@ -704,17 +704,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                                                 layout_mode=layout_mode, **kw)
         else:
             ok = 1
+        formLayout = self._renderLayout(layout_structure, ds,
+                                        layout_mode=layout_mode, ok=ok, **kw)
+        rendered = ''
         if validate and ok:
             # Call callback.
             callback_func = getattr(self, callback, None)
             if callback_func is None:
                 raise ValueError("Unknown callback '%s'" % callback)
             rendered, ok = callback_func(self, ds, **kw)
-            if not rendered:
-                rendered = ''
-        else:
-            rendered = self._renderLayout(layout_structure, ds,
-                                          layout_mode=layout_mode, ok=ok, **kw)
+        rendered = formLayout + rendered
         return rendered, ok, ds
 
     #
