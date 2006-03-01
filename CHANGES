@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- #1479: fixed ZMI add menu
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - #1295: show search form on search results page

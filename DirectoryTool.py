@@ -36,7 +36,7 @@ from Products.CMFCore.permissions import ManagePortal
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 
-from Products.CPSDirectory.interfaces import IContentishDirectory
+from Products.CPSDirectory.interfaces import IDirectory
 from Products.CPSDirectory.interfaces import IDirectoryTool
 
 from zope.interface import implements
@@ -52,7 +52,7 @@ class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
 
     id = 'portal_directories'
     meta_type = 'CPS Directory Tool'
-    _product_interfaces = (IContentishDirectory)
+    _product_interfaces = (IDirectory,)
 
     security = ClassSecurityInfo()
 
