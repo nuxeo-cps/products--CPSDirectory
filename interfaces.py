@@ -460,3 +460,29 @@ class IDirectory(Interface):
 class IContentishDirectory(IDirectory):
     """Directory with content
     """
+
+class IMetaDirectory(IDirectory):
+    """Meta Directory
+
+    A directory that redirects requests to other backing directories and does
+    field rename and aggregation.
+    """
+
+    def manage_changeBacking(dir_id, field_ignore, field_renames,
+                             missing_entry_expr, delete=0, REQUEST=None):
+        """Change mappings from ZMI.
+
+        field_renames is a list of dicts of type
+              {'b_id' : <id in backing>, 'id': <id in meta>}
+        """
+
+    def manage_addBacking(dir_id, field_ignore, field_renames,
+                          missing_entry_expr, REQUEST=None):
+        """Change mappings from ZMI.
+
+        field_renames is a list of dicts of type
+              {'b_id' : <id in backing>, 'id': <id in meta>}
+        """
+
+    def getBackingDirectories(self, no_dir=0):
+        """Get the list of backing directories and their infos."""
