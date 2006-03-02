@@ -1,19 +1,20 @@
-# translation of ro.po to 
+# translation of ro.po to
+# Alin Voinea <avoinea@nuxeo.com>, 2005.
+# Dragos Ivan <div@nuxeo.com>, 2006.
 # Gettext Message File for default.
-# Alin Voinea <avoinea@nuxeo.com>, 2005
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2006-01-03 14:47default\n"
-"PO-Revision-Date: 2005-04-01 12:51+0300\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2006-03-02 17:47default\n"
+"PO-Revision-Date: 2006-03-02 17:49+0200\n"
+"Last-Translator: Dragos Ivan <div@nuxeo.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Preferred-encodings: utf-8 latin1\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.1\n"
 "Language-Code: ro\n"
 "Language-Name: Romanian\n"
 "Domain: default\n"
@@ -44,13 +45,16 @@ msgstr "Creeaza o noua inregistrare"
 msgid "cpsdir_label_edit_entry"
 msgstr "Modifica inregistrarea"
 
+#.   <span condition="python: ok == 'results'">cpsdir_label_results
+#.         </span>
 #.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Rezultatele cautarii"
 
-#.   <span condition="python: ok != 'results'">search an entry</span>
+#.   <span condition="python: ok != 'results'">search an entry
+#.         </span>
 #.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
@@ -58,11 +62,7 @@ msgid "cpsdir_label_search_entry"
 msgstr "Cauta o inregistrare"
 
 #.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
+#: from ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 #: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
@@ -117,9 +117,8 @@ msgstr "Nici un director disponibil"
 msgid "psm_entry_created"
 msgstr "Inregistrare creata cu succes"
 
-#, fuzzy
 msgid "label_roles"
-msgstr "Rôles"
+msgstr "Roluri"
 
 msgid "label_groups"
 msgstr "Grupuri"
@@ -165,13 +164,11 @@ msgstr ""
 msgid "cpsdir_err_entry_already_exists"
 msgstr "O inregistrare cu acelasi identificator exista deja."
 
-#, fuzzy
 msgid "label_cpsdir_roles_Member"
-msgstr "Membre"
+msgstr "Membru"
 
-#, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Administrateur"
+msgstr "Manager"
 
 msgid "Title"
 msgstr "Titre"
@@ -184,3 +181,4 @@ msgstr "Sterge"
 
 msgid "button_search"
 msgstr "Cauta"
+
