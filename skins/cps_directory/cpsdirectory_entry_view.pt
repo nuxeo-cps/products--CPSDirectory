@@ -21,9 +21,7 @@
   </metal:block>
 
   <metal:block fill-slot="header">
-    <h1 tal:attributes="style 
-      python:'background:url(%s) no-repeat 0px 4px'
-      % here.getDirectoryIcon(dirname)">
+    <h1>
       <span i18n:translate="" tal:content="dirtitle" />:
       <span i18n:translate="cpsdir_label_view_entry">view entry</span>
     </h1>
