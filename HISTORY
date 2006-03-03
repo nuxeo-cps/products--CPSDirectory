@@ -1,4 +1,21 @@
 *******************************************
+** CPSDirectory V1.32.0 [R1 build 2006/03/03-17:28 by ben]
+** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 33855
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- #1479: fixed ZMI add menu
+New internal features:
+- #1465: wrote GenericSetup IO for MetaDirectories backings
+~~~~~~~~~~~~~~~~~~~~~~
+- #1295: show search form on search results page
+
+*******************************************
 ** CPSDirectory V1.31.1 [R1 build 2006/02/17-20:17 by fermigier]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 32986
 Requires:
