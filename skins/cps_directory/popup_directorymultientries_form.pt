@@ -7,7 +7,7 @@
 <div style="margin: 1em;">
 <div class="document" style="font-size:80%">
 <div style="float:right">
-<button onclick="window.close()">Fermer</button>
+<button onclick="window.close()" i18n:translate="button_close">Close</button>
 </div>
   <metal:block use-macro="here/navigation_lib_multi_select_navigation/macros/multi_select_navigation">
     <metal:block fill-slot="action">
