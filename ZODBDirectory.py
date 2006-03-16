@@ -23,10 +23,13 @@ from zLOG import LOG, DEBUG, TRACE
 
 from cgi import escape
 from copy import deepcopy
+from Globals import Persistent
 from Globals import InitializeClass
+from Acquisition import Implicit
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from OFS.SimpleItem import SimpleItem
+from AccessControl.Role import RoleManager
+from OFS.SimpleItem import Item_w__name__
 from OFS.Cache import Cacheable
 
 from Products.CMFCore.permissions import ManagePortal
@@ -290,12 +293,13 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
 InitializeClass(ZODBDirectory)
 
 
-class ZODBDirectoryEntry(SimpleItem):
+class ZODBDirectoryEntry(Item_w__name__,
+                         Persistent, Implicit, RoleManager):
     """ZODB Directory Entry.
 
     Stores all data from an entry.
     """
-    # SimpleItem is used so that the 'id' attribute is free.
+    # Item_w__name__ is used so that the 'id' attribute is free.
 
     security = ClassSecurityInfo()
 
@@ -307,7 +311,7 @@ class ZODBDirectoryEntry(SimpleItem):
 
     manage_options = (
         ({'label': 'View', 'action': 'manage_main'},
-         ) + SimpleItem.manage_options +
+         ) + Item_w__name__.manage_options +
         ({'label': 'Security', 'action': 'manage_access',
           'help': ('OFSP', 'Security.stx')},
          )
