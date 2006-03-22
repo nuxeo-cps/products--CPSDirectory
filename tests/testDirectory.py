@@ -42,7 +42,7 @@ class TestDirectoryWithDefaultUserFolder(CPSDirectoryTestCase):
         default_members = ['manager']
         self.assertEquals(members.listEntryIds(), default_members)
         # Only manager has a title set
-        ids_and_titles = [('manager', 'Manager CPS')]
+        ids_and_titles = [('manager', 'CPS Manager')]
         self.assertEquals(members.listEntryIdsAndTitles(), ids_and_titles)
 
         # give an argument to search, otherwise no search is performed
