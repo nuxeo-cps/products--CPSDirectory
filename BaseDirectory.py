@@ -828,7 +828,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Get the fields dict used in search from return fields, and the
         updated return fields
 
-        Also compute dependant fields.
+        Also compute dependent fields.
         """
         res = []
         all_field_ids = self._getFieldIds()
