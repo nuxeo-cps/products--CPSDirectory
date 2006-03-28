@@ -96,7 +96,7 @@ class FakeSchema(Item):
         return self.fields[key]
     def _setObject(self, id_, object_):
         if id_ not in self.fields.keys():
-            self.fields[id] = object_
+            self.fields[id_] = object_
         raise KeyError(
             "The id '%s' is invalid - it is already in use." %(id_))
 
