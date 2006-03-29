@@ -199,7 +199,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'attr used as id for children_attr default is ldap_rdn_attr.'},
         )
 
-    implemented_encryptions = ['SSHA', 'none']
+    implemented_encryptions = ('SSHA', 'none')
 
     _properties = _replaceProperty(
         _properties, 'id_field',
@@ -210,7 +210,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     title_field = 'cn'
 
     password_field = ''
-    password_encryption = 'ssha'
+    password_encryption = 'SSHA'
     ldap_server = ''
     ldap_port = 389
     ldap_use_ssl = 0
@@ -639,8 +639,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 # do not overwrite existing non trivial value !
                 if not value:
                     continue
-                encr = self.password_encryption.lower()
-                if encr == 'ssha':
+                encr = self.password_encryption
+                if encr == 'SSHA':
                     value = sshaDigest(value)
                 elif encr != 'none':
                     raise NotImplementedError("encryption scheme %s" % encr)
