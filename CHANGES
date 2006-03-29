@@ -3,7 +3,8 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- #1583: LDAP Backing Directory supports SSHA encryption scheme, and this
+  is now the default behaviour
 Bug fixes:
 ~~~~~~~~~~
 -

@@ -120,6 +120,96 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.assert_(not dir.hasEntry(id))
         self.assertRaises(KeyError, dir.getEntry, dn)
 
+    def testConvertDataToLDAP(self):
+        stool = self.portal.portal_schemas
+        schema = stool.testldapbd
+        try:
+            schema._setObject('userPassword', FakeField())
+        except KeyError: # already exists
+            pass
+
+        ldir = self.dir
+
+        # no encryption
+        ldir.password_encryption = 'none'
+        res = ldir.convertDataToLDAP({'userPassword': 'precious'})
+        pwd = res['userPassword']
+        self.assertEquals(len(pwd), 1)
+        self.assertEquals(pwd[0], 'precious')
+
+        # SSHA
+        ldir.password_encryption = 'SSHA'
+        res = ldir.convertDataToLDAP({'userPassword': 'precious'})
+        pwd = res['userPassword']
+        self.assertEquals(len(pwd), 1)
+        self.assert_(pwd[0].startswith('{SSHA}'))
+
+        # unknown
+        ldir.password_encryption = 'parabolic'
+        self.failUnlessRaises(NotImplementedError,
+                              ldir.convertDataToLDAP,
+                              {'userPassword': 'precious'})
+
+        # An empty password should not be forwarded
+        res = ldir.convertDataToLDAP({'userPassword': ''})
+        self.assertEquals(res, {})
+
+    def testPasswordWrites(self):
+        # Encryption tests for CPSDirectory API
+
+        stool = self.portal.portal_schemas
+        schema = stool.testldapbd
+        try:
+            schema._setObject('userPassword', FakeField())
+        except KeyError: # already exists
+            pass
+
+        ldir = self.dir
+        ldir.password_encryption = 'SSHA'
+        dn = 'uid=salted,ou=personnes,o=nuxeo,c=com'
+
+        # We'll need to go low level to retrieve what has been written
+        def readPwd():
+            conn = ldir.connectLDAP()
+            res = conn.search_s(dn, 0, '(objectClass=person)', ['userPassword'])
+            # correctness of ldap call
+            self.assertEquals(len(res), 1)
+            self.assertEquals(res[0][0], dn)
+            pwd = res[0][1]['userPassword']
+            self.assertEquals(len(pwd), 1)
+            return pwd[0]
+
+        # test creation
+        ldir._createEntry({'dn': dn,
+                           'userPassword': 'changeme'})
+        self.assert_(readPwd().startswith('{SSHA}'))
+
+        # test edition
+        ldir._editEntry({'dn': dn, 'foo': 'miaou',
+                         'userPassword': 'changedme'})
+        self.assert_(readPwd().startswith('{SSHA}'))
+
+    def testPasswordReads(self):
+        # all high level attempts to read password return ''
+        stool = self.portal.portal_schemas
+        schema = stool.testldapbd
+        try:
+            schema._setObject('userPassword', FakeField())
+        except KeyError: # already exists
+            pass
+
+        ldir = self.dir
+
+        dn = 'uid=me,ou=personnes,o=nuxeo,c=com'
+        ldir._createEntry({'dn':dn, 'foo': 'grr', 'userPassword': 'ouah'})
+
+        res = ldir._searchEntries(dn=dn, return_fields=['userPassword'])
+        self.assertEquals(len(res), 1)
+        self.assertEquals(res[0][1]['userPassword'], '')
+
+        entry = ldir.getEntry(dn)
+        self.assertEquals(entry['userPassword'], '')
+
     def testSearch(self):
         dir = self.dir
 

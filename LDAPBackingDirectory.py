@@ -34,6 +34,8 @@ from AccessControl import ClassSecurityInfo
 from OFS.Image import Image
 from OFS.Cache import Cacheable
 
+from Products.CPSUtil.ssha import sshaDigest
+
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.Field import ValidationError
 
@@ -165,8 +167,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         {'id': 'password_field', 'type': 'string', 'mode': 'w',
          'label': "Field for password (if authentication)"},
         {'id': 'password_encryption', 'type': 'selection', 'mode': 'w',
-         'label': "Password encryption",
-         'select_variable': 'all_password_encryptions'},
+         'select_variable': 'implemented_encryptions',
+         'label': "Password encryption",},
         {'id': 'ldap_server', 'type': 'string', 'mode': 'w',
          'label': 'LDAP server'},
         {'id': 'ldap_port', 'type': 'int', 'mode': 'w',
@@ -196,6 +198,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         {'id': 'children_id_attr', 'type': 'string', 'mode': 'w',
          'label': 'attr used as id for children_attr default is ldap_rdn_attr.'},
         )
+
+    implemented_encryptions = ['SSHA', 'none']
+
     _properties = _replaceProperty(
         _properties, 'id_field',
         {'id': 'id_field', 'type': 'string', 'mode': '', # read-only
@@ -205,7 +210,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     title_field = 'cn'
 
     password_field = ''
-    password_encryption = 'none'
+    password_encryption = 'ssha'
     ldap_server = ''
     ldap_port = 389
     ldap_use_ssl = 0
@@ -629,6 +634,16 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             value = data[field_id]
             if not value and not keep_empty:
                 continue
+            if field_id == self.password_field:
+                # pwd read from ldap returns empty string (for security).
+                # do not overwrite existing non trivial value !
+                if not value:
+                    continue
+                encr = self.password_encryption.lower()
+                if encr == 'ssha':
+                    value = sshaDigest(value)
+                elif encr != 'none':
+                    raise NotImplementedError("encryption scheme %s" % encr)
             values = field.convertToLDAP(value)
             if not values:
                 values = [''] # Means 'delete' for modify operations.
@@ -641,6 +656,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         entry = {}
         for field_id, field in self._getFieldItems():
             if not ldap_entry.has_key(field_id):
+                continue
+            # don't get passwords - ever
+            if field_id == self.password_field:
+                value = ''
                 continue
             values = ldap_entry[field_id]
             try:
