@@ -1060,7 +1060,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         {'label': 'Entry Local Roles', 'action':'manage_entryLocalRoles'},) +
         SimpleItemWithProperties.manage_options[1:]+
         ({'label': 'Search','action': 'manage_searchDirectoryForm'},
-         {'label': 'Export','action': 'manage_export'},
+         {'label': 'Export','action': 'manage_genericSetupExport.html'},
          ))
     security.declareProtected(ManagePortal, 'manage_entryLocalRoles')
     manage_entryLocalRoles = DTMLFile('zmi/manageEntryLocalRoles', globals())
