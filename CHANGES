@@ -10,4 +10,4 @@ Bug fixes:
 -
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- _getEntry() accepts a 'default' keyword argument

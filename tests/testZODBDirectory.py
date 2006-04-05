@@ -100,6 +100,23 @@ class TestZODBDirectory(ZopeTestCase):
         self.assert_(not zdir.hasEntry(id))
         self.assertRaises(KeyError, zdir.getEntry, id)
 
+    def test__getEntry(self):
+        # this actually tests code from BaseDirectory
+
+        # preparation
+        zdir = self.dir
+        id = 'chien'
+        entry = {'idd': id, 'foo': 'ouah', 'bar': ['4']}
+        zdir.createEntry(entry)
+
+        # forbid side effects
+        self.assertEquals(zdir.listEntryIds(), [id])
+
+        # assertions
+        self.assertEquals(zdir._getEntry(id), entry)
+        self.assertEquals(zdir._getEntry('abc', default=2), 2)
+        self.assertRaises(KeyError, zdir._getEntry, 'abc')
+
     def testSearch(self):
         zdir = self.dir
 

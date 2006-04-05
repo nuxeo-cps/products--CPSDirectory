@@ -413,10 +413,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         return self._getEntryFromDataModel(dm)
 
     security.declarePrivate('_getEntry')
-    def _getEntry(self, id, **kw):
+    def _getEntry(self, id, default=_marker, **kw):
         """Get entry filtered by processes but not acls."""
-        dm = self._getDataModel(id, check_acls=0, **kw)
-        return self._getEntryFromDataModel(dm)
+        try:
+            dm = self._getDataModel(id, check_acls=0, **kw)
+            return self._getEntryFromDataModel(dm)
+        except (KeyError, ValueError), err:
+            if default is not _marker and str(err) == "'%s'" % id:
+                return default
+            else:
+                raise KeyError, str(err) # exception can have other cause
 
     security.declarePublic('isAuthenticating')
     def isAuthenticating(self):
