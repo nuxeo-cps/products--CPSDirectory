@@ -1,4 +1,23 @@
 *******************************************
+** CPSDirectory V1.33.0 [R1 build 2006/04/10-16:27 by gracinet]
+** SVN URL: http://svn/pub/CPSDirectory/trunk Revision: 35076
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- #1583: LDAP Backing Directory supports SSHA encryption scheme, and this
+  is now the default behaviour
+- #1590: QueryMatcher failed if entry matched lacked keys from the query. Now
+  this means it doesn't match
+Bug fixes:
+~~~~~~~~~~
+- Updated brazilian portugese translations (thanks to mo.menezes@gmail.com).
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- _getEntry() accepts a 'default' keyword argument
+
+*******************************************
 ** CPSDirectory V1.32.0 [R1 build 2006/03/03-17:28 by ben]
 ** SVN URL: https://svn.nuxeo.org/pub/CPSDirectory/trunk Revision: 33855
 Requires:
