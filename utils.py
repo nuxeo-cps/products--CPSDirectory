@@ -34,6 +34,10 @@ class QueryMatcher:
     >>> qm.match({'id':'SpamFooEggs'})
     True
 
+    We don't fail if the entry lacks keys from the query
+    >>> qm.match({})
+    False
+
     """
 
     def __init__(self, query, accepted_keys=None, substring_keys=None):
@@ -68,7 +72,10 @@ class QueryMatcher:
         search_types = self.match_types
         ok = 1
         for key, value in self.query.items():
-            searched = entry[key]
+            searched = entry.get(key)
+            if searched is None:
+                ok = 0
+                break
             if isinstance(searched, StringType):
                 searched = (searched,)
             matched = 0

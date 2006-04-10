@@ -5,6 +5,8 @@ New features:
 ~~~~~~~~~~~~~
 - #1583: LDAP Backing Directory supports SSHA encryption scheme, and this
   is now the default behaviour
+- #1590: QueryMatcher failed if entry matched lacked keys from the query. Now
+  this means it doesn't match
 Bug fixes:
 ~~~~~~~~~~
 - Updated brazilian portugese translations (thanks to mo.menezes@gmail.com).
