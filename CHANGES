@@ -7,7 +7,7 @@ New features:
   is now the default behaviour
 Bug fixes:
 ~~~~~~~~~~
--
+- Updated brazilian portugese translations (thanks to mo.menezes@gmail.com).
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 - _getEntry() accepts a 'default' keyword argument
