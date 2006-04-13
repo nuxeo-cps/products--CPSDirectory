@@ -6,7 +6,8 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Fixed problem causing calls to create/edit/view render functions for the 
+  directories to be issued twice
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

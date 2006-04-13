@@ -3,11 +3,6 @@
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
   global dirtitle dir/title_or_id;
-  title_field dir/title_field;
-  res python: dir.renderEntryDetailed(id);
-  global rendered_main python: res[0];
-  ds python: res[1];
-  global title ds/?title_field|id;
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="style_slot">
@@ -29,7 +24,13 @@
     </div>
   </metal:block>
 
-  <metal:block fill-slot="main">
+  <metal:block fill-slot="main" tal:define="
+    title_field dir/title_field;
+    res python: dir.renderEntryDetailed(id);
+    global rendered_main python: res[0];
+    ds python: res[1];
+    global title ds/?title_field|id;">
+
     <div tal:replace="structure rendered_main">Rendered main...</div>
     <input type="submit" name="back" i18n:attributes="value"
       class="standalone" value="button_back" onClick="history.back()" />

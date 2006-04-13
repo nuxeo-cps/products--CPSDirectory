@@ -2,14 +2,6 @@
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
   global dirtitle dir/title_or_id;
-  validate python: request.has_key('cpsdirectory_search_button');
-  res python: dir.renderSearchDetailed(request=request, validate=validate,
-                                    callback='cpsdirectory_entry_search_do');
-  global rendered_main python: res[0];
-  global ok python: res[1];
-  ds python: res[2];
-  global portal_status_message python: (validate and not ok and
-    'psm_content_error') or request.form.get('portal_status_message', '');
   "/>
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="style_slot">
@@ -23,7 +15,17 @@
 
   </metal:block>
 
-  <metal:block fill-slot="header">
+  <metal:block fill-slot="header"/>
+
+  <metal:block fill-slot="main" tal:define="
+    validate python: request.has_key('cpsdirectory_search_button');
+    res python: dir.renderSearchDetailed(request=request, validate=validate,
+                                      callback='cpsdirectory_entry_search_do');
+    global rendered_main python: res[0];
+    global ok python: res[1];
+    ds python: res[2];
+    global portal_status_message python: (validate and not ok and
+      'psm_content_error') or request.form.get('portal_status_message', '');">
     <h1>
       <span i18n:translate="" tal:content="dirtitle" />:
       <span tal:condition="python: ok == 'results'"
@@ -33,9 +35,7 @@
          i18n:translate="cpsdir_label_search_entry">search an entry
       </span>
     </h1>
-  </metal:block>
 
-  <metal:block fill-slot="main">
     <div tal:replace="structure rendered_main">Rendered main...</div>
   </metal:block>
 
