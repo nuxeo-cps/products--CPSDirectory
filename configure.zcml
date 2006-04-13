@@ -140,10 +140,13 @@
       global="False"
       />
 
-  <!-- traversable so that add views can work -->
+  <!-- traversable so that add views and export views can work -->
 
   <five:traversable
       class=".DirectoryTool.DirectoryTool"/>
+
+  <five:traversable
+      class=".BaseDirectory.BaseDirectory"/>
 
   <configure package="Products.GenericSetup.browser">
 
