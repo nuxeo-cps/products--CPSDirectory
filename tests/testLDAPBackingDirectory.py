@@ -825,7 +825,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
             })
         stool._setObject('testldapbd1', s)
         s = FakeSchema({
-            'id': FakeField(id='id'),
+            'dn': FakeField(id='dn'),
             'givenName': FakeField(id='givenName'),
             'name' : FakeField(id='name'),
             'fullname' : FakeField(id='fullname',
@@ -861,9 +861,11 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         self.dir = dtool.members
 
     def test_getSchemas(self):
-
+        # _getSchemas is a BBB alias for _getUniqueSchema
         schemas = self.dir._getSchemas()
-        self.assertEqual(len(schemas), 2)
+        self.assertEquals(len(schemas), 1)
+        unique_schema = self.dir._getUniqueSchema()
+        self.assertEquals(schemas, [unique_schema])
 
     def test_getSchemasForSearch(self):
 
@@ -873,20 +875,20 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
     def test_getFieldIds(self):
 
         schemas_keys = self.dir._getFieldIds()
-        self.assertEqual(len(schemas_keys), 4)
+        self.assertEqual(len(schemas_keys), 5)
         # id is not duplicated
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
-                         ['fullname', 'givenName', 'id', 'name'])
+                         ['dn', 'fullname', 'givenName', 'id', 'name'])
 
     def test_getSchemasFields(self):
 
         schemas_fields = self.dir._getFieldItems()
-        self.assertEqual(len(schemas_fields), 4)
+        self.assertEqual(len(schemas_fields), 5)
         schemas_keys = [x[0] for x in schemas_fields]
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
-                         ['fullname', 'givenName', 'id', 'name'])
+                         ['dn', 'fullname', 'givenName', 'id', 'name'])
         ref_keys = self.dir._getFieldIds()
         ref_keys.sort()
         self.assertEqual(schemas_keys, ref_keys)
@@ -932,11 +934,11 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         self.assertEqual(rpdf, deps)
 
     def test_getUniqueSchema(self):
-
+        # _getUniqueSchema returns a dict to aggregate the fields of multiple
+        # schemas if more than one schema is defined on the directory
         schema = self.dir._getUniqueSchema(search=False)
         self.assert_(schema)
-        from Products.CPSSchemas.Schema import CPSSchema
-        self.assert_(isinstance(schema, CPSSchema))
+        self.assert_(isinstance(schema, dict))
 
         fields = self.dir._getFieldItems()
         schema_fields = schema.items()
@@ -952,7 +954,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
 
         schema = self.dir._getUniqueSchema(search=True)
         self.assert_(schema)
-        self.assertEqual(self.dir._getSchemas()[0], schema)
+        self.assertEqual(self.dir._getSchemas(search=True)[0], schema)
 
         fields = self.dir._getFieldItems(search=True)
         schema_fields = schema.items()
@@ -963,6 +965,38 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         field_ids.sort()
         schema_field_ids.sort()
         self.assertEqual(field_ids, schema_field_ids)
+
+    def test_createEntry(self):
+        entry_def = {
+            'id': 'entry1',
+            'dn': 'cn=entry1,ou=personnes,o=nuxeo,c=com',
+            'givenName': 'Charles',
+            'name' : 'Darwin',
+            'fullname' : 'Charles Darwin',
+        }
+        self.dir.createEntry(entry_def)
+        entries = self.dir.listEntryIds()
+        self.assertEquals(entries, ['cn=entry1,ou=personnes,o=nuxeo,c=com'])
+
+    def test_editEntry(self):
+        entry_def = {
+            'id': 'entry1',
+            'dn': 'cn=entry1,ou=personnes,o=nuxeo,c=com',
+            'givenName': 'Charles',
+            'name' : 'Darwin',
+            'fullname' : 'Charles Darwin',
+        }
+        self.dir.createEntry(entry_def)
+        entries = self.dir.listEntryIds()
+        self.assertEquals(entries, ['cn=entry1,ou=personnes,o=nuxeo,c=com'])
+
+        entry_def['id'] = "this_id_a_new_id"
+        self.dir.editEntry(entry_def)
+        entries = self.dir.listEntryIds()
+        self.assertEquals(entries, ['cn=entry1,ou=personnes,o=nuxeo,c=com'])
+        entry = self.dir.getEntry('cn=entry1,ou=personnes,o=nuxeo,c=com')
+        self.assertEquals(entry, entry_def)
+
 
 
 def test_suite():

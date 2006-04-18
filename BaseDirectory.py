@@ -726,30 +726,25 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     # Internal
     #
 
+    #BBB: mark this deprecated?
     security.declarePrivate('_getSchemas')
     def _getSchemas(self, search=False):
         """Get the schemas for this directory.
 
+        This is a BBB alias that wraps the ``_getUniqueSchema`` method result
+        into a list. StorageAdapters were not designed to allow multiple
+        schemas thus we merge all the schemas into a virtual non persistent
+        schema with all the fields (filtering rendancy by keeping only the
+        first occurence).
+
         If search=True, get the schemas for a search.
 
-        Returns a sequence of Schema objects.
+        Returns a sequence of one aggregated schema object
+
+        XXX: the directory API should be refactored to make it explicit that
+        multi schemas are merged into a single fake schema at runtime
         """
-        stool = getToolByName(self, 'portal_schemas')
-        schemas = []
-        if not search:
-            schema_ids = self.schema.split()
-        else:
-            if self.schema_search:
-                schema_ids = self.schema_search.split()
-            else:
-                schema_ids = self.schema.split()
-        for schema_id in schema_ids:
-            schema = stool._getOb(schema_id, None)
-            if schema is None:
-                raise ValueError("Missing schema '%s' for directory  '%s'"
-                                 % (schema_id, self.getId()))
-            schemas.append(schema)
-        return schemas
+        return [self._getUniqueSchema(search=search)]
 
     security.declarePrivate('_getFieldItems')
     def _getFieldItems(self, search=False):
@@ -761,15 +756,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         Doesn't return duplicate field ids coming from differents schemas.
         """
-        seen = {}
-        items = []
-        schemas = self._getSchemas(search=search)
-        for schema in schemas:
-            for field_id, field in schema.items():
-                if field_id not in seen:
-                    items.append((field_id, field))
-                    seen[field_id] = None
-        return items
+        return self._getUniqueSchema(search=search).items()
 
     security.declarePrivate('_getFieldIds')
     def _getFieldIds(self, search=False):
@@ -795,30 +782,41 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
          * Several schemas specified:
 
-           Generate dynamicaly a *non* persistent CPSSchema instance
-           that aggregates all the fields from the different schemas of
-           this directory.
+           Generate dynamicaly a *non* persistent dict instance to
+           simulate a CPSSchema instance that aggregates all the fields
+           from the different schemas of this directory.
 
-           It the different schemas define fields with the same id, then
+           If the different schemas define fields with the same id, then
            the field defined on the first schema will be kept.
 
         This is used by the directory adapter storage because only one
         exists right now for a given directory.
         """
-        schemas = self._getSchemas(search=search)
+        stool = getToolByName(self, 'portal_schemas')
+        schemas = []
+        if search and self.schema_search:
+            schema_ids = self.schema_search.split()
+        else:
+            schema_ids = self.schema.split()
+        for schema_id in schema_ids:
+            schema = stool._getOb(schema_id, None)
+            if schema is None:
+                raise ValueError("Missing schema '%s' for directory  '%s'"
+                                 % (schema_id, self.getId()))
+            schemas.append(schema)
         # Do not generate a schema in this case but return the only
         # specified schema on this directory.
         if len(schemas) == 1:
             return schemas[0]
-        # Generate a CPSSchema and add the aggregated fields on it.
-        # TODO : ensure it's not too costly to generate this
-        schema = CPSSchema(id=self.getId())
-        seen = {}
-        for field_id, field in self._getFieldItems(search=search):
-            if field_id not in seen:
-                schema.addSubObject(field)
-                seen[field_id] = None
-        return schema
+        # Generate a fake transient CPSSchema with a python dict. This is the
+        # fastest way to simulate a CPSSchema instance and does not trigger any
+        # CPS event (no addSubObject call)
+        unique_schema = {}
+        # reverse the list of schemas to ensure the first (field_id, field)
+        # occurence will be kept
+        for schema in reversed(schemas):
+            unique_schema.update(schema)
+        return unique_schema
 
     security.declarePrivate('_getSchemaFieldById')
     def _getSchemaFieldById(self, field_id, search=False):

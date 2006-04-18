@@ -8,6 +8,9 @@ Bug fixes:
 ~~~~~~~~~~
 - Fixed problem causing calls to create/edit/view render functions for the 
   directories to be issued twice
+- Fixed bug with multi schema support for directories: if several schemas are
+  defined on some directory, they are merged into a transient dict instance at
+  runtime
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
