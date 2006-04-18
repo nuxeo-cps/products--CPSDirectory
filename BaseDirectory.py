@@ -92,9 +92,13 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     _propertiesBaseClass = SimpleItemWithProperties
     _properties = SimpleItemWithProperties._properties + (
         {'id': 'schema', 'type': 'string', 'mode': 'w',
-         'label': "Schemas"},
+         'label': "Schemas (old style - for backward compatibility)"},
+        {'id': 'schemas', 'type': 'tokens', 'mode': 'w',
+         'label': "Additional schemas (new style - merged with the previous)"},
         {'id': 'schema_search', 'type': 'string', 'mode': 'w',
          'label': "Schemas for search"},
+        {'id': 'schemas_search', 'type': 'tokens', 'mode': 'w',
+         'label': "Additional schemas for search"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
@@ -121,6 +125,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     schema = ''
     schema_search = ''
+    schemas = ()
+    schemas_search = ()
     layout = ''
     layout_search = ''
     acl_directory_view_roles = 'Manager'
@@ -794,10 +800,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """
         stool = getToolByName(self, 'portal_schemas')
         schemas = []
-        if search and self.schema_search:
+        if search and (self.schema_search or self.schemas_search):
             schema_ids = self.schema_search.split()
+            schema_ids.extend(self.schemas_search)
         else:
-            schema_ids = self.schema.split()
+            schema_ids = self.schema.split() # old style schema property
+            schema_ids.extend(self.schemas) # new style token based property
         for schema_id in schema_ids:
             schema = stool._getOb(schema_id, None)
             if schema is None:

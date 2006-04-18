@@ -13,4 +13,6 @@ Bug fixes:
   runtime
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- added schemas and schemas_search tokens properties to make it easier for
+  extension profiles to register new schemas for directories without
+  overwritting existing schemas

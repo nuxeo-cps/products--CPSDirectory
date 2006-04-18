@@ -832,6 +832,10 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
                                    read_dep=('givenName', 'name', 'id'))
             })
         stool._setObject('testldapbd2', s)
+        s = FakeSchema({
+            'yetanotherfield': FakeField(id='yetanotherfield'),
+            })
+        stool._setObject('testldapbd3', s)
 
     def makeDir(self):
         from Products.CPSDirectory.LDAPBackingDirectory import \
@@ -841,6 +845,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         # since it's a fake ldap server
         dir = LDAPBackingDirectory('members',
             schema='testldapbd1 testldapbd2',
+            schemas=('testldapbd3',),
             schema_search='testldapbd1',
             layout='',
             layout_search='',
@@ -875,20 +880,22 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
     def test_getFieldIds(self):
 
         schemas_keys = self.dir._getFieldIds()
-        self.assertEqual(len(schemas_keys), 5)
-        # id is not duplicated
+        self.assertEqual(len(schemas_keys), 6)
+        # fields are not duplicated
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
-                         ['dn', 'fullname', 'givenName', 'id', 'name'])
+                         ['dn', 'fullname', 'givenName', 'id', 'name',
+                          'yetanotherfield'])
 
     def test_getSchemasFields(self):
 
         schemas_fields = self.dir._getFieldItems()
-        self.assertEqual(len(schemas_fields), 5)
+        self.assertEqual(len(schemas_fields), 6)
         schemas_keys = [x[0] for x in schemas_fields]
         schemas_keys.sort()
         self.assertEqual(schemas_keys,
-                         ['dn', 'fullname', 'givenName', 'id', 'name'])
+                         ['dn', 'fullname', 'givenName', 'id', 'name',
+                          'yetanotherfield'])
         ref_keys = self.dir._getFieldIds()
         ref_keys.sort()
         self.assertEqual(schemas_keys, ref_keys)
@@ -971,8 +978,9 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
             'id': 'entry1',
             'dn': 'cn=entry1,ou=personnes,o=nuxeo,c=com',
             'givenName': 'Charles',
-            'name' : 'Darwin',
-            'fullname' : 'Charles Darwin',
+            'name': 'Darwin',
+            'fullname': 'Charles Darwin',
+            'yetanotherfield': 'yet anothe value',
         }
         self.dir.createEntry(entry_def)
         entries = self.dir.listEntryIds()
@@ -985,12 +993,14 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
             'givenName': 'Charles',
             'name' : 'Darwin',
             'fullname' : 'Charles Darwin',
+            'yetanotherfield': 'yet another value',
         }
         self.dir.createEntry(entry_def)
         entries = self.dir.listEntryIds()
         self.assertEquals(entries, ['cn=entry1,ou=personnes,o=nuxeo,c=com'])
 
         entry_def['id'] = "this_id_a_new_id"
+        entry_def['yetanotherfield'] = "New value for the dummy field"
         self.dir.editEntry(entry_def)
         entries = self.dir.listEntryIds()
         self.assertEquals(entries, ['cn=entry1,ou=personnes,o=nuxeo,c=com'])
