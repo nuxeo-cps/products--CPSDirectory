@@ -167,6 +167,8 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
             dir = getattr(portal_directories, self.directory)
             display_attr = dir.title_field
             id, title = self.getIdAndTitle(value)
+            # Allow vocabulary with int keys to work
+            value = str(value)
 
             if value:
                 jsvalue = value.replace("'", "\\'")
