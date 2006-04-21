@@ -129,7 +129,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
             if quoter is None:
                 quoter = self._getSQLQuoter()
             return quoter(value)
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, (int, long, float)):
             return str(value)
         elif isinstance(value, DateTime):
             # XXX probably depends on SQL dialect
