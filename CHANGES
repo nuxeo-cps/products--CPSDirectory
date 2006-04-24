@@ -6,7 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Fixed error on searching when directory title field was not string
 - Allowed vocabulary with int keys to be used by CPSDirectoryEntryWidget (SQL 
   Directories generates them)
 New internal features:
