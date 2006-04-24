@@ -1,4 +1,26 @@
 *******************************************
+** CPSDirectory V1.34.0 [R1 build 2006/04/24-09:26 by gracinet]
+** SVN URL: http://svn/pub/CPSDirectory/trunk Revision: 35270
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+-
+Bug fixes:
+~~~~~~~~~~
+- Fixed problem causing calls to create/edit/view render functions for the 
+  directories to be issued twice
+- Fixed bug with multi schema support for directories: if several schemas are
+  defined on some directory, they are merged into a transient dict instance at
+  runtime
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- added schemas and schemas_search tokens properties to make it easier for
+  extension profiles to register new schemas for directories without
+  overwritting existing schemas
+
+*******************************************
 ** CPSDirectory V1.33.0 [R1 build 2006/04/10-16:27 by gracinet]
 ** SVN URL: http://svn/pub/CPSDirectory/trunk Revision: 35076
 Requires:
