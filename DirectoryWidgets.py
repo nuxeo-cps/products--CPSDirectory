@@ -259,6 +259,10 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
                     break
                 if i not in v:
                     v.append(i)
+            # if the widget is required, empty values will not be accepted
+            if self.is_required and not len(v):
+                err = "cpsschemas_err_required"
+
         datastructure[widget_id] = v
         if err:
             datastructure.setError(widget_id, err)
