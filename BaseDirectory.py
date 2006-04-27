@@ -802,10 +802,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         schemas = []
         if search and (self.schema_search or self.schemas_search):
             schema_ids = self.schema_search.split()
-            schema_ids.extend(self.schemas_search)
+            if self.schemas_search is not None:
+                schema_ids.extend(self.schemas_search)
         else:
             schema_ids = self.schema.split() # old style schema property
-            schema_ids.extend(self.schemas) # new style token based property
+            if self.schemas is not None:
+                schema_ids.extend(self.schemas) # new style token based property
         for schema_id in schema_ids:
             schema = stool._getOb(schema_id, None)
             if schema is None:
