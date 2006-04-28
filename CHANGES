@@ -12,6 +12,7 @@ Bug fixes:
 - Fixed problem with required MultiEntry Directory Widget that was accepting 
   empty values
 - Fixed error when newly added schemas_search / schemas are None
+- Added translation for selection column in search results
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -

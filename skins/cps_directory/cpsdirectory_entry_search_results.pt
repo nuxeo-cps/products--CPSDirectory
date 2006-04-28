@@ -18,7 +18,7 @@
     <form action="cpsdirectory_entry_delete" method="post">
       <table tal:condition="results" summary="search result list">
         <tr>
-          <th tal:condition="isAdmin">
+          <th tal:condition="isAdmin" i18n:translate="label_selection">
             Selection
           </th>
           <tal:block repeat="field fields">

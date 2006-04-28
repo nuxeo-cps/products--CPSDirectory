@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2006-03-02 17:47default\n"
+"POT-Creation-Date: 2006-04-28 12:29default\n"
 "PO-Revision-Date: 2004-10-04 16:52+0100\n"
 "Last-Translator:  <>\n"
 "Language-Team: Euskara <eu@li.org>\n"
@@ -108,6 +108,14 @@ msgstr "label"
 msgid "label_no_results"
 msgstr "Emaitzarik ez"
 
+#.   <th condition="isAdmin">
+#.               Selection
+#.             </th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#, fuzzy
+msgid "label_selection"
+msgstr "Selection"
+
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
@@ -173,14 +181,14 @@ msgstr ""
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
-#~ msgid "Title"
-#~ msgstr "Title"
+msgid "Title"
+msgstr "Title"
 
-#~ msgid "button_back"
-#~ msgstr "Back"
+msgid "button_back"
+msgstr "Back"
 
-#~ msgid "button_delete"
-#~ msgstr "Delete"
+msgid "button_delete"
+msgstr "Delete"
 
-#~ msgid "button_search"
-#~ msgstr "Search"
+msgid "button_search"
+msgstr "Search"

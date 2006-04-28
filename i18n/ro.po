@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2006-03-02 17:47default\n"
+"POT-Creation-Date: 2006-04-28 12:29default\n"
 "PO-Revision-Date: 2006-03-02 17:49+0200\n"
 "Last-Translator: Dragos Ivan <div@nuxeo.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -106,6 +106,13 @@ msgstr "eticheta"
 msgid "label_no_results"
 msgstr "Nici un rezultat"
 
+#.   <th condition="isAdmin">
+#.               Selection
+#.             </th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+msgid "label_selection"
+msgstr "Selectie"
+
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
@@ -170,15 +177,14 @@ msgstr "Membru"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
 
-msgid "Title"
-msgstr "Titre"
+#~ msgid "Title"
+#~ msgstr "Titre"
 
-msgid "button_back"
-msgstr "Retour"
+#~ msgid "button_back"
+#~ msgstr "Retour"
 
-msgid "button_delete"
-msgstr "Sterge"
+#~ msgid "button_delete"
+#~ msgstr "Sterge"
 
-msgid "button_search"
-msgstr "Cauta"
-
+#~ msgid "button_search"
+#~ msgstr "Cauta"

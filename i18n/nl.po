@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-02 17:47default\n"
+"POT-Creation-Date: 2006-04-28 12:29default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: Nederlands <contact@nuxeo.com>\n"
@@ -104,6 +104,14 @@ msgstr "label"
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
 msgstr "Geen resultaten."
+
+#.   <th condition="isAdmin">
+#.               Selection
+#.             </th>
+#: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
+#, fuzzy
+msgid "label_selection"
+msgstr "Selection"
 
 #.   <p condition="not:directories">
 #.         No directory available
