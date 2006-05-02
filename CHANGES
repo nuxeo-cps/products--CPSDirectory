@@ -6,13 +6,7 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
-- Fixed error on searching when directory title field was not string
-- Allowed vocabulary with int keys to be used by CPSDirectoryEntryWidget (SQL 
-  Directories generates them)
-- Fixed problem with required MultiEntry Directory Widget that was accepting 
-  empty values
-- Fixed error when newly added schemas_search / schemas are None
-- Added translation for selection column in search results
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
