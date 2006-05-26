@@ -189,17 +189,6 @@ class GroupsDirectory(BaseDirectory):
         aclu = self.acl_users
         aclu.userFolderDelGroups([id])
 
-    security.declarePublic('hasSubGroupsSupport')
-    def hasSubGroupsSupport(self):
-        """Tells if the current acl_users has subgroups support.
-        """
-        aclu = self.acl_users
-        supported_aclus = ('Pluggable User Folder',
-                           'LDAPUserGroupsFolder')
-        if aclu.meta_type in supported_aclus:
-            return 1
-        return 0
-
 InitializeClass(GroupsDirectory)
 
 

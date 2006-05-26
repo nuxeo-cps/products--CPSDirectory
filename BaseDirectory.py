@@ -1066,6 +1066,18 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                             for v in self.entry_roles]
         return ''
 
+    security.declarePublic('hasSubGroupsSupport')
+    def hasSubGroupsSupport(self):
+        """Tells if the current acl_users has subgroups support.
+        """
+        aclu = self.acl_users
+        supported_aclus = ('Pluggable User Folder',
+                           'LDAPUserGroupsFolder')
+        if aclu.meta_type in supported_aclus:
+            return 1
+        return 0
+
+
     #
     # ZMI
     #

@@ -6,7 +6,9 @@ New features:
 -
 Bug fixes:
 ~~~~~~~~~~
--
+- Since any type of directory can be used for groups (like ZODBDirectory)
+  the hasSubGroupsSupport method is moved to the BaseDirectory. This
+  is necessary for the groups to work after an upgrade from CPS 3.2.
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
