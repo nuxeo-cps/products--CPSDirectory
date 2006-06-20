@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- MD5 capability in LDAPBackingDirectory
 Bug fixes:
 ~~~~~~~~~~
 - Since any type of directory can be used for groups (like ZODBDirectory)
