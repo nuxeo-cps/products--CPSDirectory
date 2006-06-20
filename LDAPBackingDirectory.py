@@ -57,6 +57,15 @@ def md5Digest(s):
     dig = md5.new(s).digest()
     return '{MD5}%s' % base64.encodestring(dig).rstrip()
 
+def shaDigest(s):
+    """make a LDAP-ready SHA digest.
+
+    XXX GR should probably move in a yet-to-come CPSUtil.cryptodigests
+    """
+    import sha, base64
+    dig = sha.new(s).digest()
+    return '{SHA}%s' % base64.encodestring(dig).rstrip()
+
 # During testing?
 # XXX GR this isn't robust: depends on the frame number, which may change again
 from inspect import currentframe
@@ -207,7 +216,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'attr used as id for children_attr default is ldap_rdn_attr.'},
         )
 
-    implemented_encryptions = ('SSHA', 'MD5', 'none')
+    implemented_encryptions = ('SSHA', 'SHA', 'MD5', 'none')
 
     _properties = _replaceProperty(
         _properties, 'id_field',
@@ -650,6 +659,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 encr = self.password_encryption
                 if encr == 'SSHA':
                     value = sshaDigest(value)
+                elif encr == 'SHA':
+                    value = shaDigest(value)
                 elif encr == 'MD5':
                     value = md5Digest(value)
                 elif encr != 'none':

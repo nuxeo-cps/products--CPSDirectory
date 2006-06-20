@@ -144,6 +144,17 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.assertEquals(len(pwd), 1)
         self.assert_(pwd[0].startswith('{SSHA}'))
 
+        # SHA
+        ldir.password_encryption = 'SHA'
+        res = ldir.convertDataToLDAP({'userPassword': 'precious'})
+        pwd = res['userPassword']
+        self.assertEquals(len(pwd), 1)
+        pwd = pwd[0]
+        self.assert_(pwd.startswith('{SHA}'))
+        from binascii import a2b_base64
+        exp = 'B\xe6:\x94\xdb\xef\xf41\x90\xf6\xc0?|X\x85\xc0\x1c\x87\xc2\x00'
+        self.assertEquals(a2b_base64(pwd[5:]), exp)
+
         # MD5
         ldir.password_encryption = 'MD5'
         res = ldir.convertDataToLDAP({'userPassword': 'precious'})
@@ -151,7 +162,6 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.assertEquals(len(pwd), 1)
         pwd = pwd[0]
         self.assert_(pwd.startswith('{MD5}'))
-        from binascii import a2b_base64
         self.assertEquals(a2b_base64(pwd[5:]),
                           '#\xf9\xd5\x0e\xcd \xcc\xc4d\xf4\xadE\xa32\x89H')
 
