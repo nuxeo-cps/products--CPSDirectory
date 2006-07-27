@@ -22,6 +22,10 @@ import sys
 from zLOG import LOG, INFO, DEBUG
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
+from Products.CPSUtil.testing.environment import setTestingEnvironmentIfNeeded
+
+# for tests
+setTestingEnvironmentIfNeeded()
 
 import_errors = [] # Hold the tracebacks for failed imports.
 try:

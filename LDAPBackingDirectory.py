@@ -35,6 +35,7 @@ from OFS.Image import Image
 from OFS.Cache import Cacheable
 
 from Products.CPSUtil.ssha import sshaDigest
+from Products.CPSUtil.testing.environment import isTestingEnvironment
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.Field import ValidationError
@@ -66,24 +67,14 @@ def shaDigest(s):
     dig = sha.new(s).digest()
     return '{SHA}%s' % base64.encodestring(dig).rstrip()
 
-# During testing?
-# XXX GR this isn't robust: depends on the frame number, which may change again
-from inspect import currentframe
-filename = currentframe(3).f_code.co_filename
-if '/ZopeTestCase/' in filename or filename.endswith("/testrunner.py"):
-    _TESTING = True
-else:
-    _TESTING = False
-del filename, currentframe
 
 # Import LDAP modules, maybe from testing code
-if not _TESTING:
+if not isTestingEnvironment():
     import ldap
     import ldap.ldapobject
     import ldap.filter
 else:
     from Products.CPSDirectory.tests import ldap
-del _TESTING
 
 #
 # UTF-8

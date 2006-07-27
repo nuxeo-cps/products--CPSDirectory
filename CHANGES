@@ -12,4 +12,4 @@ Bug fixes:
 - removed harcoded reference to "id" in getDirectoryResultFields.py
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- Using testing environment utilities for LDAPBackingDirectory tests.
