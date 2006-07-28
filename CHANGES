@@ -3,7 +3,8 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- MD5 and (non salted) SHA capability in LDAPBackingDirectory
+- MD5 and (non salted) SHA capability in LDAPBackingDirectory.
+- #1702: Added new Catalan translation thanks to Santi Camps.
 Bug fixes:
 ~~~~~~~~~~
 - Since any type of directory can be used for groups (like ZODBDirectory)
