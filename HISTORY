@@ -1,4 +1,24 @@
 *******************************************
+** CPSDirectory V1.36.0 [R1 build 2006/08/03-09:17 by fermigier]
+** SVN URL: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk Revision: 47779
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- MD5 and (non salted) SHA capability in LDAPBackingDirectory.
+- #1702: Added new Catalan translation thanks to Santi Camps.
+Bug fixes:
+~~~~~~~~~~
+- Since any type of directory can be used for groups (like ZODBDirectory)
+  the hasSubGroupsSupport method is moved to the BaseDirectory. This
+  is necessary for the groups to work after an upgrade from CPS 3.2.
+- removed harcoded reference to "id" in getDirectoryResultFields.py
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- Using testing environment utilities for LDAPBackingDirectory tests.
+
+*******************************************
 ** CPSDirectory V1.35.0 [R1 build 2006/05/02-15:49 by gracinet]
 ** SVN URL: http://svn/pub/CPSDirectory/trunk Revision: 45154
 Requires:

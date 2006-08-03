@@ -3,14 +3,10 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
-- MD5 and (non salted) SHA capability in LDAPBackingDirectory.
-- #1702: Added new Catalan translation thanks to Santi Camps.
+-
 Bug fixes:
 ~~~~~~~~~~
-- Since any type of directory can be used for groups (like ZODBDirectory)
-  the hasSubGroupsSupport method is moved to the BaseDirectory. This
-  is necessary for the groups to work after an upgrade from CPS 3.2.
-- removed harcoded reference to "id" in getDirectoryResultFields.py
+-
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
-- Using testing environment utilities for LDAPBackingDirectory tests.
+-
