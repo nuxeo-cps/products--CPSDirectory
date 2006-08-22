@@ -486,3 +486,11 @@ class IMetaDirectory(IDirectory):
 
     def getBackingDirectories(self, no_dir=0):
         """Get the list of backing directories and their infos."""
+
+class IBatchable(Interface):
+    """Directory that understands limit/offset query_options.
+    """
+
+class IOrderable(Interface):
+    """Directory that understands order_by query_option.
+    """

@@ -3,7 +3,7 @@ Requires:
 -
 New features:
 ~~~~~~~~~~~~~
--
+- IBatchable and IOrderable interfaces (used in CPS 4).
 Bug fixes:
 ~~~~~~~~~~
 -
