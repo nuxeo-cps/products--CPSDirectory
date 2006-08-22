@@ -494,3 +494,7 @@ class IBatchable(Interface):
 class IOrderable(Interface):
     """Directory that understands order_by query_option.
     """
+
+class ICountable(Interface):
+    """Directory that understands count query_option.
+    """
