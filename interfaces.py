@@ -488,13 +488,9 @@ class IMetaDirectory(IDirectory):
         """Get the list of backing directories and their infos."""
 
 class IBatchable(Interface):
-    """Directory that understands limit/offset query_options.
+    """Directory that understands limit/offset/count query_options.
     """
 
 class IOrderable(Interface):
     """Directory that understands order_by query_option.
-    """
-
-class ICountable(Interface):
-    """Directory that understands count query_option.
     """
