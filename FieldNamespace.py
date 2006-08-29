@@ -41,9 +41,8 @@ def crossGetList(self, dir_id, field_id, value):
     directory's schema to list all members that belong to some group.
     """
     dtool = getToolByName(self, 'portal_directories')
-    stool = getToolByName(self, 'portal_schemas')
     dir = dtool[dir_id]
-    if field_id not in stool[dir.schema].keys():
+    if field_id not in dir._getUniqueSchema():
         raise KeyError("%s not in %s's fields" % (field_id, dir_id))
     return dir._searchEntries(**{field_id: [value]})
 

@@ -6,7 +6,8 @@ New features:
 - IBatchable and IOrderable interfaces (used in CPS 4).
 Bug fixes:
 ~~~~~~~~~~
--
+- make FieldNamespace functions aware of CPSDirectories abitility to use
+  several schemas
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
