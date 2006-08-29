@@ -42,7 +42,7 @@ def crossGetList(self, dir_id, field_id, value):
     """
     dtool = getToolByName(self, 'portal_directories')
     dir = dtool[dir_id]
-    if field_id not in dir._getUniqueSchema():
+    if field_id not in dir._getFieldIds():
         raise KeyError("%s not in %s's fields" % (field_id, dir_id))
     return dir._searchEntries(**{field_id: [value]})
 
