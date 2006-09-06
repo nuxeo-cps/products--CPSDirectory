@@ -12,7 +12,7 @@
 <p class="form-help">
   In the TALES condition the following namespace is available:
   <code>entry, entry_id, user, user_id, getUserEntry(), portal,
-    DateTime(), nothing</code>.
+    DateTime(), modules, nothing</code>.
   All the values from the entry are also available directly.
 </p>
 <p class="form-help">

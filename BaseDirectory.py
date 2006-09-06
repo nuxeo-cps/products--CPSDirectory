@@ -31,6 +31,7 @@ from AccessControl import Unauthorized
 from AccessControl import ModuleSecurityInfo
 from DateTime.DateTime import DateTime
 
+from Products.PageTemplates.Expressions import SecureModuleImporter
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import SimpleItemWithProperties
 from Products.CMFCore.permissions import ManagePortal
@@ -1006,6 +1007,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             'portal': getToolByName(self, 'portal_url').getPortalObject(),
             'DateTime': DateTime,
             'nothing': None,
+            'modules': SecureModuleImporter,
             })
         return getEngine().getContext(mapping)
 

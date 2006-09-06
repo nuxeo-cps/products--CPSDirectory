@@ -4,6 +4,8 @@ Requires:
 New features:
 ~~~~~~~~~~~~~
 - IBatchable and IOrderable interfaces (used in CPS 4).
+- Secure Module Importer available in entry local roles expressions
+  as 'modules'
 Bug fixes:
 ~~~~~~~~~~
 - make FieldNamespace functions aware of CPSDirectories abitility to use
