@@ -1,5 +1,3 @@
-import os, sys
-
 import unittest
 from Testing.ZopeTestCase import ZopeTestCase
 
@@ -509,15 +507,25 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
     def testBasicSecurity(self):
         self.assert_(self.dir.isVisible())
         self.assert_(self.dir.isCreateEntryAllowed())
+        e = {'id': 'albator', 'name': 'Albator'}
+        self.dir.createEntry(e)
         self.assert_(self.dir.searchEntries() is not None)
+        self.assertEquals(self.dir.getEntry('albator'), {'id': 'albator',
+                                                          'name': 'Albator'})
         self.assertEquals(self.dir.getEntry('peterpan'), {'id': 'peterpan',
                                                           'name': 'Peterpan'})
         self.logout()
         self.assert_(not self.dir.isVisible())
         self.assert_(not self.dir.isCreateEntryAllowed())
         self.assertRaises(Unauthorized, self.dir.searchEntries)
-        self.assertRaises(Unauthorized, self.dir.getEntry, 'peterpan')
-        self.assertEquals(self.dir.getEntry('peterpan', default=None), None)
+        self.assertRaises(Unauthorized, self.dir.getEntry, 'albator')
+        self.assertEquals(self.dir.getEntry('albator', default=None), None)
+
+        # Because of the entry local role we still have the right to view
+        # PeterPan :
+        self.assertEquals(self.dir.getEntry('peterpan'), {'id': 'peterpan',
+                                                          'name': 'Peterpan'})
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -525,5 +533,3 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDirectoryEntryLocalRoles))
     return suite
 
-if __name__ == '__main__':
-    TestRunner().run(test_suite())

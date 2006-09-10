@@ -10,6 +10,7 @@ Bug fixes:
 ~~~~~~~~~~
 - make FieldNamespace functions aware of CPSDirectories abitility to use
   several schemas
+- #1593: getEntry() guard did not interpret entry local roles
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
 -
