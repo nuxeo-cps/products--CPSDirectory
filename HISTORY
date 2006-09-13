@@ -1,3 +1,27 @@
+===========================================================
+Package: CPSDirectory 1.37.0
+===========================================================
+First release built by: gracinet at: 2006-09-13T13:48:54
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.37.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@48920
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- IBatchable and IOrderable interfaces (used in CPS 4).
+- Secure Module Importer available in entry local roles expressions
+  as 'modules'
+Bug fixes:
+~~~~~~~~~~
+- make FieldNamespace functions aware of CPSDirectories abitility to use
+  several schemas
+- #1593: getEntry() guard did not interpret entry local roles
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-
+
 *******************************************
 ** CPSDirectory V1.36.0 [R1 build 2006/08/03-09:17 by fermigier]
 ** SVN URL: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk Revision: 47779

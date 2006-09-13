@@ -1,16 +1,12 @@
-Requires:
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
 ~~~~~~~~~
 -
-New features:
-~~~~~~~~~~~~~
-- IBatchable and IOrderable interfaces (used in CPS 4).
-- Secure Module Importer available in entry local roles expressions
-  as 'modules'
-Bug fixes:
-~~~~~~~~~~
-- make FieldNamespace functions aware of CPSDirectories abitility to use
-  several schemas
-- #1593: getEntry() guard did not interpret entry local roles
-New internal features:
-~~~~~~~~~~~~~~~~~~~~~~
--
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
