@@ -3,8 +3,9 @@
   layout options/layout;
   ds options/datastructure;
   creation creation|nothing;
-  formaction python: test(creation, 'cpsdirectory_entry_create_form',
-                                    'cpsdirectory_entry_edit_form');
+  formaction request/formaction|python:test(creation,
+      'cpsdirectory_entry_create_form',
+      'cpsdirectory_entry_edit_form');
   ">
 <div class="group">
 <form action="." method="post" name="form" enctype="multipart/form-data">
@@ -65,14 +66,20 @@
     <td></td>
     <td>
     <tal:block condition="has_edits">
+      <input type="hidden" name="formaction"
+	     tal:attributes="value formaction"/>
+      <input type="submit" class="standalone"
+	     name="cpsdirectory_entry_edit_form:method"
+	     value="button_change"
+	     tal:condition="not:creation"
+	     tal:attributes="name string:${formaction}:method"
+	     i18n:attributes="value"/>
     <input type="submit" class="standalone"
-      name="cpsdirectory_entry_edit_form:method"
-      value="button_change" i18n:attributes="value"
-      tal:condition="not:creation" />
-    <input type="submit" class="standalone"
-      name="cpsdirectory_entry_create_form:method"
-      value="button_create" i18n:attributes="value"
-      tal:condition="creation" />
+	   name="cpsdirectory_entry_create_form:method"
+	   value="button_create"
+	   tal:condition="creation"
+	   tal:attributes="name string:${formaction}:method"
+	   i18n:attributes="value"/>
     </tal:block>
     </td>
   </tr>
