@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+-Substring searches use the standard ascii conversion.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 -templates succession fy creation now customizable 

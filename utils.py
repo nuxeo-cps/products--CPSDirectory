@@ -1,3 +1,4 @@
+#-*- coding=iso-8859-15 -*-
 # (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
 # Author: Georges Racinet <gracinet@nuxeo.com>
 #
@@ -20,6 +21,7 @@
 used by CPSDirectory classes. """
 
 from types import ListType, TupleType, StringType
+from Products.CPSUtil.text import toAscii
 
 class QueryMatcher:
     """ Hold/prepare a query and allow to match entries against it.
@@ -29,7 +31,23 @@ class QueryMatcher:
     >>> qm.match({'id':'foo'})
     True
 
+    >>> qm = QueryMatcher({'id' : 'foo', 'spam' : 'eggs'},
+    ...                   accepted_keys=['id'])
+    >>> qm.match({'id':'the Foo'})
+    False
+
     >>> qm = QueryMatcher({'id' : 'foo'}, accepted_keys=['id'],
+    ...                    substring_keys=['id'])
+    >>> qm.match({'id':'SpamFooEggs'})
+    True
+
+    Substring behaviour and accents:
+    >>> qm = QueryMatcher({'id' : 'fooe'}, accepted_keys=['id'],
+    ...                    substring_keys=['id'])
+    >>> qm.match({'id':'SpamFooÉggs'})
+    True
+
+    >>> qm = QueryMatcher({'id' : 'fooé'}, accepted_keys=['id'],
     ...                    substring_keys=['id'])
     >>> qm.match({'id':'SpamFooEggs'})
     True
@@ -52,7 +70,7 @@ class QueryMatcher:
             if isinstance(value, StringType):
                 if substring_keys is not None and key in substring_keys:
                     match_types[key] = 'substring'
-                    value = value.lower()
+                    value = toAscii(value).lower()
                 else:
                     match_types[key] = 'exact'
             elif isinstance(value, ListType) or isinstance(value, TupleType):
@@ -80,11 +98,11 @@ class QueryMatcher:
                 searched = (searched,)
             matched = 0
             for item in searched:
-                # FIXME? No wild cards like * are currently accepted
+                # Wild cards like * are currently accepted
                 if search_types[key] == 'list':
                     matched = item in value
                 elif search_types[key] == 'substring':
-                    matched = item.lower().find(value) != -1 or value == '*'
+                    matched = value in toAscii(item).lower() or value == '*'
                 else: # search_types[key] == 'exact':
                     matched = item == value
                 if matched:
