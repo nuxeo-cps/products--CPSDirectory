@@ -259,6 +259,12 @@ class TestStackingDirectory(ZopeTestCase):
         ids = dir.searchEntries(moo='LLL')
         self.assertEquals(ids, [])
 
+        # typed search
+        self.dirfoo.editEntry({'uid': 'GGG', 'glop': False})
+        ids = dir.searchEntries(glop=False)
+        self.assertEquals(ids, ['GGG'])
+        self.dirfoo.editEntry(entry1) # restoring
+
         # Multiple results
         # Id list match
         ids = dir.searchEntries(moo=['f2', 'f7'])

@@ -477,6 +477,12 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         res = dir.searchEntries(foo='E', bar='12')
         self.assertEquals(res, ids)
 
+        # typed searches
+        dir.editEntry({'id': id1, 'foo': True})
+        dir.editEntry({'id': id2, 'foo': False})
+        res = dir.searchEntries(foo=False)
+        self.assertEquals(res, [id2])
+
 class TestMetaDirectoryMissing(TestMetaDirectory):
 
     def afterSetUp(self):

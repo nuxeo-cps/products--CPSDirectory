@@ -227,6 +227,12 @@ class TestZODBDirectory(ZopeTestCase):
         res = zdir.searchEntries(foo='green', return_fields=['zblurg'])
         self.assertEquals(res, [(id1, {})])
 
+        # typed searches
+        zdir.editEntry({'idd': id1, 'foo': True})
+        zdir.editEntry({'idd': id2, 'foo': False})
+        res = zdir.searchEntries(foo=False)
+        self.assertEquals(res, [id2])
+
     def testCache(self):
         zdir = self.dir
         dtool = self.portal.portal_directories

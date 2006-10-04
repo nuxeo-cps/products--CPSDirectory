@@ -64,6 +64,18 @@ class QueryMatcher(object):
     >>> qm.match({'id':'SpamFooEggs'})
     True
 
+    >>> qm = QueryMatcher({'enabled': False}, accepted_keys=['enabled'])
+    >>> qm.match({'enabled': True})
+    False
+    >>> qm.match({'enabled': False})
+    True
+
+    >>> qm = QueryMatcher({'enabled': True}, accepted_keys=['enabled'])
+    >>> qm.match({'enabled': True})
+    True
+    >>> qm.match({'enabled': False})
+    False
+
     We don't fail if the entry lacks keys from the query
     >>> qm.match({})
     False

@@ -325,7 +325,7 @@ class MetaDirectory(BaseDirectory):
         for key, value in kw.items():
             if key not in all_field_ids:
                 continue
-            if not value:
+            if not value and value != False:
                 # Ignore empty searches.
                 continue
             query[key] = value
