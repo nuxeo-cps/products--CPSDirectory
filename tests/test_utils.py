@@ -21,8 +21,27 @@ import unittest
 
 from Testing.ZopeTestCase import doctest
 
+from Products.CPSDirectory.utils import QueryMatcher
+
 class DirectoryUtilsTestCase(unittest.TestCase):
-    pass
+
+    def testNegate_str(self):
+        query = {'sn': {'query': 'tutu', 'negate': True}}
+        matcher = QueryMatcher(query)
+        self.assert_(matcher.match({'sn': 'blob', 'givenName': '1'}))
+        self.failIf(matcher.match({'sn': 'tutu', 'givenName': '2'}))
+
+    def testNegate_int(self):
+        query = {'sn': {'query': 1, 'negate': True}}
+        matcher = QueryMatcher(query)
+        self.assert_(matcher.match({'sn': 34, 'givenName': '1'}))
+        self.failIf(matcher.match({'sn': 1, 'givenName': '2'}))
+
+    def testNegate_list(self):
+        query = {'sn': {'query': ('a', 'b'), 'negate': True}}
+        matcher = QueryMatcher(query)
+        self.assert_(matcher.match({'sn': 'c', 'givenName': '1'}))
+        self.failIf(matcher.match({'sn': 'a', 'givenName': '2'}))
 
 
 def test_suite():

@@ -21,9 +21,21 @@
 used by CPSDirectory classes. """
 
 from types import ListType, TupleType, StringType
+import re
+import operator
+from types import NoneType
+
 from Products.CPSUtil.text import toAscii
 
-class QueryMatcher:
+def operator_in(a, b):
+    # operator.contains with reversed operands
+    return a in b
+
+def operator_notin(a, b):
+    return a not in b
+
+
+class QueryMatcher(object):
     """ Hold/prepare a query and allow to match entries against it.
 
     >>> qm = QueryMatcher({'id' : 'foo', 'spam' : 'eggs'},
@@ -59,27 +71,58 @@ class QueryMatcher:
     """
 
     def __init__(self, query, accepted_keys=None, substring_keys=None):
+        self._substring_keys = substring_keys
         _query = {}
-        match_types = {}
+        ops = {}
         for key, value in query.items():
             if accepted_keys is not None and key not in accepted_keys:
                 continue
-            if not value:
-                # Ignore empty searches
+            value, op = self._findType(key, value)
+            if op is None:
                 continue
-            if isinstance(value, StringType):
-                if substring_keys is not None and key in substring_keys:
-                    match_types[key] = 'substring'
-                    value = toAscii(value).lower()
-                else:
-                    match_types[key] = 'exact'
-            elif isinstance(value, ListType) or isinstance(value, TupleType):
-                match_types[key] = 'list'
-            else:
-                raise ValueError("Bad value %s for '%s'" % (`value`, key))
+            ops[key] = op
             _query[key] = value
         self.query = _query
-        self.match_types = match_types
+        self.ops = ops
+
+    def _findType(self, key, value, negate=False):
+        """Find op and value.
+        """
+        if value in ('', None): # XXX
+            if negate:
+                raise NotImplementedError
+            # Ignore empty searches
+            return value, None
+        elif isinstance(value, basestring):
+            if (self._substring_keys is not None
+                and key in self._substring_keys):
+                if negate:
+                    raise NotImplementedError
+                op = 'substring'
+                value = value.lower()
+            else:
+                if negate:
+                    op = operator.ne
+                else:
+                    op = operator.eq
+        elif isinstance(value, (int, long, bool)):
+            if negate:
+                op = operator.ne
+            else:
+                op = operator.eq
+        elif isinstance(value, (list, tuple)):
+            if negate:
+                op = operator_notin
+            else:
+                op = operator_in
+        elif isinstance(value, dict) and 'query' in value:
+            if negate and value.get('negate'):
+                raise ValueError("Cannot double negate")
+            query = value['query']
+            return self._findType(key, query, negate=True)
+        else:
+            raise ValueError("Bad value %s for '%s'" % (`value`, key))
+        return value, op
 
     def getKeysSet(self):
         return set(self.query)
@@ -87,27 +130,37 @@ class QueryMatcher:
     def match(self, entry):
         """ Does the entry match the query ? Boolean valued.
         """
-        search_types = self.match_types
-        ok = 1
+        ops = self.ops
+        ok = True
         for key, value in self.query.items():
-            searched = entry.get(key)
-            if searched is None:
-                ok = 0
+            if key not in entry:
+                ok = False
                 break
-            if isinstance(searched, StringType):
+            searched = entry[key]
+            if isinstance(searched, (basestring, int, long, NoneType)):
+                # bool subclasses int
                 searched = (searched,)
             matched = 0
+            value_re = None
+            op = ops[key]
+            if isinstance(value, basestring):
+                if op == 'substring':
+                    value = toAscii(value).lower()
+                if '*' in value or '?' in value:
+                    regexp = re.escape(value)
+                    regexp = regexp.replace('\\?', '.?')
+                    regexp = regexp.replace('\\*', '.*')
+                    value_re = re.compile(regexp)
+
             for item in searched:
                 # Wild cards like * are currently accepted
-                if search_types[key] == 'list':
-                    matched = item in value
-                elif search_types[key] == 'substring':
+                if op == 'substring':
                     matched = value in toAscii(item).lower() or value == '*'
-                else: # search_types[key] == 'exact':
-                    matched = item == value
+                else: # op is an operator
+                    matched = op(item, value)
                 if matched:
                     break
             if not matched:
-                ok = 0
+                ok = False
                 break
-        return ok == 1
+        return ok

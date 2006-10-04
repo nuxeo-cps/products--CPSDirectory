@@ -3,10 +3,11 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
+- utils.QueryMatcher knows about None, booleans, ints, and negated
 -
 Bug fixes
 ~~~~~~~~~
 - Substring searches use the standard ascii conversion.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- templates succession fy creation now customizable 
+- templates succession fy creation now customizable
