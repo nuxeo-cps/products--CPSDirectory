@@ -6,6 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
+- crossSetList has a new kw arg to help in case of "weird seach semantics"
 - [packaging] bundleman svn property
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~

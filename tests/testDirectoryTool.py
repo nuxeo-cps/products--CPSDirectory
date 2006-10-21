@@ -129,6 +129,31 @@ class TestDirectoryTool(ZopeTestCase):
         self.assertEquals(dir.searchEntries(groups='group2'),
                           ['iliketuples', 'user1'])
 
+        # 'value_search': cases where _searchEntries is decorelated from
+        # _getEntry
+        # patching searches to have them behave differently from gets
+        normal_searchEntries = dir._searchEntries
+        def _searchEntries(**kw):
+            groups = kw.get('groups')
+            if groups is not None:
+                if isinstance(groups, basestring):
+                    groups = [groups]
+                kw['groups'] = [group.split('=')[1] for group in groups]
+            return normal_searchEntries(**kw)
+        dir._searchEntries = _searchEntries
+        # testing the patch
+        self.assertEquals(dir.searchEntries(groups='ou=group1'), ['iliketuples'])
+        self.assertEquals(dir.searchEntries(groups='ou=group2'),
+                          ['iliketuples', 'user1'])
+        self.assertRaises(IndexError, dir.searchEntries, groups='group2')
+        # do test: keep user1, remove iliketuples, adding user2
+        crossSetList(portal, dir_id, 'groups', 'group2', ['user1', 'user2'],
+                     value_search='ou=group2')
+        self.assertEquals(dir.searchEntries(groups='ou=group2'),
+                          ['user1', 'user2'])
+        # unpatching
+        dir._searchEntries = normal_searchEntries
+
         # Unexisting user triggers KeyError
         # XXX: is this the same behavior for all directory backends?
         self.assertRaises(KeyError,
