@@ -6,6 +6,7 @@
   formaction request/formaction|python:test(creation,
       'cpsdirectory_entry_create_form',
       'cpsdirectory_entry_edit_form');
+  cpsmcat nocall:here/translation_service;
   ">
 <div class="group">
 <form action="." method="post" name="form" enctype="multipart/form-data">
@@ -20,6 +21,7 @@
     <tal:block define="widget cell/widget;
                        wid widget/getWidgetId;
                        err python: ds.getError(wid);
+                       err_mapping python:ds.getErrorMapping(wid);
                        is_edit python: cell['widget_mode'] == 'edit';
                        is_required python: is_edit and widget.is_required;
                        global has_edits python: has_edits or is_edit;
@@ -45,8 +47,10 @@
             <tal:block replace="structure cell/widget_rendered" />
           </div>
           <div tal:condition="err">
-            <em style="color:red" tal:content="err"
-              i18n:translate="">Error</em>
+            <tal:block define="msg python:cpsmcat(err, mapping=err_mapping)">
+              <em style="color: red"
+                  tal:content="msg">err</em>
+            </tal:block>
           </div>
         </div>
         <div class="tooltipArea" style="visibility: hidden;"
