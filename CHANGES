@@ -6,11 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- crossSetList has a new kw arg to help in case of "weird seach semantics"
-- [packaging] bundleman svn property
-- fixed missing validation error messages in directory editing form
-  patch by Cédric Marfil <cedric.marfil@capgemini.com>
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
-
