@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
 "POT-Creation-Date: 2006-04-28 12:29default\n"
-"PO-Revision-Date: 2004-10-04 16:52+0100\n"
-"Last-Translator:  <>\n"
+"PO-Revision-Date: 2006-09-29 12:14+0100\n"
+"Last-Translator: Periko Alkain <perikoalkain@lasalle.es>\n"
 "Language-Team: Euskara <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -101,7 +101,7 @@ msgstr "id"
 #: ../skins/cps_directory/layout_dir_search.pt
 #: ../skins/cps_directory/layout_dir_view.pt
 msgid "label"
-msgstr "label"
+msgstr "etiketa"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -112,10 +112,12 @@ msgstr "Emaitzarik ez"
 #.               Selection
 #.             </th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
-#, fuzzy
 msgid "label_selection"
-msgstr "Selection"
+msgstr "Hautapena"
 
+#    <p condition="not:directories">
+#          No directory available
+#        </p>
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
@@ -152,10 +154,7 @@ msgid "cpsdir_label_delete_entry"
 msgstr "Sarrera ezabatu"
 
 msgid "cpsdir_help_homeless"
-msgstr ""
-"Atal pribatuaren aukerak hauexek dira:<br />- lanerako gune pribatua<br />- "
-"zure egutegia<br />- gogokoenen zerrenda<br />- kutxak txikitu eta ixteko "
-"aukera<br />"
+msgstr "Atal pribatuaren aukerak hauexek dira:<br />- lanerako gune pribatua<br />- zure egutegia<br />- gogokoenen zerrenda<br />- kutxak txikitzeko eta ixteko aukera<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Alderdi pribatua gaitu"
@@ -167,28 +166,15 @@ msgid "label_roles_Member"
 msgstr "Erabiltzailea"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
-"Sorry but this entry can not be deleted, you have to delete all sub entries "
-"first."
+msgstr "Sentitzen dugu baina sarrera hau ezin da ezabatu, lehendabizi bere azpisarrera guztiak ezabatu behar dira"
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "An entry with the same identifier already exists"
+msgstr "Dagoenego badago sarrera bat izen berarekin"
 
 msgid "label_cpsdir_roles_Member"
 msgstr ""
 
-#, fuzzy
 msgid "label_cpsdir_roles_Manager"
-msgstr "Administrador"
+msgstr "Administratzailearen rolak"
 
-msgid "Title"
-msgstr "Title"
 
-msgid "button_back"
-msgstr "Back"
-
-msgid "button_delete"
-msgstr "Delete"
-
-msgid "button_search"
-msgstr "Search"
