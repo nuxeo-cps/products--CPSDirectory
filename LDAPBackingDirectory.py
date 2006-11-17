@@ -24,7 +24,7 @@ It has no dependencies besides the ldap module.
 In this directory the id is always the dn.
 """
 
-from zLOG import LOG, DEBUG, TRACE, ERROR
+from logging import getLogger
 
 import re
 import sys
@@ -48,6 +48,8 @@ from Products.CPSDirectory.BaseDirectory import _replaceProperty
 from Products.CPSDirectory.interfaces import IDirectory
 
 from zope.interface import implements
+
+logger = getLogger('CPSDirectory.LDAPBackingDirectory')
 
 def md5Digest(s):
     """make a LDAP-ready MD5 digest.
@@ -205,6 +207,12 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'Field that contains a list of sub entries id for hierarchical directory'},
         {'id': 'children_id_attr', 'type': 'string', 'mode': 'w',
          'label': 'attr used as id for children_attr default is ldap_rdn_attr.'},
+        {'id': 'ldap_retry_max', 'type': 'int', 'mode': 'w',
+         'label': 'LDAP auto reconnect feature: maximum retry'},
+        {'id': 'ldap_retry_delay', 'type': 'float', 'mode': 'w',
+         'label': 'LDAP auto reconnect feature: delay in seconds before retrying'},
+        {'id': 'ldap_timeout', 'type': 'float', 'mode': 'w',
+         'label': 'LDAP network timeout in seconds for any request (0 means no limit)'},
         )
 
     implemented_encryptions = ('SSHA', 'SHA', 'MD5', 'none')
@@ -239,6 +247,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     ldap_search_classes_c = ['person']
     ldap_search_classes_filter = '(objectClass=person)'
     ldap_object_classes_c = ['top', 'person']
+    ldap_retry_max = 1
+    ldap_retry_delay = 60.0
+    ldap_timeout = 0
 
     all_password_encryptions = ('none',)
     all_ldap_scopes = ('ONELEVEL', 'SUBTREE')
@@ -443,7 +454,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             self._searchEntries(return_fields=[field_id],
                                 **{self.children_id_attr: [child]})
             for child in children]
-        return [entry[0][1].get(field_id) for entry in children_entires]
+        return [entry[0][1].get(field_id) for entry in children_entries]
 
     security.declarePrivate('_getParentEntryId')
     def _getParentEntryId(self, id, field_id=None):
@@ -505,12 +516,11 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             # UNWILLING_TO_PERFORM: unauthenticated bind (DN with no password)
             # disallowed
             if password is None:
-                LOG('_getEntryFromLDAP', ERROR,
-                    "Invalid credentials for directory %s" % self.getId())
+                logger.error('_getEntryFromLDAP: Invalid credentials for directory %s',
+                             self.getId())
                 raise ldap.INVALID_CREDENTIALS
             else:
-                LOG('_getEntryFromLDAP', TRACE,
-                    "Invalid credentials for %s" % id)
+                logger.log(5, '_getEntryFromLDAP: Invalid credentials for %s', id)
                 raise AuthenticationFailed
         if not results:
             raise KeyError("No entry '%s'" % id)
@@ -535,8 +545,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 continue
             if '_' in key:
                 # Invalid attribute for LDAP (Bad search filter (87)).
-                LOG('LDAPBackingDirectory._buildFilter', ERROR,
-                    "Invalid LDAP attribute '%s', ignored" % key)
+                logger.error("_buildFilter: Invalid LDAP attribute '%s', ignored", key)
                 continue
             if not value:
                 continue
@@ -712,8 +721,12 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 proto = 'ldap'
             conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
 
-            LOG('connectLDAP', TRACE, 'initialize conn_str=%s' % conn_str)
-            conn = ldap.ldapobject.ReconnectLDAPObject(conn_str)
+            logger.log(5, 'connectLDAP: initialize conn_str=%s', conn_str)
+            conn = ldap.ldapobject.ReconnectLDAPObject(
+                conn_str, retry_max=self.ldap_retry_max,
+                retry_delay=self.ldap_retry_delay)
+            if self.ldap_timeout > 0:
+                conn.timeout = self.ldap_timeout
             try:
                 conn.set_option(ldap.OPT_PROTOCOL_VERSION, ldap.VERSION3)
             except ldap.LDAPError:
@@ -724,7 +737,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 conn.set_option(ldap.OPT_REFERRALS, 1)
             except ldap.LDAPError:
                 # Forget about it.
-                LOG('LDAPBackingDirectory.connect', DEBUG, 'No referrals')
+                logger.debug('connectLDAP: No referrals')
                 pass
 
             #conn.manage_dsa_it(0)
@@ -749,7 +762,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         # Bind with authentication
         conn._cps_bound_dn = None
         conn._cps_bound_password = None
-        LOG('connectLDAP', TRACE, "bind_s dn=%s" % bind_dn)
+        logger.log(5, 'connectLDAP: bind_s dn=%s', bind_dn)
         try:
             conn.simple_bind_s(bind_dn, bind_password)
         except ldap.SERVER_DOWN:
@@ -776,10 +789,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         """Return true if the entry exists."""
         try:
             conn = self.connectLDAP()
-            LOG('existsLDAP', TRACE, "search_s dn=%s" % dn)
+            logger.log(5, 'existsLDAP: search_s dn=%s', dn)
             filter = self.searchFilter()
             res = conn.search_s(dn, ldap.SCOPE_BASE, filter, ['dn'])
-            LOG('existsLDAP', TRACE, " -> results=%s" % (res,))
+            logger.log(5, 'existsLDAP: -> results=%s', res)
         except ldap.NO_SUCH_OBJECT:
             return 0
         return len(res) != 0
@@ -804,11 +817,10 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 }
             if password is not None:
                 keyset['password'] = password
-            LOG('searchLDAP', TRACE, "Searching cache for %s" % (keyset,))
+            logger.log(5, 'searchLDAP: Searching cache for %s', keyset)
             ldap_entries = self.ZCacheable_get(keywords=keyset)
             if ldap_entries is not None:
-                LOG('searchLDAP', TRACE, " -> results=%s" %
-                    (ldap_entries[:20],))
+                logger.log(5, 'searchLDAP: -> results=%s', ldap_entries[:20])
                 return ldap_entries
         else:
             keyset = None
@@ -824,14 +836,16 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                     raise ldap.INVALID_DN_SYNTAX
                 conn = self.connectLDAP(base, toUTF8(password))
             except ldap.INVALID_DN_SYNTAX:
-                LOG('searchLDAP', TRACE, "Invalid credentials (dn syntax) for %s" % base)
+                logger.log(5, 'searchLDAP: Invalid credentials (dn syntax) for'
+                           ' %s', base)
                 return []
             except ldap.INVALID_CREDENTIALS:
-                LOG('searchLDAP', TRACE, "Invalid credentials for %s" % base)
+                logger.log(5, 'searchLDAP: Invalid credentials for %s', base)
                 raise AuthenticationFailed
 
-        LOG('searchLDAP', TRACE, "search_s base=%s scope=%s filter=%s attrs=%s" %
-            (base, scope, filter, attrs))
+        logger.log(5, 'searchLDAP: search_s base=%s scope=%s filter=%s '
+                   'attrs=%s', base, scope, filter, attrs)
+
         try:
             ldap_entries = conn.search_s(base, scope, toUTF8(filter), attrs)
         except ldap.NO_SUCH_OBJECT:
@@ -840,14 +854,14 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         except ldap.SERVER_DOWN:
             raise ConfigurationError("Directory '%s': LDAP server is down"
                                      % self.getId())
-        LOG('searchLDAP', TRACE, " -> results=%s" % (ldap_entries[:20],))
+        logger.log(5, 'searchLDAP: -> results=%s', ldap_entries[:20])
         #except ldap.NO_SUCH_OBJECT:
         #except ldap.SIZELIMIT_EXCEEDED:
         # XXX: might try to fetch partial results with ldap.async:
         # http://python-ldap.sourceforge.net/doc/python-ldap/ldap.async-example.List.html
 
         if keyset is not None:
-            LOG('searchLDAP', TRACE, "Putting in cache")
+            logger.log(5, 'searchLDAP: Putting in cache')
             self.ZCacheable_set(ldap_entries, keywords=keyset)
 
         return ldap_entries
@@ -867,7 +881,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         """Delete an entry from LDAP."""
         # maybe check read_only
         conn = self.connectLDAP()
-        LOG('deleteLDAP', TRACE, "delete_s dn=%s" % dn)
+        logger.log(5, 'deleteLDAP: delete_s dn=%s', dn)
         try:
             conn.delete_s(dn)
         except ldap.INSUFFICIENT_ACCESS, e:
@@ -880,7 +894,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         # maybe check read_only
         attrs_list = [(k, v) for k, v in ldap_attrs.items()]
         conn = self.connectLDAP()
-        LOG('insertLDAP', TRACE, "add_s dn=%s attrs=%s" % (dn, attrs_list))
+        logger.log(5, 'insertLDAP: add_s dn=%s attrs=%s', dn, attrs_list)
         try:
             conn.add_s(dn, attrs_list)
         except ldap.INSUFFICIENT_ACCESS, e:
@@ -900,11 +914,11 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         rdn_attrs = [ava.split('=')[0] for ava in rdn_split]
 
         # Get current entry
-        LOG('modifyLDAP', TRACE, "search_s base dn=%s" % dn)
+        logger.log(5, 'modifyLDAP: search_s base dn=%s', dn)
         # (use objectClass=* because dn is already assumed valid
         #  and also we'd like the *LDAP methods to be generic)
         res = conn.search_s(dn, ldap.SCOPE_BASE, '(objectClass=*)')
-        LOG('modifyLDAP', TRACE, " -> results=%s" % (res,))
+        logger.log(5, 'modifyLDAP: -> results=%s', res)
         if not res:
             raise KeyError("No entry '%s'" % dn)
         cur_dn, cur_ldap_entry = res[0]
@@ -932,7 +946,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         if not mod_list:
             return
 
-        LOG('modifyLDAP', TRACE, "modify_s dn=%s mod_list=%s" % (dn, mod_list))
+        logger.log(5, 'modifyLDAP: modify_s dn=%s mod_list=%s', dn, mod_list)
         conn.modify_s(dn, mod_list)
         self.ZCacheable_invalidate()
 
