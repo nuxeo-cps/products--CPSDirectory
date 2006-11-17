@@ -1,4 +1,25 @@
 ===========================================================
+Package: CPSDirectory 1.39.0
+===========================================================
+First release built by: gracinet at: 2006-11-17T18:31:46
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.39.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@50141
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Basque translation
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- added the possibility to set ldap_timeout, ldap_retry_max and ldap_retry_delay
+  to be able to tune LDAP connections
+
+===========================================================
 Package: CPSDirectory 1.38.2
 ===========================================================
 First release built by: gracinet at: 2006-11-16T18:15:49
