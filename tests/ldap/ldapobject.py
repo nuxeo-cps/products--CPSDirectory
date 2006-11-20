@@ -21,7 +21,7 @@
 
 from functions import initialize
 
-def ReconnectLDAPObject(connection_string):
+def ReconnectLDAPObject(connection_string, retry_max=1, retry_delay=60.0):
     """ faking a connection
     """
     return initialize('fake')
