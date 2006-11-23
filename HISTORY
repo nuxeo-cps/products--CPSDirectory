@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.39.1
+===========================================================
+First release built by: gracinet at: 2006-11-23T21:01:22
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.39.1
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@50247
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Fixed a lagging unit test
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.39.0
 ===========================================================
 First release built by: gracinet at: 2006-11-17T18:31:46
