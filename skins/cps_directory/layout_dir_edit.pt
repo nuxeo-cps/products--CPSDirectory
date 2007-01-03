@@ -9,7 +9,8 @@
   cpsmcat nocall:here/translation_service;
   ">
 <div class="group">
-<form action="." method="post" name="form" enctype="multipart/form-data">
+<form action="." method="post" name="form"
+      enctype="multipart/form-data" accept-charset="utf-8">
 <input type="hidden" name="dirname" value="."
   tal:attributes="value request/dirname" />
 <input type="hidden" name="id" value="."
