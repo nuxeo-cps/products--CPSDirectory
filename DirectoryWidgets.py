@@ -336,10 +336,10 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
                 if portal_registration.isMemberIdAllowed(v):
                     return True
                 else:
-                    datastructure.setError(widget_id, 
+                    datastructure.setError(widget_id,
                                            'cpsdir_err_entry_already_exists')
                     return False
-                    
+
 
         return not err
 
