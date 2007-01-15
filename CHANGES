@@ -4,6 +4,7 @@ Requires
 New features
 ~~~~~~~~~~~~
 - i18n unicode utf-8 support in progress
+- SQLDirectory back port CPS 4 version
 Bug fixes
 ~~~~~~~~~
 -
