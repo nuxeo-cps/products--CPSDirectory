@@ -84,6 +84,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
          'label': "SQL dialect", 'select_variable': 'all_dialects'},
         {'id': 'encoding', 'type': 'selection', 'mode': 'w',
          'label': "DB Encoding", 'select_variable': 'all_encoding'},
+        {'id': 'method_clause', 'type': 'string', 'mode': 'w',
+         'label': "SQL clause filtering"},
         )
 
     all_dialects = (
@@ -103,6 +105,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
     sql_table = ''
     dialect = all_dialects[0]
     encoding = all_encoding[0]
+    method_clause = ''
 
     def all_sql_connection_paths(self):
         """Get SQL database connections in the current folder and above.
@@ -271,9 +274,23 @@ class SQLDirectory(BaseDirectory, Cacheable):
 
         return id
 
+    def _getMethodClause(self):
+        clause = ''
+        if self.method_clause:
+            meth = getattr(self, self.method_clause, None)
+            if meth is None:
+                raise RuntimeError("Unknown clause method %s for dir %s"
+                                   % (self.method_clause, self.getId()))
+            clause = meth()
+        return clause
+
     def _makeWhereClause(self, id):
-        return " %s = %s" % (self.getSQLField(self.id_field),
-                                 self.getSQLValue(id))
+        clause = " %s = %s" % (self.getSQLField(self.id_field),
+                               self.getSQLValue(id))
+        tmp = self._getMethodClause()
+        if tmp:
+            clause += ' AND ' + tmp
+        return clause
 
     security.declarePrivate('_deleteEntry')
     def _deleteEntry(self, id):
@@ -331,6 +348,9 @@ class SQLDirectory(BaseDirectory, Cacheable):
             clause = self._makeClause(key, value, quoter)
             if clause is not None:
                 clauses.append(clause)
+        clause = self._getMethodClause()
+        if clause:
+            clauses.append(clause)
         if clauses:
             sql = sql + " WHERE " + " AND ".join(clauses)
 
