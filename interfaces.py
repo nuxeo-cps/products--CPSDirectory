@@ -494,3 +494,8 @@ class IBatchable(Interface):
 class IOrderable(Interface):
     """Directory that understands order_by query_option.
     """
+
+class IPluggableConnection(Interface):
+    """Connector, typically for ZSQL Family"""
+    pass
+

@@ -25,6 +25,13 @@
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
+   <adapter
+      factory=".exportimport.SQLConnectorXMLAdapter"
+      provides="Products.GenericSetup.interfaces.IBody"
+      for=".interfaces.IPluggableConnection
+           Products.GenericSetup.interfaces.ISetupEnviron"
+      />
+
   <five:registerClass
       class=".MembersDirectory.MembersDirectory"
       meta_type="CPS Members Directory"

@@ -37,6 +37,7 @@ from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
 from Products.CPSDirectory.interfaces import IMetaDirectory
 from Products.CPSDirectory.interfaces import IContentishDirectory
+from Products.CPSDirectory.interfaces import IPluggableConnection
 
 TOOL = 'portal_directories'
 NAME = 'directories'
@@ -99,7 +100,12 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
             # it's a Directory with content (potentially)
             if IContentishDirectory.providedBy(dir):
                 # if the directory has entries, don't delete it
-                if dir.searchEntries():
+                try:
+                    if dir.searchEntries():
+                        continue
+                except (ValueError, AttributeError, KeyError):
+                    # XXX AT: searchEntries may be needing schemas or
+                    # vocabulary that are not already (or anymore) present
                     continue
             parent._delObject(obj_id)
 
@@ -243,3 +249,68 @@ class ContentishDirectoryXMLAdapter(DirectoryXMLAdapter):
 
     adapts(IContentishDirectory, ISetupEnviron)
     implements(IBody)
+
+class SQLConnectorXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
+    adapts(IPluggableConnection, ISetupEnviron)
+    implements(IBody)
+
+    _LOGGER_ID = NAME
+
+    def _exportNode(self):
+        """Export the object as a DOM node.
+
+        Manual mapping here, because the connector doesn't have
+        property mappers.
+        """
+        node = self._getObjectNode('object')
+        fragment = self._doc.createDocumentFragment()
+        for prop_id in ('title', 'connection_string'):
+            prop = getattr(self.context, prop_id)
+            subnode = self._doc.createElement('property')
+            subnode.setAttribute('name', prop_id)
+            child = self._doc.createTextNode(prop)
+            subnode.appendChild(child)
+            fragment.appendChild(subnode)
+
+        # adding check to 1
+        subnode = self._doc.createElement('property')
+        subnode.setAttribute('name', 'check')
+        connected = self.context.connected() is not None
+        child = self._doc.createTextNode(str(connected))
+        subnode.appendChild(child)
+        fragment.appendChild(subnode)
+
+        node.appendChild(fragment)
+        self._logger.info("%r connector exported." % self.context.getId())
+        return node
+
+    def _importNode(self, node):
+        """Import the object from the DOM node.
+        """
+        if self.environ.shouldPurge():
+            self._purgeProperties()
+
+        obj = self.context
+        values = {}
+        for child in node.childNodes:
+            if child.nodeName != 'property':
+                continue
+            prop_id = str(child.getAttribute('name'))
+            if prop_id in ('title', 'connection_string', 'check'):
+                prop_value = self._getNodeText(child).encode('utf-8')
+                values[prop_id] = prop_value
+
+        if 'check' not in values:
+            values['check'] = False
+        else:
+            values['check'] = bool(values['check'])
+        try:
+            from _mysql_exceptions import OperationalError
+            try:
+                obj.edit(values['title'], values['connection_string'], values['check'])
+            except OperationalError:
+                obj.title = values['title']
+        except ImportError:
+            obj.title = values['title']
+
+        self._logger.info("%r connector imported." % self.context.getId())
