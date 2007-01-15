@@ -10,4 +10,4 @@ Bug fixes
 -
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- SQLDirectory have method clause filter property.
