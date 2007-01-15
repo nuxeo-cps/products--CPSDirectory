@@ -46,6 +46,9 @@ try:
 except ImportError:
     has_ldap = 0
 
+# Generic setup patches for SQL Connector
+import SQLConnector
+
 import DirectoryTool
 # Register widgets. Don't remove.
 import DirectoryWidgets
