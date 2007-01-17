@@ -32,6 +32,8 @@ from AccessControl import ClassSecurityInfo
 from DateTime.DateTime import DateTime
 from OFS.Cache import Cacheable
 
+from Products.CMFCore.utils import getToolByName
+
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
@@ -114,12 +116,12 @@ class SQLDirectory(BaseDirectory, Cacheable):
         """
         paths = ['']
         context = self
+        utool = getToolByName(self, 'portal_url')
         while context is not None:
             if getattr(aq_base(context), 'objectValues', None) is not None:
                 for ob in context.objectValues():
                     if getattr(aq_base(ob), '_isAnSQLConnection', False):
-                        path = '/'.join(ob.getPhysicalPath())
-                        paths.append(path)
+                        paths.append(utool.getRelativeUrl(ob))
             context = aq_parent(aq_inner(context))
         paths.sort()
         return paths
