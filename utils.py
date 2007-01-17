@@ -133,7 +133,7 @@ class QueryMatcher(object):
                 raise ValueError("Cannot double negate")
             query = value['query']
             return self._findType(key, query, negate=True)
-        elif isinstance(value, DateTime.DateTime):
+        elif isinstance(value, DateTime):
             if negate:
                 op = operator.ne
             else:
