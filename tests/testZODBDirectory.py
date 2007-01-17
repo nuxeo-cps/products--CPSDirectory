@@ -3,6 +3,7 @@ from Testing.ZopeTestCase import ZopeTestCase
 
 from AccessControl import Unauthorized
 from OFS.Folder import Folder
+from DateTime import DateTime
 
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
@@ -232,6 +233,12 @@ class TestZODBDirectory(ZopeTestCase):
         zdir.editEntry({'idd': id2, 'foo': False})
         res = zdir.searchEntries(foo=False)
         self.assertEquals(res, [id2])
+
+        # typed searches with DateTime
+        zdir.editEntry({'idd':id1, 'foo':DateTime('2000/01/01')})
+        zdir.editEntry({'idd':id2, 'foo':DateTime('2000/02/02')})
+        res = zdir.searchEntries(foo=DateTime('2000/01/01'))
+        self.assertEquals(res, [id1])
 
     def testCache(self):
         zdir = self.dir
