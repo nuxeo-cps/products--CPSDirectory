@@ -24,6 +24,7 @@ from types import ListType, TupleType, StringType
 import re
 import operator
 from types import NoneType
+from DateTime import DateTime
 
 from Products.CPSUtil.text import toAscii
 
@@ -149,7 +150,7 @@ class QueryMatcher(object):
                 ok = False
                 break
             searched = entry[key]
-            if isinstance(searched, (basestring, int, long, NoneType)):
+            if isinstance(searched, (basestring, int, long, NoneType, DateTime)):
                 # bool subclasses int
                 searched = (searched,)
             matched = 0

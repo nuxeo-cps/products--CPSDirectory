@@ -6,7 +6,8 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- #1805: Add DateTime type to the method match ofCPSDirectory.utils
+
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
