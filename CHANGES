@@ -10,6 +10,11 @@ Bug fixes
 - Fixed XHTML validity in directory entry form.
 - Synced with CPSDocument and CPSDefault fix for #1806 "Fields with errors have
   their error message not associated them and too far below".
+- Made the cpsdirectory_entry_created.py script swicth to the
+  "cpsdirectory_entry_edit_form" or the "cpsdirectory_entry_view" page depending
+  on the ACL rights of the current user over the entry. Typically this is to be
+  able to deal with cases where some kind of managers are able to create entries
+  but not to modify them.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
