@@ -62,6 +62,8 @@ class FakeField:
         pass
     def computeDependantFields(self, *args, **kw):
         pass
+    def _getAllDependantFieldIds(self):
+        return ()
     def convertToLDAP(self, value):
         return [toUTF8(str(value))]
     def convertFromLDAP(self, values):

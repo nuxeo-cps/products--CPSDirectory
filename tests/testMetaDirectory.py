@@ -33,6 +33,13 @@ from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
+from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+
+class LoggerZODBDirectory(ZODBDirectory):
+    def _searchEntries(self, *args, **kwargs):
+        self.tests_called_search = True
+        return ZODBDirectory._searchEntries(self, *args, **kwargs)
+
 
 class TestMetaDirectory(ZopeTestCase):
 
@@ -70,12 +77,7 @@ class TestMetaDirectory(ZopeTestCase):
         stool._setObject('smeta', s)
 
     def makeDirs(self):
-        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         from Products.CPSDirectory.MetaDirectory import MetaDirectory
-        class LoggerZODBDirectory(ZODBDirectory):
-            def _searchEntries(self, *args, **kwargs):
-                self.tests_called_search = True
-                return ZODBDirectory._searchEntries(self, *args, **kwargs)
 
         dtool = self.portal.portal_directories
         dirfoo = ZODBDirectory('dirfoo', schema='sfoo', id_field='idd',
@@ -714,10 +716,62 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         self.assert_(not self.dirmeta.isCreateEntryAllowed())
         self.assertRaises(Unauthorized, self.dirmeta.searchEntries)
 
+class TestMetaStackingDirectory(TestMetaDirectory):
+    #GR: I actually saw a case where a problem was specific
+    #to the situation where a stacking is behind a meta
+
+    def makeDirs(self):
+        TestMetaDirectory.makeDirs(self)
+        from Products.CPSDirectory.StackingDirectory import StackingDirectory
+        dtool = self.portal.portal_directories
+
+        dtool.manage_delObjects(['dirfoo'])
+        dirbar = LoggerZODBDirectory('dirfoo', schema='sfoo', id_field='foo',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirbar.getId(), dirbar)
+
+        dirsfoo = StackingDirectory('dirsfoo', schema='sfoo', id_field='idd',
+                                    backing_dirs=('dirfoo',),
+                                    creation_dir='dirfoo',
+                                    acl_directory_view_roles='test_role_1_',
+                                    acl_entry_create_roles='test_role_1_',
+                                    acl_entry_delete_roles='test_role_1_',
+                                    acl_entry_view_roles='test_role_1_',
+                                    acl_entry_edit_roles='test_role_1_',
+                                    )
+        dtool._setObject(dirsfoo.getId(), dirsfoo)
+
+        self.dirmeta.setBackingDirectories(
+            ({'dir_id': 'dirsfoo',
+              'field_ignore': ('pasglop',),
+              },
+             {'dir_id': 'dirbar',
+              'field_rename': {'mail': 'email'}, # convention is back:meta
+                 },
+             ))
+        self.dirfoo = dtool.dirsfoo
+
+    def test_editEntry(self):
+        #this test breaks if BaseStorageAdapter.getMandatoryFieldIds
+        #returns ()
+        id = '111'
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+
+        self.dirmeta.editEntry({'id': id, 'pasglop': 'glop'})
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestMetaDirectoryNoMissing))
     suite.addTest(unittest.makeSuite(TestMetaDirectoryMissing))
+    suite.addTest(unittest.makeSuite(TestMetaStackingDirectory))
     return suite
 
 if __name__ == '__main__':
