@@ -46,6 +46,8 @@ class FakeField:
         self.read_expr = read_expr
         self.read_process_dependent_fields = read_dep
         self.id = id
+    write_process_expr = ''
+    write_process_dependent_fields = ()
     write_ignore_storage = False
     read_ignore_storage = False
     def getDefault(self, datamodel=None):
