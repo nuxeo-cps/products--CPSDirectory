@@ -333,7 +333,8 @@ class StackingDirectory(BaseDirectory):
                         (b_dir.getId(), id_field, id))
                 primary_id, entry = entries[0]
                 if password is not None:
-                    entry = b_dir.getEntryAuthenticated(primary_id, password)
+                    entry = b_dir.getEntryAuthenticated(primary_id, password,
+                                                        prefetched=entry)
                     # may raise AuthenticationFailed
             return entry, b_dir
         raise KeyError(id)

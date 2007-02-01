@@ -363,12 +363,29 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Raises KeyError if the entry doesn't exist.
         Raises AuthenticationFailed if authentication failed.
         """
+        __traceback_info__ = "dn = %s" % id
+
         if not id.strip() or not password.strip():
             # We don't want to cause an empty LDAP search.
             # Empty passwords are forbidden too  due to a
             # strange behaviour of some LDAP servers (Sun iPlanet)
             raise AuthenticationFailed
-        return self._getEntryKW(id, password=password, **kw)
+
+        prefetched = kw.get('prefetched')
+        if prefetched is None:
+            return self._getEntryKW(id, password=password, **kw)
+
+        # We don't need to fetch the entry. Something else did it before.
+        # Presumably we're being called by a StackingDirectory with change
+        # of id field. Anyway, just check we can bind with id,password.
+        try:
+            conn = self.connectLDAP(id, toUTF8(password))
+        except ldap.INVALID_CREDENTIALS:
+            logger.log(5, 'searchLDAP: Invalid credentials for %s', id)
+            raise AuthenticationFailed
+        # Caller is responsible for providing a valid dn. We don't catch errors
+        return prefetched
+
 
     security.declarePrivate('_createEntry')
     def _createEntry(self, entry):

@@ -15,6 +15,7 @@ Bug fixes
   on the ACL rights of the current user over the entry. Typically this is to be
   able to deal with cases where some kind of managers are able to create entries
   but not to modify them.
+- #1809: Cannot authenticate against very restricted LDAP server
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
