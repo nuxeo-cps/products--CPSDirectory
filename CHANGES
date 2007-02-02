@@ -16,6 +16,7 @@ Bug fixes
   able to deal with cases where some kind of managers are able to create entries
   but not to modify them.
 - #1809: Cannot authenticate against very restricted LDAP server
+- #1810: Directories can be globally set to read-only
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

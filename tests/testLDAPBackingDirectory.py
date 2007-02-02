@@ -1028,7 +1028,10 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         entry = self.dir.getEntry('cn=entry1,ou=personnes,o=nuxeo,c=com')
         self.assertEquals(entry, entry_def)
 
-
+        # readonly behavior
+        self.dir.readonly = True
+        self.dir.editEntry({'yetanotherfield': "Some junk"})
+        self.assertEquals(entry, entry_def)
 
 def test_suite():
     suite = unittest.TestSuite()

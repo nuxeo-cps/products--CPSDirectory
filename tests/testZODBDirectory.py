@@ -516,6 +516,11 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         self.assert_(not meth(entry={'name': 'Blurp'}))
         self.assert_(meth(id='peterpan'))
         self.assert_(meth(entry={'name': 'Peterpan'}))
+        # readonly behavior
+        self.dir.readonly = True
+        self.dir._editEntry({'name': 'Peterspoon', 'id': 'peterpan'})
+        self.assertEquals(self.dir._getEntry('peterpan')['name'],
+                          'Peterpan')
 
     def testBasicSecurity(self):
         self.assert_(self.dir.isVisible())

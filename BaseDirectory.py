@@ -19,7 +19,7 @@
 """BaseDirectory
 """
 
-from zLOG import LOG, DEBUG
+from zLOG import LOG, DEBUG, INFO
 
 from urllib import urlencode
 
@@ -102,6 +102,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Additional schemas for search"},
         {'id': 'layout', 'type': 'string', 'mode': 'w',
          'label': "Layout"},
+        {'id': 'readonly', 'type': 'boolean', 'mode': 'w',
+         'label': "Is the directory read-only?",},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
          'label': "Layout for search"},
         {'id': 'acl_directory_view_roles', 'type': 'string', 'mode': 'w',
@@ -130,6 +132,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     schemas_search = ()
     layout = ''
     layout_search = ''
+    readonly = False
     acl_directory_view_roles = 'Manager'
     acl_entry_create_roles = 'Manager'
     acl_entry_delete_roles = 'Manager'
@@ -500,6 +503,10 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     def _editEntry(self, entry, check_acls=False):
         """Edit an entry in the directory, unrestricted.
         """
+        if self.readonly:
+            LOG('BaseDirectory._editEntry', INFO,
+                'directory %s is readonly' % self.getId())
+            return
         id = entry[self.id_field]
         dm = self._getDataModel(id, check_acls=check_acls)
         dm_entry = self._getEntryFromDataModel(dm)
