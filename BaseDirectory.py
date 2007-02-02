@@ -727,7 +727,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             if callback_func is None:
                 raise ValueError("Unknown callback '%s'" % callback)
             rendered, ok = callback_func(self, ds, **kw)
-        rendered = formLayout + unicode(rendered, 'utf-8')
+        rendered = formLayout + rendered
         return rendered, ok, ds
     #
     # Internal
