@@ -404,6 +404,9 @@ class StackingStorageAdapter(BaseStorageAdapter):
         self._creation = creation
         BaseStorageAdapter.__init__(self, schema, **kw)
 
+    def getMandatoryFieldIds(self):
+        return [bdir.id_field for bdir in self._dir._getBackingDirs()]
+
     def setContextObject(self, context):
         """Set a new underlying context for this adapter."""
         self._id = context

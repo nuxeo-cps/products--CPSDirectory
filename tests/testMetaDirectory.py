@@ -723,20 +723,26 @@ class TestMetaStackingDirectory(TestMetaDirectory):
     def makeDirs(self):
         TestMetaDirectory.makeDirs(self)
         from Products.CPSDirectory.StackingDirectory import StackingDirectory
+
+        # now replace 'dirfoo' with a stacking with two backings:
+        #  - original 'dirfoo'
+        #  - 'dirfoo_foo': same as dirfoo with id_field: foo
+
         dtool = self.portal.portal_directories
 
-        dtool.manage_delObjects(['dirfoo'])
-        dirbar = LoggerZODBDirectory('dirfoo', schema='sfoo', id_field='foo',
+        dirfoo = LoggerZODBDirectory('dirfoo_foo', id_field='foo',
+                                     schema='sfoo',
                 acl_directory_view_roles='test_role_1_',
                 acl_entry_create_roles='test_role_1_',
                 acl_entry_delete_roles='test_role_1_',
                 acl_entry_view_roles='test_role_1_',
                 acl_entry_edit_roles='test_role_1_',
                 )
-        dtool._setObject(dirbar.getId(), dirbar)
+        dtool._setObject(dirfoo.getId(), dirfoo)
+        self.dirfoo_foo = dtool.dirfoo_foo
 
         dirsfoo = StackingDirectory('dirsfoo', schema='sfoo', id_field='idd',
-                                    backing_dirs=('dirfoo',),
+                                    backing_dirs=('dirfoo', 'dirfoo_foo'),
                                     creation_dir='dirfoo',
                                     acl_directory_view_roles='test_role_1_',
                                     acl_entry_create_roles='test_role_1_',
@@ -747,18 +753,32 @@ class TestMetaStackingDirectory(TestMetaDirectory):
         dtool._setObject(dirsfoo.getId(), dirsfoo)
 
         self.dirmeta.setBackingDirectories(
-            ({'dir_id': 'dirsfoo',
-              'field_ignore': ('pasglop',),
-              },
+            ({'dir_id': 'dirsfoo',},
              {'dir_id': 'dirbar',
               'field_rename': {'mail': 'email'}, # convention is back:meta
                  },
              ))
         self.dirfoo = dtool.dirsfoo
 
+    def makeSchemas(self):
+        TestMetaDirectory.makeSchemas(self)
+        # add 'pasglop' to 'smeta' schema
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeField(),
+            'email': FakeField(),
+            'pasglop': FakeField(),
+            })
+        stool.manage_delObjects(['smeta'])
+        stool._setObject('smeta', s)
+
     def test_editEntry(self):
         #this test breaks if BaseStorageAdapter.getMandatoryFieldIds
         #returns ()
+
+        # backing of stacking with same id field
         id = '111'
         fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
         barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
@@ -766,6 +786,18 @@ class TestMetaStackingDirectory(TestMetaDirectory):
         self.dirbar.createEntry(barentry)
 
         self.dirmeta.editEntry({'id': id, 'pasglop': 'glop'})
+        self.assertEquals(self.dirmeta.getEntry(id)['pasglop'], 'glop')
+
+        # backing of stacking with different id field
+        id = '222'
+        fooentry = {'idd':  id, 'foo': "foo id", 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'bra', 'mail': 'she@here'}
+        self.dirfoo_foo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        self.assertEquals(self.dirfoo.getEntry(id), fooentry)
+
+        self.dirmeta.editEntry({'id': id, 'pasglop': 'glop'})
+        self.assertEquals(self.dirmeta.getEntry(id)['pasglop'], 'glop')
 
 def test_suite():
     suite = unittest.TestSuite()

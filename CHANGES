@@ -17,6 +17,7 @@ Bug fixes
   but not to modify them.
 - #1809: Cannot authenticate against very restricted LDAP server
 - #1810: Directories can be globally set to read-only
+- Don't write field values that don't need to
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- Only necessary writes are performed

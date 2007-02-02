@@ -923,6 +923,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     security.declarePrivate('modifyLDAP')
     def modifyLDAP(self, dn, ldap_attrs):
         """Modify an entry in LDAP."""
+        if not ldap_attrs:
+            # nothing to change
+            return
         # maybe check read_only
         conn = self.connectLDAP()
 
@@ -983,6 +986,9 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         self._password = password
         BaseStorageAdapter.__init__(self, schema, **kw)
+
+    def getMandatoryFieldIds(self):
+        return ('dn',)
 
     def getData(self):
         """Get data from an entry, returns a mapping.

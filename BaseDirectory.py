@@ -512,11 +512,18 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         dm_entry = self._getEntryFromDataModel(dm)
         if check_acls:
             self.checkEditEntryAllowed(id=id, entry=dm_entry)
-        for key in dm.keys():
-            if not entry.has_key(key):
+
+        # build set of keys to actually update
+        write_keys = set(entry) & set(dm.keys())
+        write_keys.discard(id)
+        # GR at this point, there are very few unwanted writes left
+        # typically the id of a StackingDirectory upstairs, not much more
+        for key in write_keys:
+            toset = entry[key]
+            if dm[key] == toset:
                 continue
             try:
-                dm[key] = entry[key]
+                dm[key] = toset
             except WriteAccessError:
                 pass
         dm._commit()

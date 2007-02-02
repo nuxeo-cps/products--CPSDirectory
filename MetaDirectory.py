@@ -561,8 +561,13 @@ class MetaDirectory(BaseDirectory):
             }
         return getEngine().getContext(mapping)
 
-    def _getEntryFromBacking(self, id, field_ids, password=None):
-        """Compute an entry from the backing directories."""
+    def _getEntryFromBacking(self, id, field_ids, password=None,
+                             missing_fields=None):
+        """Compute an entry from the backing directories.
+
+        If missing_fields (a list) is provided, keep a trace of fields coming
+        from missing entry in them.
+        """
         entry = {self.id_field: id}
         for info in self.getBackingDirectories():
             b_dir = info['dir']
@@ -598,6 +603,7 @@ class MetaDirectory(BaseDirectory):
                     if missing_entry is None:
                         raise
                     b_entry = missing_entry
+                    missing_fields.extend(missing_entry.keys())
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
@@ -623,7 +629,25 @@ class MetaStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         self._password = password
         self._do_create = kw.get('do_create', 0)
+        self._mandatory = None
+        self._missing_fields = []
         BaseStorageAdapter.__init__(self, schema, **kw)
+
+    def getMandatoryFieldIds(self):
+        """Introspect backing directories.
+
+        XXX GR: should ask them instead of implementing a custom logic
+        """
+        if self._mandatory is not None:
+            return self._mandatory
+        mand = self._missing_fields # *used* missing fields
+        for b_info in self._dir.getBackingDirectories():
+            bdir = b_info['dir']
+            if bdir.meta_type == 'CPS Stacking Directory':
+                mand.extend([bbdir.id_field
+                             for bbdir in bdir._getBackingDirs()])
+        self._mandatory = mand
+        return mand
 
     def setContextObject(self, context):
         """Set a new underlying context for this adapter."""
@@ -640,7 +664,8 @@ class MetaStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
         field_ids = [field_id for field_id, field in self.getFieldItems()]
         entry = self._dir._getEntryFromBacking(id, field_ids,
-                                               password=self._password)
+                                               password=self._password,
+                                               missing_fields=self._missing_fields,)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
