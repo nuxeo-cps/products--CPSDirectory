@@ -1,23 +1,12 @@
 Requires
 ~~~~~~~~
-- CPSDefault > 3.56.5
+-
 New features
 ~~~~~~~~~~~~
 -
 Bug fixes
 ~~~~~~~~~
-- #1805: Add DateTime type to the method match ofCPSDirectory.utils
-- Fixed XHTML validity in directory entry form.
-- Synced with CPSDocument and CPSDefault fix for #1806 "Fields with errors have
-  their error message not associated them and too far below".
-- Made the cpsdirectory_entry_created.py script swicth to the
-  "cpsdirectory_entry_edit_form" or the "cpsdirectory_entry_view" page depending
-  on the ACL rights of the current user over the entry. Typically this is to be
-  able to deal with cases where some kind of managers are able to create entries
-  but not to modify them.
-- #1809: Cannot authenticate against very restricted LDAP server
-- #1810: Directories can be globally set to read-only
-- Don't write field values that don't need to
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- Only necessary writes are performed
+- 
