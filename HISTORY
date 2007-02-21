@@ -1,4 +1,25 @@
 ===========================================================
+Package: CPSDirectory 1.40.0-rel1271525924
+===========================================================
+First release built by: ben at: 2007-02-21T16:45:41
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.0-rel1271525924
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/branches/rel1271525924@51183
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+- i18n unicode utf-8 support in progress
+- SQLDirectory back port CPS 4 version
+Bug fixes
+~~~~~~~~~
+-
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- SQLDirectory have method clause filter property.
+
+===========================================================
 Package: CPSDirectory 1.39.1
 ===========================================================
 First release built by: gracinet at: 2006-11-23T21:01:22
