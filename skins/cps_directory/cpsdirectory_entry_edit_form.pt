@@ -36,7 +36,12 @@
       portal_status_message request/portal_status_message|nothing;
       global portal_status_message python: portal_status_message or (validate 
         and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) 
-        or '';">
+        or '';
+      user_name python: context.portal_membership.getAuthenticatedMember().getId();
+      same_user python: validate and id == user_name or nothing;
+      credentials_changed python: same_user and request['widget__confirm'] != '' or nothing;
+      dummy python: credentials_changed and context.cookie_authentication.credentialsChanged('', user_name, request['widget__confirm']) or nothing;
+      ">
     <div tal:replace="structure rendered_main">Rendered main...</div>
   </metal:block>
 

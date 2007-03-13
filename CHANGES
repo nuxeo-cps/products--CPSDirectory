@@ -6,7 +6,8 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- fixed problem with user losing his credentials if he changes his password
+  from the directory (ported from the trunk)
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
