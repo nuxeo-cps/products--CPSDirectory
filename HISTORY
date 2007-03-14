@@ -1,4 +1,26 @@
 ===========================================================
+Package: CPSDirectory 1.40.1
+===========================================================
+First release built by: div at: 2007-03-14T12:24:25
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.1
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51329
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Removed obsolete unused Plone skin.
+- Fixed #1711: A user loses his credentials if change his password from the
+  directory
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.40.0
 ===========================================================
 First release built by: gracinet at: 2007-02-06T14:45:19
