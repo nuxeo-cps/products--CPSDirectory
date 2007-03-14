@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2006-04-28 12:29default\n"
+"POT-Creation-Date: 2007-03-14 11:58default\n"
 "PO-Revision-Date: 2006-04-03 15:11-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -22,59 +22,39 @@ msgstr ""
 "Language-Code: pt_BR\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
+#: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Erro"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Escolha um diretório"
 
 #.   <span>create entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Criar uma entrada"
 
 #.   <span>Edit entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Editar entrada"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results
 #.         </span>
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Resultados"
 
 #.   <span condition="python: ok != 'results'">search an entry
 #.         </span>
-#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Buscar entrada"
 
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Subir para"
-
 #.   <span>view entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
@@ -118,7 +98,6 @@ msgstr "Selection"
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Nenhum diretório disponível"
 
@@ -178,14 +157,17 @@ msgstr "Membro"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
-msgid "Title"
-msgstr "Título"
+#~ msgid "cpsdir_label_upto_directories"
+#~ msgstr "Subir para"
 
-msgid "button_back"
-msgstr "Voltar"
+#~ msgid "Title"
+#~ msgstr "Título"
 
-msgid "button_delete"
-msgstr "Delete"
+#~ msgid "button_back"
+#~ msgstr "Voltar"
 
-msgid "button_search"
-msgstr "Search"
+#~ msgid "button_delete"
+#~ msgstr "Delete"
+
+#~ msgid "button_search"
+#~ msgstr "Search"
