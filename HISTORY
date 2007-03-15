@@ -1,4 +1,25 @@
 ===========================================================
+Package: CPSDirectory 1.40.1-rel1271525924
+===========================================================
+First release built by: div at: 2007-03-15T10:57:16
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.1-rel1271525924
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/branches/rel1271525924@51373
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- fixed problem with user losing his credentials if he changes his password
+  from the directory (ported from the trunk)
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.40.0-rel1271525924
 ===========================================================
 First release built by: ben at: 2007-02-21T16:45:41
