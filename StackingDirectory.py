@@ -443,6 +443,8 @@ class StackingStorageAdapter(BaseStorageAdapter):
             # in which case, it would be overwritten...
             # An explicit test would be better.
             old_entry, b_dir = self._dir._getEntryFromBacking(self._id)
+            # _setDataDoProcess most probably discarded the id in backing.
+            data[b_dir.id_field] = old_entry[b_dir.id_field]
             b_dir._editEntry(data)
         else:
             dir_id = self._dir.creation_dir

@@ -1016,9 +1016,11 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
             return field.getDefault()
         return entry[field_id]
 
-    def _setData(self, data):
+    def _setData(self, data, toset=None):
         """Set data to the entry, from a mapping."""
-        data = self._setDataDoProcess(data)
+        data = self._setDataDoProcess(data, toset=toset)
+        if not toset:
+            return
         dn = self._id
 
         # Find the rdn attr.

@@ -629,25 +629,8 @@ class MetaStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         self._password = password
         self._do_create = kw.get('do_create', 0)
-        self._mandatory = None
         self._missing_fields = []
         BaseStorageAdapter.__init__(self, schema, **kw)
-
-    def getMandatoryFieldIds(self):
-        """Introspect backing directories.
-
-        XXX GR: should ask them instead of implementing a custom logic
-        """
-        if self._mandatory is not None:
-            return self._mandatory
-        mand = self._missing_fields # *used* missing fields
-        for b_info in self._dir.getBackingDirectories():
-            bdir = b_info['dir']
-            if bdir.meta_type == 'CPS Stacking Directory':
-                mand.extend([bbdir.id_field
-                             for bbdir in bdir._getBackingDirs()])
-        self._mandatory = mand
-        return mand
 
     def setContextObject(self, context):
         """Set a new underlying context for this adapter."""
@@ -714,7 +697,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
                 except KeyError:
                     if info['missing_entry'] is None:
                         raise
-                    b_dir._createEntry(b_entry)
+                    # missing entry must take precedence over field defaults
+                    # typically for consistency with what was read
+                    # before performing the write.
+                    merged = info['missing_entry']
+                    merged.update(b_entry)
+                    b_dir._createEntry(merged)
 
     def _getContentUrl(self, entry_id, field_id):
         """ giving content url if backing has it"""

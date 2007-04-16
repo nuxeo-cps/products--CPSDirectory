@@ -557,7 +557,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         # Now change it
         entry = {'id': id, 'bar': 'BAR', 'email': 'EMAIL@COM'}
         self.dirmeta.editEntry(entry)
-        # Check changed
+        # Check changed (Missing entry takes precedence over field's default).
         okentry = {'id': id, 'foo': 'defaultfoo', 'bar': 'BAR',
                    'email': 'EMAIL@COM'}
         entry2 = self.dirmeta.getEntry(id)
