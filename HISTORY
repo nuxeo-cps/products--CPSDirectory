@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.40.3
+===========================================================
+First release built by: div at: 2007-04-16T20:15:59
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.3
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51539
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #1830: proper implementation of sparse writes.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.40.2
 ===========================================================
 First release built by: div at: 2007-03-14T16:09:08
