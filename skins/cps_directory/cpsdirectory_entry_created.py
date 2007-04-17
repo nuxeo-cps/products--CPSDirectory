@@ -1,4 +1,5 @@
 ##parameters=datastructure
+# $Id$
 """
 Do the necessary rendering or redirection after an entry has been
 successfully created and filled with the initial values by the user.
