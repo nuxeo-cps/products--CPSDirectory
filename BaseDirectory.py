@@ -529,9 +529,11 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         dm._commit()
 
     security.declarePublic('deleteEntry')
-    def deleteEntry(self, id):
+    def deleteEntry(self, id, REQUEST=None):
         """Delete an entry in the directory.
         """
+        if REQUEST is not None:
+            raise Unauthorized("Not accessible TTW")
         self.checkDeleteEntryAllowed(id=id)
         self._deleteEntry(id)
 

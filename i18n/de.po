@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 11:58default\n"
+"POT-Creation-Date: 2007-04-17 14:23default\n"
 "PO-Revision-Date: 2005-10-06 14:12+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -51,6 +51,14 @@ msgstr "Suche Eintrag"
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Ansehen Eintrag"
+
+#.   <p>
+#.         Are you sure you want to delete this entry ?
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "description_confirm_entry_delete"
+msgstr "Are you sure you want to delete this entry ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt

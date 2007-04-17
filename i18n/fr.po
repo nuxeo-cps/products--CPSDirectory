@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2007-03-14 11:58default\n"
+"POT-Creation-Date: 2007-04-17 14:23default\n"
 "PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -61,6 +61,13 @@ msgstr "Chercher"
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Voir"
+
+#.   <p>
+#.         Are you sure you want to delete this entry ?
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "description_confirm_entry_delete"
+msgstr "Êtes-vous certain de vouloir supprimer cette entrée ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
