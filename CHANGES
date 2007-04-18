@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- Fixed #630 : Don't use GET for side effects, use POST.
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

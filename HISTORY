@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.40.4
+===========================================================
+First release built by: madarche at: 2007-04-18T14:56:10
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.4
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51558
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Fixed #630 : Don't use GET for side effects, use POST.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.40.3
 ===========================================================
 First release built by: div at: 2007-04-16T20:15:59
