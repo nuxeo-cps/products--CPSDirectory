@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- Fixed XHTML 1.0 Strict validity in layout_dir_search.pt.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
