@@ -6,9 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- In directories made the breadcrumb starts at the portal root and made the
-  breadcrumb show on each page (it was missing on the entry deletion page).
-- Fixed XHTML 1.0 Strict validity in layout_dir_search.pt.
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
