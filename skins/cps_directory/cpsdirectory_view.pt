@@ -1,10 +1,11 @@
 <tal:block define="
-  portal_url here/portal_url;
-  portal here/portal_url/getPortalObject;
+  utool nocall:here/portal_url;
+  portal utool/getPortalObject;
+  portal_url portal/absolute_url;
   portal_title portal/title;
   dummy python:request.set('breadcrumb_set',
     [{'id': portal.getId(),
-      'url': portal.absolute_url(),
+      'url': portal_url,
       'title': portal.Title(),
       },
      {'id': 'directories',
