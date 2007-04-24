@@ -291,7 +291,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             # sorting here because some storage (LDAP user group)
             # doesn't store ordered list
             value = list(value)
-            value.sort()
+            value.sort(key=str.lower)
         if mode == 'view':
             render = ''
             if value is not None:
