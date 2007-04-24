@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2007-04-17 14:23default\n"
+"POT-Creation-Date: 2007-04-24 18:14default\n"
 "PO-Revision-Date: 2006-04-03 15:11-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -31,10 +31,15 @@ msgstr "Erro"
 msgid "choose_a_directory"
 msgstr "Escolha um diretório"
 
-#.   <span>create entry</span>
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Criar uma entrada"
+
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr "Remover entrada"
 
 #.   <span>Edit entry</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -59,11 +64,12 @@ msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
 #.   <p>
-#.         Are you sure you want to delete this entry ?
+#.         description_confirm_entry_delete
+#.         ${entry_id (tal content="id")}
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
-msgid "description_confirm_entry_delete"
+msgid "description_confirm_entry_delete ${entry_id}"
 msgstr "Are you sure you want to delete this entry ?"
 
 #.   <p />
@@ -132,9 +138,6 @@ msgstr "Último Nome"
 
 msgid "label_full_name"
 msgstr "Nome Completo"
-
-msgid "cpsdir_label_delete_entry"
-msgstr "Remover entrada"
 
 msgid "cpsdir_help_homeless"
 msgstr ""

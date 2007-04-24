@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2007-04-17 14:23default\n"
+"POT-Creation-Date: 2007-04-24 18:14default\n"
 "PO-Revision-Date: 2006-03-02 17:49+0200\n"
 "Last-Translator: Dragos Ivan <div@nuxeo.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -29,10 +29,15 @@ msgstr "Eroare"
 msgid "choose_a_directory"
 msgstr "Alege un director"
 
-#.   <span>create entry</span>
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Creeaza o noua inregistrare"
+
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr "Sterge inregistrare"
 
 #.   <span>Edit entry</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -57,12 +62,13 @@ msgid "cpsdir_label_view_entry"
 msgstr "Vizualizare inregistrare"
 
 #.   <p>
-#.         Are you sure you want to delete this entry ?
+#.         description_confirm_entry_delete
+#.         ${entry_id (tal content="id")}
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
-msgid "description_confirm_entry_delete"
-msgstr "Are you sure you want to delete this entry ?"
+msgid "description_confirm_entry_delete ${entry_id}"
+msgstr "Are you sure you want to delete the <em>${entry_id}</em> entry?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -132,9 +138,6 @@ msgstr "Nume"
 msgid "label_full_name"
 msgstr "Nume complet"
 
-msgid "cpsdir_label_delete_entry"
-msgstr "Sterge inregistrare"
-
 msgid "cpsdir_help_homeless"
 msgstr ""
 "Un spatiu personal iti da acces la :<br />- un spatiu de lucru privat<br />- "
@@ -164,17 +167,17 @@ msgstr "Membru"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
 
-#~ msgid "cpsdir_label_upto_directories"
-#~ msgstr "Lista directoarelor"
+msgid "cpsdir_label_upto_directories"
+msgstr "Lista directoarelor"
 
-#~ msgid "Title"
-#~ msgstr "Titre"
+msgid "Title"
+msgstr "Titre"
 
-#~ msgid "button_back"
-#~ msgstr "Retour"
+msgid "button_back"
+msgstr "Retour"
 
-#~ msgid "button_delete"
-#~ msgstr "Sterge"
+msgid "button_delete"
+msgstr "Sterge"
 
-#~ msgid "button_search"
-#~ msgstr "Cauta"
+msgid "button_search"
+msgstr "Cauta"

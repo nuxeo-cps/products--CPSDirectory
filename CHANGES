@@ -6,6 +6,8 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
+- Usability improvement: Made the cpsdirectory_entry_delete_form state exactly
+  which entry it is about to delete.
 - Made the CPS Directory MultiEntries Widget output
   case-insensitive sorted entries.
 - Cosmit and little optims.

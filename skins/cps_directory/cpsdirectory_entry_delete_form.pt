@@ -20,16 +20,16 @@
     </h1>
   </metal:block>
 
-  <metal:block fill-slot="main">
-    <p i18n:translate="description_confirm_entry_delete">
-      Are you sure you want to delete this entry ?
+  <metal:block fill-slot="main" tal:define="id request/id">
+    <p i18n:translate="">
+      description_confirm_entry_delete
+      <tal:block i18n:name="entry_id" content="id"/>
     </p>
     <form action="cpsdirectory_entry_delete" method="post">
       <p>
-        <input type="hidden" name="dirname"
-          tal:attributes="value request/dirname"/>
-        <input type="hidden" name="id"
-          tal:attributes="value request/id"/>
+        <input type="hidden" name="dirname" tal:attributes="value dirname"/>
+        <input type="hidden" name="id" tal:attributes="value id"/>
+
         <button type="button" onclick="javascript:history.back()"
           i18n:translate="button_back">Back</button>
         <button type="submit" class="destructive"

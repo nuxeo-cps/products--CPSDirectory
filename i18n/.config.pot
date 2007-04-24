@@ -1,1 +1,0 @@
-cpsdirectory.pot

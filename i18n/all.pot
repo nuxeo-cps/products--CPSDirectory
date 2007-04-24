@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2006-04-28 12:29default\n"
+"POT-Creation-Date: 2007-04-24 18:14default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -17,60 +17,53 @@ msgstr ""
 "Domain: default\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
+#: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr ""
 
-#.   <span>create entry</span>
-#.   <span />
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr ""
 
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr ""
+
 #.   <span>Edit entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr ""
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results
 #.         </span>
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr ""
 
 #.   <span condition="python: ok != 'results'">search an entry
 #.         </span>
-#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr ""
 
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
+#.   <span>view entry</span>
+#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
+msgid "cpsdir_label_view_entry"
 msgstr ""
 
-#.   <span>view entry</span>
-#.   <span />
-#: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_view_entry"
+#.   <p>
+#.         description_confirm_entry_delete
+#.         ${entry_id (tal content="id")}
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "description_confirm_entry_delete ${entry_id}"
 msgstr ""
 
 #.   <p />
@@ -112,7 +105,6 @@ msgstr ""
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr ""
 
@@ -138,9 +130,6 @@ msgid "label_last_name"
 msgstr ""
 
 msgid "label_full_name"
-msgstr ""
-
-msgid "cpsdir_label_delete_entry"
 msgstr ""
 
 msgid "cpsdir_help_homeless"
