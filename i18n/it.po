@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory Italian Translation\n"
-"POT-Creation-Date: 2007-04-24 18:14default\n"
+"POT-Creation-Date: 2007-04-25 11:26default\n"
 "PO-Revision-Date: 2005-11-10 09:08+0100\n"
 "Last-Translator: Stefano Schintu <schintu@gmail.com>\n"
 "Language-Team: CPS Italian <schintu@gmail.com>\n"
@@ -66,7 +66,9 @@ msgstr "Visualizza l'elemento"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete ${entry_id}"
-msgstr "Êtes-vous certain de vouloir supprimer l'entrée <em>${entry_id}</em> ?"
+msgstr ""
+"Êtes-vous certain de vouloir supprimer l'entrée <strong>${entry_id}</"
+"strong> ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt

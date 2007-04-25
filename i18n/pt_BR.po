@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2007-04-24 18:14default\n"
+"POT-Creation-Date: 2007-04-25 11:26default\n"
 "PO-Revision-Date: 2006-04-03 15:11-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"

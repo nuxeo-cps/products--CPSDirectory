@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-04-24 18:13default\n"
+"POT-Creation-Date: 2007-04-25 11:24default\n"
 "PO-Revision-Date: 2006-07-19 18:48+0100\n"
 "Last-Translator: Santi Camps <scamps@earcon.com>\n"
 "Language-Team: català <darcalis@gmail.com>\n"
@@ -72,7 +72,7 @@ msgstr "Veure l'entrada"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete ${entry_id}"
-msgstr "Are you sure you want to delete the ${entry_id} entry ?"
+msgstr "¿Está seguro de querer borrar la entrada <strong>${entry_id}</strong>?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt

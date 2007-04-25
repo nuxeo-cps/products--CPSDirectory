@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2007-04-24 18:14default\n"
+"POT-Creation-Date: 2007-04-25 11:26default\n"
 "PO-Revision-Date: 2006-09-29 12:14+0100\n"
 "Last-Translator: Periko Alkain <perikoalkain@lasalle.es>\n"
 "Language-Team: Euskara <eu@li.org>\n"
@@ -72,7 +72,7 @@ msgstr "Sarrera ikusi"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete ${entry_id}"
-msgstr "Are you sure you want to delete the <em>${entry_id}</em> entry?"
+msgstr "¿Está seguro de querer borrar la entrada <strong>${entry_id}</strong>?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt

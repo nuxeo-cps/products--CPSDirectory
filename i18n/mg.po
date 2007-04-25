@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mg\n"
-"POT-Creation-Date: 2007-04-24 18:14default\n"
+"POT-Creation-Date: 2007-04-25 11:26default\n"
 "PO-Revision-Date: 2004-11-24 14:00+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -75,7 +75,9 @@ msgstr "Jerena"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete ${entry_id}"
-msgstr "Êtes-vous certain de vouloir supprimer l'entrée <em>${entry_id}</em> ?"
+msgstr ""
+"Êtes-vous certain de vouloir supprimer l'entrée <strong>${entry_id}</"
+"strong> ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
