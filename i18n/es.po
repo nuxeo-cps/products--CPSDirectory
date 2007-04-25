@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-04-25 12:22default\n"
 "PO-Revision-Date: 2006-08-11 15:24+0100\n"
 "Last-Translator: Jesus Martin <jesusmartin@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"
@@ -82,24 +82,11 @@ msgid "description_too_many_results_refine_query"
 msgstr ""
 "Hay demasiados resultados en tu consulta. Por favor, afina mejor la búsqueda."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Ayuda clave para este campo"
-
 #    <th content="field/title">id</th>
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "etiqueta"
 
 #    <span />
 #.   <span />
@@ -175,6 +162,12 @@ msgstr "Miembro"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Ayuda clave para este campo"
+
+#~ msgid "label"
+#~ msgstr "etiqueta"
 
 #~ msgid "cpsdir_label_upto_directories"
 #~ msgstr "Volver a Directorios"

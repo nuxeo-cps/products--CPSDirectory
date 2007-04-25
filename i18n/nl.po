@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-04-25 12:22default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: Nederlands <contact@nuxeo.com>\n"
@@ -78,23 +78,10 @@ msgstr ""
 msgid "description_too_many_results_refine_query"
 msgstr "There are too many results for your query, please refine your query."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -176,6 +163,9 @@ msgstr "Member"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
+
+msgid "label"
+msgstr "label"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Naar mappen"

@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-04-25 12:22default\n"
 "PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -84,23 +84,10 @@ msgid "description_too_many_results_refine_query"
 msgstr ""
 "Il y a trop de résultats pour votre requête, merci de préciser votre requête."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -173,6 +160,9 @@ msgstr "Membre"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrateur"
+
+#~ msgid "label"
+#~ msgstr "label"
 
 #~ msgid "cpsdir_label_upto_directories"
 #~ msgstr "Liste des annuaires"

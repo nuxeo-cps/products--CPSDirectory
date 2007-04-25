@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mg\n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-04-25 12:22default\n"
 "PO-Revision-Date: 2004-11-24 14:00+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -86,23 +86,10 @@ msgstr ""
 "Betsaka loatra ny valin'ny fangatahanao, Miangavy anao mba hamerina mazava "
 "tsara ny tena fangatahanao."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr ""
-
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "label"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -179,6 +166,9 @@ msgstr "Membre"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrateur"
+
+msgid "label"
+msgstr "label"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Lisitry ny tahirin'adiresy"

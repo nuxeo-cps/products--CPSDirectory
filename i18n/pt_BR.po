@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-04-25 12:22default\n"
 "PO-Revision-Date: 2006-04-03 15:11-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -77,23 +77,10 @@ msgstr "Are you sure you want to delete this entry ?"
 msgid "description_too_many_results_refine_query"
 msgstr "Muitos resultados; refine sua busca."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Tecla de ajuda i18 para este campo"
-
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
-
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "Rótulo"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -167,6 +154,12 @@ msgstr "Membro"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Tecla de ajuda i18 para este campo"
+
+#~ msgid "label"
+#~ msgstr "Rótulo"
 
 #~ msgid "cpsdir_label_upto_directories"
 #~ msgstr "Subir para"
