@@ -11,6 +11,8 @@ Bug fixes
 - Made the CPS Directory MultiEntries Widget output
   case-insensitive sorted entries.
 - Cosmit and little optims.
+- Allow None as SQL value (NULL).
+
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
