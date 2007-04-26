@@ -134,6 +134,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
         elif isinstance(value, DateTime):
             # XXX probably depends on SQL dialect
             return "'"+value.ISO()+"'"
+        elif value is None:
+            return 'NULL'
         else:
             LOG('getSQLValue', DEBUG, 'Unknown conversion for %s' % `value`)
             raise ValueError(value)
