@@ -25,21 +25,20 @@
     </h1>
     <tal:block condition="directories">
       <p i18n:translate="choose_a_directory">Choose a directory</p>
-      <dl>
+      <ul class="cpsDirectories">
         <tal:block repeat="dirname directories">
           <tal:block define="dir dirtool/?dirname;
             diricon python:here.getDirectoryIcon(dirname);">
-          <dt>
-            <img tal:replace="structure python:here.getImgTag(diricon, base_url=base_url)">
+          <li tal:attributes="style python:'background-image: url(\'%s%s\')' % (base_url, diricon)">
             <a href=""  i18n:translate=""
                tal:attributes="href string:${portal_url}/cpsdirectory_entry_search_form?dirname=${dirname}"
                tal:content="dir/title_or_id">
               Title
             </a>
-          </dt>
+          </li>
           </tal:block>
         </tal:block>
-      </dl>
+      </ul>
     </tal:block>
     <p tal:condition="not:directories"
        i18n:translate="no_dir_available">
