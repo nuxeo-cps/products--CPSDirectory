@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2006-04-28 12:29default\n"
+"POT-Creation-Date: 2007-04-17 14:23default\n"
 "PO-Revision-Date: 2006-08-11 15:24+0100\n"
 "Last-Translator: Jesus Martin <jesusmartin@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"
@@ -12,7 +12,8 @@ msgstr ""
 "Language-Name: Spanish\n"
 "Domain: default\n"
 "Preferred-encodings: utf-8 latin1\n"
-"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
+"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-"
+"hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
 "X-Generator: KBabel 1.0.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Spanish\n"
@@ -20,72 +21,61 @@ msgstr ""
 
 #    <em content="err" style="color:red">Error</em>
 #.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
+#: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Error"
 
 #    <p>Choose a directory</p>
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Seleccione un directorio"
 
 #    <span />
 #.   <span>create entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crear una nueva entrada"
 
 #    <span />
 #.   <span>Edit entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Modificar la entrada"
 
 #    <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #.   <span condition="python: ok == 'results'">cpsdir_label_results
 #.         </span>
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Resultados de la búsqueda"
 
 #    <span condition="python: ok != 'results'" />
 #.   <span condition="python: ok != 'results'">search an entry
 #.         </span>
-#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_search_entry"
 msgstr "Buscar una entrada"
 
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Volver a Directorios"
-
 #    <span />
 #.   <span>view entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Ver la entrada"
+
+#.   <p>
+#.         Are you sure you want to delete this entry ?
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "description_confirm_entry_delete"
+msgstr "Are you sure you want to delete this entry ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "Hay demasiados resultados en tu consulta. Por favor, afina mejor la búsqueda."
+msgstr ""
+"Hay demasiados resultados en tu consulta. Por favor, afina mejor la búsqueda."
 
 #.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
 #: from ../skins/cps_directory/layout_dir_edit.pt
@@ -126,7 +116,6 @@ msgstr "Selección"
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "Ningún directorio disponible"
 
@@ -158,7 +147,10 @@ msgid "cpsdir_label_delete_entry"
 msgstr "Suprimir la entrada"
 
 msgid "cpsdir_help_homeless"
-msgstr "Una zona privada te dará acceso a:<br />- un espacio privado de trabajo<br />- un calendario personal<br />- una agenda de favoritos<br />- la posibilidad de cerrar/minimizar cajas<br />"
+msgstr ""
+"Una zona privada te dará acceso a:<br />- un espacio privado de trabajo<br /"
+">- un calendario personal<br />- una agenda de favoritos<br />- la "
+"posibilidad de cerrar/minimizar cajas<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Activar el área privada"
@@ -170,7 +162,8 @@ msgid "label_roles_Member"
 msgstr "Miembro"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Lo sentimos, pero mientras contenga datos, no podemos borrar esta entrada."
+msgstr ""
+"Lo sentimos, pero mientras contenga datos, no podemos borrar esta entrada."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Ya existe una entrada con el mismo identificador."
@@ -181,3 +174,5 @@ msgstr "Miembro"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
+#~ msgid "cpsdir_label_upto_directories"
+#~ msgstr "Volver a Directorios"

@@ -19,7 +19,7 @@
 """ZODBDirectory
 """
 
-from zLOG import LOG, DEBUG, TRACE
+from zLOG import LOG, DEBUG, TRACE, INFO
 
 from cgi import escape
 from copy import deepcopy
@@ -195,6 +195,10 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
     security.declarePrivate('_editEntry')
     def _editEntry(self, entry, check_acls=False):
         """ unrestricted method to edit an entry and invalidate the cache. """
+        if self.readonly:
+            LOG('ZODBDirectory._editEntry', INFO,
+                'directory %s is readonly' % self.getId())
+            return
         BaseDirectory._editEntry(self, entry, check_acls)
         self.ZCacheable_invalidate()
 

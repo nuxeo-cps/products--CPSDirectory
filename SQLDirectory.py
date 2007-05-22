@@ -712,9 +712,11 @@ class SQLStorageAdapter(BaseStorageAdapter):
         """Get data from one field."""
         return entry[field_id]
 
-    def _setData(self, data):
+    def _setData(self, data, toset=None):
         """Set data to the entry, from a mapping."""
-        data = self._setDataDoProcess(data)
+        data = self._setDataDoProcess(data, toset=toset)
+        if not toset:
+            return
         dir = self._dir
         sql_data = dir._convertDataToQuotedSQL(data, skip_id=True)
         dir._updateDataInSQL(self._id, sql_data)

@@ -41,6 +41,141 @@ New internal features
 - SQLDirectory have method clause filter property.
 
 ===========================================================
+Package: CPSDirectory 1.40.5
+===========================================================
+First release built by: div at: 2007-04-20T12:02:06
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.5
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51603
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- In directories made the breadcrumb starts at the portal root and made the
+  breadcrumb show on each page (it was missing on the entry deletion page).
+- Fixed XHTML 1.0 Strict validity in layout_dir_search.pt.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.40.4
+===========================================================
+First release built by: madarche at: 2007-04-18T14:56:10
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.4
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51558
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Fixed #630 : Don't use GET for side effects, use POST.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.40.3
+===========================================================
+First release built by: div at: 2007-04-16T20:15:59
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.3
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51539
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #1830: proper implementation of sparse writes.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.40.2
+===========================================================
+First release built by: div at: 2007-03-14T16:09:08
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.2
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51360
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Updated the .po files.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.40.1
+===========================================================
+First release built by: div at: 2007-03-14T12:24:25
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.1
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@51329
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Removed obsolete unused Plone skin.
+- Fixed #1711: A user loses his credentials if change his password from the
+  directory
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.40.0
+===========================================================
+First release built by: gracinet at: 2007-02-06T14:45:19
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.40.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@50983
+
+Requires
+~~~~~~~~
+- CPSDefault > 3.56.5
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #1805: Add DateTime type to the method match ofCPSDirectory.utils
+- Fixed XHTML validity in directory entry form.
+- Synced with CPSDocument and CPSDefault fix for #1806 "Fields with errors have
+  their error message not associated them and too far below".
+- Made the cpsdirectory_entry_created.py script swicth to the
+  "cpsdirectory_entry_edit_form" or the "cpsdirectory_entry_view" page depending
+  on the ACL rights of the current user over the entry. Typically this is to be
+  able to deal with cases where some kind of managers are able to create entries
+  but not to modify them.
+- #1809: Cannot authenticate against very restricted LDAP server
+- #1810: Directories can be globally set to read-only
+- Don't write field values that don't need to
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- Only necessary writes are performed
+
+===========================================================
 Package: CPSDirectory 1.39.1
 ===========================================================
 First release built by: gracinet at: 2006-11-23T21:01:22

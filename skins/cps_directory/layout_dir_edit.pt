@@ -11,10 +11,12 @@
 <div class="group">
 <form action="." method="post" name="form"
       enctype="multipart/form-data" accept-charset="utf-8">
+<p>
 <input type="hidden" name="dirname" value="."
   tal:attributes="value request/dirname" />
 <input type="hidden" name="id" value="."
   tal:attributes="value request/id|nothing" />
+</p>
 <table cellpadding="0" cellspacing="2" summary="form layout"
   tal:define="global has_edits nothing">
   <tr tal:repeat="row layout/rows">
@@ -43,16 +45,15 @@
       </td>
       <td valign="top" colspan="1"
         tal:attributes="colspan python:cell['ncols']*2-1">
-        <div tal:attributes="class python:err and 'error' or nothing">
+        <div class="error" tal:omit-tag="not:err">
           <div tal:attributes="class widget/css_class|nothing">
             <tal:block replace="structure cell/widget_rendered" />
           </div>
-          <div tal:condition="err">
-            <tal:block define="msg python:cpsmcat(err, mapping=err_mapping)">
-              <em style="color: red"
-                  tal:content="msg">err</em>
-            </tal:block>
-          </div>
+          <tal:block condition="err">
+              <tal:block define="msg python:cpsmcat(err, mapping=err_mapping)">
+                <p class="errorMessage"><em tal:content="msg">err</em></p>
+              </tal:block>
+          </tal:block>
         </div>
         <div class="tooltipArea" style="visibility: hidden;"
           tal:condition="widget/help"

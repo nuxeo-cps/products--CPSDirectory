@@ -1,4 +1,4 @@
-# Copyright (c) 2003 Nuxeo SARL <http://nuxeo.com>
+# Copyright (c) 2003-2007 Nuxeo SAS <http://nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -97,7 +97,6 @@ import MemberToolsPatch
 tools = (DirectoryTool.DirectoryTool,)
 
 registerDirectory('skins/cps_directory', globals())
-registerDirectory('skins/cps_directory_plone', globals())
 
 def initialize(registrar):
     ToolInit(

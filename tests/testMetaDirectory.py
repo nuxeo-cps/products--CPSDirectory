@@ -33,6 +33,13 @@ from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
+from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+
+class LoggerZODBDirectory(ZODBDirectory):
+    def _searchEntries(self, *args, **kwargs):
+        self.tests_called_search = True
+        return ZODBDirectory._searchEntries(self, *args, **kwargs)
+
 
 class TestMetaDirectory(ZopeTestCase):
 
@@ -70,12 +77,7 @@ class TestMetaDirectory(ZopeTestCase):
         stool._setObject('smeta', s)
 
     def makeDirs(self):
-        from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         from Products.CPSDirectory.MetaDirectory import MetaDirectory
-        class LoggerZODBDirectory(ZODBDirectory):
-            def _searchEntries(self, *args, **kwargs):
-                self.tests_called_search = True
-                return ZODBDirectory._searchEntries(self, *args, **kwargs)
 
         dtool = self.portal.portal_directories
         dirfoo = ZODBDirectory('dirfoo', schema='sfoo', id_field='idd',
@@ -555,7 +557,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         # Now change it
         entry = {'id': id, 'bar': 'BAR', 'email': 'EMAIL@COM'}
         self.dirmeta.editEntry(entry)
-        # Check changed
+        # Check changed (Missing entry takes precedence over field's default).
         okentry = {'id': id, 'foo': 'defaultfoo', 'bar': 'BAR',
                    'email': 'EMAIL@COM'}
         entry2 = self.dirmeta.getEntry(id)
@@ -714,10 +716,94 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         self.assert_(not self.dirmeta.isCreateEntryAllowed())
         self.assertRaises(Unauthorized, self.dirmeta.searchEntries)
 
+class TestMetaStackingDirectory(TestMetaDirectory):
+    #GR: I actually saw a case where a problem was specific
+    #to the situation where a stacking is behind a meta
+
+    def makeDirs(self):
+        TestMetaDirectory.makeDirs(self)
+        from Products.CPSDirectory.StackingDirectory import StackingDirectory
+
+        # now replace 'dirfoo' with a stacking with two backings:
+        #  - original 'dirfoo'
+        #  - 'dirfoo_foo': same as dirfoo with id_field: foo
+
+        dtool = self.portal.portal_directories
+
+        dirfoo = LoggerZODBDirectory('dirfoo_foo', id_field='foo',
+                                     schema='sfoo',
+                acl_directory_view_roles='test_role_1_',
+                acl_entry_create_roles='test_role_1_',
+                acl_entry_delete_roles='test_role_1_',
+                acl_entry_view_roles='test_role_1_',
+                acl_entry_edit_roles='test_role_1_',
+                )
+        dtool._setObject(dirfoo.getId(), dirfoo)
+        self.dirfoo_foo = dtool.dirfoo_foo
+
+        dirsfoo = StackingDirectory('dirsfoo', schema='sfoo', id_field='idd',
+                                    backing_dirs=('dirfoo', 'dirfoo_foo'),
+                                    creation_dir='dirfoo',
+                                    acl_directory_view_roles='test_role_1_',
+                                    acl_entry_create_roles='test_role_1_',
+                                    acl_entry_delete_roles='test_role_1_',
+                                    acl_entry_view_roles='test_role_1_',
+                                    acl_entry_edit_roles='test_role_1_',
+                                    )
+        dtool._setObject(dirsfoo.getId(), dirsfoo)
+
+        self.dirmeta.setBackingDirectories(
+            ({'dir_id': 'dirsfoo',},
+             {'dir_id': 'dirbar',
+              'field_rename': {'mail': 'email'}, # convention is back:meta
+                 },
+             ))
+        self.dirfoo = dtool.dirsfoo
+
+    def makeSchemas(self):
+        TestMetaDirectory.makeSchemas(self)
+        # add 'pasglop' to 'smeta' schema
+        stool = self.portal.portal_schemas
+        s = FakeSchema({
+            'id': FakeField(),
+            'foo': FakeField(),
+            'bar': FakeField(),
+            'email': FakeField(),
+            'pasglop': FakeField(),
+            })
+        stool.manage_delObjects(['smeta'])
+        stool._setObject('smeta', s)
+
+    def test_editEntry(self):
+        #this test breaks if BaseStorageAdapter.getMandatoryFieldIds
+        #returns ()
+
+        # backing of stacking with same id field
+        id = '111'
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+
+        self.dirmeta.editEntry({'id': id, 'pasglop': 'glop'})
+        self.assertEquals(self.dirmeta.getEntry(id)['pasglop'], 'glop')
+
+        # backing of stacking with different id field
+        id = '222'
+        fooentry = {'idd':  id, 'foo': "foo id", 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'bra', 'mail': 'she@here'}
+        self.dirfoo_foo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        self.assertEquals(self.dirfoo.getEntry(id), fooentry)
+
+        self.dirmeta.editEntry({'id': id, 'pasglop': 'glop'})
+        self.assertEquals(self.dirmeta.getEntry(id)['pasglop'], 'glop')
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestMetaDirectoryNoMissing))
     suite.addTest(unittest.makeSuite(TestMetaDirectoryMissing))
+    suite.addTest(unittest.makeSuite(TestMetaStackingDirectory))
     return suite
 
 if __name__ == '__main__':

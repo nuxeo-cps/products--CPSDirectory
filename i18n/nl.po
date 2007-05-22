@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-28 12:29default\n"
+"POT-Creation-Date: 2007-04-17 14:23default\n"
 "PO-Revision-Date: 2004-03-04 15:28+0100\n"
 "Last-Translator: Encolpe DEGOUTE <ed@nuxeo.com>\n"
 "Language-Team: Nederlands <contact@nuxeo.com>\n"
@@ -20,62 +20,50 @@ msgstr ""
 "Domain: default\n"
 
 #.   <em style="color:red" content="err">Error</em>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
+#: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Error"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Kies een map"
 
 #.   <span>create entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Maak een nieuw item aan"
 
 #.   <span>Edit entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
 msgid "cpsdir_label_edit_entry"
 msgstr "Wijzig item"
 
 #.   <span condition="python: ok == 'results'">cpsdir_label_results
 #.         </span>
-#.   <span condition="python: ok == 'results'">cpsdir_label_results</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
 msgstr "Resultaten"
 
 #.   <span condition="python: ok != 'results'">search an entry
 #.         </span>
-#.   <span condition="python: ok != 'results'" />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
 #, fuzzy
 msgid "cpsdir_label_search_entry"
 msgstr "Search"
 
-#.   <strong>cpsdir_label_upto_directories</strong>
-#: from ../skins/cps_directory_plone/cpsdirectory_entry_create_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_edit_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_search_form.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
-msgid "cpsdir_label_upto_directories"
-msgstr "Naar mappen"
-
 #.   <span>view entry</span>
-#.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_entry_view.pt
 msgid "cpsdir_label_view_entry"
 msgstr "Weergave item"
+
+#.   <p>
+#.         Are you sure you want to delete this entry ?
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "description_confirm_entry_delete"
+msgstr "Are you sure you want to delete this entry ?"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -117,7 +105,6 @@ msgstr "Selection"
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
-#: ../skins/cps_directory_plone/cpsdirectory_view.pt
 msgid "no_dir_available"
 msgstr "No directory available"
 
@@ -186,14 +173,17 @@ msgstr "Member"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
 
-msgid "Title"
-msgstr "Title"
+#~ msgid "cpsdir_label_upto_directories"
+#~ msgstr "Naar mappen"
 
-msgid "button_back"
-msgstr "Back"
+#~ msgid "Title"
+#~ msgstr "Title"
 
-msgid "button_delete"
-msgstr "Delete"
+#~ msgid "button_back"
+#~ msgstr "Back"
 
-msgid "button_search"
-msgstr "Search"
+#~ msgid "button_delete"
+#~ msgstr "Delete"
+
+#~ msgid "button_search"
+#~ msgstr "Search"

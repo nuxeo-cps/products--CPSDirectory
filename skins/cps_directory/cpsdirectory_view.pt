@@ -1,11 +1,14 @@
 <tal:block define="
+  portal_url here/portal_url;
   portal here/portal_url/getPortalObject;
   portal_title portal/title;
-  portal_url here/portal_url;
   dummy python:request.set('breadcrumb_set',
-    [{
-      'id': 'directories',
-      'url': portal_url+'/cpsdirectory_view',
+    [{'id': portal.getId(),
+      'url': portal.absolute_url(),
+      'title': portal.Title(),
+      },
+     {'id': 'directories',
+      'url': portal_url + '/cpsdirectory_view',
       'longtitle': here.translation_service('Directories'),
       'title': here.translation_service('Directories'),
     }]);

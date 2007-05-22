@@ -1,0 +1,41 @@
+<tal:block define="
+    global dirname request/dirname|string:members;
+    global dir here/portal_directories/?dirname;
+    global dirtitle dir/title_or_id;
+    "/>
+
+<html metal:use-macro="here/content_lib_master/macros/master">
+
+  <metal:block fill-slot="style_slot">
+    <tal:block define="dummy
+      python:context.setDirectoryBreadCrumbs(request, dirname, dir, dirtitle)"/>
+    <tal:block define="global actions
+      python:context.getDirectoryActions(actions, dirname, dir, 'create')"/>
+  </metal:block>
+
+  <metal:block fill-slot="header">
+    <h1>
+      <tal:block i18n:translate="" tal:content="dirtitle" />:
+      <tal:block i18n:translate="cpsdir_label_delete_entry">Delete entry</tal:block>
+    </h1>
+  </metal:block>
+
+  <metal:block fill-slot="main">
+    <p i18n:translate="description_confirm_entry_delete">
+      Are you sure you want to delete this entry ?
+    </p>
+    <form action="cpsdirectory_entry_delete" method="post">
+      <p>
+        <input type="hidden" name="dirname"
+          tal:attributes="value request/dirname"/>
+        <input type="hidden" name="id"
+          tal:attributes="value request/id"/>
+        <button type="button" onclick="javascript:history.back()"
+          i18n:translate="button_back">Back</button>
+        <button type="submit" class="destructive"
+          i18n:translate="button_delete">Delete</button>
+      </p>
+    </form>
+  </metal:block>
+
+</html>

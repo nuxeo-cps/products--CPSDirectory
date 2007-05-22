@@ -1,10 +1,19 @@
 ##parameters=REQUEST, dirname, dir, dirtitle
 #$Id$
 """
-Set breadcrumbs in directory pages
+Set breadcrumbs for the directories pages.
 """
 
-from zLOG import LOG, DEBUG
+from Products.CMFCore.utils import getToolByName
+
+utool = getToolByName(context, 'portal_url')
+portal = utool.getPortalObject()
+
+portal_root_breadcrumb = {
+    'id': portal.getId(),
+    'url': portal.absolute_url(),
+    'title': portal.Title(),
+    }
 
 directories_breadcrumb = {
     'id': 'directories',
@@ -18,7 +27,7 @@ directory_breadcrumbs = {
     'title': context.translation_service(dirtitle),
     }
 
-breadcrumb_set = [directories_breadcrumb]
+breadcrumb_set = [portal_root_breadcrumb, directories_breadcrumb]
 
 if dir.isVisible():
     breadcrumb_set.append(directory_breadcrumbs)

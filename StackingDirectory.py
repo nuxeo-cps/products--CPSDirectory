@@ -333,7 +333,8 @@ class StackingDirectory(BaseDirectory):
                         (b_dir.getId(), id_field, id))
                 primary_id, entry = entries[0]
                 if password is not None:
-                    entry = b_dir.getEntryAuthenticated(primary_id, password)
+                    entry = b_dir.getEntryAuthenticated(primary_id, password,
+                                                        prefetched=entry)
                     # may raise AuthenticationFailed
             return entry, b_dir
         raise KeyError(id)
@@ -403,6 +404,9 @@ class StackingStorageAdapter(BaseStorageAdapter):
         self._creation = creation
         BaseStorageAdapter.__init__(self, schema, **kw)
 
+    def getMandatoryFieldIds(self):
+        return [bdir.id_field for bdir in self._dir._getBackingDirs()]
+
     def setContextObject(self, context):
         """Set a new underlying context for this adapter."""
         self._id = context
@@ -439,6 +443,8 @@ class StackingStorageAdapter(BaseStorageAdapter):
             # in which case, it would be overwritten...
             # An explicit test would be better.
             old_entry, b_dir = self._dir._getEntryFromBacking(self._id)
+            # _setDataDoProcess most probably discarded the id in backing.
+            data[b_dir.id_field] = old_entry[b_dir.id_field]
             b_dir._editEntry(data)
         else:
             dir_id = self._dir.creation_dir

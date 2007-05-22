@@ -561,8 +561,13 @@ class MetaDirectory(BaseDirectory):
             }
         return getEngine().getContext(mapping)
 
-    def _getEntryFromBacking(self, id, field_ids, password=None):
-        """Compute an entry from the backing directories."""
+    def _getEntryFromBacking(self, id, field_ids, password=None,
+                             missing_fields=None):
+        """Compute an entry from the backing directories.
+
+        If missing_fields (a list) is provided, keep a trace of fields coming
+        from missing entry in them.
+        """
         entry = {self.id_field: id}
         for info in self.getBackingDirectories():
             b_dir = info['dir']
@@ -598,6 +603,7 @@ class MetaDirectory(BaseDirectory):
                     if missing_entry is None:
                         raise
                     b_entry = missing_entry
+                    missing_fields.extend(missing_entry.keys())
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
@@ -623,6 +629,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
         self._dir = dir
         self._password = password
         self._do_create = kw.get('do_create', 0)
+        self._missing_fields = []
         BaseStorageAdapter.__init__(self, schema, **kw)
 
     def setContextObject(self, context):
@@ -640,7 +647,8 @@ class MetaStorageAdapter(BaseStorageAdapter):
             return self.getDefaultData()
         field_ids = [field_id for field_id, field in self.getFieldItems()]
         entry = self._dir._getEntryFromBacking(id, field_ids,
-                                               password=self._password)
+                                               password=self._password,
+                                               missing_fields=self._missing_fields,)
         return self._getData(entry=entry)
 
     def _getFieldData(self, field_id, field, entry=None):
@@ -689,7 +697,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
                 except KeyError:
                     if info['missing_entry'] is None:
                         raise
-                    b_dir._createEntry(b_entry)
+                    # missing entry must take precedence over field defaults
+                    # typically for consistency with what was read
+                    # before performing the write.
+                    merged = info['missing_entry']
+                    merged.update(b_entry)
+                    b_dir._createEntry(merged)
 
     def _getContentUrl(self, entry_id, field_id):
         """ giving content url if backing has it"""

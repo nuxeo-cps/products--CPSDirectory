@@ -63,8 +63,8 @@
             tal:attributes="onclick python:'return window.confirm(\'%s\')'
             % cpsmcat('description_confirm_delete')" />
         </tal:block>
-        <input type="button" class="context" value="button_back"
-          onclick="javascript:history.back()" i18n:attributes="value" />
+        <button type="button" onclick="javascript:history.back()"
+          i18n:translate="button_back">Back</button>
       </p>
     </form>
     <tal:block condition="python:batch_info and batch_info['nb_pages'] > 1">

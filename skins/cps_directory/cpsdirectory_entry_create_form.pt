@@ -16,8 +16,8 @@
 
   <metal:block fill-slot="header">
     <h1>
-      <span i18n:translate="" tal:content="dirtitle" />:
-      <span i18n:translate="cpsdir_label_create_entry">create entry</span>
+      <tal:block i18n:translate="" tal:content="dirtitle" /> :
+      <tal:block i18n:translate="cpsdir_label_create_entry">create entry</tal:block>
     </h1>
     <div class="description">
     </div>
@@ -33,7 +33,7 @@
       global rendered_main python: res[0];
       rendered_ok python: res[1];
       ds python: res[2];
-      global portal_status_message python: validate and (rendered_ok and 
+      global portal_status_message python: validate and (rendered_ok and
         'psm_content_changed' or 'psm_content_error') or '';">
     <div tal:replace="structure rendered_main">Rendered main...</div>
   </metal:block>
