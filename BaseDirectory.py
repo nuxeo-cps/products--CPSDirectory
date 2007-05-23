@@ -1,4 +1,4 @@
-# (C) Copyright 2003 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2003-2007 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -536,6 +536,11 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             raise Unauthorized("Not accessible TTW")
         self.checkDeleteEntryAllowed(id=id)
         self._deleteEntry(id)
+        users_directory_id = self.acl_users.getProperty('users_dir')
+        if self.getId() == users_directory_id:
+            mtool = getToolByName(self, 'portal_membership')
+            mtool.deleteMembers([id], check_permission=0)
+
 
     security.declarePrivate('_deleteEntry')
     def _deleteEntry(self, id):
@@ -994,14 +999,15 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         user = getSecurityManager().getUser()
         user_id = user.getId()
         entry_id = entry.get(self.id_field)
-        # Get user entry lazily.
-        if self.getId() == 'members' and entry_id == user_id:
+        # Get user entry lazily
+        users_directory_id = self.acl_users.getProperty('users_dir')
+        if self.getId() == users_directory_id and entry_id == user_id:
             # Our own entry, just reuse it and avoid potential recursion.
             def getUserEntry(entry=entry):
                 return entry
         else:
             # Get our entry from the members directory.
-            mdir = getToolByName(self, 'portal_directories').members
+            mdir = getToolByName(self, 'portal_directories')[users_directory_id]
             def getUserEntry(mdir=mdir, user_id=user_id):
                 try:
                     return mdir._getEntry(user_id)
