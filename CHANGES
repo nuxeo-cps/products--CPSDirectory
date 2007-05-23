@@ -12,7 +12,6 @@ Bug fixes
   case-insensitive sorted entries.
 - Cosmit and little optims.
 - Allow None as SQL value (NULL).
-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

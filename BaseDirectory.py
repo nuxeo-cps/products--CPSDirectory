@@ -535,11 +535,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         if REQUEST is not None:
             raise Unauthorized("Not accessible TTW")
         self.checkDeleteEntryAllowed(id=id)
-        self._deleteEntry(id)
         users_directory_id = self.acl_users.getProperty('users_dir')
         if self.getId() == users_directory_id:
             mtool = getToolByName(self, 'portal_membership')
             mtool.deleteMembers([id], check_permission=0)
+        else:
+            self._deleteEntry(id)
 
 
     security.declarePrivate('_deleteEntry')
