@@ -54,6 +54,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.root = FakeRoot()
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_membership = FakeMembershipTool()
         self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
@@ -74,7 +75,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         from Products.CPSDirectory.LDAPBackingDirectory import \
                                                     LDAPBackingDirectory
         dtool = self.portal.portal_directories
-        dir = LDAPBackingDirectory('ldapbackingdir',
+        dir = LDAPBackingDirectory('members',
             schema='testldapbd',
             schema_search='testldapbd',
             layout='',
@@ -91,10 +92,10 @@ class TestLDAPbackingDirectory(ZopeTestCase):
             acl_entry_edit_roles='test_role_1_',
             )
         dtool._setObject(dir.getId(), dir)
-        self.dir = dtool.ldapbackingdir
+        self.dir = dtool.members
 
     def testPresence(self):
-        self.assertEquals(self.pd.ldapbackingdir.meta_type, 'CPS LDAP Backing Directory')
+        self.assertEquals(self.pd.members.meta_type, 'CPS LDAP Backing Directory')
 
     def testBasicSecurity(self):
         self.assert_(self.dir.isVisible())
@@ -537,6 +538,8 @@ class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
         self.root = FakeRoot()
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_membership = FakeMembershipTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
@@ -561,7 +564,7 @@ class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
     def makeDir(self):
         from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
         dtool = self.portal.portal_directories
-        dir = LDAPBackingDirectory('ldapbackingdir',
+        dir = LDAPBackingDirectory('members',
                                    schema='testldapbd',
                                    schema_search='testldapbd',
                                    layout='',
@@ -637,6 +640,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         utool.getPortalObject = lambda : self.root.portal
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_membership = FakeMembershipTool()
         self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
@@ -810,18 +814,13 @@ class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
         self.dir = dtool.members
 
     def test_creation_under_ldap_base_creation(self):
-
         dir = self.dir
         id = 'janguenot'
         dn = 'id=janguenot,ou=devels,ou=personnes,o=nuxeo,c=com'
-
-        entry = {'id': id, 'foo': 'ouah', 'bar': ['4'],
-                 'cn': 'julien'}
+        entry = {'id': id, 'foo': 'ouah', 'bar': ['4'], 'cn': 'julien'}
 
         dir._createEntry(entry)
-
-        self.assertRaises(KeyError, self.dir._createEntry,
-                          entry)
+        self.assertRaises(KeyError, self.dir._createEntry, entry)
 
         self.assertEqual(dir.listEntryIds(), [dn])
         self.assert_(dir._hasEntry(dn))
@@ -855,6 +854,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         utool.getPortalObject = lambda : self.root.portal
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_membership = FakeMembershipTool()
         self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
