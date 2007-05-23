@@ -1,4 +1,4 @@
-# (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2004-2007 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,7 @@ from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
@@ -51,6 +52,7 @@ class TestMetaDirectory(ZopeTestCase):
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
         self.root.portal.portal_directories = FakeDirectoryTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
 

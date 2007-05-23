@@ -1,5 +1,26 @@
+# -*- encoding: iso-8859-15 -*-
+# Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
+# Author: Florent Guillaume <fg@nuxeo.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# $Id$
+
+
 # TODO: check that "hack" in __getitem__ for dealing with dependency
-# between fields is ok
+# between fields is ok.
 
 import os, sys
 
@@ -12,9 +33,9 @@ from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 from Products.CPSDirectory.DirectoryVocabulary import DirectoryVocabulary
-
 
 class TestDirectoryVocabulary(ZopeTestCase):
 
@@ -23,6 +44,7 @@ class TestDirectoryVocabulary(ZopeTestCase):
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
         self.root.portal.portal_directories = FakeDirectoryTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
 

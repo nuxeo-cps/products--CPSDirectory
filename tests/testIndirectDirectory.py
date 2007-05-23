@@ -1,5 +1,5 @@
 # -*- encoding: iso-8859-15 -*-
-# (C) Copyright 2005 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
 # Authors:
 # Anahide Tchertchian <at@nuxeo.com>
 #
@@ -33,9 +33,9 @@ from Products.CPSDirectory.tests.fakeCps import FakeListField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 from Products.CPSSchemas.DataModel import DEFAULT_VALUE_MARKER
-
 
 def makeFullname(value, data, ob, context):
     # surname or len(id.split('/'))>1 and id.split('/')[1] or id
@@ -52,6 +52,7 @@ class TestIndirectDirectory(ZopeTestCase):
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
         self.root.portal.portal_directories = FakeDirectoryTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
 

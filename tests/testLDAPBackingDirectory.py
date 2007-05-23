@@ -1,5 +1,22 @@
-#!/usr/bin/python
 # -*- encoding: iso-8859-15 -*-
+# Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
+# Author: Florent Guillaume <fg@nuxeo.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# $Id$
 
 import os, sys
 
@@ -20,6 +37,8 @@ from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeListField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
+from Products.CPSDirectory.tests.fakeCps import FakeMembershipTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
@@ -35,6 +54,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.root = FakeRoot()
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
@@ -617,6 +637,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         utool.getPortalObject = lambda : self.root.portal
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
@@ -747,6 +768,8 @@ class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
         utool.getPortalObject = lambda : self.root.portal
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.portal_membership = FakeMembershipTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
@@ -832,6 +855,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         utool.getPortalObject = lambda : self.root.portal
         self.root.portal.portal_url = utool
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories

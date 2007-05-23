@@ -1,4 +1,4 @@
-# Copyright 2005 Nuxeo SARL <http://nuxeo.com>
+# Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,9 +28,8 @@ from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
-
-
 
 class TestSQLDirectory(ZopeTestCase):
 
@@ -46,6 +45,7 @@ class TestSQLDirectory(ZopeTestCase):
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
         self.root.portal.portal_directories = FakeDirectoryTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.sqlconn = FakeSQLConnection('sqlconn')
         self.portal = self.root.portal
 

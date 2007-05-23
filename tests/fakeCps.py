@@ -1,4 +1,4 @@
-# Copyright 2005 Nuxeo SARL <http://nuxeo.com>
+# Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,21 @@ class FakeRoot(Folder):
 
 class FakeDirectoryTool(Folder):
     id = 'portal_directories'
+
+class FakeUserFolder(Folder):
+    USERS_DIRECTORY_ID = 'members'
+    id = 'acl_users'
+    def getProperty(self, property_id):
+        if 'users_dir':
+            return self.USERS_DIRECTORY_ID
+        else:
+            return property_id
+
+class FakeMembershipTool(Folder):
+    id = 'portal_membership'
+    def deleteMembers(self, member_ids, delete_memberareas=1,
+                      delete_localroles=0, check_permission=1):
+        pass
 
 default_encoding = sys.getdefaultencoding()
 if default_encoding == 'ascii':

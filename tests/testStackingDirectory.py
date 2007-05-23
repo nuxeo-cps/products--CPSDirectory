@@ -1,4 +1,4 @@
-# (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2004-2007 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,6 @@
 #
 # $Id$
 
-
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
@@ -31,6 +30,7 @@ from Products.CPSDirectory.tests.fakeCps import FakeField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
+from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
 
 class TestStackingDirectory(ZopeTestCase):
@@ -39,6 +39,7 @@ class TestStackingDirectory(ZopeTestCase):
         self.root = FakeRoot()
         self.root.portal = Folder('portal')
         self.root.portal.portal_schemas = FakeSchemasTool()
+        self.root.portal.acl_users = FakeUserFolder()
         self.root.portal.portal_directories = FakeDirectoryTool()
         self.portal = self.root.portal
         self.pd = self.portal.portal_directories
