@@ -1,5 +1,7 @@
-# (C) Copyright 2005 Nuxeo SAS <http://nuxeo.com>
-# Author: Olivier Grisel <og@nuxeo.com>
+# (C) Copyright 2005-2007 Nuxeo SAS <http://nuxeo.com>
+# Authors:
+# Olivier Grisel <og@nuxeo.com>
+# M.-A. Darche <madarche@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -16,10 +18,10 @@
 # 02111-1307, USA.
 #
 # $Id$
-"""FieldNamespace
+"""FieldNamespace.
 
 Register directory-related methods to CPSSchemas' FieldNamespace utility
-so as to be able to make 'joins' with computed String List Fields
+so as to be able to make 'joins' with computed String List Fields.
 """
 
 try:
@@ -28,8 +30,11 @@ except NameError:
     # python 2.3 compat
     from sets import Set as set
 
-from Products.CPSSchemas.FieldNamespace import fieldStorageNamespace
+import re
+
 from Products.CMFCore.utils import getToolByName
+
+from Products.CPSSchemas.FieldNamespace import fieldStorageNamespace
 
 def crossGetList(self, dir_id, field_id, value):
     """Return the list of entry ids of 'dir_id' such that 'value' is in
@@ -99,3 +104,37 @@ def crossSetList(self, dir_id, field_id, value, entry_ids, value_search=None):
         entry = dir._editEntry(new_entry)
 
 fieldStorageNamespace.register('dirCrossSetList', crossSetList)
+
+
+def mapIdsToFieldValues(self, dir_id, entry_ids, field_id):
+    """Construct the list of values of 'field_id' from 'entry_ids' entries
+    of directory 'dir_id'.
+
+    Used in group ldap setup when the group is also a mail alias.
+    Use _getEntry to avoid problems with return_fields and computed fields.
+    """
+
+    dtool = getToolByName(self, 'portal_directories')
+    tdir = dtool[dir_id]
+    return [tdir._getEntry(e_id)[field_id] for e_id in entry_ids]
+
+fieldStorageNamespace.register('dirMapIdsToFieldValues', mapIdsToFieldValues)
+
+
+REGEXP_DN = re.compile(u'uid=([a-zA-Z0-9_\.-]+),.+')
+def mapDnToMemberIds(self, dn_field_ids):
+    """Map LDAP DNs to member IDs.
+
+    dn_field_ids is made of LDAP DNs from of the following form:
+    'uid=joeuser,ou=member,ou=people,dc=mysite,dc=net'
+    """
+    member_ids = []
+    for dn_field_id in dn_field_ids:
+        member_id = dn_field_id
+        #import pdb; pdb.set_trace()
+        res = REGEXP_DN.match(member_id)
+        if res is not None:
+            member_id = res.group(1)
+        member_ids.append(member_id)
+    return member_ids
+fieldStorageNamespace.register('mapDnToMemberIds', mapDnToMemberIds)
