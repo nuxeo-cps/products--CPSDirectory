@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.41.0-rel1271525924
+===========================================================
+First release built by: div at: 2007-06-14T14:31:44
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.41.0-rel1271525924
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/branches/rel1271525924@51831
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+-
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- Merged with the trunk
+
+===========================================================
 Package: CPSDirectory 1.40.1-rel1271525924
 ===========================================================
 First release built by: div at: 2007-03-15T10:57:16
