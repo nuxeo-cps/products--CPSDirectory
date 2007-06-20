@@ -1,5 +1,7 @@
 # (C) Copyright 2004-2007 Nuxeo SAS <http://nuxeo.com>
-# Author: Florent Guillaume <fg@nuxeo.com>
+# Authors:
+# Florent Guillaume <fg@nuxeo.com>
+# M.-A. Darche <madarche@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -336,7 +338,7 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
               'field_rename': {'pasglop': 'glop',}, # convention is back:meta
               },
              {'dir_id': 'dirbar',
-              'field_rename': {'mail': 'email'}, 
+              'field_rename': {'mail': 'email'},
                  },
              ))
 
@@ -346,7 +348,7 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         self.dirbar.createEntry(barentry)
         res = dir.searchEntries(id='DDD', return_fields=['glop', 'email', ])
         self.assertEquals(res, [('DDD', {'glop' : 'arg', 'email': 'me@here'})])
-        
+
     def test_searchEntries_renames_notinj(self):
         # two different ids in the meta but same field ids in backings
         # XXX an entire test case for this setting would be more appropriate
@@ -354,7 +356,7 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         dtool = self.portal.portal_directories
         stool = self.portal.portal_schemas
 
-        # we need a new backing        
+        # we need a new backing
         from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
         from Products.CPSDirectory.MetaDirectory import MetaDirectory
         dirbabar = ZODBDirectory('dirbabar', schema='sbar', id_field='id',
@@ -388,12 +390,12 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         dtool._setObject(dirmeta_babar.getId(), dirmeta_babar)
 
         dir = dtool.dirmeta_babar
-        dir.setBackingDirectories( 
+        dir.setBackingDirectories(
             ({'dir_id': 'dirbar',
               'field_rename': {'mail': 'email'}, # convention is back:meta
                  },
              {'dir_id': 'dirbabar',
-              'field_rename': {'mail': 'email_babar'}, 
+              'field_rename': {'mail': 'email_babar'},
                  },
              ))
 
@@ -615,7 +617,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
 
         ids = dir.searchEntries(id='AAA')
         self.assertEquals(ids, ['AAA'])
-        
+
         ids = dir.searchEntries(foo='oo')
         ids.sort()
         self.assertEquals(ids, ['BBB', 'CCC'])
@@ -623,7 +625,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         ids = dir.searchEntries(bar='baronly', foo='defaultfoo')
         ids.sort()
         self.assertEquals(ids, ['DDD'])
-        
+
         # used to produce empty search in dirbar. Since query cannot match
         # dirfoo's missing entry. search in dirbar shouldn't be done at all
         # (see https://svn.nuxeo.org/trac/pub/ticket/995)
@@ -633,20 +635,20 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         self.assertEquals(ids, ['BBB', 'CCC'])
         self.failIf(self.dirbar.tests_called_search)
         self.dirbar.tests_called_search = True
-        
+
         ids = dir.searchEntries(foo='oo')
         ids.sort()
         self.assertEquals(ids, ['BBB', 'CCC'])
-        
+
         ids = dir.searchEntries(bar='rab')
         ids.sort()
         self.assertEquals(ids, ['AAA', 'CCC'])
-        
+
         # unknown field: equivalent to an empty search
         ids = dir.searchEntries(hooooole='ohle')
         ids.sort()
         self.assertEquals(ids, ['AAA', 'BBB', 'CCC', 'DDD'])
-        
+
         ids = dir.searchEntries(email='evil@hell')
         self.assertEquals(ids, ['BBB'])
 
@@ -705,7 +707,7 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         # Substring on the missing
         self.dirfoo.search_substring_fields = ['foo']
         res = dir.searchEntries(bar='baronly', foo='default',
-                                return_fields=['foo']) 
+                                return_fields=['foo'])
         res.sort()
         self.assertEquals(res, [('DDD', {'foo': 'defaultfoo'})])
 
