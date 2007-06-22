@@ -449,7 +449,7 @@ class MetaDirectory(BaseDirectory):
 
             # Accumulate res into acc_res
             #print ' accumulating %s into %s' % (res, acc_res)
-            if acc_res is None:
+            if not acc_res:
                 acc_res = res
             else:
                 if not b_matched:
