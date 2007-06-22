@@ -126,12 +126,11 @@ def mapDnToMemberIds(self, dn_field_ids):
     """Map LDAP DNs to member IDs.
 
     dn_field_ids is made of LDAP DNs from of the following form:
-    'uid=joeuser,ou=member,ou=people,dc=mysite,dc=net'
+    'uid=joeuser,ou=people,dc=mysite,dc=net'
     """
     member_ids = []
     for dn_field_id in dn_field_ids:
         member_id = dn_field_id
-        #import pdb; pdb.set_trace()
         res = REGEXP_DN.match(member_id)
         if res is not None:
             member_id = res.group(1)
