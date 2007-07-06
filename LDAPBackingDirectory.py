@@ -782,12 +782,12 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         logger.log(5, 'connectLDAP: bind_s dn=%s', bind_dn)
         try:
             conn.simple_bind_s(bind_dn, bind_password)
-        except ldap.SERVER_DOWN:
+        except ldap.SERVER_DOWN, exception:
             # retry with an empty connection only once
             self._v_conn = None
             if retrying:
-                raise ConfigurationError("Directory '%s': LDAP server is down"
-                                         % self.getId())
+                raise ConfigurationError("Directory '%s': LDAP server is down: %s"
+                                         % (self.getId(), str(exception)))
             else:
                 return self.connectLDAP(bind_dn=bind_dn_orig,
                         bind_password=bind_password_orig, retrying=True)
@@ -868,9 +868,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         except ldap.NO_SUCH_OBJECT:
             raise ConfigurationError("Directory '%s': Invalid search base "
                                      "'%s'" % (self.getId(), base))
-        except ldap.SERVER_DOWN:
-            raise ConfigurationError("Directory '%s': LDAP server is down"
-                                     % self.getId())
+        except ldap.SERVER_DOWN, exception:
+            raise ConfigurationError("Directory '%s': LDAP server is down: %s"
+                                     % (self.getId(), str(exception)))
         logger.log(5, 'searchLDAP: -> results=%s', ldap_entries[:20])
         #except ldap.NO_SUCH_OBJECT:
         #except ldap.SIZELIMIT_EXCEEDED:

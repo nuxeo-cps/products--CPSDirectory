@@ -12,6 +12,7 @@ Bug fixes
   case-insensitive sorted entries.
 - Cosmit and little optims.
 - Allow None as SQL value (NULL).
+- Added more logs in LDAPBackingDirectory in case of exceptions.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
