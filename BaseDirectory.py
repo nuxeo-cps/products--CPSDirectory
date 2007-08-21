@@ -433,7 +433,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             if default is not _marker and str(err) == "'%s'" % id:
                 return default
             else:
-                raise KeyError, str(err) # exception can have other cause
+                # Simply re-raise the exception if we don't do anything special
+                raise
 
     security.declarePublic('isAuthenticating')
     def isAuthenticating(self):
