@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2007-04-25 12:22default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: 2006-03-02 17:49+0200\n"
 "Last-Translator: Dragos Ivan <div@nuxeo.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -23,6 +23,11 @@ msgstr ""
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Eroare"
+
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -62,14 +67,12 @@ msgid "cpsdir_label_view_entry"
 msgstr "Vizualizare inregistrare"
 
 #.   <p>
-#.         description_confirm_entry_delete
-#.         ${entry_id (tal content="id")}
+#.         Confirmer la suppression des entrees suivantes :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
-msgid "description_confirm_entry_delete ${entry_id}"
-msgstr ""
-"Are you sure you want to delete the <strong>${entry_id}</strong> entry?"
+msgid "description_confirm_entry_delete"
+msgstr "Confirm the deletion of the following entrie(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -82,6 +85,11 @@ msgstr ""
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
+
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr ""
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -104,6 +112,23 @@ msgstr "Nici un director disponibil"
 
 msgid "psm_entry_created"
 msgstr "Inregistrare creata cu succes"
+
+#, fuzzy
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+#, fuzzy
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+#, fuzzy
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+"Atentie inregistrarea nu a fost stearsa! Pentru stergerea aceasteia este "
+"necesara stergerea tuturor inregistrarilor continute de aceasta."
 
 msgid "label_roles"
 msgstr "Roluri"
@@ -140,11 +165,6 @@ msgstr "Administrator"
 
 msgid "label_roles_Member"
 msgstr "Membru"
-
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
-"Atentie inregistrarea nu a fost stearsa! Pentru stergerea aceasteia este "
-"necesara stergerea tuturor inregistrarilor continute de aceasta."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "O inregistrare cu acelasi identificator exista deja."

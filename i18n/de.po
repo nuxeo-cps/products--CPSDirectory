@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-25 11:26default\n"
+"POT-Creation-Date: 2007-08-22 18:31default\n"
 "PO-Revision-Date: 2005-10-06 14:12+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -19,6 +19,11 @@ msgstr ""
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Fehler"
+
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -58,14 +63,12 @@ msgid "cpsdir_label_view_entry"
 msgstr "Ansehen Eintrag"
 
 #.   <p>
-#.         description_confirm_entry_delete
-#.         ${entry_id (tal content="id")}
+#.         Confirmer la suppression des entrees suivantes :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
-msgid "description_confirm_entry_delete ${entry_id}"
-msgstr ""
-"Are you sure you want to delete the <strong>${entry_id}</strong> entry?"
+msgid "description_confirm_entry_delete"
+msgstr "Confirm the deletion of the following entrie(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -74,23 +77,15 @@ msgstr ""
 "Es gibt zu viele Treffer als Ergebnis Ihrer Abfrage. Verfeinern Sie Ihre "
 "Suchabfrage."
 
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Hilfe für dieses Feld"
-
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "ID"
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "Label"
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr ""
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -114,6 +109,21 @@ msgstr "Kein Verzeichnis verfügbar"
 
 msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
+
+#, fuzzy
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+#, fuzzy
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+#, fuzzy
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr "Eintrag löschen nicht erlaubt"
 
 msgid "label_roles"
 msgstr "Rollen"
@@ -151,9 +161,6 @@ msgstr "Rolle(n) Manager"
 msgid "label_roles_Member"
 msgstr "Rolle(n) Teilnehmer"
 
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Eintrag löschen nicht erlaubt"
-
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Eintrag existiert schon"
 
@@ -164,6 +171,9 @@ msgstr "Member"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
+
+msgid "label"
+msgstr "Label"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Zurück zu Verzeichnissen"
@@ -179,6 +189,9 @@ msgstr "Löschen"
 
 msgid "button_search"
 msgstr "Suchen"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Hilfe für dieses Feld"
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"

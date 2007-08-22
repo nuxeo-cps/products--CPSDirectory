@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-03-14 11:58default\n"
+"POT-Creation-Date: 2007-08-22 18:31default\n"
 "PO-Revision-Date: 2007-05-31 09:25+0100\n"
 "Language-Team: valencià/català. <juangus@lasalle.es>\n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,11 @@ msgstr ""
 msgid "Error"
 msgstr "Error"
 
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
+
 #    <p>Choose a directory</p>
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -28,10 +33,15 @@ msgid "choose_a_directory"
 msgstr "Trie un directori"
 
 #    <span />
-#.   <span>create entry</span>
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crear una nova entrada"
+
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr "Suprimir l'entrada"
 
 #    <span />
 #.   <span>Edit entry</span>
@@ -59,15 +69,19 @@ msgstr "Buscar una entrada"
 msgid "cpsdir_label_view_entry"
 msgstr "Vore l'entrada"
 
+#.   <p>
+#.         Confirmer la suppression des entrees suivantes :
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "description_confirm_entry_delete"
+msgstr ""
+"Are you sure you want to delete the <strong>${entry_id}</strong> entry?"
+
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
 msgstr "La consulta dóna massa resultats. Cal afinar millor la recerca."
-
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Ajuda clau per a aquest camp"
 
 #    <th content="field/title">id</th>
 #.   <th content="field/title">id</th>
@@ -75,13 +89,10 @@ msgstr "Ajuda clau per a aquest camp"
 msgid "id"
 msgstr "ID"
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "etiqueta"
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr ""
 
 #    <span />
 #.   <span />
@@ -109,6 +120,21 @@ msgstr "Cap directori disponible"
 msgid "psm_entry_created"
 msgstr "Entrada creada"
 
+#, fuzzy
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+#, fuzzy
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+#, fuzzy
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr "No es pot esborrar aquesta entrada mentre continga dades."
+
 msgid "label_roles"
 msgstr "Rols"
 
@@ -130,11 +156,11 @@ msgstr "Cognoms"
 msgid "label_full_name"
 msgstr "Nom complet"
 
-msgid "cpsdir_label_delete_entry"
-msgstr "Suprimir l'entrada"
-
 msgid "cpsdir_help_homeless"
-msgstr "Una zona privada li donarà accés a:<br />- un espai privat de feina<br />- un calendari personal<br />- una agenda d'adreces d'interès<br />- la possibilitat de tancar/minimitzar caixes<br />"
+msgstr ""
+"Una zona privada li donarà accés a:<br />- un espai privat de feina<br />- "
+"un calendari personal<br />- una agenda d'adreces d'interès<br />- la "
+"possibilitat de tancar/minimitzar caixes<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Activar l'àrea privada"
@@ -145,9 +171,6 @@ msgstr "Administrador"
 msgid "label_roles_Member"
 msgstr "Membre"
 
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "No es pot esborrar aquesta entrada mentre continga dades."
-
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Ja existeix una entrada amb el mateix identificador."
 
@@ -157,6 +180,23 @@ msgstr "Membre"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
-#~ msgid "cpsdir_label_upto_directories"
-#~ msgstr "Tornar a Directoris"
+msgid "label"
+msgstr "etiqueta"
 
+msgid "cpsdir_label_upto_directories"
+msgstr "Tornar a Directoris"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "button_back"
+msgstr "Back"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"
+
+msgid "i18_key-help_for_this_field"
+msgstr "Ajuda clau per a aquest camp"

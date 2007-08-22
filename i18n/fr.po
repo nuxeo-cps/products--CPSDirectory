@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2007-04-25 12:22default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: 2004-08-30 12:20+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -29,6 +29,11 @@ msgstr ""
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Erreur"
+
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -68,15 +73,11 @@ msgid "cpsdir_label_view_entry"
 msgstr "Voir"
 
 #.   <p>
-#.         description_confirm_entry_delete
-#.         ${entry_id (tal content="id")}
+#.         Confirmer la suppression des entrees suivantes :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-#, fuzzy
-msgid "description_confirm_entry_delete ${entry_id}"
-msgstr ""
-"Êtes-vous certain de vouloir supprimer l'entrée <strong>${entry_id}</"
-"strong> ?"
+msgid "description_confirm_entry_delete"
+msgstr "Confirmer la suppression de(s) entrée(s) suivante(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -88,6 +89,11 @@ msgstr ""
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
+
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr "Présence d'un espace personnel"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -110,6 +116,20 @@ msgstr "Aucun annuaire disponible"
 
 msgid "psm_entry_created"
 msgstr "Entrée créée"
+
+msgid "psm_entry_modified"
+msgstr "Entrée modifiée"
+
+msgid "psm_entry_deleted"
+msgstr "Entrée effacée"
+
+msgid "psm_entries_deleted"
+msgstr "Entrées effacées"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous "
+"faut d'abord supprimer toutes les sous-entrées."
 
 msgid "label_roles"
 msgstr "Rôles"
@@ -146,11 +166,6 @@ msgstr "Administrateur"
 
 msgid "label_roles_Member"
 msgstr "Membre"
-
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
-"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous "
-"faut d'abord supprimer toutes les sous-entrées."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Une entrée existe déjà avec le même identifiant."

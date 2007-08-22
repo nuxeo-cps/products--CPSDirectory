@@ -1,7 +1,12 @@
 <tal:block define="
+    global id request/id|nothing;
+    global ids python:request.get('ids') or [id];
     global dirname request/dirname|string:members;
     global dir here/portal_directories/?dirname;
     global dirtitle dir/title_or_id;
+    global is_members_directory python:dirname == here.acl_users.getProperty('users_dir');
+    global members_folder_rpath python:here.portal_membership.getProperty('membersfolder_id');
+    global members_folder nocall:here/portal_url/?members_folder_rpath;
     "/>
 
 <html metal:use-macro="here/content_lib_master/macros/master">
@@ -20,20 +25,49 @@
     </h1>
   </metal:block>
 
-  <metal:block fill-slot="main" tal:define="id request/id">
-    <p i18n:translate="">
-      description_confirm_entry_delete
-      <tal:block i18n:name="entry_id" content="id"/>
+  <metal:block fill-slot="main">
+
+    <p i18n:translate="description_confirm_entry_delete">
+      Confirmer la suppression des entrees suivantes :
     </p>
+
+    <table class="listing">
+    <thead>
+    <tr>
+      <th i18n:translate="label_user_name">User name</th>
+      <th tal:condition="is_members_directory"
+          i18n:translate="label_is_user_space_present">Presence of a personal space</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr tal:repeat="id ids"
+          tal:attributes="class python:test(repeat['id'].odd(), 'odd', 'even')">
+        <td tal:content="id"/>
+        <td condition="is_members_directory">
+          <tal:block
+           define="member_folder python:members_folder.restrictedTraverse(id, default=None)"
+           content="python:member_folder is not None"
+           i18n:translate=""
+           />
+        </td>
+      </tr>
+    </tbody>
+    </table>
+
     <form action="cpsdirectory_entry_delete" method="post">
       <p>
         <input type="hidden" name="dirname" tal:attributes="value dirname"/>
-        <input type="hidden" name="id" tal:attributes="value id"/>
+        <tal:block repeat="id ids">
+          <input type="hidden" name="ids:list" tal:attributes="value id"/>
+        </tal:block>
 
-        <button type="button" onclick="javascript:history.back()"
-          i18n:translate="button_back">Back</button>
         <button type="submit" class="destructive"
           i18n:translate="button_delete">Delete</button>
+        <button type="submit" class="destructive"
+          name="archive_user_spaces"
+          i18n:translate="button_archive_user_space_delete_user">Archive user space before deleting user</button>
+        <button type="button" onclick="javascript:history.back()"
+          i18n:translate="button_back">Back</button>
       </p>
     </form>
   </metal:block>

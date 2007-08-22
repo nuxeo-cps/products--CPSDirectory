@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-03-14 11:58default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: 2007-05-01 16:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: Português <luis727@gmail.com>\n"
@@ -26,15 +26,25 @@ msgstr ""
 msgid "Error"
 msgstr "Erro"
 
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
+
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
 msgstr "Escolha um directório"
 
-#.   <span>create entry</span>
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Criar uma entrada"
+
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr "Remover entrada"
 
 #.   <span>Edit entry</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -58,28 +68,27 @@ msgstr "Buscar entrada"
 msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
+#.   <p>
+#.         Confirmer la suppression des entrees suivantes :
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "description_confirm_entry_delete"
+msgstr ""
+
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
 msgstr "Muitos resultados; redefina a sua pesquisa."
-
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Tecla de ajuda i18 para este campo"
 
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "Rótulo"
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr ""
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -103,6 +112,23 @@ msgstr "Nenhum directório disponível"
 msgid "psm_entry_created"
 msgstr "Entrada criada"
 
+#, fuzzy
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+#, fuzzy
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+#, fuzzy
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+"Desculpe mas esta entrada não pode ser removida, deve remover todas as "
+"subentradas primeiro."
+
 msgid "label_roles"
 msgstr "Papéis"
 
@@ -124,11 +150,11 @@ msgstr "Último Nome"
 msgid "label_full_name"
 msgstr "Nome Completo"
 
-msgid "cpsdir_label_delete_entry"
-msgstr "Remover entrada"
-
 msgid "cpsdir_help_homeless"
-msgstr "Uma área particular dá a você acesso a: - uma área de trabalho particular - uma agenda pessoal - uma colecção de favoritos - permite fechar/minimizar caixa."
+msgstr ""
+"Uma área particular dá a você acesso a: - uma área de trabalho particular - "
+"uma agenda pessoal - uma colecção de favoritos - permite fechar/minimizar "
+"caixa."
 
 msgid "cpsdir_label_homeless"
 msgstr "Habilitar área particular"
@@ -139,9 +165,6 @@ msgstr "Administrador"
 msgid "label_roles_Member"
 msgstr "Membro"
 
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Desculpe mas esta entrada não pode ser removida, deve remover todas as subentradas primeiro."
-
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Uma entrada com o mesmo identificador já existe"
 
@@ -151,14 +174,23 @@ msgstr "Membro"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
-#~ msgid "cpsdir_label_upto_directories"
-#~ msgstr "Subir para"
-#~ msgid "Title"
-#~ msgstr "Título"
-#~ msgid "button_back"
-#~ msgstr "Voltar"
-#~ msgid "button_delete"
-#~ msgstr "Delete"
-#~ msgid "button_search"
-#~ msgstr "Search"
+msgid "label"
+msgstr "Rótulo"
 
+msgid "cpsdir_label_upto_directories"
+msgstr "Subir para"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "button_back"
+msgstr "Voltar"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Tecla de ajuda i18 para este campo"

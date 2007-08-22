@@ -3,7 +3,8 @@ Requires
 - CPSI18n >= 1.0.0
 New features
 ~~~~~~~~~~~~
--
+- Added the confirmation for entry deletion as well as possible optional
+  archival for user personal spaces. 
 Bug fixes
 ~~~~~~~~~
 - Fixed #1851: "_getEntry won't return the given default value when using

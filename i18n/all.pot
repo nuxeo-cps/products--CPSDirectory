@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2007-04-25 12:22default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -19,6 +19,11 @@ msgstr ""
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
+msgstr ""
+
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -59,11 +64,10 @@ msgid "cpsdir_label_view_entry"
 msgstr ""
 
 #.   <p>
-#.         description_confirm_entry_delete
-#.         ${entry_id (tal content="id")}
+#.         Confirmer la suppression des entrees suivantes :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-msgid "description_confirm_entry_delete ${entry_id}"
+msgid "description_confirm_entry_delete"
 msgstr ""
 
 #.   <p />
@@ -74,6 +78,11 @@ msgstr ""
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
+msgstr ""
+
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
 msgstr ""
 
 #.   <span />
@@ -95,9 +104,25 @@ msgstr ""
 msgid "no_dir_available"
 msgstr ""
 
+# Status messages (psm)
+# ######################
 msgid "psm_entry_created"
 msgstr ""
 
+msgid "psm_entry_modified"
+msgstr ""
+
+msgid "psm_entry_deleted"
+msgstr ""
+
+msgid "psm_entries_deleted"
+msgstr ""
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+# Labels
+# #######
 msgid "label_roles"
 msgstr ""
 
@@ -129,9 +154,6 @@ msgid "label_roles_Manager"
 msgstr ""
 
 msgid "label_roles_Member"
-msgstr ""
-
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-03-14 11:58default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: 2007-05-12 13:57+0100\n"
 "Last-Translator: xosé francisco martínez reboiras <xosereboiras@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"
@@ -12,7 +12,8 @@ msgstr ""
 "Language-Name: Galician\n"
 "Domain: default\n"
 "Preferred-encodings: utf-8 latin1\n"
-"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
+"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-"
+"hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
 "X-Generator: KBabel 1.0.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Spanish\n"
@@ -24,6 +25,11 @@ msgstr ""
 msgid "Error"
 msgstr "Erro"
 
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
+
 #    <p>Choose a directory</p>
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -31,10 +37,15 @@ msgid "choose_a_directory"
 msgstr "Seleccione un directorio"
 
 #    <span />
-#.   <span>create entry</span>
+#.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
 msgstr "Crear unha nova entrada"
+
+#.   <block>Delete entry</block>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "cpsdir_label_delete_entry"
+msgstr "Suprimir a entrada"
 
 #    <span />
 #.   <span>Edit entry</span>
@@ -62,15 +73,18 @@ msgstr "Buscar unha entrada"
 msgid "cpsdir_label_view_entry"
 msgstr "Ver a entrada"
 
+#.   <p>
+#.         Confirmer la suppression des entrees suivantes :
+#.       </p>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "description_confirm_entry_delete"
+msgstr ""
+
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "Hai demasiados resultados na túa consulta. Por favor, afina mellor a busca."
-
-#.   <span content="widget/help" condition="widget/is_i18n">i18_key-help_for_this_field</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-msgid "i18_key-help_for_this_field"
-msgstr "Axuda clave para este campo"
+msgstr ""
+"Hai demasiados resultados na túa consulta. Por favor, afina mellor a busca."
 
 #    <th content="field/title">id</th>
 #.   <th content="field/title">id</th>
@@ -78,13 +92,10 @@ msgstr "Axuda clave para este campo"
 msgid "id"
 msgstr "id"
 
-#.   <span content="widget/label_edit" condition="widget/is_i18n">label</span>
-#.   <span content="widget/label" condition="widget/is_i18n">label</span>
-#: from ../skins/cps_directory/layout_dir_edit.pt
-#: ../skins/cps_directory/layout_dir_search.pt
-#: ../skins/cps_directory/layout_dir_view.pt
-msgid "label"
-msgstr "etiqueta"
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr ""
 
 #    <span />
 #.   <span />
@@ -112,6 +123,22 @@ msgstr "Ningún directorio dispoñible"
 msgid "psm_entry_created"
 msgstr "Entrada creada"
 
+#, fuzzy
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+#, fuzzy
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+#, fuzzy
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+"Sentímolo, pero mentres conteña datos, non podemos borrar esta entrada."
+
 msgid "label_roles"
 msgstr "Roles"
 
@@ -133,11 +160,11 @@ msgstr "Apelidos"
 msgid "label_full_name"
 msgstr "Nome completo"
 
-msgid "cpsdir_label_delete_entry"
-msgstr "Suprimir a entrada"
-
 msgid "cpsdir_help_homeless"
-msgstr "Unha zona privada darache acceso a:<br />- un espazo privado de traballo<br />- un calendario persoal<br />- unha axenda de favoritos<br />- a posibilidade de pechar/minimizar caixas<br />"
+msgstr ""
+"Unha zona privada darache acceso a:<br />- un espazo privado de traballo<br /"
+">- un calendario persoal<br />- unha axenda de favoritos<br />- a "
+"posibilidade de pechar/minimizar caixas<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Activar a área privada"
@@ -148,9 +175,6 @@ msgstr "Administrador"
 msgid "label_roles_Member"
 msgstr "Membro"
 
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Sentímolo, pero mentres conteña datos, non podemos borrar esta entrada."
-
 msgid "cpsdir_err_entry_already_exists"
 msgstr "Xa existe unha entrada co mesmo identificador."
 
@@ -160,6 +184,23 @@ msgstr "Membro"
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
 
-#~ msgid "cpsdir_label_upto_directories"
-#~ msgstr "Volver a Directorios"
+msgid "label"
+msgstr "etiqueta"
 
+msgid "cpsdir_label_upto_directories"
+msgstr "Volver a Directorios"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "button_back"
+msgstr "Back"
+
+msgid "button_delete"
+msgstr "Delete"
+
+msgid "button_search"
+msgstr "Search"
+
+#~ msgid "i18_key-help_for_this_field"
+#~ msgstr "Axuda clave para este campo"

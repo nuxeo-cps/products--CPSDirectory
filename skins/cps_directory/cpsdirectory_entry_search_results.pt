@@ -15,7 +15,7 @@
   cpsmcat nocall:here/translation_service;
   ">
   <div style="padding-left: 1.5em">
-    <form action="cpsdirectory_entry_delete" method="post">
+    <form action="cpsdirectory_entry_delete_form" method="post">
       <table tal:condition="results" summary="search result list">
         <tr>
           <th tal:condition="isAdmin" i18n:translate="label_selection">
@@ -59,9 +59,7 @@
             tal:attributes="onclick python:'toggleSelect(this, \'%s\', \'%s\')'
             % (cpsmcat('button_select_all'), cpsmcat('button_deselect_all'))" />
           <input type="submit" class="destructive" value="button_delete"
-            i18n:attributes="value"
-            tal:attributes="onclick python:'return window.confirm(\'%s\')'
-            % cpsmcat('description_confirm_delete')" />
+            i18n:attributes="value"/>
         </tal:block>
         <button type="button" onclick="javascript:history.back()"
           i18n:translate="button_back">Back</button>

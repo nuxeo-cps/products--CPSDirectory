@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2007-04-25 12:22default\n"
+"POT-Creation-Date: 2007-08-22 18:34default\n"
 "PO-Revision-Date: 2004-08-30 12:21+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -29,6 +29,11 @@ msgstr ""
 #: from ../skins/cps_directory/layout_dir_search.pt
 msgid "Error"
 msgstr "Error"
+
+#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "button_archive_user_space_delete_user"
+msgstr ""
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -68,14 +73,11 @@ msgid "cpsdir_label_view_entry"
 msgstr "View"
 
 #.   <p>
-#.         description_confirm_entry_delete
-#.         ${entry_id (tal content="id")}
+#.         Confirmer la suppression des entrees suivantes :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-#, fuzzy
-msgid "description_confirm_entry_delete ${entry_id}"
-msgstr ""
-"Are you sure you want to delete the <strong>${entry_id}</strong> entry?"
+msgid "description_confirm_entry_delete"
+msgstr "Confirm the deletion of the following entrie(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -86,6 +88,11 @@ msgstr "There are too many results for your query, please refine your query."
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
+
+#.   <th condition="is_members_directory">Presence of a personal space</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_is_user_space_present"
+msgstr "Presence of a personal space"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -108,6 +115,20 @@ msgstr "No directory available"
 
 msgid "psm_entry_created"
 msgstr "Entry created"
+
+msgid "psm_entry_modified"
+msgstr "Entry modified"
+
+msgid "psm_entry_deleted"
+msgstr "Entry deleted"
+
+msgid "psm_entries_deleted"
+msgstr "Entries deleted"
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+"Sorry but this entry can not be deleted, you have to delete all sub entries "
+"first."
 
 msgid "label_roles"
 msgstr "Roles"
@@ -144,11 +165,6 @@ msgstr "Manager"
 
 msgid "label_roles_Member"
 msgstr "Member"
-
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
-"Sorry but this entry can not be deleted, you have to delete all sub entries "
-"first."
 
 msgid "cpsdir_err_entry_already_exists"
 msgstr "An entry with the same identifier already exists"

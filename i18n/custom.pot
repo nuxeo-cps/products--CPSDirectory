@@ -16,9 +16,25 @@ msgstr ""
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: default\n"
 
+# Status messages (psm)
+#######################
 msgid "psm_entry_created"
 msgstr ""
 
+msgid "psm_entry_modified"
+msgstr ""
+
+msgid "psm_entry_deleted"
+msgstr ""
+
+msgid "psm_entries_deleted"
+msgstr ""
+
+msgid "psm_entry_delete_not_allowed_on_non_leaf"
+msgstr ""
+
+# Labels
+########
 msgid "label_roles"
 msgstr ""
 
@@ -68,9 +84,6 @@ msgid "label_roles_Manager"
 msgstr ""
 
 msgid "label_roles_Member"
-msgstr ""
-
-msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
 
 msgid "cpsdir_err_entry_already_exists"
