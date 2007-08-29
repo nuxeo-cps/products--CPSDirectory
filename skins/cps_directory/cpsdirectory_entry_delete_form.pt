@@ -28,7 +28,7 @@
   <metal:block fill-slot="main">
 
     <p i18n:translate="description_confirm_entry_delete">
-      Confirmer la suppression des entrees suivantes :
+      Confirm the deletion of the following entrie(s) :
     </p>
 
     <table class="listing">
