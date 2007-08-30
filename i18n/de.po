@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-22 18:31default\n"
+"POT-Creation-Date: 2007-08-30 15:02default\n"
 "PO-Revision-Date: 2005-10-06 14:12+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -20,10 +20,11 @@ msgstr ""
 msgid "Error"
 msgstr "Fehler"
 
-#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#.   <button type="submit" class="destructive" name="archive_user_spaces" condition="is_members_directory">Archive user spaces then delete users</button>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-msgid "button_archive_user_space_delete_user"
-msgstr ""
+#, fuzzy
+msgid "button_archive_user_spaces_delete_users"
+msgstr "Archive user spaces then delete users"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
@@ -63,7 +64,7 @@ msgid "cpsdir_label_view_entry"
 msgstr "Ansehen Eintrag"
 
 #.   <p>
-#.         Confirmer la suppression des entrees suivantes :
+#.         Confirm the deletion of the following entrie(s) :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
@@ -81,6 +82,12 @@ msgstr ""
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "ID"
+
+#.   <th>Entry id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "label_entry_id"
+msgstr "Entry identifier"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -110,13 +117,11 @@ msgstr "Kein Verzeichnis verfügbar"
 msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
 
-#, fuzzy
 msgid "psm_entry_modified"
-msgstr "Entry modified"
+msgstr "Eintrag geändert."
 
-#, fuzzy
 msgid "psm_entry_deleted"
-msgstr "Entry deleted"
+msgstr "Eintrag gelöscht."
 
 #, fuzzy
 msgid "psm_entries_deleted"

@@ -34,7 +34,7 @@
     <table class="listing">
     <thead>
     <tr>
-      <th i18n:translate="label_user_name">User name</th>
+      <th i18n:translate="label_entry_id">Entry id</th>
       <th tal:condition="is_members_directory"
           i18n:translate="label_is_user_space_present">Presence of a personal space</th>
     </tr>
@@ -43,7 +43,7 @@
     <tr tal:repeat="id ids"
           tal:attributes="class python:test(repeat['id'].odd(), 'odd', 'even')">
         <td tal:content="id"/>
-        <td condition="is_members_directory">
+        <td tal:condition="is_members_directory">
           <tal:block
            define="member_folder python:members_folder.restrictedTraverse(id, default=None)"
            content="python:member_folder is not None"
@@ -64,8 +64,9 @@
         <button type="submit" class="destructive"
           i18n:translate="button_delete">Delete</button>
         <button type="submit" class="destructive"
+          tal:condition="is_members_directory"
           name="archive_user_spaces"
-          i18n:translate="button_archive_user_space_delete_user">Archive user space before deleting user</button>
+          i18n:translate="button_archive_user_spaces_delete_users">Archive user spaces then delete users</button>
         <button type="button" onclick="javascript:history.back()"
           i18n:translate="button_back">Back</button>
       </p>

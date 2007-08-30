@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-08-22 18:31default\n"
+"POT-Creation-Date: 2007-08-30 15:02default\n"
 "PO-Revision-Date: 2007-05-31 09:25+0100\n"
 "Language-Team: valencià/català. <juangus@lasalle.es>\n"
 "MIME-Version: 1.0\n"
@@ -21,9 +21,9 @@ msgstr ""
 msgid "Error"
 msgstr "Error"
 
-#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#.   <button type="submit" class="destructive" name="archive_user_spaces" condition="is_members_directory">Archive user spaces then delete users</button>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-msgid "button_archive_user_space_delete_user"
+msgid "button_archive_user_spaces_delete_users"
 msgstr ""
 
 #    <p>Choose a directory</p>
@@ -70,13 +70,12 @@ msgid "cpsdir_label_view_entry"
 msgstr "Vore l'entrada"
 
 #.   <p>
-#.         Confirmer la suppression des entrees suivantes :
+#.         Confirm the deletion of the following entrie(s) :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete"
-msgstr ""
-"Are you sure you want to delete the <strong>${entry_id}</strong> entry?"
+msgstr "Confirm the deletion of the following entrie(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -88,6 +87,12 @@ msgstr "La consulta dóna massa resultats. Cal afinar millor la recerca."
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "ID"
+
+#.   <th>Entry id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "label_entry_id"
+msgstr "Entry identifier"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -120,13 +125,11 @@ msgstr "Cap directori disponible"
 msgid "psm_entry_created"
 msgstr "Entrada creada"
 
-#, fuzzy
 msgid "psm_entry_modified"
-msgstr "Entry modified"
+msgstr "Entrada modificada."
 
-#, fuzzy
 msgid "psm_entry_deleted"
-msgstr "Entry deleted"
+msgstr "Entrada borrada."
 
 #, fuzzy
 msgid "psm_entries_deleted"

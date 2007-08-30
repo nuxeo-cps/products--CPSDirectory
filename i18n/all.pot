@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default\n"
-"POT-Creation-Date: 2007-08-22 18:34default\n"
+"POT-Creation-Date: 2007-08-30 15:02default\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Your Name <your@email>\n"
 "Language-Team: Name <email>\n"
@@ -21,9 +21,9 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#.   <button type="submit" class="destructive" name="archive_user_spaces" condition="is_members_directory">Archive user spaces then delete users</button>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-msgid "button_archive_user_space_delete_user"
+msgid "button_archive_user_spaces_delete_users"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -64,7 +64,7 @@ msgid "cpsdir_label_view_entry"
 msgstr ""
 
 #.   <p>
-#.         Confirmer la suppression des entrees suivantes :
+#.         Confirm the deletion of the following entrie(s) :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "description_confirm_entry_delete"
@@ -78,6 +78,11 @@ msgstr ""
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
+msgstr ""
+
+#.   <th>Entry id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+msgid "label_entry_id"
 msgstr ""
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>

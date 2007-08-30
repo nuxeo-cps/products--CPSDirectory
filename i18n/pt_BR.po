@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-BR\n"
-"POT-Creation-Date: 2007-08-22 18:34default\n"
+"POT-Creation-Date: 2007-08-30 15:02default\n"
 "PO-Revision-Date: 2006-04-03 15:11-0300\n"
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
@@ -26,9 +26,9 @@ msgstr ""
 msgid "Error"
 msgstr "Erro"
 
-#.   <button type="submit" class="destructive" name="archive_user_spaces">Archive user space before deleting user</button>
+#.   <button type="submit" class="destructive" name="archive_user_spaces" condition="is_members_directory">Archive user spaces then delete users</button>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-msgid "button_archive_user_space_delete_user"
+msgid "button_archive_user_spaces_delete_users"
 msgstr ""
 
 #.   <p>Choose a directory</p>
@@ -69,7 +69,7 @@ msgid "cpsdir_label_view_entry"
 msgstr "Visualizar entrada"
 
 #.   <p>
-#.         Confirmer la suppression des entrees suivantes :
+#.         Confirm the deletion of the following entrie(s) :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
@@ -85,6 +85,12 @@ msgstr "Muitos resultados; refine sua busca."
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "id"
 msgstr "id"
+
+#.   <th>Entry id</th>
+#: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
+#, fuzzy
+msgid "label_entry_id"
+msgstr "Último Nome"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -114,13 +120,11 @@ msgstr "Nenhum diretório disponível"
 msgid "psm_entry_created"
 msgstr "Entrada criada"
 
-#, fuzzy
 msgid "psm_entry_modified"
-msgstr "Entrada criada"
+msgstr "Entrada modificada."
 
-#, fuzzy
 msgid "psm_entry_deleted"
-msgstr "Entrada criada"
+msgstr "Entrada removida."
 
 #, fuzzy
 msgid "psm_entries_deleted"
