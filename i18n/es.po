@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
 "POT-Creation-Date: 2007-08-30 15:02default\n"
-"PO-Revision-Date: 2006-08-11 15:24+0100\n"
+"PO-Revision-Date: 2007-09-01 23:00+0100\n"
 "Last-Translator: Jesus Martin <jesusmartin@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,7 @@ msgstr ""
 "Language-Name: Spanish\n"
 "Domain: default\n"
 "Preferred-encodings: utf-8 latin1\n"
-"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-"
-"hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
+"X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-sv es-gt es-hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
 "X-Generator: KBabel 1.0.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Spanish\n"
@@ -77,15 +76,13 @@ msgstr "Ver la entrada"
 #.         Confirm the deletion of the following entrie(s) :
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-#, fuzzy
 msgid "description_confirm_entry_delete"
-msgstr "Confirm the deletion of the following entrie(s) :"
+msgstr "Confirmar el borrado de la(s) siguiente(s) entrada(s):"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr ""
-"Hay demasiados resultados en tu consulta. Por favor, afina mejor la búsqueda."
+msgstr "Hay demasiados resultados en tu consulta. Por favor, afina mejor la búsqueda."
 
 #    <th content="field/title">id</th>
 #.   <th content="field/title">id</th>
@@ -95,9 +92,8 @@ msgstr "id"
 
 #.   <th>Entry id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
-#, fuzzy
 msgid "label_entry_id"
-msgstr "Entry identifier"
+msgstr "Identificador (id) de la entrada"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -136,13 +132,11 @@ msgstr "Entrada modificada."
 msgid "psm_entry_deleted"
 msgstr "Entrada borrada."
 
-#, fuzzy
 msgid "psm_entries_deleted"
-msgstr "Entries deleted"
+msgstr "Entradas borradas"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr ""
-"Lo sentimos, pero mientras contenga datos, no podemos borrar esta entrada."
+msgstr "Lo sentimos, pero mientras contenga datos, no podemos borrar esta entrada."
 
 msgid "label_roles"
 msgstr "Roles"
@@ -166,10 +160,7 @@ msgid "label_full_name"
 msgstr "Nombre completo"
 
 msgid "cpsdir_help_homeless"
-msgstr ""
-"Una zona privada te dará acceso a:<br />- un espacio privado de trabajo<br /"
-">- un calendario personal<br />- una agenda de favoritos<br />- la "
-"posibilidad de cerrar/minimizar cajas<br />"
+msgstr "Una zona privada te dará acceso a:<br />- un espacio privado de trabajo<br />- un calendario personal<br />- una agenda de favoritos<br />- la posibilidad de cerrar/minimizar cajas<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Activar el área privada"
@@ -196,16 +187,17 @@ msgid "cpsdir_label_upto_directories"
 msgstr "Volver a Directorios"
 
 msgid "Title"
-msgstr "Title"
+msgstr "Título"
 
 msgid "button_back"
-msgstr "Back"
+msgstr "Atrás"
 
 msgid "button_delete"
-msgstr "Delete"
+msgstr "Borrar"
 
 msgid "button_search"
-msgstr "Search"
+msgstr "Búsqueda"
 
 #~ msgid "i18_key-help_for_this_field"
 #~ msgstr "Ayuda clave para este campo"
+
