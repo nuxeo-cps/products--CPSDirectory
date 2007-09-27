@@ -3,7 +3,24 @@
   global dirname request/dirname|string:members;
   global dir here/portal_directories/?dirname;
   global dirtitle dir/title_or_id;
+  title_field dir/title_field;
+  validate python: request.has_key('cpsdirectory_entry_edit_form');
+  edit_request python: validate and request or nothing;
+  res python: dir.renderEditEntryDetailed(id, request=edit_request);
+  global rendered_main python: res[0];
+  rendered_ok python: res[1];
+  ds python: res[2];
+  global title ds/?title_field|id;
+  portal_status_message request/portal_status_message|nothing;
+  global portal_status_message python: portal_status_message or (validate
+  and (rendered_ok and 'psm_content_changed' or 'psm_content_error'))
+  or '';
+  user_name python: context.portal_membership.getAuthenticatedMember().getId();
+  same_user python: validate and id == user_name or nothing;
+  credentials_changed python: same_user and request['widget__confirm'] != '' or nothing;
+  dummy python: credentials_changed and context.cookie_authentication.credentialsChanged('', user_name, request['widget__confirm']) or nothing;
   "/>
+
 <metal:block use-macro="here/main_template/macros/master">
   <metal:block fill-slot="style_slot">
     <tal:block define="dummy
@@ -24,24 +41,7 @@
     </div>
   </metal:block>
 
-  <metal:block fill-slot="main" tal:define="
-      title_field dir/title_field;
-      validate python: request.has_key('cpsdirectory_entry_edit_form');
-      edit_request python: validate and request or nothing;
-      res python: dir.renderEditEntryDetailed(id, request=edit_request);
-      global rendered_main python: res[0];
-      rendered_ok python: res[1];
-      ds python: res[2];
-      global title ds/?title_field|id;
-      portal_status_message request/portal_status_message|nothing;
-      global portal_status_message python: portal_status_message or (validate 
-        and (rendered_ok and 'psm_content_changed' or 'psm_content_error')) 
-        or '';
-      user_name python: context.portal_membership.getAuthenticatedMember().getId();
-      same_user python: validate and id == user_name or nothing;
-      credentials_changed python: same_user and request['widget__confirm'] != '' or nothing;
-      dummy python: credentials_changed and context.cookie_authentication.credentialsChanged('', user_name, request['widget__confirm']) or nothing;
-      ">
+  <metal:block fill-slot="main">
     <div tal:replace="structure rendered_main">Rendered main...</div>
   </metal:block>
 

@@ -11,11 +11,13 @@ Bug fixes
   chained directories (stacking and meta)".
 - Usability improvement: Made the cpsdirectory_entry_delete_form state exactly
   which entry it is about to delete.
+- Fixed #1856 : "Modifying a CPSDirectory entry should display an information
+  message (psm)"
 - Made the CPS Directory MultiEntries Widget output
   case-insensitive sorted entries.
-- Cosmit and little optims.
 - Allow None as SQL value (NULL).
 - Added more logs in LDAPBackingDirectory in case of exceptions.
+- Cosmit and little optims.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - Add some notes about python-ldap on sarge in the doc directory.
