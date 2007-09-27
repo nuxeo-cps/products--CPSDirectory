@@ -18,4 +18,4 @@ Bug fixes
 - Added more logs in LDAPBackingDirectory in case of exceptions.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- Add some notes about python-ldap on sarge in the doc directory.
