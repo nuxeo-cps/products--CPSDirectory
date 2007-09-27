@@ -1,0 +1,46 @@
+========================
+python-ldap notes
+========================
+
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
+
+
+Debian Sarge notes
+==================
+
+Sarge comes with python-ldap 2.0.4 and python2.3.
+The python-ldap 2.0.4 has a buggy reconnect features.
+
+The python-ldap 2.2.0 Debian package can not be installed in Sarge.
+Nevertheless copying  _ldap.so and the ldap directory into
+/usr/lib/python2.3/site-packages seems to work (quick and dirty
+workaround).
+
+There is no python-ldap for python 2.4 in Sarge but you can compile it
+using the following patch :
+
+--- python-ldap-2.2.0~/Modules/errors.c
++++ python-ldap-2.2.0/Modules/errors.c
+@@ -17,9 +17,16 @@
+
+ /* list of error objects */
+
++#if LDAP_VENDOR_VERSION>=20200
++/* OpenLDAP 2.2+ defines negative error constants */
+ #define LDAP_ERROR_MIN          LDAP_REFERRAL_LIMIT_EXCEEDED
+ #define LDAP_ERROR_MAX          LDAP_OTHER
+ #define LDAP_ERROR_OFFSET       -LDAP_ERROR_MIN
++#else
++#define LDAP_ERROR_MIN          0
++#define LDAP_ERROR_MAX          LDAP_REFERRAL_LIMIT_EXCEEDED
++#define LDAP_ERROR_OFFSET       0
++#endif
+
+static PyObject* errobjects[ LDAP_ERROR_MAX-LDAP_ERROR_MIN+1 ];
+
+
+
+
