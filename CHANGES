@@ -18,6 +18,7 @@ Bug fixes
 - Allow None as SQL value (NULL).
 - Added more logs in LDAPBackingDirectory in case of exceptions.
 - Cosmit and little optims.
+- Fixed #725 : "Change the message background when it's an error or a warning".
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - Add some notes about python-ldap on sarge in the doc directory.

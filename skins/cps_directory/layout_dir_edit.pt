@@ -44,7 +44,7 @@
       </td>
       <td valign="top" colspan="1"
         tal:attributes="colspan python:cell['ncols']*2-1">
-        <div class="error" tal:omit-tag="not:err">
+        <div class="fieldError" tal:omit-tag="not:err">
           <div tal:attributes="class widget/css_class|nothing">
             <tal:block replace="structure cell/widget_rendered" />
           </div>
