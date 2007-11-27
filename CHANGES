@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- Removed a now useless translations about confirmation in directory actions.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

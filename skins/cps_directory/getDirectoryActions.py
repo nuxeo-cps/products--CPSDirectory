@@ -46,8 +46,6 @@ edit_action = {
     'category': 'object',
     }
 
-confirm_text = context.translation_service('description_confirm_delete')
-confirm_text.encode('ISO-8859-15', 'ignore')
 delete_action = {
     'id': 'delete_entry',
     'url': base_url+'cpsdirectory_entry_delete_form?dirname='+dirname+'&id='+id,
