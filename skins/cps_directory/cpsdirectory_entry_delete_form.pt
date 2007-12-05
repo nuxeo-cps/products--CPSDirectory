@@ -2,6 +2,8 @@
     global dirname request/dirname|string:members;
     global dir here/portal_directories/?dirname;
     global dirtitle dir/title_or_id;
+    global id request/id|nothing;
+    global ids python:request.get('ids') or [id];
     "/>
 
 <html metal:use-macro="here/content_lib_master/macros/master">
@@ -26,10 +28,10 @@
     </p>
     <form action="cpsdirectory_entry_delete" method="post">
       <p>
-        <input type="hidden" name="dirname"
-          tal:attributes="value request/dirname"/>
-        <input type="hidden" name="id"
-          tal:attributes="value request/id"/>
+        <input type="hidden" name="dirname" tal:attributes="value dirname"/>
+        <tal:block repeat="id ids">
+          <input type="hidden" name="ids:list" tal:attributes="value id"/>
+        </tal:block>
         <button type="button" onclick="javascript:history.back()"
           i18n:translate="button_back">Back</button>
         <button type="submit" class="destructive"
@@ -39,4 +41,5 @@
   </metal:block>
 
 </html>
+
 
