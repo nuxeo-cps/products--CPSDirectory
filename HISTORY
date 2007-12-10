@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.41.1-rel1271525924
+===========================================================
+First release built by: gracinet at: 2007-12-10T16:08:41
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.41.1-rel1271525924
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/branches/rel1271525924@52265
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Delete home directory when you delete a member
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.41.0-rel1271525924
 ===========================================================
 First release built by: div at: 2007-06-14T14:31:44
