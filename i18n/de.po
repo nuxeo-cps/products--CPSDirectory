@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:25default\n"
 "PO-Revision-Date: 2005-10-06 14:12+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -142,6 +142,10 @@ msgstr "Sub-Gruppen"
 msgid "label_members"
 msgstr "Teilnehmer"
 
+#, fuzzy
+msgid "label_id"
+msgstr "Id"
+
 msgid "label_first_name"
 msgstr "Vorname"
 
@@ -176,9 +180,6 @@ msgstr "Member"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
-
-msgid "label"
-msgstr "Label"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Zurück zu Verzeichnissen"

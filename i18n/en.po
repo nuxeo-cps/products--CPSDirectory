@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2004-08-30 12:21+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -147,6 +147,9 @@ msgstr "Subgroups"
 msgid "label_members"
 msgstr "Members"
 
+msgid "label_id"
+msgstr "Id"
+
 msgid "label_first_name"
 msgstr "First Name"
 
@@ -179,9 +182,6 @@ msgstr "Member"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
-
-#~ msgid "label"
-#~ msgstr "label"
 
 #~ msgid "cpsdir_label_upto_directories"
 #~ msgstr "Up to Directories"

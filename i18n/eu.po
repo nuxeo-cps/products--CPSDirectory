@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:24default\n"
 "PO-Revision-Date: 2006-09-29 12:14+0100\n"
 "Last-Translator: Periko Alkain <perikoalkain@lasalle.es>\n"
 "Language-Team: Euskara <eu@li.org>\n"
@@ -76,7 +76,7 @@ msgstr "Sarrera ikusi"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete"
-msgstr "Confirm the deletion of the following entrie(s) :"
+msgstr "Confirmar el borrado de la(s) siguiente(s) entrada(s):"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -92,7 +92,7 @@ msgstr "id"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "label_entry_id"
-msgstr "Entry identifier"
+msgstr "Identificador (id) de la entrada"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -132,7 +132,7 @@ msgstr "Sarrera ezabatuta."
 
 #, fuzzy
 msgid "psm_entries_deleted"
-msgstr "Entries deleted"
+msgstr "Entradas borradas"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
@@ -150,6 +150,10 @@ msgstr "Azpitaldea(k)"
 
 msgid "label_members"
 msgstr "Erabiltzailea(k)"
+
+#, fuzzy
+msgid "label_id"
+msgstr "Id"
 
 msgid "label_first_name"
 msgstr "Izena"
@@ -183,9 +187,6 @@ msgstr ""
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administratzailearen rolak"
-
-msgid "label"
-msgstr "etiketa"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Direktorioetara"

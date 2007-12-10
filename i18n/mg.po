@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mg\n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:25default\n"
 "PO-Revision-Date: 2004-11-24 14:00+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
@@ -155,6 +155,10 @@ msgstr "Zana-bondrona"
 msgid "label_members"
 msgstr "Mpikambana"
 
+#, fuzzy
+msgid "label_id"
+msgstr "Identifiant"
+
 msgid "label_first_name"
 msgstr "Fanampin'anarana"
 
@@ -189,9 +193,6 @@ msgstr "Membre"
 #, fuzzy
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrateur"
-
-msgid "label"
-msgstr "label"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Lisitry ny tahirin'adiresy"

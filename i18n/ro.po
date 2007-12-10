@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:25default\n"
 "PO-Revision-Date: 2006-03-02 17:49+0200\n"
 "Last-Translator: Dragos Ivan <div@nuxeo.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -146,6 +146,10 @@ msgstr "Subgrupuri"
 msgid "label_members"
 msgstr "Membri"
 
+#, fuzzy
+msgid "label_id"
+msgstr "Id"
+
 msgid "label_first_name"
 msgstr "Prenume"
 
@@ -178,9 +182,6 @@ msgstr "Membru"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
-
-msgid "label"
-msgstr "eticheta"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Lista directoarelor"

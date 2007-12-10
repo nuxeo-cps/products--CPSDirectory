@@ -47,6 +47,9 @@ msgstr ""
 msgid "label_members"
 msgstr ""
 
+msgid "label_id"
+msgstr ""
+
 msgid "label_first_name"
 msgstr ""
 

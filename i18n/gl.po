@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-08-30 15:02default\n"
+"POT-Creation-Date: 2007-12-10 16:25default\n"
 "PO-Revision-Date: 2007-05-12 13:57+0100\n"
 "Last-Translator: xosé francisco martínez reboiras <xosereboiras@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"
@@ -155,6 +155,10 @@ msgstr "Subgrupos"
 msgid "label_members"
 msgstr "Usuarios"
 
+#, fuzzy
+msgid "label_id"
+msgstr "Id"
+
 msgid "label_first_name"
 msgstr "Nome"
 
@@ -187,9 +191,6 @@ msgstr "Membro"
 
 msgid "label_cpsdir_roles_Manager"
 msgstr "Administrador"
-
-msgid "label"
-msgstr "etiqueta"
 
 msgid "cpsdir_label_upto_directories"
 msgstr "Volver a Directorios"

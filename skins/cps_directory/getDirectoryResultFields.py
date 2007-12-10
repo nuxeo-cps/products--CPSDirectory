@@ -16,7 +16,7 @@ if not fields:
         fields = [{'id': 'sn', 'title': 'label_last_name', 'sort': 'asc'},
                   {'id': 'givenName', 'title': 'label_first_name'},
                   {'id': 'email', 'title': 'label_email'},
-                  {'id': id_field, 'title': 'label_user_name'},
+                  {'id': id_field, 'title': 'label_id'},
                   ]
     elif directory_id == 'groups':
         fields = [{'id': id_field, 'title': 'label_group', 'sort': 'asc'},]
