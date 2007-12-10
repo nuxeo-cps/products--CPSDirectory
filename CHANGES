@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- Delete home directory when you delete a member
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
