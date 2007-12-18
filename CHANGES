@@ -9,4 +9,5 @@ Bug fixes
 - Removed a now useless translations about confirmation in directory actions.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- Added some more methods in the FieldNamespace module to help with LDAP based
+  configurations. 
