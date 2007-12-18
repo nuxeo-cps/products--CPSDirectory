@@ -126,6 +126,7 @@ def crossSetList(self, dir_id, field_id, value, entry_ids, value_search=None):
 fieldStorageNamespace.register('dirCrossSetList', crossSetList)
 
 
+# TODO: "cn" should not be hardcoded here
 REGEXP_CN_DN = re.compile(u'cn=([a-zA-Z0-9_\.-]+),.+')
 def crossLdapGetList(self, dir_id, field_id, value, base_dn):
     """Return the list of entry ids of 'dir_id' such that 'value' is in
@@ -145,6 +146,7 @@ def crossLdapGetList(self, dir_id, field_id, value, base_dn):
     logger.debug("dir = %s" % dir)
     if field_id not in dir._getFieldIds():
         raise KeyError("%s not in %s's fields" % (field_id, dir_id))
+    # TODO: "uid" should not be hardcoded here
     value = 'uid=%s,%s' % (value, base_dn)
     res = dir._searchEntries(**{field_id: [value]})
     logger.debug("res = %s" % res)
@@ -175,6 +177,7 @@ def mapIdsToFieldValues(self, dir_id, entry_ids, field_id):
 fieldStorageNamespace.register('dirMapIdsToFieldValues', mapIdsToFieldValues)
 
 
+# TODO: "uid" should not be hardcoded here
 REGEXP_UID_DN = re.compile(u'uid=([a-zA-Z0-9_\.-]+),.+')
 def mapDnToMemberIds(self, dn_field_ids):
     """Map LDAP DNs to member IDs.
