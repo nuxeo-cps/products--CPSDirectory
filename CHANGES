@@ -3,7 +3,7 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
--
+- #1882: Global roles should be extracted from the roles directory.
 Bug fixes
 ~~~~~~~~~
 -
