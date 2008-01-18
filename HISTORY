@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.43.0
+===========================================================
+First release built by: madarche at: 2008-01-18T21:37:01
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.43.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@52476
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+- #1882: Global roles should be extracted from the roles directory.
+Bug fixes
+~~~~~~~~~
+-
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.42.0
 ===========================================================
 First release built by: madarche at: 2008-01-15T12:17:05
