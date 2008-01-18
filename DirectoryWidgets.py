@@ -93,7 +93,7 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
     This widget displays a reference to a single directory entry as an
     href link.
 
-    In edit mode it uses a SelectWidget for now. XXX
+    In edit mode it uses a SelectWidget.
     """
     meta_type = 'Directory Entry Widget'
 
@@ -191,7 +191,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     This widget displays a reference to a several directory entries as
     an href links.
 
-    In edit mode it uses a MultiSelectWidget for now. XXX
+    In edit mode it uses a MultiSelectWidget.
     """
     meta_type = 'Directory MultiEntries Widget'
 
