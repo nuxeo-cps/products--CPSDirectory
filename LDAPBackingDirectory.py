@@ -718,6 +718,14 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             raise ValueError("DN '%s' must be under base '%s'" %
                              (dn, self.ldap_base))
 
+    security.declarePrivate('setupSpecificOptions')
+    def setupSpecificOptions(self):
+        """This method can be monkey-patched to set specific connexion setting.
+        """
+        # Example:
+        #ldap.set_option(ldap.OPT_X_TLS_NEVER)
+        pass
+
     security.declarePrivate('connectLDAP')
     def connectLDAP(self, bind_dn=None, bind_password=None, retrying=False):
         """Get or initialize a connection to the LDAP server.
@@ -726,6 +734,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         Otherwise bind using the global bind dn and password.
         """
         conn = self._v_conn
+
+        self.setupSpecificOptions()
 
         # Saving for retrying
         bind_dn_orig = bind_dn

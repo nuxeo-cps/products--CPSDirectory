@@ -3,7 +3,8 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
--
+- Added a setupSpecificOptions method which can be monkey-patched to set
+  specific connexion setting.
 Bug fixes
 ~~~~~~~~~
 -
