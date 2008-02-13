@@ -7,7 +7,8 @@ New features
   specific connexion setting.
 Bug fixes
 ~~~~~~~~~
--
+- Optimized the getGlobalRoles script so that it doesn't perform useless
+  directory queries.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

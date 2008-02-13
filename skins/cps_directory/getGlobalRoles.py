@@ -23,38 +23,35 @@ LOG_KEY = 'getGlobalRoles'
 logger = getLogger(LOG_KEY)
 
 portal = getToolByName(context, 'portal_url').getPortalObject()
-cpsmcat = portal.Localizer.default
+cpsmcat = portal.translation_service
 dtool = portal.portal_directories
 roles_directory = dtool.roles
 charset = portal.default_charset
 
-marker = []
-value = marker
 returned = []
 
 ## logger.debug("key = %s" % str(key))
-
-entries_ids = roles_directory.searchEntries()
-for entry_id in entries_ids:
-    if is_i18n:
-        msgid = 'label_cpsdir_roles_' + entry_id
-        label = cpsmcat(msgid).encode(charset, 'ignore')
-    else:
-        label = entry_id
-
-    if key is None:
+if key is None:
+    entries_ids = roles_directory.searchEntries()
+    for entry_id in entries_ids:
+        if is_i18n:
+            msgid = 'label_cpsdir_roles_' + entry_id
+            label = cpsmcat(msgid).encode(charset, 'ignore')
+        else:
+            label = entry_id
         returned.append((entry_id, label))
-    elif entry_id == key:
-        value = label
-        break
+    return returned
 
-if key is not None:
-##     logger.debug("value = %s" % str(value))
-    if value is not marker:
-        return value
+else:
+    entry_id = key
+    if roles_directory.hasEntry(entry_id):
+        if is_i18n:
+            msgid = 'label_cpsdir_roles_' + entry_id
+            label = cpsmcat(msgid).encode(charset, 'ignore')
+        else:
+            label = entry_id
+        return label
     else:
         # This case will be catched by the MethodVocabulary which will return
         # a default value.
         raise KeyError
-else:
-    return returned
