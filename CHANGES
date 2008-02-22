@@ -3,12 +3,10 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
-- Added a setupSpecificOptions method which can be monkey-patched to set
-  specific connexion setting.
+-
 Bug fixes
 ~~~~~~~~~
-- Optimized the getGlobalRoles script so that it doesn't perform useless
-  directory queries.
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

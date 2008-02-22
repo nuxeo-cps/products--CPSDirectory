@@ -1,4 +1,26 @@
 ===========================================================
+Package: CPSDirectory 1.44.0
+===========================================================
+First release built by: madarche at: 2008-02-22T15:54:39
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.44.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@52586
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+- Added a setupSpecificOptions method which can be monkey-patched to set
+  specific connexion setting.
+Bug fixes
+~~~~~~~~~
+- Optimized the getGlobalRoles script so that it doesn't perform useless
+  directory queries.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.43.0
 ===========================================================
 First release built by: madarche at: 2008-01-18T21:37:01
