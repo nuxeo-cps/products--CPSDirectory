@@ -17,6 +17,8 @@ argument :
 
 from logging import getLogger
 
+from AccessControl import Unauthorized
+
 from Products.CMFCore.utils import getToolByName
 
 LOG_KEY = 'getGlobalRoles'
@@ -44,14 +46,21 @@ if key is None:
 
 else:
     entry_id = key
-    if roles_directory.hasEntry(entry_id):
-        if is_i18n:
-            msgid = 'label_cpsdir_roles_' + entry_id
-            label = cpsmcat(msgid).encode(charset, 'ignore')
+    try:
+        if roles_directory.hasEntry(entry_id):
+            if is_i18n:
+                msgid = 'label_cpsdir_roles_' + entry_id
+                label = cpsmcat(msgid).encode(charset, 'ignore')
+            else:
+                label = entry_id
+            return label
         else:
-            label = entry_id
-        return label
-    else:
+            # This case will be catched by the MethodVocabulary which will return
+            # a default value.
+            raise KeyError
+    except Unauthorized:
         # This case will be catched by the MethodVocabulary which will return
         # a default value.
-        raise KeyError
+        #raise KeyError
+        return ''
+
