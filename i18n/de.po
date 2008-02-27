@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory-de CPS-3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-10 16:25default\n"
+"POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2005-10-06 14:12+0200\n"
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
@@ -24,7 +24,7 @@ msgstr "Fehler"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "button_archive_user_spaces_delete_users"
-msgstr "Archive user spaces then delete users"
+msgstr "Archive user space(s) then delete user(s)"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-12-10 16:45default\n"
+"POT-Creation-Date: 2008-02-27 17:18default\n"
 "PO-Revision-Date: 2007-09-01 23:00+0100\n"
 "Last-Translator: Jesus Martin <jesusmartin@lasalle.es>\n"
 "Language-Team: español <jesusmartin@lasalle.es>\n"

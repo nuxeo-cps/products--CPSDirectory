@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-12-10 16:24default\n"
+"POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2007-05-31 09:25+0100\n"
 "Language-Team: valencià/català. <juangus@lasalle.es>\n"
 "MIME-Version: 1.0\n"

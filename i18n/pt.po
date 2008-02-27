@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory\n"
-"POT-Creation-Date: 2007-12-10 16:25default\n"
+"POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2007-05-01 16:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: Português <luis727@gmail.com>\n"

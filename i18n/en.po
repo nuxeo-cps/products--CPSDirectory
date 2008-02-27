@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en\n"
-"POT-Creation-Date: 2007-12-10 16:45default\n"
+"POT-Creation-Date: 2008-02-27 17:18default\n"
 "PO-Revision-Date: 2004-08-30 12:21+0200\n"
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "Error"
 #.   <button type="submit" class="destructive" name="archive_user_spaces" condition="is_members_directory">Archive user spaces then delete users</button>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "button_archive_user_spaces_delete_users"
-msgstr "Archive user spaces then delete users"
+msgstr "Archive user space(s) then delete user(s)"
 
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt

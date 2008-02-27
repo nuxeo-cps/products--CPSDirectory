@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CPSDirectory_en\n"
-"POT-Creation-Date: 2007-12-10 16:24default\n"
+"POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2006-09-29 12:14+0100\n"
 "Last-Translator: Periko Alkain <perikoalkain@lasalle.es>\n"
 "Language-Team: Euskara <eu@li.org>\n"
