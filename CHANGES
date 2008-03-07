@@ -6,8 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- Made skins/cps_directory/getGlobalRoles.py deal with the case when a user has
-  no right to view the roles directory entries.
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

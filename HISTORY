@@ -1,4 +1,25 @@
 ===========================================================
+Package: CPSDirectory 1.44.1
+===========================================================
+First release built by: madarche at: 2008-03-07T18:44:49
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.44.1
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@52640
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Made skins/cps_directory/getGlobalRoles.py deal with the case when a user has
+  no right to view the roles directory entries.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.44.0
 ===========================================================
 First release built by: madarche at: 2008-02-22T15:54:39
