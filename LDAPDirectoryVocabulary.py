@@ -1,4 +1,4 @@
-# (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2004-2008 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -141,7 +141,7 @@ class LDAPDirectoryVocabulary(SimpleItemWithProperties):
         if self.add_empty_key and key == '':
             return 1
         dir = self._getDirectory()
-        return dir.hasEntryByDN(key)
+        return dir._hasEntry(key)
 
     security.declareProtected(ManagePortal, 'isUserModified')
     def isUserModified(self):

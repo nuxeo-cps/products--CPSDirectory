@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- #1862: Problem with has_key of LDAPDirectoryVocabulary.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
