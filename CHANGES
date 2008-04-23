@@ -9,4 +9,5 @@ Bug fixes
 -
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- Added a new "ldap_case_sensitive" option on LDAPBackingDirectory to store the
+  information of whether the underlying LDAP sensitive regarding its id field.

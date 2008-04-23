@@ -213,6 +213,8 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'LDAP auto reconnect feature: delay in seconds before retrying'},
         {'id': 'ldap_timeout', 'type': 'float', 'mode': 'w',
          'label': 'LDAP network timeout in seconds for any request (0 means no limit)'},
+        {'id': 'ldap_case_sensitive', 'type': 'boolean', 'mode': 'w',
+         'label': "Is the underlying LDAP sensitive regarding its id field"},
         )
 
     implemented_encryptions = ('SSHA', 'SHA', 'MD5', 'none')
