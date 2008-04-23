@@ -252,6 +252,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     ldap_retry_max = 1
     ldap_retry_delay = 60.0
     ldap_timeout = 0
+    ldap_case_sensitive = True
 
     all_password_encryptions = ('none',)
     all_ldap_scopes = ('ONELEVEL', 'SUBTREE')
