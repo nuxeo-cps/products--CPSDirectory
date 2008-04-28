@@ -1,4 +1,4 @@
-# (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2004-2008 Nuxeo SAS <http://nuxeo.com>
 # Author: Florent Guillaume <fg@nuxeo.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -59,9 +59,12 @@ class StackingDirectory(BaseDirectory):
          'label': "Backing directories"},
         {'id': 'creation_dir', 'type': 'string', 'mode': 'w',
          'label': "Backing directory for creation"},
+        {'id': 'enforce_entry_ids_case_sensitivity', 'type': 'boolean', 'mode': 'w',
+         'label': "Enforce search doesn't return alternate casing (may happen with LDAP)"},
         )
     backing_dirs = ()
     creation_dir = ''
+    enforce_entry_ids_case_sensitivity = False
 
     def __init__(self, *args, **kw):
         BaseDirectory.__init__(self, *args, **kw)
@@ -321,10 +324,8 @@ class StackingDirectory(BaseDirectory):
                 # XXX don't check acls on search
                 entries = b_dir._searchEntries(return_fields=['*'],
                     **{id_field: [id]})
-                # Make sure search didn't return alternate casing,
-                # this could be the case for LDAP.
-                # XXX This should probably be in the LDAP dir search code.
-                entries = [e for e in entries if e[1][id_field] == id]
+                if self.enforce_entry_ids_case_sensitivity:
+                    entries = [e for e in entries if e[1][id_field] == id]
                 if not entries:
                     continue
                 if len(entries) > 1:
