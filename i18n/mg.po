@@ -17,14 +17,14 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Preferred-encodings: utf-8 latin1\n"
 "X-Generator: KBabel 1.3\n"
 "Language-Code: mg\n"
 "Language-Name: Malagasy\n"
 "Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -79,7 +79,7 @@ msgstr "Jerena"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete"
-msgstr "Confirmer la suppression de(s) entrée(s) suivante(s) :"
+msgstr "Confirmer la suppression de(s) entrÃ©e(s) suivante(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -97,7 +97,7 @@ msgstr "id"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "label_entry_id"
-msgstr "Identifiant de l'entrée"
+msgstr "Identifiant de l'entrÃ©e"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -115,7 +115,7 @@ msgstr "Tsy misy valiny"
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #, fuzzy
 msgid "label_selection"
-msgstr "Sélection"
+msgstr "SÃ©lection"
 
 #.   <p condition="not:directories">
 #.         No directory available
@@ -135,7 +135,7 @@ msgstr "Voafafa."
 
 #, fuzzy
 msgid "psm_entries_deleted"
-msgstr "Entrées effacées"
+msgstr "EntrÃ©es effacÃ©es"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
@@ -144,7 +144,7 @@ msgstr ""
 
 #, fuzzy
 msgid "label_roles"
-msgstr "Rôles"
+msgstr "RÃ´les"
 
 msgid "label_groups"
 msgstr "Vondrona"

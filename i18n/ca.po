@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: CPSDirectory\n"
 "POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2007-05-31 09:25+0100\n"
-"Language-Team: valenci‡/catal‡. <juangus@lasalle.es>\n"
+"Language-Team: valenci√†/catal√†. <juangus@lasalle.es>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Preferred-encodings: latin9 utf-8\n"
-"Domain: default\n"
-"Language-Code: ca\n"
-"Language-Name: valenci‡/catal‡\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-Country: SPAIN\n"
+"Language-Code: ca\n"
+"Language-Name: ca\n"
+"Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #    <em content="err" style="color:red">Error</em>
 #.   <em style="color:red" content="err">Error</em>
@@ -80,7 +80,7 @@ msgstr "Confirmar el borrado de la(s) siguiente(s) entrada(s):"
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
-msgstr "La consulta dÛna massa resultats. Cal afinar millor la recerca."
+msgstr "La consulta d√≥na massa resultats. Cal afinar millor la recerca."
 
 #    <th content="field/title">id</th>
 #.   <th content="field/title">id</th>
@@ -110,7 +110,7 @@ msgstr "Cap resultat"
 #.             </th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_selection"
-msgstr "SelecciÛ"
+msgstr "Selecci√≥"
 
 #    <p condition="not:directories">
 #          No directory available
@@ -165,12 +165,12 @@ msgstr "Nom complet"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Una zona privada li donar‡ accÈs a:<br />- un espai privat de feina<br />- "
-"un calendari personal<br />- una agenda d'adreces d'interËs<br />- la "
+"Una zona privada li donar√† acc√©s a:<br />- un espai privat de feina<br />- "
+"un calendari personal<br />- una agenda d'adreces d'inter√®s<br />- la "
 "possibilitat de tancar/minimitzar caixes<br />"
 
 msgid "cpsdir_label_homeless"
-msgstr "Activar l'‡rea privada"
+msgstr "Activar l'√†rea privada"
 
 msgid "label_roles_Manager"
 msgstr "Administrador"

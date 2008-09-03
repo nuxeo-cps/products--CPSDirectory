@@ -8,14 +8,14 @@ msgstr ""
 "Last-Translator: Stefano Schintu <schintu@gmail.com>\n"
 "Language-Team: CPS Italian <schintu@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Preferred-encodings: utf-8 latin1\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
 "Language-Code: it\n"
 "Language-Name: Italian\n"
 "Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -70,7 +70,7 @@ msgstr "Visualizza l'elemento"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "description_confirm_entry_delete"
-msgstr "Confirmer la suppression de(s) entrÈe(s) suivante(s) :"
+msgstr "Confirmer la suppression de(s) entr√©e(s) suivante(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
@@ -88,7 +88,7 @@ msgstr "Identificatore"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "label_entry_id"
-msgstr "Identifiant de l'entrÈe"
+msgstr "Identifiant de l'entr√©e"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -106,7 +106,7 @@ msgstr "Nessun risultato."
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 #, fuzzy
 msgid "label_selection"
-msgstr "SÈlection"
+msgstr "S√©lection"
 
 #.   <p condition="not:directories">
 #.         No directory available
@@ -116,21 +116,21 @@ msgid "no_dir_available"
 msgstr "Nessun elenco disponibile."
 
 msgid "psm_entry_created"
-msgstr "L'elemento Ë stato creato."
+msgstr "L'elemento √® stato creato."
 
 msgid "psm_entry_modified"
 msgstr "Le modifiche sono state apportate."
 
 msgid "psm_entry_deleted"
-msgstr "L'eliminazione degli oggetti Ë stata effettuata."
+msgstr "L'eliminazione degli oggetti √® stata effettuata."
 
 #, fuzzy
 msgid "psm_entries_deleted"
-msgstr "EntrÈes effacÈes"
+msgstr "Entr√©es effac√©es"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Attenzione, l'elemento non puÚ essere eliminato.<br>Per effettuare questa "
+"Attenzione, l'elemento non pu√≤ essere eliminato.<br>Per effettuare questa "
 "azione devi prima cancellare tutti i sotto-elementi."
 
 msgid "label_roles"
@@ -175,7 +175,7 @@ msgid "label_roles_Member"
 msgstr "Collaboratore"
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Attenzione, un oggetto con lo stesso identificativo Ë gi‡ presente."
+msgstr "Attenzione, un oggetto con lo stesso identificativo √® gi√† presente."
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membri"

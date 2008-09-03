@@ -16,14 +16,14 @@ msgstr ""
 "Last-Translator: ben\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Preferred-encodings: utf-8 latin1\n"
 "X-Generator: KBabel 1.3.1\n"
 "Language-Code: fr\n"
 "Language-Name: French\n"
 "Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -43,7 +43,7 @@ msgstr "Choix de l'annuaire"
 #.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
 msgid "cpsdir_label_create_entry"
-msgstr "Créer"
+msgstr "CrÃ©er"
 
 #.   <block>Delete entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -59,7 +59,7 @@ msgstr "Modifier"
 #.         </span>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_form.pt
 msgid "cpsdir_label_results"
-msgstr "Résultats de la recherche"
+msgstr "RÃ©sultats de la recherche"
 
 #.   <span condition="python: ok != 'results'">search an entry
 #.         </span>
@@ -77,13 +77,13 @@ msgstr "Voir"
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "description_confirm_entry_delete"
-msgstr "Confirmer la suppression de(s) entrée(s) suivante(s) :"
+msgstr "Confirmer la suppression de(s) entrÃ©e(s) suivante(s) :"
 
 #.   <p />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_errors.pt
 msgid "description_too_many_results_refine_query"
 msgstr ""
-"Il y a trop de résultats pour votre requête, merci de préciser votre requête."
+"Il y a trop de rÃ©sultats pour votre requÃªte, merci de prÃ©ciser votre requÃªte."
 
 #.   <th content="field/title">id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
@@ -93,24 +93,24 @@ msgstr "id"
 #.   <th>Entry id</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "label_entry_id"
-msgstr "Identifiant de l'entrée"
+msgstr "Identifiant de l'entrÃ©e"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "label_is_user_space_present"
-msgstr "Présence d'un espace personnel"
+msgstr "PrÃ©sence d'un espace personnel"
 
 #.   <span />
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_no_results"
-msgstr "Aucun résultat"
+msgstr "Aucun rÃ©sultat"
 
 #.   <th condition="isAdmin">
 #.               Selection
 #.             </th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_selection"
-msgstr "Sélection"
+msgstr "SÃ©lection"
 
 #.   <p condition="not:directories">
 #.         No directory available
@@ -120,24 +120,24 @@ msgid "no_dir_available"
 msgstr "Aucun annuaire disponible"
 
 msgid "psm_entry_created"
-msgstr "Entrée créée"
+msgstr "EntrÃ©e crÃ©Ã©e"
 
 msgid "psm_entry_modified"
-msgstr "Entrée modifiée"
+msgstr "EntrÃ©e modifiÃ©e"
 
 msgid "psm_entry_deleted"
-msgstr "Entrée effacée"
+msgstr "EntrÃ©e effacÃ©e"
 
 msgid "psm_entries_deleted"
-msgstr "Entrées effacées"
+msgstr "EntrÃ©es effacÃ©es"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Attention l'entrée n'a pas été supprimée ! Pour supprimer l'entrée il vous "
-"faut d'abord supprimer toutes les sous-entrées."
+"Attention l'entrÃ©e n'a pas Ã©tÃ© supprimÃ©e ! Pour supprimer l'entrÃ©e il vous "
+"faut d'abord supprimer toutes les sous-entrÃ©es."
 
 msgid "label_roles"
-msgstr "Rôles"
+msgstr "RÃ´les"
 
 msgid "label_groups"
 msgstr "Groupes"
@@ -152,7 +152,7 @@ msgid "label_id"
 msgstr "Identifiant"
 
 msgid "label_first_name"
-msgstr "Prénom"
+msgstr "PrÃ©nom"
 
 msgid "label_last_name"
 msgstr "Nom"
@@ -162,9 +162,9 @@ msgstr "Nom complet"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Un espace personnel vous donne accès à :<br />- un espace de travail "
-"privé<br />- un agenda personnel<br />- des favoris<br />- la possibilité de "
-"réduire/fermer des boîtes<br />"
+"Un espace personnel vous donne accÃ¨s Ã  :<br />- un espace de travail "
+"privÃ©<br />- un agenda personnel<br />- des favoris<br />- la possibilitÃ© de "
+"rÃ©duire/fermer des boÃ®tes<br />"
 
 msgid "cpsdir_label_homeless"
 msgstr "Utilisation d'un espace personnel"
@@ -176,7 +176,7 @@ msgid "label_roles_Member"
 msgstr "Membre"
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Une entrée existe déjà avec le même identifiant."
+msgstr "Une entrÃ©e existe dÃ©jÃ  avec le mÃªme identifiant."
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membre"

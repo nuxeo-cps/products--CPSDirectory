@@ -1,5 +1,5 @@
-# translation of pt-BR.po to Português do Brasil
-# translation of cpsdirectory.po to PortuguÃªs do Brasil
+# translation of pt-BR.po to PortuguÃªs do Brasil
+# translation of cpsdirectory.po to PortuguÃƒÂªs do Brasil
 # ##########################################################
 # ################# DON'T EDIT THIS FILE! ##################
 # ##########################################################
@@ -14,12 +14,13 @@ msgstr ""
 "Last-Translator: Mario Olimpio de Menezes <mario@ipen.br>\n"
 "Language-Team: Portugues do Brasil <pt@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-code: pt-br\n"
+"Language-Code: pt_BR\n"
 "Language-Name: Portuguese Brazilian\n"
 "Domain: default\n"
-"Language-Code: pt_BR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -34,7 +35,7 @@ msgstr ""
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr "Escolha um diretório"
+msgstr "Escolha um diretÃ³rio"
 
 #.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -90,7 +91,7 @@ msgstr "id"
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 #, fuzzy
 msgid "label_entry_id"
-msgstr "Último Nome"
+msgstr "Ãšltimo Nome"
 
 #.   <th condition="is_members_directory">Presence of a personal space</th>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
@@ -115,7 +116,7 @@ msgstr "Selection"
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr "Nenhum diretório disponível"
+msgstr "Nenhum diretÃ³rio disponÃ­vel"
 
 msgid "psm_entry_created"
 msgstr "Entrada criada"
@@ -132,11 +133,11 @@ msgstr "Entrada criada"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Desculpe mas esta entrada não pode ser removida, você que tem remover todas "
+"Desculpe mas esta entrada nÃ£o pode ser removida, vocÃª que tem remover todas "
 "as subentradas primeiro."
 
 msgid "label_roles"
-msgstr "Papéis"
+msgstr "PapÃ©is"
 
 msgid "label_groups"
 msgstr "Grupos"
@@ -149,25 +150,25 @@ msgstr "Membros"
 
 #, fuzzy
 msgid "label_id"
-msgstr "Rótulo"
+msgstr "RÃ³tulo"
 
 msgid "label_first_name"
 msgstr "Primeiro Nome"
 
 msgid "label_last_name"
-msgstr "Último Nome"
+msgstr "Ãšltimo Nome"
 
 msgid "label_full_name"
 msgstr "Nome Completo"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Uma área particular dá a você acesso a: - uma área de trabalho particular - "
-"uma agenda pessoal - uma coleção de favoritos - permite fechar/minimizar "
+"Uma Ã¡rea particular dÃ¡ a vocÃª acesso a: - uma Ã¡rea de trabalho particular - "
+"uma agenda pessoal - uma coleÃ§Ã£o de favoritos - permite fechar/minimizar "
 "caixa."
 
 msgid "cpsdir_label_homeless"
-msgstr "Habilitar área particular"
+msgstr "Habilitar Ã¡rea particular"
 
 msgid "label_roles_Manager"
 msgstr "Administrador"
@@ -176,7 +177,7 @@ msgid "label_roles_Member"
 msgstr "Membro"
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Uma entrada com o mesmo identificador já existe"
+msgstr "Uma entrada com o mesmo identificador jÃ¡ existe"
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membro"
@@ -191,7 +192,7 @@ msgstr "Administrador"
 #~ msgstr "Subir para"
 
 #~ msgid "Title"
-#~ msgstr "Título"
+#~ msgstr "TÃ­tulo"
 
 #~ msgid "button_back"
 #~ msgstr "Voltar"

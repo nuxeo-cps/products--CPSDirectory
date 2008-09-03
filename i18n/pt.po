@@ -1,5 +1,5 @@
-# translation of pt-BR.po to Português do Brasil
-# translation of cpsdirectory.po to PortuguÃªs do Brasil
+# translation of pt-BR.po to PortuguÃªs do Brasil
+# translation of cpsdirectory.po to PortuguÃƒÂªs do Brasil
 # ##########################################################
 # ################# DON'T EDIT THIS FILE! ##################
 # ##########################################################
@@ -12,14 +12,15 @@ msgstr ""
 "POT-Creation-Date: 2007-12-10 16:45default\n"
 "PO-Revision-Date: 2007-05-01 16:25+0100\n"
 "Last-Translator: \n"
-"Language-Team: Português <luis727@gmail.com>\n"
+"Language-Team: PortuguÃªs <luis727@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Code: pt\n"
-"Language-Name: Portuguese\n"
-"Domain: default\n"
 "Language-Code: pt\n"
+"Language-Name: pt\n"
+"Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -34,7 +35,7 @@ msgstr ""
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr "Escolha um directório"
+msgstr "Escolha um directÃ³rio"
 
 #.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -106,14 +107,14 @@ msgstr "Nenhum resultado"
 #.             </th>
 #: from ../skins/cps_directory/cpsdirectory_entry_search_results.pt
 msgid "label_selection"
-msgstr "Selecção"
+msgstr "SelecÃ§Ã£o"
 
 #.   <p condition="not:directories">
 #.         No directory available
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr "Nenhum directório disponível"
+msgstr "Nenhum directÃ³rio disponÃ­vel"
 
 msgid "psm_entry_created"
 msgstr "Entrada criada"
@@ -130,11 +131,11 @@ msgstr "Entries deleted"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
 msgstr ""
-"Desculpe mas esta entrada não pode ser removida, deve remover todas as "
+"Desculpe mas esta entrada nÃ£o pode ser removida, deve remover todas as "
 "subentradas primeiro."
 
 msgid "label_roles"
-msgstr "Papéis"
+msgstr "PapÃ©is"
 
 msgid "label_groups"
 msgstr "Grupos"
@@ -153,19 +154,19 @@ msgid "label_first_name"
 msgstr "Primeiro Nome"
 
 msgid "label_last_name"
-msgstr "Último Nome"
+msgstr "Ãšltimo Nome"
 
 msgid "label_full_name"
 msgstr "Nome Completo"
 
 msgid "cpsdir_help_homeless"
 msgstr ""
-"Uma área particular dá a você acesso a: - uma área de trabalho particular - "
-"uma agenda pessoal - uma colecção de favoritos - permite fechar/minimizar "
+"Uma Ã¡rea particular dÃ¡ a vocÃª acesso a: - uma Ã¡rea de trabalho particular - "
+"uma agenda pessoal - uma colecÃ§Ã£o de favoritos - permite fechar/minimizar "
 "caixa."
 
 msgid "cpsdir_label_homeless"
-msgstr "Habilitar área particular"
+msgstr "Habilitar Ã¡rea particular"
 
 msgid "label_roles_Manager"
 msgstr "Administrador"
@@ -174,7 +175,7 @@ msgid "label_roles_Member"
 msgstr "Membro"
 
 msgid "cpsdir_err_entry_already_exists"
-msgstr "Uma entrada com o mesmo identificador já existe"
+msgstr "Uma entrada com o mesmo identificador jÃ¡ existe"
 
 msgid "label_cpsdir_roles_Member"
 msgstr "Membro"
@@ -186,7 +187,7 @@ msgid "cpsdir_label_upto_directories"
 msgstr "Subir para"
 
 msgid "Title"
-msgstr "Título"
+msgstr "TÃ­tulo"
 
 msgid "button_back"
 msgstr "Voltar"

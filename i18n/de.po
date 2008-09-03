@@ -8,12 +8,13 @@ msgstr ""
 "Last-Translator: Georg Hennemann <georg.hennemann@dhl.com>\n"
 "Language-Team: de <rheinland@dzug.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language-Code: de\n"
-"Domain: default\n"
 "Language-Name: German\n"
+"Domain: default\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Preferred-Encodings: utf-8\n"
 
 #.   <em style="color:red" content="err">Error</em>
 #: from ../skins/cps_directory/layout_dir_search.pt
@@ -29,7 +30,7 @@ msgstr "Archive user space(s) then delete user(s)"
 #.   <p>Choose a directory</p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "choose_a_directory"
-msgstr "Wähle ein Verzeichnis"
+msgstr "WÃ¤hle ein Verzeichnis"
 
 #.   <block>Create entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_create_form.pt
@@ -39,7 +40,7 @@ msgstr "Neuer Eintrag"
 #.   <block>Delete entry</block>
 #: from ../skins/cps_directory/cpsdirectory_entry_delete_form.pt
 msgid "cpsdir_label_delete_entry"
-msgstr "Lösche Eintrag"
+msgstr "LÃ¶sche Eintrag"
 
 #.   <span>Edit entry</span>
 #: from ../skins/cps_directory/cpsdirectory_entry_edit_form.pt
@@ -112,23 +113,23 @@ msgstr "Selection"
 #.       </p>
 #: from ../skins/cps_directory/cpsdirectory_view.pt
 msgid "no_dir_available"
-msgstr "Kein Verzeichnis verfügbar"
+msgstr "Kein Verzeichnis verfÃ¼gbar"
 
 msgid "psm_entry_created"
 msgstr "Eintrag erstellt"
 
 msgid "psm_entry_modified"
-msgstr "Eintrag geändert."
+msgstr "Eintrag geÃ¤ndert."
 
 msgid "psm_entry_deleted"
-msgstr "Eintrag gelöscht."
+msgstr "Eintrag gelÃ¶scht."
 
 #, fuzzy
 msgid "psm_entries_deleted"
 msgstr "Entries deleted"
 
 msgid "psm_entry_delete_not_allowed_on_non_leaf"
-msgstr "Eintrag löschen nicht erlaubt"
+msgstr "Eintrag lÃ¶schen nicht erlaubt"
 
 msgid "label_roles"
 msgstr "Rollen"
@@ -182,22 +183,22 @@ msgid "label_cpsdir_roles_Manager"
 msgstr "Manager"
 
 msgid "cpsdir_label_upto_directories"
-msgstr "Zurück zu Verzeichnissen"
+msgstr "ZurÃ¼ck zu Verzeichnissen"
 
 msgid "Title"
 msgstr "Titel"
 
 msgid "button_back"
-msgstr "Zurück"
+msgstr "ZurÃ¼ck"
 
 msgid "button_delete"
-msgstr "Löschen"
+msgstr "LÃ¶schen"
 
 msgid "button_search"
 msgstr "Suchen"
 
 #~ msgid "i18_key-help_for_this_field"
-#~ msgstr "Hilfe für dieses Feld"
+#~ msgstr "Hilfe fÃ¼r dieses Feld"
 
 #~ msgid "button_edit"
 #~ msgstr "Bearbeiten"
