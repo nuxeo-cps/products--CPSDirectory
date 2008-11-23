@@ -1,4 +1,24 @@
 ===========================================================
+Package: CPSDirectory 1.45.1
+===========================================================
+First release built by: madarche at: 2008-11-23T22:08:37
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.45.1
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@53051
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #1916: Switch all the .po files to UTF-8
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.45.0
 ===========================================================
 First release built by: madarche at: 2008-04-28T16:27:15
