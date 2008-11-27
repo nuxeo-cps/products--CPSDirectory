@@ -494,3 +494,9 @@ class IBatchable(Interface):
 class IOrderable(Interface):
     """Directory that understands order_by query_option.
     """
+
+class ILDAPServerAccess(Interface):
+    """Object storing bind parameters."""
+
+    def getLdapUrl():
+        """Return the full LDAP URL."""

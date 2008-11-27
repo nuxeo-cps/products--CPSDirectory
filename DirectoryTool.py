@@ -95,6 +95,8 @@ class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
                 all.append(mt)
             elif name.endswith('RAM Cache Manager'):
                 all.append(mt)
+            elif name == 'LDAP Server Access':
+                all.append(mt)
         return all
 
     # BBB for old installers/importers, will be removed in CPS 3.5

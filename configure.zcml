@@ -4,6 +4,8 @@
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:zcml="http://namespaces.zope.org/zcml">
 
+  <include file="upgrade.zcml"/>
+
   <adapter
       factory=".exportimport.DirectoryToolXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
@@ -15,6 +17,13 @@
       factory=".exportimport.DirectoryXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
       for=".interfaces.IDirectory
+           Products.GenericSetup.interfaces.ISetupEnviron"
+      />
+
+  <adapter
+      factory=".exportimport.LDAPServerAccessXMLAdapter"
+      provides="Products.GenericSetup.interfaces.IBody"
+      for=".interfaces.ILDAPServerAccess
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
@@ -70,6 +79,15 @@
       class=".LDAPBackingDirectory.LDAPBackingDirectory"
       meta_type="CPS LDAP Backing Directory"
       addview="addLDAPBackingDirectory.html"
+      permission="cmf.ManagePortal"
+      global="False"
+      />
+
+  <five:registerClass
+      zcml:condition="installed ldap"
+      class=".LDAPServerAccess.LDAPServerAccess"
+      meta_type="LDAP Server Access"
+      addview="addLDAPServerAccess.html"
       permission="cmf.ManagePortal"
       global="False"
       />
@@ -196,6 +214,15 @@
         name="addLDAPBackingDirectory.html"
         template="addWithPresettings.pt"
         class="Products.CPSDirectory.browser.LDAPBackingDirectoryAddView"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        zcml:condition="installed ldap"
+        for="zope.app.container.interfaces.IAdding"
+        name="addLDAPServerAccess.html"
+        template="addWithPresettings.pt"
+        class="Products.CPSDirectory.browser.LDAPServerAccessAddView"
         permission="cmf.ManagePortal"
         />
 

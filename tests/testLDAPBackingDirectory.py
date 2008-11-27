@@ -71,7 +71,14 @@ class TestLDAPbackingDirectory(ZopeTestCase):
             })
         stool._setObject('testldapbd', s)
 
+    def makeLDAPServerAccess(self):
+        from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+        access = LDAPServerAccess('ldap_server_access')
+        self.portal.portal_directories._setObject(access.getId(), access)
+        return access.getId()
+        
     def makeDir(self):
+        access_id = self.makeLDAPServerAccess()
         from Products.CPSDirectory.LDAPBackingDirectory import \
                                                     LDAPBackingDirectory
         dtool = self.portal.portal_directories
@@ -82,6 +89,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
             layout_search='',
             password_field='userPassword',
             title_field='cn',
+            ldap_server_access=access_id,
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',
             ldap_search_classes='person',
@@ -561,7 +569,15 @@ class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
                                                  id, self.dir.ldap_base),
                               'children': children})
 
+    def makeLDAPServerAccess(self):
+        from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+        access = LDAPServerAccess('ldap_server_access')
+        self.portal.portal_directories._setObject(access.getId(), access)
+        return access.getId()
+        
     def makeDir(self):
+        access_id = self.makeLDAPServerAccess()
+
         from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
         dtool = self.portal.portal_directories
         dir = LDAPBackingDirectory('members',
@@ -571,6 +587,7 @@ class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
                                    layout_search='',
                                    password_field='userPassword',
                                    title_field='cn',
+                                   ldap_server_access=access_id,
                                    ldap_base='ou=personnes,o=nuxeo,c=com',
                                    ldap_rdn_attr='cn',
                                    ldap_scope='SUBTREE',
@@ -654,7 +671,15 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
             })
         stool._setObject('testldapbd', s)
 
+    def makeLDAPServerAccess(self):
+        from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+        access = LDAPServerAccess('ldap_server_access')
+        self.portal.portal_directories._setObject(access.getId(), access)
+        return access.getId()
+        
     def makeDir(self):
+        access_id = self.makeLDAPServerAccess()
+
         from Products.CPSDirectory.LDAPBackingDirectory import \
                                                     LDAPBackingDirectory
         dtool = self.portal.portal_directories
@@ -667,6 +692,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
             layout_search='',
             password_field='userPassword',
             title_field='cn',
+            ldap_server_access=access_id,                                   
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',
             ldap_search_classes='person',
@@ -786,7 +812,15 @@ class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
             })
         stool._setObject('testldapbd', s)
 
+    def makeLDAPServerAccess(self):
+        from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+        access = LDAPServerAccess('ldap_server_access')
+        self.portal.portal_directories._setObject(access.getId(), access)
+        return access.getId()
+
     def makeDir(self):
+        access_id = self.makeLDAPServerAccess()
+
         from Products.CPSDirectory.LDAPBackingDirectory import \
              LDAPBackingDirectory
         dtool = self.portal.portal_directories
@@ -799,6 +833,7 @@ class TestLDAPBackingDirectoryWithBaseDNForCreation(ZopeTestCase):
             layout_search='',
             password_field='userPassword',
             title_field='cn',
+            ldap_server_access=access_id,
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_base_creation='ou=devels,ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',
@@ -882,7 +917,15 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
             })
         stool._setObject('testldapbd3', s)
 
+    def makeLDAPServerAccess(self):
+        from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+        access = LDAPServerAccess('ldap_server_access')
+        self.portal.portal_directories._setObject(access.getId(), access)
+        return access.getId()
+
     def makeDir(self):
+        access_id = self.makeLDAPServerAccess()
+
         from Products.CPSDirectory.LDAPBackingDirectory import \
              LDAPBackingDirectory
         dtool = self.portal.portal_directories
@@ -896,6 +939,7 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
             layout_search='',
             password_field='userPassword',
             title_field='cn',
+            ldap_server_access=access_id,
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_base_creation='ou=devels,ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',

@@ -40,6 +40,7 @@ from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 from Products.CPSDirectory.SQLDirectory import SQLDirectory
 if import_ldap_ok:
     from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
+    from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
 from Products.CPSDirectory.MetaDirectory import MetaDirectory
 from Products.CPSDirectory.StackingDirectory import StackingDirectory
 from Products.CPSDirectory.LocalDirectory import LocalDirectory
@@ -60,7 +61,6 @@ class BaseDirectoryAddView(BaseAddView):
     """
     _dir_name = 'directories'
     description = u"A directory holds tabular information."
-
 
 class MembersDirectoryAddView(BaseDirectoryAddView):
     """Add view for MembersDirectory."""
@@ -86,6 +86,13 @@ if import_ldap_ok:
     class LDAPBackingDirectoryAddView(BaseDirectoryAddView):
         """Add view for LDAPBackingDirectory."""
         klass = LDAPBackingDirectory
+
+    class LDAPServerAccessAddView(BaseAddView):
+         """Add view for LDAPServerAccess."""
+         _dir_name = 'directories'
+         klass = LDAPServerAccess
+         description = u"LDAP Server Access hold connection and bind params."
+
 
 class MetaDirectoryAddView(BaseDirectoryAddView):
     """Add view for MetaDirectory."""
