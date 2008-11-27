@@ -3,7 +3,7 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
--
+- #1928: bind information is centralized in LDAPServerAccess objects
 Bug fixes
 ~~~~~~~~~
 -

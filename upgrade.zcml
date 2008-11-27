@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:cps="http://namespaces.nuxeo.org/cps">
+
+  <!-- CPS 3.5.0 upgrades -->
+
+  <cps:upgradeStep
+      title="Factorize LDAP binds in LDAP Server Access objects"
+      source="3.4.7" destination="3.5.0"
+      handler=".upgrade.upgrade_ldap_server_access"
+      />
+
+</configure>

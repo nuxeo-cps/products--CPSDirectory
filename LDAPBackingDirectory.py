@@ -34,6 +34,8 @@ from AccessControl import ClassSecurityInfo
 from OFS.Image import Image
 from OFS.Cache import Cacheable
 
+from Products.CMFCore.utils import getToolByName
+
 from Products.CPSUtil.ssha import sshaDigest
 from Products.CPSUtil.testing.environment import isTestingEnvironment
 
@@ -141,7 +143,6 @@ def implodeRDN(avas):
     """Implode a sequence of avas into a rdn."""
     return '+'.join(avas)
 
-
 class LDAPBackingDirectory(BaseDirectory, Cacheable):
     """LDAP Backing Directory.
 
@@ -179,12 +180,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         {'id': 'password_encryption', 'type': 'selection', 'mode': 'w',
          'select_variable': 'implemented_encryptions',
          'label': "Password encryption",},
-        {'id': 'ldap_server', 'type': 'string', 'mode': 'w',
-         'label': 'LDAP server'},
-        {'id': 'ldap_port', 'type': 'int', 'mode': 'w',
-         'label': 'LDAP port'},
-        {'id': 'ldap_use_ssl', 'type': 'boolean', 'mode': 'w',
-         'label': 'LDAP use ssl'},
+        {'id': 'ldap_server_access', 'type': 'selection', 'mode': 'w',
+         'select_variable': 'getAvailableServerAccessIds',
+         'label': 'LDAP Server Access object'},
         {'id': 'ldap_base', 'type': 'string', 'mode': 'w',
          'label': 'LDAP base'},
         {'id': 'ldap_base_creation', 'type': 'string', 'mode': 'w',
@@ -195,10 +193,6 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
          'label': 'LDAP object classes (search)'},
         {'id': 'ldap_search_filter', 'type': 'string', 'mode': 'w',
          'label': 'LDAP filter (search)'},
-        {'id': 'ldap_bind_dn', 'type': 'string', 'mode': 'w',
-         'label': 'LDAP bind dn'},
-        {'id': 'ldap_bind_password', 'type': 'string', 'mode': 'w',
-         'label': 'LDAP bind password'},
         {'id': 'ldap_rdn_attr', 'type': 'string', 'mode': 'w',
          'label': 'LDAP rdn attribute (create)'},
         {'id': 'ldap_object_classes', 'type': 'string', 'mode': 'w',
@@ -229,16 +223,12 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
 
     password_field = ''
     password_encryption = 'SSHA'
-    ldap_server = ''
-    ldap_port = 389
-    ldap_use_ssl = 0
+    ldap_server_access = ''
     ldap_base = ''
     ldap_base_creation = ''
     ldap_scope = 'ONELEVEL'
     ldap_search_classes = 'person'
     ldap_search_filter = ''
-    ldap_bind_dn = ''
-    ldap_bind_password = ''
     ldap_rdn_attr = 'cn'
     ldap_object_classes = 'top, person'
 
@@ -303,6 +293,18 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         adapters = [LDAPBackingStorageAdapter(schema, id, dir, **kw)
                     for schema in self._getSchemas(search=search)]
         return adapters
+
+    def getAvailableServerAccessIds(self):
+        dtool = getToolByName(self, 'portal_directories')
+        return dtool.objectIds(['LDAP Server Access'])
+
+    def _getLdapServerAccess(self):
+        """Return LDAP Server Access object."""
+        if self.ldap_server_access == '':
+            raise ValueError('LDAP Server Access is empty')
+
+        dtool = getToolByName(self, 'portal_directories')
+        return dtool._getOb(self.ldap_server_access) 
 
     #
     # API
@@ -739,18 +741,14 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
         conn = self._v_conn
 
         self.setupSpecificOptions()
+        server_access = self._getLdapServerAccess()
 
         # Saving for retrying
         bind_dn_orig = bind_dn
         bind_password_orig = bind_password
 
         if conn is None:
-            if self.ldap_use_ssl:
-                proto = 'ldaps'
-            else:
-                proto = 'ldap'
-            conn_str = '%s://%s:%s/' % (proto, self.ldap_server, self.ldap_port)
-
+            conn_str = server_access.getLdapUrl()
             logger.log(5, 'connectLDAP: initialize conn_str=%s', conn_str)
             conn = ldap.ldapobject.ReconnectLDAPObject(
                 conn_str, retry_max=self.ldap_retry_max,
@@ -779,8 +777,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
 
         # Check how to bind
         if bind_dn is None:
-            bind_dn = self.ldap_bind_dn
-            bind_password = self.ldap_bind_password
+            bind_dn, bind_password = server_access.getBindParameters()
             using_config_bind = True
         else:
             using_config_bind = False

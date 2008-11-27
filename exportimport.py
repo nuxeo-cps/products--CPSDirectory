@@ -37,6 +37,7 @@ from Products.CPSDirectory.interfaces import IDirectoryTool
 from Products.CPSDirectory.interfaces import IDirectory
 from Products.CPSDirectory.interfaces import IMetaDirectory
 from Products.CPSDirectory.interfaces import IContentishDirectory
+from Products.CPSDirectory.interfaces import ILDAPServerAccess
 
 TOOL = 'portal_directories'
 NAME = 'directories'
@@ -102,6 +103,36 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
                 if dir.searchEntries():
                     continue
             parent._delObject(obj_id)
+
+
+class LDAPServerAccessXMLAdapter(XMLAdapterBase,
+                           PostProcessingPropertyManagerHelpers):
+    """XML importer and exporter for DirectoryTool.
+    """
+
+    adapts(ILDAPServerAccess, ISetupEnviron)
+    implements(IBody)
+
+    _LOGGER_ID = NAME
+    name = NAME
+
+    def _exportNode(self):
+        """Export the object as a DOM node.
+        """
+        node = self._getObjectNode('object')
+        node.appendChild(self._extractProperties())
+
+        self._logger.info("%r ldap access imported." % self.context.getId())
+        return node
+
+    def _importNode(self, node):
+        """Import the object from the DOM node.
+        """
+        if self.environ.shouldPurge():
+            self._purgeProperties()
+
+        self._initProperties(node)
+        self._logger.info("%r ldap access exported." % self.context.getId())
 
 
 class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
