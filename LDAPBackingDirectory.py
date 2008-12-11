@@ -651,16 +651,22 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
     #
 
     security.declarePrivate('convertDataToLDAP')
-    def convertDataToLDAP(self, data, ignored_attrs=(), keep_empty=0):
+    def convertDataToLDAP(self, data, ignored_attrs=(), keep_empty=0,
+                          schema=None):
         """Convert a data mapping into a correct LDAP one.
 
         The values for an LDAP entry are always lists.
         Uses the schema to decide how conversion is done.
 
         Skips ignored_attrs. Keeps empty attributes if keep_empty.
+        Optional schema is used, otherwise directory global schemas are.
         """
         ldap_attrs = {}
-        for field_id, field in self._getFieldItems():
+        if schema is None:
+            field_items = self._getFieldItems()
+        else:
+            field_items = schema.items()
+        for field_id, field in field_items:
             if field.write_ignore_storage:
                 continue
             if field_id in ('dn', 'base_dn'):
@@ -1040,7 +1046,8 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
         # XXX treat change of rdn
 
         dir = self._dir
-        ldap_attrs = dir.convertDataToLDAP(data, keep_empty=1)
+        ldap_attrs = dir.convertDataToLDAP(data, keep_empty=1, 
+                                           schema=self._schema)
         dir.modifyLDAP(dn, ldap_attrs)
 
     def _getContentUrl(self, entry_id, field_id):
