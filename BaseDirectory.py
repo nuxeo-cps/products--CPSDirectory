@@ -106,6 +106,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
          'label': "Is the directory read-only?",},
         {'id': 'layout_search', 'type': 'string', 'mode': 'w',
          'label': "Layout for search"},
+        {'id': 'hidden_in_navigation', 'type': 'boolean', 'mode': 'w',
+         'label': "Hidden in navigation ?"},
         {'id': 'acl_directory_view_roles', 'type': 'string', 'mode': 'w',
          'label': "ACL: directory view roles"},
         {'id': 'acl_entry_create_roles', 'type': 'string', 'mode': 'w',
@@ -133,6 +135,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     layout = ''
     layout_search = ''
     readonly = False
+    hidden_in_navigation = False
     acl_directory_view_roles = 'Manager'
     acl_entry_create_roles = 'Manager'
     acl_entry_delete_roles = 'Manager'
@@ -224,7 +227,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         Returns a boolean.
         """
-        return self.isEntryAclAllowed(self.acl_directory_view_roles_c)
+        return not self.hidden_in_navigation and self.isEntryAclAllowed(self.acl_directory_view_roles_c)
 
     security.declarePublic('isCreateEntryAllowed')
     def isCreateEntryAllowed(self, id=None, entry=None):
@@ -696,6 +699,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 msg = str(e)
                 if msg.find('already exists') > 0:
                     # XXX Hack, this should be done by field/schema... XXX
+                    # GR: and bewsides assumes widget and field have same id
                     ok = 0
                     ds.setError(self.id_field,
                                 'cpsdir_err_entry_already_exists')

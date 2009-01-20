@@ -92,6 +92,10 @@ class TestDirectoryTool(ZopeTestCase):
         dir_list = self.pd.listVisibleDirectories()
         self.assertEquals(dir_list, ['members'])
 
+        self.pd.members.hidden_in_navigation = True
+        dir_list = self.pd.listVisibleDirectories()
+        self.assertEquals(dir_list, [])
+
     def test_crossGetList(self):
         # crossGetList is a utility function that should be registered on the
         # CPSSchemas.FieldNamespace.util object but we can test it directly on
