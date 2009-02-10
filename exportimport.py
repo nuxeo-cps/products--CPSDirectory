@@ -114,7 +114,6 @@ class LDAPServerAccessXMLAdapter(XMLAdapterBase,
     implements(IBody)
 
     _LOGGER_ID = NAME
-    name = NAME
 
     def _exportNode(self):
         """Export the object as a DOM node.

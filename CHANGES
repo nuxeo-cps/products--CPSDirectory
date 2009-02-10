@@ -6,6 +6,7 @@ New features
 - #1928: bind information is centralized in LDAPServerAccess objects
 Bug fixes
 ~~~~~~~~~
+- #1970: can't make a snapshot with LDAPServerAccess objects 
 - #1959: provide possibility to hide a directory
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
