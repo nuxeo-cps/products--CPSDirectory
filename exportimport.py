@@ -99,9 +99,11 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
             dir = parent._getOb(obj_id)
             # it's a Directory with content (potentially)
             if IContentishDirectory.providedBy(dir):
-                # if the directory has entries, don't delete it
-                if dir.searchEntries():
-                    continue
+                # GR see #1976
+                self._logger.warning("Contentish directory %s not removed."
+                                     " Do it manually after the import"
+                                     " if you really want to" % dir.getId())
+                continue
             parent._delObject(obj_id)
 
 
