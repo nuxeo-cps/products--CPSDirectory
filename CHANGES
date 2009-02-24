@@ -4,6 +4,7 @@ Requires
 New features
 ~~~~~~~~~~~~
 - #1928: bind information is centralized in LDAPServerAccess objects
+- #1978: simple CSV export API
 Bug fixes
 ~~~~~~~~~
 - #1976: don't remove contentish directories in profile purge

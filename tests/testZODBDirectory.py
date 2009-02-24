@@ -261,6 +261,61 @@ class TestZODBDirectory(ZopeTestCase):
         res = zdir.searchEntries(foo=DateTime('2000/01/01'))
         self.assertEquals(res, [id1])
 
+    def test_renderCsvSearch(self):
+        # this actually tests code from BaseDirectory
+
+        # preparation
+        zdir = self.dir
+        zdir.createEntry({'idd': 'chien', 'foo': 'ouah', 'bar': 'poil'})
+        zdir.createEntry({'idd': 'canard', 'foo': 'coin', 'bar': 'plume'})
+        zdir.createEntry({'idd': 'cobra', 'foo': 'ssss', 'bar': '\xe9caille'})
+
+        # forbid side effects
+        self.assertEquals(len(zdir.listEntryIds()), 3)
+
+        return_fields = (('idd', 'Animal'),
+                         ('foo', 'Cri'),
+                         ('bar', 'Surface'))
+
+        self.assertEquals("Animal,Cri,Surface\r\n"
+                          "chien,ouah,poil\r\n",
+                          zdir.csvExport(foo='ouah', 
+                                         return_fields=return_fields))
+
+        zdir.search_substring_fields = ['bar']
+        result = zdir.csvExport(bar='p', 
+                                return_fields=return_fields).split('\r\n')
+        result.sort()
+        
+        expected = ["Animal,Cri,Surface", 
+                    "chien,ouah,poil",
+                    "canard,coin,plume", ""]
+        expected.sort()
+        self.assertEquals(result, expected)
+        
+        self.assertEquals("Cri,Surface\r\n"
+                          "ssss,\xe9caille\r\n",
+                          zdir.csvExport(idd='cobra', 
+                                         return_fields=return_fields[1:]))
+
+        self.assertEquals("Cri,Surface\r\n"
+                          "ssss,\xc3\xa9caille\r\n",
+                          zdir.csvExport(idd='cobra', 
+                                         output_charset='utf-8',
+                                         return_fields=return_fields[1:]))
+
+        # minimal field security check and resilience
+        from Products.CPSSchemas.DataModel import ReadAccessError
+        def checkReadAccess(*args):
+            raise ReadAccessError("You kidding ?")
+        idd_field = self.portal.portal_schemas.testzodb['foo']
+        idd_field.checkReadAccess = checkReadAccess
+        self.assertEquals("Animal,Cri,Surface\r\n"
+                          "cobra,,\xe9caille\r\n",
+                          zdir.csvExport(idd='cobra', 
+                                         return_fields=return_fields))
+
+
     def testCache(self):
         zdir = self.dir
         dtool = self.portal.portal_directories

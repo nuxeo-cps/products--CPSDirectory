@@ -21,6 +21,8 @@
 
 from zLOG import LOG, DEBUG, INFO
 
+import csv
+from StringIO import StringIO
 from urllib import urlencode
 
 from Globals import InitializeClass
@@ -755,6 +757,52 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             rendered, ok = callback_func(self, ds, **kw)
         rendered = formLayout + rendered
         return rendered, ok, ds
+
+    #
+    # Export API
+    #
+
+    security.declarePublic('csvExport')
+    def csvExport(self, return_fields=None, csv_dialect='excel',
+                  input_charset = 'iso-8859-15', output_charset = None,
+                  **kw):
+        """Perform a search and dump the results as CSV.
+
+        API is similar to search() except that:
+            - return fields is a list of pairs of the form (field, label).
+              Label is used for the first line.
+            - csv_dialect is the dialect as meant in the csv module 
+              documentation
+            - if output_charset is not None, transcoding is performed from
+              input charser
+        """
+
+        if return_fields is None:
+            raise ValueError("Return fields can't be None for csvExport()")
+        
+        out = StringIO()
+        fields = tuple(rf[0] for rf in return_fields)
+        w = csv.DictWriter(out, fieldnames=fields, 
+                           restval='', 
+                           extrasaction='ignore',
+                           dialect=csv_dialect)
+
+        w.writerow(dict(return_fields))
+        for eid in self.searchEntries(**kw):
+            dm = self._getDataModel(eid)
+            # GR: this drops fields without Read permission
+            entry = self._getEntryFromDataModel(dm)
+            if not self.isViewEntryAllowed(entry):
+                retun
+
+            # transcoding
+            if output_charset is not None:
+                for k, v in entry.items():
+                    entry[k] = v.decode(input_charset).encode(output_charset)
+
+            w.writerow(entry)
+
+        return out.getvalue()
 
     #
     # Internal
