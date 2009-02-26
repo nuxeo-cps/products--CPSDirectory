@@ -792,7 +792,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             dm = self._getDataModel(eid)
             # GR: this drops fields without Read permission
             entry = self._getEntryFromDataModel(dm)
-            if not self.isViewEntryAllowed(entry):
+            if not self.isViewEntryAllowed(entry=entry):
                 retun
 
             # transcoding
