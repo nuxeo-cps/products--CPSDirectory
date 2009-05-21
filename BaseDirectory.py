@@ -771,7 +771,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         API is similar to search() except that:
             - return fields is a list of pairs of the form (field, label).
               Label is used for the first line.
-            - csv_dialect is the dialect as meant in the csv module 
+            - csv_dialect is the dialect as meant in the csv module
               documentation
             - if output_charset is not None, transcoding is performed from
               input charser
@@ -779,13 +779,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
         if return_fields is None:
             raise ValueError("Return fields can't be None for csvExport()")
-        
+
         out = StringIO()
         fields = tuple(rf[0] for rf in return_fields)
-        w = csv.DictWriter(out, fieldnames=fields, 
-                           restval='', 
+        w = csv.DictWriter(out, fieldnames=fields,
+                           restval='',
                            extrasaction='ignore',
                            dialect=csv_dialect)
+
+        def str_transcode(v):
+            return v.decode(input_charset).encode(output_charset)
 
         w.writerow(dict(return_fields))
         for eid in self.searchEntries(**kw):
@@ -793,12 +796,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             # GR: this drops fields without Read permission
             entry = self._getEntryFromDataModel(dm)
             if not self.isViewEntryAllowed(entry=entry):
-                retun
+                continue
 
             # transcoding
-            if output_charset is not None:
-                for k, v in entry.items():
-                    entry[k] = v.decode(input_charset).encode(output_charset)
+            if output_charset is not None and output_charset != input_charset:
+                for k in return_fields:
+                    v = entry.get(k)
+                    if isinstance(v, basestring):
+                        entry[k] = str_transcode(v)
 
             w.writerow(entry)
 
