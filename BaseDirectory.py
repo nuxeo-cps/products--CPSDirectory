@@ -791,6 +791,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             return v.decode(input_charset).encode(output_charset)
 
         w.writerow(dict(return_fields))
+        return_keys = tuple(f[0] for f in return_fields)
+
         for eid in self.searchEntries(**kw):
             dm = self._getDataModel(eid)
             # GR: this drops fields without Read permission
@@ -800,7 +802,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
             # transcoding
             if output_charset is not None and output_charset != input_charset:
-                for k in return_fields:
+                for k in return_keys:
                     v = entry.get(k)
                     if isinstance(v, basestring):
                         entry[k] = str_transcode(v)
