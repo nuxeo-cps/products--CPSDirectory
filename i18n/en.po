@@ -114,6 +114,9 @@ msgstr "No directory available"
 msgid "psm_entry_created"
 msgstr "Entry created"
 
+msgid "label_id"
+msgstr "Id"
+
 msgid "label_roles"
 msgstr "Roles"
 

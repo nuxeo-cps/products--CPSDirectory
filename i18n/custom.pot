@@ -19,6 +19,9 @@ msgstr ""
 msgid "psm_entry_created"
 msgstr ""
 
+msgid "label_id"
+msgstr ""
+
 msgid "label_roles"
 msgstr ""
 

@@ -112,6 +112,9 @@ msgstr "Nenhum diretório disponível"
 msgid "psm_entry_created"
 msgstr "Entrada criada"
 
+msgid "label_id"
+msgstr "Rótulo"
+
 msgid "label_roles"
 msgstr "Papéis"
 

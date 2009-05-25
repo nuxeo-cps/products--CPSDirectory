@@ -115,6 +115,9 @@ msgstr "Aucun annuaire disponible"
 msgid "psm_entry_created"
 msgstr "Entrée créée"
 
+msgid "label_id"
+msgstr "Identifiant"
+
 msgid "label_roles"
 msgstr "Rôles"
 
