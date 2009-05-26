@@ -1009,6 +1009,19 @@ class TestLDAPBackingDirectoryWithSeveralSchemas(ZopeTestCase):
         schemas_keys.sort()
         self.assertEqual(schemas_keys, ['fullname', 'id', 'name'])
 
+    def test__getSearchFields(self):
+        self.assertEqual(
+            self.dir._getSearchFields(return_fields=('fullname',)),
+            (('dn', 'fullname', 'givenName', 'name', 'id'),
+             ('fullname',)))
+        self.assertEqual(
+            self.dir._getSearchFields(return_fields=('fullname', 'invalid')),
+            (('dn', 'fullname', 'givenName', 'name', 'id'),
+             ('fullname',)))
+        self.assertEqual(self.dir._getSearchFields(return_fields=('name',)),
+            (('dn', 'name',),
+             ('name',)))
+
     def test_getSchemaFieldById(self):
 
         field_id = 'fullname'

@@ -926,28 +926,28 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         updated return fields
 
         Also compute dependent fields.
+        This is tested in testLDAPBackingDirectory (setup with deps)
         """
-        res = []
+        if return_fields is None:
+            return (self.id_field,), None
+
         all_field_ids = self._getFieldIds()
-        field_ids_d = {self.id_field: None}
-        if return_fields is not None:
-            if return_fields == ['*']:
-                return_fields = all_field_ids
-            # filter invalid field ids
-            return_fields = [x for x in return_fields
-                             if x in all_field_ids]
-            # get dependant fields
-            dep_ids = []
-            for field_id in return_fields:
-                field_ids_d[field_id] = None
-                field = self._getSchemaFieldById(field_id)
-                if field is None:
-                    continue
-                rpdf = list(field.read_process_dependent_fields)
-                dep_ids.extend(rpdf)
-            for field_id in dep_ids:
-                field_ids_d[field_id] = None
-        return field_ids_d, return_fields
+        field_ids = set((self.id_field,))
+        if return_fields == ['*']:
+            return_fields = set(all_field_ids)
+        else:
+            return_fields = set(all_field_ids).intersection(return_fields)
+
+        field_ids.update(return_fields)
+
+        # add dependant fields
+        for field_id in return_fields:
+            field = self._getSchemaFieldById(field_id)
+            if field is None:
+                continue
+            field_ids.update(field.read_process_dependent_fields)
+
+        return tuple(field_ids), tuple(return_fields)
 
     security.declarePrivate('_getAdapters')
     def _getAdapters(self, id, search=0, **kw):
