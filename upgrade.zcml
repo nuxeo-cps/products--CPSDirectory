@@ -8,6 +8,7 @@
       title="Factorize LDAP binds in LDAP Server Access objects"
       source="3.4.7" destination="3.5.0"
       handler=".upgrade.upgrade_ldap_server_access"
+      checker=".upgrade.check_ldap_installed" 
       />
 
 </configure>

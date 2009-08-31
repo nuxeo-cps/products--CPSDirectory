@@ -24,8 +24,21 @@ import logging
 from Acquisition import aq_base
 from zExceptions import BadRequest
 
-from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
-from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+try:
+    from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
+    from Products.CPSDirectory.LDAPServerAccess import LDAPServerAccess
+except ImportError, e:
+    if str(e) == 'No module named ldap':
+        LDAP_OK = False
+    else:
+        raise
+else:
+    LDAP_OK = True
+
+
+def check_ldap_installed(portal):
+    """Check if ldap module is there."""
+    return LDAP_OK
 
 def upgrade_ldap_server_access(portal):
     """Move bind params from LDAPBackingDirectory to LDAPServerAccess instances.
