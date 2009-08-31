@@ -618,6 +618,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 # We must compute a partial datamodel for each result,
                 # to get correct computed fields.
                 data = adapter._getData(entry=entry)
+                adapter.finalizeDefaults(data)
                 res.append((dn, data))
             return res
 
