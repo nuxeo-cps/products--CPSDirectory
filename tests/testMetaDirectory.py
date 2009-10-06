@@ -35,6 +35,7 @@ from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
 from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryNormalizing
 
 from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
 
@@ -131,6 +132,17 @@ class TestMetaDirectory(ZopeTestCase):
         self.makeSchemas()
         self.makeDirs()
 
+    def makeDirsIdNormalizing(self):
+        # dirfoo is a normalizing directories (case independency)
+        dtool = self.portal.portal_directories
+        dtool.manage_delObjects(['dirfoo',])
+
+        dirfoo = FakeDirectoryNormalizing('dirfoo', 'idd', {})
+        dirfoo.setFieldIds(['idd', 'foo', 'pasglop'])
+        dtool._setObject(dirfoo.getId(), dirfoo)
+
+        self.dirfoo = dtool.dirfoo
+
 class TestMetaDirectoryNoMissing(TestMetaDirectory):
 
     def test_properties(self):
@@ -147,6 +159,18 @@ class TestMetaDirectoryNoMissing(TestMetaDirectory):
         self.dirfoo.createEntry(fooentry)
         self.dirbar.createEntry(barentry)
         entry = self.dirmeta.getEntry(id)
+        self.assertEquals(entry, okentry)
+
+    def test_getEntryNormalizing(self):
+        self.makeDirsIdNormalizing()
+        id = 'OOo'
+        self.assertRaises(KeyError, self.dirmeta.getEntry, id)
+        fooentry = {'idd': id, 'foo': 'ouah', 'pasglop': 'arg'}
+        barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}
+        okentry = {'id': id, 'foo': 'ouah', 'bar': 'brr', 'email': 'me@here'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        entry = self.dirmeta.getEntry('ooo')
         self.assertEquals(entry, okentry)
 
     def test_listEntryIds(self):

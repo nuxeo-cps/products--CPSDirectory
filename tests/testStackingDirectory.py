@@ -32,6 +32,7 @@ from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
 from Products.CPSDirectory.tests.fakeCps import FakeDirectoryTool
 from Products.CPSDirectory.tests.fakeCps import FakeUserFolder
 from Products.CPSDirectory.tests.fakeCps import FakeRoot
+from Products.CPSDirectory.tests.fakeCps import FakeDirectoryNormalizing
 
 class TestStackingDirectory(ZopeTestCase):
 
@@ -89,6 +90,20 @@ class TestStackingDirectory(ZopeTestCase):
         self.dirstack = dtool.dirstack
         self.dirs = [self.dirfoo, self.dirbar, self.dirbaz]
 
+    def makeDirsIdNormalizing(self):
+        # dirbar and dirbaz are normalizing directories (case independency)
+        dtool = self.portal.portal_directories
+        dtool.manage_delObjects(['dirbar', 'dirbaz'])
+
+        dirbar = FakeDirectoryNormalizing('dirbar', 'uid', {})
+        dtool._setObject(dirbar.getId(), dirbar)
+        # In baz, the id is moo.
+        dirbaz = FakeDirectoryNormalizing('dirbaz', 'moo', {})
+        dtool._setObject(dirbaz.getId(), dirbaz)
+
+        self.dirbar = dtool.dirbar
+        self.dirbaz = dtool.dirbaz
+
     def afterSetUp(self):
         ZopeTestCase.afterSetUp(self)
         self.makeSite()
@@ -114,6 +129,29 @@ class TestStackingDirectory(ZopeTestCase):
         entry = self.dirstack.getEntry(id2)
         self.assertEquals(entry, barentry)
         entry = self.dirstack.getEntry(id3)
+        self.assertEquals(entry, bazentry)
+
+    def test_getEntryNormalizing(self):
+        self.makeDirsIdNormalizing()
+        id1 = 'foo'
+        id2 = 'bar'
+        id3 = 'baz'
+        bid3 = 'mmm'
+        self.assertRaises(KeyError, self.dirstack.getEntry, id1)
+        self.assertRaises(KeyError, self.dirstack.getEntry, id2)
+        self.assertRaises(KeyError, self.dirstack.getEntry, id3)
+        fooentry = {'uid': id1, 'moo': 'ouah', 'glop': 'pasglop'}
+        barentry = {'uid': id2, 'moo': 'bar', 'glop': 'gulp'}
+        bazentry = {'uid': id3, 'moo': bid3, 'glop': 'g'}
+        self.dirfoo.createEntry(fooentry)
+        self.dirbar.createEntry(barentry)
+        self.dirbaz.createEntry(bazentry)
+
+        entry = self.dirstack.getEntry(id1)
+        self.assertEquals(entry, fooentry)
+        entry = self.dirstack.getEntry('bAr')
+        self.assertEquals(entry, barentry)
+        entry = self.dirstack.getEntry('baZ')
         self.assertEquals(entry, bazentry)
 
     def test_listEntryIds(self):

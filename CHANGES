@@ -3,6 +3,7 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
+- #2039: entry id case-insensitiveness or normalization
 - #1928: bind information is centralized in LDAPServerAccess objects
 - #1978: simple CSV export API
 Bug fixes

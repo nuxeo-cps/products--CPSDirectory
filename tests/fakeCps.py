@@ -20,6 +20,7 @@
 """
 import sys
 from types import UnicodeType
+from copy import deepcopy
 from OFS.SimpleItem import Item
 from OFS.Folder import Folder
 
@@ -127,5 +128,126 @@ class FakeSchemasTool(Folder):
             return getattr(self, id)
         else:
             return getattr(self, id, default)
+
+#
+# Fake directories (useful for non meta/stacking/etc.)
+#
+
+_marker = object()
+class FakeDirectory(Folder):
+    def __init__(self, id, id_field, blank):
+        self._setId(id)
+        Folder.__init__(self)
+        self.id_field = id_field
+        self.blank = blank
+        self.entries = {}
+    def setFieldIds(self, field_ids):
+        self.field_ids = field_ids
+    def _getFieldIds(self):
+        return self.field_ids
+    def getEntry(self, id, default=_marker):
+        try:
+            return self.entries[id]
+        except KeyError:
+            if default is _marker:
+                raise
+            else:
+                return default
+    _getEntry = getEntry
+    _getEntryKW = getEntry
+    def createEntry(self, entry):
+        new = deepcopy(self.blank)
+        new.update(entry)
+        self.entries[entry[self.id_field]] = new
+    _createEntry = createEntry
+    def editEntry(self, entry):
+        self.entries[entry[self.id_field]].update(entry)
+    _editEntry = editEntry
+    def deleteEntry(self, id):
+        del self.entries[id]
+    _deleteEntry = deleteEntry
+    def hasEntry(self, id):
+        return self.entries.has_key(id)
+    _hasEntry = hasEntry
+    def listEntryIds(self):
+        return self.entries.keys()
+    def searchEntries(self, return_fields=None, **kw):
+        res = []
+        # find entries
+        for eid, entry in self.entries.items():
+            for k, v in kw.items():
+                # GR list behaviour expected from CPSUserFolder is alternatives
+                # don't know if that's right (code wasn't tested before)
+                # maybe too much LDAP oriented ?
+                if (isinstance(v, list) and entry[k] in v) or \
+                  entry[k] == v:
+                    res.append((eid, entry))
+
+        if return_fields is None:
+            return [eid for eid, _ in res]
+        if return_fields == ['*']:
+            return res
+        raise NotImplementedError
+    _searchEntries = searchEntries
+
+class FakeDirectoryNormalizing(FakeDirectory):
+    """A simple normalization case: case independency"""
+
+    password_field = None
+
+    def __init__(self, *args, **kwargs):
+        pw_field = kwargs.pop('password_field', None)
+        if pw_field is not None:
+            self.password_field = pw_field
+        FakeDirectory.__init__(self, *args, **kwargs)
+
+    def getEntry(self, id, default=_marker, **kw):
+        for k, v in self.entries.items():
+            if id.lower() == k.lower():
+                return v
+        else:
+            if default is _marker:
+                raise KeyError(id)
+            else:
+                return default
+    _getEntry = getEntry
+    _getEntryKW = getEntry
+
+    def searchEntries(self, return_fields=None, **kw):
+        # switch criteria to lowercase.
+        crit = deepcopy(kw)
+        for k, v in crit.items():
+            if isinstance(v, list):
+                crit[k] = [i.lower() for i in v]
+            elif isinstance(v, basestring):
+                crit[k] = v.lower()
+
+        # find entries
+        res = []
+        for eid, entry in self.entries.items():
+            for k, v in crit.items():
+                # GR list behaviour expected from CPSUserFolder is alternatives
+                # don't know if that's right (code wasn't tested before)
+                # maybe too much LDAP oriented ?
+                ev = entry[k].lower()
+                if (isinstance(v, list) and ev in v) or ev == v:
+                    res.append((eid, entry))
+
+        if return_fields is None:
+            return [eid for eid, _ in res]
+        if return_fields == ['*']:
+            return res
+        raise NotImplementedError
+    _searchEntries = searchEntries
+
+    def getEntryAuthenticated(self, id, password, **kw):
+        entry = self.getEntry(id)
+        if password != entry[self.password_field]:
+            raise AuthenticationFailed
+        return entry
+
+    def isAuthenticating(self):
+        return bool(self.password_field)
+
 
 

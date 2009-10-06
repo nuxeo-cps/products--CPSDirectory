@@ -568,8 +568,8 @@ class MetaDirectory(BaseDirectory):
         If missing_fields (a list) is provided, keep a trace of fields coming
         from missing entry in them.
         """
-        entry = {self.id_field: id}
-        for info in self.getBackingDirectories():
+        entry = {}
+        for backing_number, info in enumerate(self.getBackingDirectories()):
             b_dir = info['dir']
             field_ignore = info['field_ignore']
             field_rename = info['field_rename']
@@ -578,9 +578,6 @@ class MetaDirectory(BaseDirectory):
             # Get field ids we want
             b_fids = []
             for b_fid in b_dir._getFieldIds():
-                if b_fid == b_dir.id_field:
-                    # Ignore id
-                    continue
                 if b_fid in field_ignore:
                     # Ignore fields ignored by mapping
                     continue
@@ -604,6 +601,19 @@ class MetaDirectory(BaseDirectory):
                         raise
                     b_entry = missing_entry
                     missing_fields.extend(missing_entry.keys())
+            # backing directory may have normalized the id
+            # XXX NOCOMMIT what if several backings do that ? Declare
+            # a winning one ?
+            actualid = b_entry.get(b_dir.id_field)
+            if actualid is not None and actualid != id:
+                if backing_number > 0:
+                    logger.error(
+                        "Consistency issue in entry ids from backing. "
+                        "%s outputs id value '%s' for requested value '%s'. "
+                        "Only first backing may normalize ids. Failing.",
+                        str(b_dir), actualid, id)
+                    raise KeyError(id)
+                id = entry[self.id_field] = actualid
             # Keep what we need in entry
             for b_fid in b_fids:
                 # Do renaming
