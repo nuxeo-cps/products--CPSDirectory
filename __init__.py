@@ -49,6 +49,8 @@ except ImportError:
 import DirectoryTool
 # Register widgets. Don't remove.
 import DirectoryWidgets
+# Register fields
+import DirectoryFields
 
 from DirectoryTool import DirectoryTypeRegistry
 from ZODBDirectory import ZODBDirectory
