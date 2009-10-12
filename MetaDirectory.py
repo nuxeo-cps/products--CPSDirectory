@@ -21,6 +21,7 @@
 A directory redirects requests to other backing directories.
 """
 
+import logging
 from zLOG import LOG, DEBUG, WARNING
 
 from Globals import InitializeClass
@@ -45,6 +46,7 @@ from Products.CPSDirectory.interfaces import IMetaDirectory
 
 from zope.interface import implements
 
+logger = logging.getLogger('Products.CPSDirectory.MetaDirectory')
 
 class MetaDirectory(BaseDirectory):
     """Meta Directory
@@ -568,7 +570,7 @@ class MetaDirectory(BaseDirectory):
         If missing_fields (a list) is provided, keep a trace of fields coming
         from missing entry in them.
         """
-        entry = {}
+        entry = {self.id_field: id}
         for backing_number, info in enumerate(self.getBackingDirectories()):
             b_dir = info['dir']
             field_ignore = info['field_ignore']
@@ -616,6 +618,8 @@ class MetaDirectory(BaseDirectory):
                 id = entry[self.id_field] = actualid
             # Keep what we need in entry
             for b_fid in b_fids:
+                if b_fid == b_dir.id_field:
+                    continue
                 # Do renaming
                 fid = field_rename.get(b_fid, b_fid)
                 entry[fid] = b_entry[b_fid]
