@@ -137,6 +137,9 @@ msgstr ""
 msgid "label_subgroups"
 msgstr ""
 
+msgid "label_supergroups"
+msgstr ""
+
 msgid "label_members"
 msgstr ""
 

@@ -29,12 +29,13 @@ from types import StringType, ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
 
+from Products.CPSSchemas.Vocabulary import ExclusionVocabularyWrapper
 from Products.CPSSchemas.Widget import widgetRegistry
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag
 from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSIdentifierWidget
-
+from Products.CPSSchemas.ExtendedWidgets import CPSGenericMultiSelectWidget
 
 class EntryMixin:
     """Mixin class that knows how to access id and title from
@@ -346,3 +347,37 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
 InitializeClass(CPSUserIdentifierWidget)
 
 widgetRegistry.register(CPSUserIdentifierWidget)
+
+##################################################
+
+class CPSSubSuperGroupMultiSelectWidget(CPSGenericMultiSelectWidget):
+    """A variant that discards the entries from an auxiliary field."""
+
+    _properties = CPSGenericMultiSelectWidget._properties + (
+        {'id': 'group_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field holging groups'},
+        {'id': 'exclude_field', 'type': 'string', 'mode': 'w',
+         'label': 'Field along which to recursively forbid values'}
+        )
+
+    exclude_field = ''
+
+    meta_type = 'Sub/Super Groups MultiSelect Widget'
+
+    def prepare(self, ds, **kw):
+        CPSGenericMultiSelectWidget.prepare(self, ds, **kw)
+        dm = ds.getDataModel()
+        aclu = getToolByName(self, 'acl_users')
+        excl = aclu.recurseGroups(dm[self.group_field], self.exclude_field)
+
+        ds[self.getWidgetId() + '_excl_keys'] = excl
+
+    def _getVocabulary(self, datastructure):
+        voc = CPSGenericMultiSelectWidget._getVocabulary(self, datastructure)
+        excl = datastructure[self.getWidgetId() + '_excl_keys']
+        return ExclusionVocabularyWrapper(voc, excl)
+
+InitializeClass(CPSSubSuperGroupMultiSelectWidget)
+
+widgetRegistry.register(CPSSubSuperGroupMultiSelectWidget)
+

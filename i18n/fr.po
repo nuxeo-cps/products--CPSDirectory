@@ -145,6 +145,9 @@ msgstr "Groupes"
 msgid "label_subgroups"
 msgstr "Sous-groupes"
 
+msgid "label_supergroups"
+msgstr "Super-groupes"
+
 msgid "label_members"
 msgstr "Membres"
 
