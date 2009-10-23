@@ -48,11 +48,17 @@ Upgrade your profiles
 If your directory configuration is maintained through a profile, please take
 care to remove the following properties for CPS LDAP Backing Directory objects:
 
-    - ldap_server
-    - ldap_port
-    - ldap_use_ssl
-    - ldap_bind_dn
-    - ldap_bind_password
+- ldap_server
+- ldap_port
+- ldap_use_ssl
+- ldap_bind_dn
+- ldap_bind_password
 
 Alternatively, you can just use the export ZMI tab on the directories (but this
 dumps all properties, and you might now want that)
+
+
+.. Local Variables:
+.. mode: rst
+.. End:
+.. vim: set filetype=rst:
