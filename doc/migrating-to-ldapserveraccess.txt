@@ -13,33 +13,33 @@ Context
 
 LDAPServerAccess objects are used to centralized LDAP connection and bind
 parameters. Existing CPS portals with LDAPBackingDirectory instances need to
-be upgraded. 
+be upgraded.
 
 This job can be done automatically with the dedicated upgrade step:
-*Factorize LDAP binds in LDAP Server Access objects*. 
+*Factorize LDAP binds in LDAP Server Access objects*.
 
-The purpose of this document is to explain what this step does and what to 
+The purpose of this document is to explain what this step does and what to
 do with profiles.
 
 Upgrade step details
 ====================
 
 The upgrade step extracts the connection and bind parameters from directory
-objects, stores them in LDAP Server Access objects, which in turn get 
+objects, stores them in LDAP Server Access objects, which in turn get
 referenced in the directory instances.
 
 For a given set of parameters, only one server access will be created. Its name
 will be deduced from the first encountered directory with these parameters.
 
-The upgrade step is also able to recognize pre-existing server access objects 
-and use them. 
+The upgrade step is also able to recognize pre-existing server access objects
+and use them.
 
 So, if you want to decide the name of some server access object, just
-create it in portal_directories and fill it with the correct parameters before 
+create it in portal_directories and fill it with the correct parameters before
 running the step. By correct, we mean the exact same ones as in the directories
 to migrate. Please note also that it's very likely that you won't be able to
 read them from the Properties tab of these directories after the server has
-been restarted with the new code, but you can still see them in the 
+been restarted with the new code, but you can still see them in the
 Introspection tab if ZMInstropection is installed.
 
 Upgrade your profiles
