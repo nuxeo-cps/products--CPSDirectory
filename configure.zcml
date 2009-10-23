@@ -166,6 +166,9 @@
   <five:traversable
       class=".BaseDirectory.BaseDirectory"/>
 
+  <five:traversable
+      class=".LDAPServerAccess.LDAPServerAccess"/>
+
   <configure package="Products.GenericSetup.browser">
 
     <browser:page

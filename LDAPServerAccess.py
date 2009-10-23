@@ -45,6 +45,12 @@ class LDAPServerAccess(PropertiesPostProcessor, SimpleItemWithProperties):
 
     meta_type = 'LDAP Server Access'
 
+    manage_options = (
+        {'label': 'Export',
+         'action': 'manage_genericSetupExport.html',
+         },
+        )
+
     security = ClassSecurityInfo()
 
     _propertiesBaseClass = SimpleItemWithProperties
