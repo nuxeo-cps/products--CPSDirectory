@@ -76,7 +76,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         access = LDAPServerAccess('ldap_server_access')
         self.portal.portal_directories._setObject(access.getId(), access)
         return access.getId()
-        
+
     def makeDir(self):
         access_id = self.makeLDAPServerAccess()
         from Products.CPSDirectory.LDAPBackingDirectory import \
@@ -574,7 +574,7 @@ class TestLDAPbackingDirectoryHierarchical(ZopeTestCase):
         access = LDAPServerAccess('ldap_server_access')
         self.portal.portal_directories._setObject(access.getId(), access)
         return access.getId()
-        
+
     def makeDir(self):
         access_id = self.makeLDAPServerAccess()
 
@@ -676,7 +676,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
         access = LDAPServerAccess('ldap_server_access')
         self.portal.portal_directories._setObject(access.getId(), access)
         return access.getId()
-        
+
     def makeDir(self):
         access_id = self.makeLDAPServerAccess()
 
@@ -692,7 +692,7 @@ class TestDirectoryEntryLocalRoles(ZopeTestCase):
             layout_search='',
             password_field='userPassword',
             title_field='cn',
-            ldap_server_access=access_id,                                   
+            ldap_server_access=access_id,
             ldap_base='ou=personnes,o=nuxeo,c=com',
             ldap_scope='SUBTREE',
             ldap_search_classes='person',
