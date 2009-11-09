@@ -34,6 +34,7 @@ from OFS.Folder import Folder
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
 from Products.CPSDirectory.tests.fakeCps import FakeField
+from Products.CPSDirectory.tests.fakeCps import FakeBooleanField
 from Products.CPSDirectory.tests.fakeCps import FakeListField
 from Products.CPSDirectory.tests.fakeCps import FakeSchema
 from Products.CPSDirectory.tests.fakeCps import FakeSchemasTool
@@ -68,6 +69,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
             'cn': FakeField(),
             'foo': FakeField(),
             'bar': FakeListField(),
+            'bl': FakeBooleanField(),
             })
         stool._setObject('testldapbd', s)
 
@@ -141,7 +143,7 @@ class TestLDAPbackingDirectory(ZopeTestCase):
 
         e = dir.getEntry(dn)
         self.assertEquals(e, {'id': id, 'foo': 'ouah', 'bar': ['4'],
-             'dn': dn ,'cn': 'chien'})
+             'dn': dn ,'cn': 'chien', 'bl': False})
 
         dir.deleteEntry(dn)
 
@@ -269,14 +271,16 @@ class TestLDAPbackingDirectory(ZopeTestCase):
 
         dn1 = 'uid=tree,ou=personnes,o=nuxeo,c=com'
 
-        e1 = {'id': id1, 'dn' : dn1, 'foo': foo1, 'bar': bar1, 'cn' : 'e1'}
+        e1 = {'id': id1, 'dn' : dn1, 'foo': foo1, 'bar': bar1,
+              'cn' : 'e1', 'bl': False}
         dir.createEntry(e1)
 
         id2 = 'sea'
         foo2 = 'blue'
         bar2 = ['812A', 'gra']
         dn2 = 'uid=sea,ou=personnes,o=nuxeo,c=com'
-        e2 = {'id': id2, 'dn' : dn2, 'foo': foo2, 'bar': bar2,  'cn' : 'e1'}
+        e2 = {'id': id2, 'dn' : dn2, 'foo': foo2, 'bar': bar2,  'cn' : 'e1',
+              'bl': True}
 
         dir.createEntry(e2)
 
@@ -295,6 +299,10 @@ class TestLDAPbackingDirectory(ZopeTestCase):
         self.assertEquals(res, [dn1])
         res = dir.searchEntries(foo=[foo1])
         self.assertEquals(res, [dn1])
+        res = dir.searchEntries(bl=False)
+        self.assertEquals(res, [dn1])
+        res = dir.searchEntries(bl=True)
+        self.assertEquals(res, [dn2])
         """
         fake ldap does not support multi-string search yet
 

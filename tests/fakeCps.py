@@ -23,6 +23,7 @@ from types import UnicodeType
 from copy import deepcopy
 from OFS.SimpleItem import Item
 from OFS.Folder import Folder
+from Products.CPSSchemas.BasicFields import CPSBooleanField
 
 class FakeRoot(Folder):
     id = ''
@@ -102,6 +103,16 @@ class FakeListField(FakeField):
         return [toUTF8(str(v)) for v in value]
     def convertFromLDAP(self, values):
         return [fromUTF8(v) for v in values]
+
+class FakeBooleanField(FakeField):
+    def getDefault(self, datamodel=None):
+        return False
+
+    # GR: using class methods to avoid testing just the tests
+    def convertToLDAP(self, value):
+        return CPSBooleanField.convertToLDAP(value)
+    def convertFromLDAP(self, values):
+        return CPSBooleanField.convertFromLDAP(values)
 
 class FakeSchema(Item):
     def __init__(self, fields):

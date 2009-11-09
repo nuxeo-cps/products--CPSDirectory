@@ -11,6 +11,7 @@ Bug fixes
 ~~~~~~~~~
 - #2020: default value not interpreted in LDAPBackingDirectory searches
 - #1999: robustness of CSV export
+- #1981: can't search on False nor set a value to False
 - #1976: don't remove contentish directories in profile purge
 - #1970: can't make a snapshot with LDAPServerAccess objects 
 - #1959: provide possibility to hide a directory

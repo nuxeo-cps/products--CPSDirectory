@@ -41,6 +41,7 @@ from Products.CPSUtil.testing.environment import isTestingEnvironment
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSSchemas.Field import ValidationError
+from Products.CPSSchemas.BasicFields import LDAP_FALSE, LDAP_TRUE
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
@@ -568,7 +569,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 # Invalid attribute for LDAP (Bad search filter (87)).
                 logger.error("_buildFilter: Invalid LDAP attribute '%s', ignored", key)
                 continue
-            if not value:
+            if not value and not value is False:
                 continue
             if key in self.search_substring_fields:
                 fmt = '(%s=*%s*)'
@@ -579,6 +580,9 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                     f = ldap.filter.filter_format('(%s=*)', (key,))
                 else:
                     f = ldap.filter.filter_format(fmt, (key, value))
+            elif isinstance(value, bool):
+                f = ldap.filter.filter_format(
+                    fmt, (key, value and LDAP_TRUE or LDAP_FALSE))
             elif isinstance(value, int):
                 f = ldap.filter.filter_format(fmt, (key, str(value)))
             elif isinstance(value, (list, tuple)):
@@ -677,7 +681,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
             if not data.has_key(field_id):
                 continue
             value = data[field_id]
-            if not value and not keep_empty:
+            if not value and not value is False and not keep_empty:
                 continue
             if field_id == self.password_field:
                 # pwd read from ldap returns empty string (for security).
