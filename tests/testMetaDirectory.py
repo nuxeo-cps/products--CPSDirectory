@@ -536,6 +536,37 @@ class TestMetaDirectoryMissing(TestMetaDirectory):
         entry = self.dirmeta.getEntry(id)
         self.assertEquals(entry, okentry)
 
+    def test_missing_entry_side_effects(self):
+        # see #2067 : a write on an entry built with missing entry
+        # used to write the id in the missing entry
+
+        dirmeta = self.dirmeta
+
+        eid = 'LDHL'
+        self.assertRaises(KeyError, dirmeta.getEntry, eid)
+        barentry = {'id': eid, 'bar': 'brr', 'mail': 'ma'}
+        self.dirbar.createEntry(barentry)
+        entry = dirmeta.getEntry(eid)
+
+        # now the culprit
+        entry['mail'] = 'mx'
+        dirmeta._editEntry(entry)
+
+        # a bit low level test, but that's the simplest bug reproduction
+        missing_entry = dirmeta.getBackingDirectories()[0]['missing_entry']
+        self.failIf('idd' in missing_entry)
+
+        # Subsequent calls to getEntry also needing the missing entry
+        # ended either as an error because they looked like a conflict in id
+        # normalization in case the backing with missing_entry isn't first
+        # and otherwise (our case) simply returning the previous entry (LDHL)
+        eid = 'LDHL2'
+        barentry = {'id': eid, 'bar': 'baar', 'mail': 'ma'}
+        okentry = {'id': eid, 'foo': 'defaultfoo', 'bar': 'baar', 'email': 'ma'}
+        self.dirbar.createEntry(barentry)
+        entry = dirmeta.getEntry(eid)
+        self.assertEquals(entry, okentry)
+
     def test_listEntryIds(self):
         id = 'LDA'
         barentry = {'id': id, 'bar': 'brr', 'mail': 'me@here'}

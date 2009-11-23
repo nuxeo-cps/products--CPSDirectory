@@ -22,6 +22,7 @@ A directory redirects requests to other backing directories.
 """
 
 import logging
+from copy import deepcopy
 from zLOG import LOG, DEBUG, WARNING
 
 from Globals import InitializeClass
@@ -603,9 +604,7 @@ class MetaDirectory(BaseDirectory):
                         raise
                     b_entry = missing_entry
                     missing_fields.extend(missing_entry.keys())
-            # backing directory may have normalized the id
-            # XXX NOCOMMIT what if several backings do that ? Declare
-            # a winning one ?
+            # backing directory may have normalized the id (see #2039)
             actualid = b_entry.get(b_dir.id_field)
             if actualid is not None and actualid != id:
                 if backing_number > 0:
@@ -714,7 +713,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
                     # missing entry must take precedence over field defaults
                     # typically for consistency with what was read
                     # before performing the write.
-                    merged = info['missing_entry']
+                    merged = info['missing_entry'].copy()
                     merged.update(b_entry)
                     b_dir._createEntry(merged)
 

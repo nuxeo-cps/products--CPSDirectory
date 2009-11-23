@@ -9,6 +9,7 @@ New features
 - #1978: simple CSV export API
 Bug fixes
 ~~~~~~~~~
+- #2067: new users can't login (side effects in MetaDirectory missing entries)
 - #2020: default value not interpreted in LDAPBackingDirectory searches
 - #1999: robustness of CSV export
 - #1981: can't search on False nor set a value to False
