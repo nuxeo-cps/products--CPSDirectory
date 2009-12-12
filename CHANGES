@@ -16,6 +16,7 @@ Bug fixes
 - #1976: don't remove contentish directories in profile purge
 - #1970: can't make a snapshot with LDAPServerAccess objects 
 - #1959: provide possibility to hide a directory
+- #2024: adapted cpsdirectory_entry_edit_form in order not to loose message
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

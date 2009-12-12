@@ -42,6 +42,11 @@
   </metal:block>
 
   <metal:block fill-slot="main">
+    <tal:block condition="python: not 'portal_status_message' in request">
+      <metal:block
+         use-macro="here/generic_lib_portal_message/macros/portal_message" />
+    </tal:block>
+
     <div tal:replace="structure rendered_main">Rendered main...</div>
   </metal:block>
 
