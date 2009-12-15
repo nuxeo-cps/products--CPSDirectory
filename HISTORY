@@ -1,4 +1,34 @@
 ===========================================================
+Package: CPSDirectory 1.46.0
+===========================================================
+First release built by: gracinet at: 2009-12-15T12:27:42
+SVN Tag: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/tags/1.46.0
+Build from: https://svn.nuxeo.org/pub/CPS3/products/CPSDirectory/trunk@54101
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+- #1402: directory widgets for groups of groups
+- #2039: entry id case-insensitiveness or normalization
+- #1928: bind information is centralized in LDAPServerAccess objects
+- #1978: simple CSV export API
+Bug fixes
+~~~~~~~~~
+- #2067: new users can't login (side effects in MetaDirectory missing entries)
+- #2020: default value not interpreted in LDAPBackingDirectory searches
+- #1999: robustness of CSV export
+- #1981: can't search on False nor set a value to False
+- #1976: don't remove contentish directories in profile purge
+- #1970: can't make a snapshot with LDAPServerAccess objects 
+- #1959: provide possibility to hide a directory
+- #2024: adapted cpsdirectory_entry_edit_form in order not to loose message
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.45.1
 ===========================================================
 First release built by: madarche at: 2008-11-23T22:08:37
