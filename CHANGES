@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- #2095: Missing properties tab on ldap server access objects
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
