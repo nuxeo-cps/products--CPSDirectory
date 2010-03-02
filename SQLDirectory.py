@@ -21,14 +21,18 @@
 This is a directory backed by a table in an SQL database.
 """
 
-from zLOG import LOG, DEBUG, TRACE, ERROR
-
 import sys
+import logging
+from datetime import datetime
+
+from ZODB.loglevels import TRACE
 from Acquisition import aq_base, aq_parent, aq_inner
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from DateTime.DateTime import DateTime
 from OFS.Cache import Cacheable
+
+from Products.CMFCore.utils import getToolByName
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
@@ -36,8 +40,13 @@ from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 from Products.CPSDirectory.interfaces import IDirectory
+from Products.CPSDirectory.interfaces import IBatchable
+from Products.CPSDirectory.interfaces import IOrderable
 
 from zope.interface import implements
+
+
+logger = logging.getLogger('CPSDirectory.SQLDirectory')
 
 
 class SQLSyntaxError(ValueError):
@@ -50,7 +59,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
 
     A directory that connects to an SQL database.
     """
-    implements(IDirectory)
+    implements(IDirectory, IBatchable, IOrderable)
 
     # XXX what about tables where the id is not a string, like an int ?
 
@@ -64,26 +73,41 @@ class SQLDirectory(BaseDirectory, Cacheable):
     security = ClassSecurityInfo()
 
     _properties = BaseDirectory._properties + (
+        {'id': 'id_is_serial', 'type': 'boolean', 'mode': 'w',
+         'label': "Id column is SERIAL"},
         {'id': 'password_field', 'type': 'string', 'mode': 'w',
          'label': "Field for password (if authentication)"},
         {'id': 'sql_connection_path', 'type': 'selection', 'mode': 'w',
          'label': "SQL connection",
          'select_variable': 'all_sql_connection_paths'},
-        #{'id': 'sql_syntax', 'type': 'selection', 'mode': 'w',
-        # 'label': "SQL syntax", 'select_variable': 'all_sql_syntaxes'},
         {'id': 'sql_table', 'type': 'string', 'mode': 'w',
          'label': "SQL table"},
-        #{'id': 'sql_auxiliary_tables', 'type': 'string', 'mode': 'w',
-        # 'label': "SQL auxiliary tables"},
+        {'id': 'dialect', 'type': 'selection', 'mode': 'w',
+         'label': "SQL dialect", 'select_variable': 'all_dialects'},
+        {'id': 'encoding', 'type': 'selection', 'mode': 'w',
+         'label': "DB Encoding", 'select_variable': 'all_encoding'},
+        {'id': 'method_clause', 'type': 'string', 'mode': 'w',
+         'label': "SQL clause filtering"},
         )
 
-    #all_sql_syntaxes = ('postgresql',)
+    all_dialects = (
+        'postgresql',
+        'mysql',
+        )
 
+    all_encoding = (
+        'iso-8859-15',
+        'iso-8859-1',
+        'utf-8',
+        )
+
+    id_is_serial = False
     password_field = ''
     sql_connection_path = ''
-    #sql_syntax = all_sql_syntaxes[0]
     sql_table = ''
-    #sql_auxiliary_tables = ''
+    dialect = all_dialects[0]
+    encoding = all_encoding[0]
+    method_clause = ''
 
     def all_sql_connection_paths(self):
         """Get SQL database connections in the current folder and above.
@@ -92,12 +116,12 @@ class SQLDirectory(BaseDirectory, Cacheable):
         """
         paths = ['']
         context = self
+        utool = getToolByName(self, 'portal_url')
         while context is not None:
             if getattr(aq_base(context), 'objectValues', None) is not None:
                 for ob in context.objectValues():
                     if getattr(aq_base(ob), '_isAnSQLConnection', False):
-                        path = '/'.join(ob.getPhysicalPath())
-                        paths.append(path)
+                        paths.append(utool.getRelativeUrl(ob))
             context = aq_parent(aq_inner(context))
         paths.sort()
         return paths
@@ -124,11 +148,29 @@ class SQLDirectory(BaseDirectory, Cacheable):
     security.declarePrivate('getSQLValue')
     def getSQLValue(self, value, quoter=None):
         """Get a quoted SQL value."""
-        # XXX deal with unicode and latin1
-        if isinstance(value, str):
+        if isinstance(value, (basestring, DateTime, datetime)):
             if quoter is None:
                 quoter = self._getSQLQuoter()
+            if isinstance(value, basestring):
+                if isinstance(value, str):
+                    value = unicode(value, self.encoding)
+                value = value.encode('utf-8')
+            elif isinstance(value, DateTime):
+                value = value.ISO()
+            elif isinstance(value, datetime):
+                value = value.isoformat()
             return quoter(value)
+        elif isinstance(value, bool):
+            if value:
+                if self.dialect == 'mysql':
+                    return '1'
+                else:
+                    return 'TRUE'
+            else:
+                if self.dialect == 'mysql':
+                    return '0'
+                else:
+                    return 'FALSE'
         elif isinstance(value, (int, long, float)):
             return str(value)
         elif isinstance(value, DateTime):
@@ -137,8 +179,21 @@ class SQLDirectory(BaseDirectory, Cacheable):
         elif value is None:
             return 'NULL'
         else:
-            LOG('getSQLValue', DEBUG, 'Unknown conversion for %s' % `value`)
+            logger.debug("getSQLValue: Unknown conversion for %r", value)
             raise ValueError(value)
+
+    security.declarePrivate('valueFromSQL')
+    def valueFromSQL(self, value):
+        """Get a python value from a SQL one.
+        """
+        if isinstance(value, str):
+            v = unicode(value, self.encoding)
+            try:
+                v.encode('ascii')
+            except UnicodeEncodeError:
+                # If we don't have ascii, keep the unicode value
+                value = v
+        return value
 
     security.declarePublic('debugTest') # XXX
     def debugTest(self):
@@ -172,12 +227,12 @@ class SQLDirectory(BaseDirectory, Cacheable):
         password_field = self.password_field
         cur_password = entry.get(password_field)
         if cur_password is None:
-            LOG('getEntryAuthenticated', TRACE, "No field '%s' for %s in %s" %
-                (password_field, id, self.getId()))
+            logger.log(TRACE, "getEntryAuthenticated: No field %r "
+                       "for %s in %s", password_field, id, self.getId())
             raise AuthenticationFailed
         if not self._checkPassword(password, cur_password):
-            LOG('getEntryAuthenticated', TRACE,
-                "Authentication failed for %s in %s" % (id, self.getId()))
+            logger.log(TRACE, "getEntryAuthenticated: Authentication failed "
+                       "for %s in %s", id, self.getId())
             raise AuthenticationFailed
         return entry
 
@@ -192,9 +247,15 @@ class SQLDirectory(BaseDirectory, Cacheable):
     security.declarePrivate('_createEntry')
     def _createEntry(self, entry):
         """Create an entry in the directory."""
-        id = entry[self.id_field]
-        if self._hasEntry(id):
-            raise KeyError("Entry %s already exists" % `id`)
+        if self.id_is_serial:
+            if entry.get(self.id_field) not in ('', 0, None):
+                raise ValueError("Cannot pass an id for a directory with "
+                                 "SERIAL")
+            entry.pop(self.id_field, None)
+        else:
+            id = self.getEntryId(entry)
+            if self._hasEntry(id):
+                raise KeyError("Entry %s already exists" % `id`)
 
         sql_data = self._convertDataToQuotedSQL(entry)
         sql = "INSERT INTO %(table)s (%(fields)s) VALUES (%(vals)s)" % {
@@ -204,41 +265,85 @@ class SQLDirectory(BaseDirectory, Cacheable):
             }
         self._execute(sql)
 
-        # XXX should be a way to use autoincrement ids and return it
-        # XXX depends on SQL dialect
-        return None
+        if self.id_is_serial:
+            if self.dialect == 'postgresql':
+                sql = 'SELECT CURVAL(%s)' % self.getSQLValue(
+                    '%s_%s_seq' % (self.sql_table, self.id_field))
+            elif self.dialect == 'mysql':
+                sql = 'SELECT LAST_INSERT_ID()'
+            else:
+                raise ValueError("Unknow SQL dialect %r" % self.dialect)
+            items, data = self._execute(sql)
+            id = data[0][0] # An int
+            entry[self.id_field] = id
+
+        return id
+
+    def _getMethodClause(self):
+        clause = ''
+        if self.method_clause:
+            meth = getattr(self, self.method_clause, None)
+            if meth is None:
+                raise RuntimeError("Unknown clause method %s for dir %s"
+                                   % (self.method_clause, self.getId()))
+            clause = meth()
+        return clause
+
+    def _makeWhereClause(self, id):
+        clause = " %s = %s" % (self.getSQLField(self.id_field),
+                               self.getSQLValue(id))
+        tmp = self._getMethodClause()
+        if tmp:
+            clause += ' AND ' + tmp
+        return clause
 
     security.declarePrivate('_deleteEntry')
     def _deleteEntry(self, id):
         """Delete an entry in the directory."""
+        if self.id_is_serial and not isinstance(id, int):
+            id = int(id)
         if not self._hasEntry(id):
             raise KeyError("No entry %s" % `id`)
-        sql = "DELETE FROM %(table)s WHERE %(idf)s = %(id)s" % {
-            'table': self.sql_table,
-            'idf': self.getSQLField(self.id_field),
-            'id': self.getSQLValue(id),
-            }
+        where = self._makeWhereClause(id)
+        sql = "DELETE FROM %s WHERE %s" % (self.sql_table, where)
         self._execute(sql)
+        entry = self.setEntryId(id, {})
 
     security.declarePrivate('_searchEntries')
-    def _searchEntries(self, return_fields=None, **kw):
+    def _searchEntries(self, return_fields=None, query_options=None, **kw):
         """Search for entries in the directory.
 
         See API in the base class.
-        """
-        schema = self._getUniqueSchema()
-        all_field_ids = self._getFieldIds()
 
-        # Find field_ids needed to compute returned fields.
-        attrsd, return_fields = self._getSearchFields(return_fields)
-        field_ids = list(attrsd)
-        field_ids.sort()
+        Extension: query_options is a mapping containing one or several of:
+        - limit: for batching
+        - offset: for batching
+        - count: for batching (return just a count of entries)
+        - order_by: for batching (is a basestring or a tuple)
+        - reverse: for batching (revered order)
+
+        Other extensions to the base syntax:
+        - foo={'query': v, 'range': 'min'/'max'}
+            Query for >= or <= instead of equality
+        - foo={'query': [v1,v2], 'range': 'min:max'}
+            Range query
+        """
+        all_field_ids = self._getFieldIds()
+        query_options = query_options or {}
+        count = query_options.pop('count', False)
+
+        if count:
+            columns = 'COUNT(*)'
+        else:
+            # Find field_ids needed to compute returned fields.
+            attrsd, return_fields = self._getSearchFields(return_fields)
+            field_ids = attrsd.keys()
+            field_ids.sort()
+            columns = ', '.join([self.getSQLField(fid) for fid in field_ids])
 
         # Build query
-        sql = "SELECT %(fields)s FROM %(table)s" % {
-            'fields': ', '.join([self.getSQLField(fid) for fid in field_ids]),
-            'table': self.sql_table,
-            }
+        sql = 'SELECT %s FROM %s' % (columns, self.sql_table)
+
         # Where clause
         clauses = []
         quoter = self._getSQLQuoter()
@@ -248,12 +353,37 @@ class SQLDirectory(BaseDirectory, Cacheable):
             clause = self._makeClause(key, value, quoter)
             if clause is not None:
                 clauses.append(clause)
+        clause = self._getMethodClause()
+        if clause:
+            clauses.append(clause)
         if clauses:
             sql = sql + " WHERE " + " AND ".join(clauses)
-        items, data = self._execute(sql)
+
+        # Order by
+        order_by = query_options.get('order_by')
+        if order_by:
+            if isinstance(order_by, basestring):
+                order_by = (order_by,)
+            sql += ' ORDER BY ' + ', '.join(self.getSQLField(fid)
+                                            for fid in order_by)
+            if query_options.get('reverse'):
+                sql += ' DESC'
+
+        # Batching
+        limit = query_options.get('limit')
+        if limit:
+            sql += ' LIMIT %d' % limit
+        offset = query_options.get('offset')
+        if offset:
+            sql += ' OFFSET %d' % offset
 
         # Build results
+        items, data = self._execute(sql)
         res = []
+
+        if count:
+            return [data[0][0]]
+
         idix = field_ids.index(self.id_field)
         for result in data:
             id = result[idix]
@@ -263,8 +393,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
                 result = list(result)
                 entry = {}
                 for field_id in field_ids:
-                    entry[field_id] = result.pop(0)
-                    # XXX conversions !
+                    value = result.pop(0)
+                    entry[field_id] = self.valueFromSQL(value)
                 res.append((id, entry))
 
         # Now we must compute a partial datamodel for each result,
@@ -320,18 +450,21 @@ class SQLDirectory(BaseDirectory, Cacheable):
         if self.ZCacheable_isCachingEnabled():
             if sql.startswith("SELECT"):
                 keyset = {'query': sql}
-                LOG('_execute', TRACE, "Searching cache for %s" % (keyset,))
+                logger.log(TRACE, "_execute: Searching cache for %s", keyset)
                 res = self.ZCacheable_get(keywords=keyset)
                 if res is not None:
-                    LOG('_execute', TRACE, " -> results=%s" % (res[:20],))
+                    logger.log(TRACE, "_execute: -> results=%s", res[:10])
                     return res
             else:
                 self.ZCacheable_invalidate()
 
         conn = self._getConnection()
         try:
-            LOG('_execute', TRACE, "Execute:\n  %s" % sql)
-            res = conn.query(sql)
+            logger.debug("_execute: Execute:\n  %s", sql)
+            if self.dialect == 'mysql':
+                res = conn.query(sql, max_rows=0) # MySQL-DA defaults to 1000
+            else:
+                res = conn.query(sql)
         except SyntaxError, e:
             # Gadlfy: invalid syntax
             raise SQLSyntaxError(str(e))
@@ -346,10 +479,10 @@ class SQLDirectory(BaseDirectory, Cacheable):
                     raise SQLSyntaxError(e+' '+str(v))
             raise
 
-        LOG('_execute', TRACE, "Result:\n%s" % `res`)
+        logger.log(TRACE, "_execute: Result:\n%r", res)
 
         if keyset is not None:
-            LOG('_execute', TRACE, "Putting in cache")
+            logger.log(TRACE, "_execute: Putting in cache")
             self.ZCacheable_set(res, keywords=keyset)
 
         return res
@@ -359,25 +492,23 @@ class SQLDirectory(BaseDirectory, Cacheable):
 
         Returns converted values.
         """
+        if self.id_is_serial and not isinstance(id, int):
+            id = int(id)
         password_field = self.password_field
         if password is None or password_field in field_ids:
             fids = field_ids
         else:
             fids = list(field_ids) + [password_field]
 
-        sql = ("SELECT %(fields)s FROM %(table)s"
-               " WHERE %(idf)s = %(id)s") % {
-            'fields': ', '.join([self.getSQLField(fid) for fid in fids]),
-            'table': self.sql_table,
-            'idf': self.getSQLField(self.id_field),
-            'id': self.getSQLValue(id),
-            }
+        fields = ", ".join(self.getSQLField(fid) for fid in fids)
+        where = self._makeWhereClause(id)
+        sql = "SELECT %s FROM %s WHERE %s" % (fields, self.sql_table, where)
         items, data = self._execute(sql)
         if not data:
             raise KeyError("No entry %s" % `id`)
         if len(data) > 1:
-            LOG('SQLDirectory', ERROR,
-                'Got %s entries for %s=%s' % (len(data), self.id_field, id))
+            logger.error("Got %s entries for %s=%s",
+                         len(data), self.id_field, id)
         result = list(data[0])
 
         # Check password
@@ -390,8 +521,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
         # Build entry
         entry = {}
         for field_id in field_ids:
-            entry[field_id] = result.pop(0)
-            # XXX conversions !
+            value = result.pop(0)
+            entry[field_id] = self.valueFromSQL(value)
         return entry
 
     def _convertDataToQuotedSQL(self, data, skip_id=False):
@@ -407,7 +538,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
                 continue
             if not data.has_key(field_id):
                 continue
-            if skip_id and field_id == self.id_field:
+            if skip_id and field_id in (self.id_field,):
                 continue
             value = data[field_id]
             sql_value = self.getSQLValue(value, quoter=quoter)
@@ -421,46 +552,131 @@ class SQLDirectory(BaseDirectory, Cacheable):
         """
         if not sql_data:
             return
-        sets = ["%s = %s" % (key, value) for key, value in sql_data.items()]
-        sql = "UPDATE %(table)s SET %(sets)s WHERE %(idf)s = %(id)s" % {
-            'table': self.sql_table,
-            'sets': ', '.join(sets),
-            'idf': self.getSQLField(self.id_field),
-            'id': self.getSQLValue(id),
-            }
+        if self.id_is_serial and not isinstance(id, int):
+            id = int(id)
+        sets = ", ".join("%s = %s" % (key, value)
+                         for key, value in sql_data.iteritems())
+        where = self._makeWhereClause(id)
+        sql = "UPDATE %s SET %s WHERE %s" % (self.sql_table, sets, where)
         self._execute(sql)
 
-    def _makeClause(self, key, value, quoter):
+    def _makeClause(self, key, value, quoter, negate=False):
         """Make the where clause for search query
         """
-        sqlfield = self.getSQLField(key)
-        if isinstance(value, str):
+        if isinstance(value, basestring):
             if not value:
-                # For string match, we ignore empty values,
-                # they likely come from unfilled html input fields.
-                return None
+                if negate:
+                    op = '!='
+                    val = self.getSQLValue('', quoter=quoter)
+                else:
+                    # For string match, we ignore empty values,
+                    # they likely come from unfilled html input fields.
+                    # XXX this is irregular
+                    # XXX strip should be done by form machinery
+                    logger.debug("Empty string search for field %s" % key)
+                    return None
             if value == '*':
-                return None
-            if key in self.search_substring_fields:
+                if negate:
+                    # negate of '*' is empty ('') values
+                    # XXX this is irregular but we have to provide
+                    # a way to search for '' values
+                    op = '='
+                    val = self.getSQLValue('', quoter=quoter)
+                else:
+                    op = 'IS NOT'
+                    val = 'NULL'
+            elif key in self.search_substring_fields:
                 # Note: LIKE is not supported by Gadfly
-                op = 'LIKE'
+                if negate:
+                    op = 'NOT LIKE'
+                else:
+                    op = 'LIKE'
                 val = self.getSQLValue('%'+value+'%', quoter=quoter)
             else:
-                op = '='
+                if negate:
+                    op = '!='
+                else:
+                    op = '='
                 val = self.getSQLValue(value, quoter=quoter)
+        elif isinstance(value, bool):
+            if negate:
+                op = '!='
+            else:
+                op = '='
+            if value:
+                if self.dialect == 'mysql':
+                    val = '1'
+                else:
+                    val = 'TRUE'
+            else:
+                if self.dialect == 'mysql':
+                    val = '0'
+                else:
+                    val = 'FALSE'
         elif isinstance(value, (int, long)):
-            op = '='
+            if negate:
+                op = '!='
+            else:
+                op = '='
             val = str(value)
         elif isinstance(value, (list, tuple)):
             if not value:
                 # cannot match, ignore FIXME should fail query ?
                 return None
-            op = 'IN'
+            if negate:
+                op = 'NOT IN'
+            else:
+                op = 'IN'
             val = ', '.join([self.getSQLValue(v, quoter=quoter)
                              for v in value])
             val = '('+val+')'
+        elif value is None:
+            if negate:
+                op = 'IS NOT'
+                val = 'NULL'
+            else:
+                op = 'IS'
+                val = 'NULL'
+        elif isinstance(value, dict) and 'query' in value:
+            if negate and value.get('negate'):
+                raise ValueError("Cannot double negate")
+            negate = negate or value.get('negate')
+            query = value['query']
+            if 'range' in value:
+                range = value['range']
+                if range == 'min':
+                    if negate:
+                        op = '<'
+                    else:
+                        op = '>='
+                    val = self.getSQLValue(query, quoter=quoter)
+                elif range == 'max':
+                    if negate:
+                        op = '>'
+                    else:
+                        op = '<='
+                    val = self.getSQLValue(query, quoter=quoter)
+                elif range == 'min:max':
+                    if (not isinstance(query, (list, tuple)) or
+                        len(query) != 2):
+                        raise ValueError("Bad query %r for %r" % (value, key))
+                    if negate:
+                        op = 'NOT BETWEEN'
+                    else:
+                        op = 'BETWEEN'
+                    val = '%s AND %s' % (self.getSQLValue(query[0],
+                                                          quoter=quoter),
+                                         self.getSQLValue(query[1],
+                                                          quoter=quoter))
+                else:
+                    raise ValueError("Bad range %r for %r" % (value, key))
+            elif value.get('negate'):
+                return self._makeClause(key, query, quoter, negate=True)
+            else:
+                raise ValueError("Bad value %s for '%s'" % (`value`, key))
         else:
             raise ValueError("Bad value %s for '%s'" % (`value`, key))
+        sqlfield = self.getSQLField(key)
         clause = "%s %s %s" % (sqlfield, op, val)
         return clause
 

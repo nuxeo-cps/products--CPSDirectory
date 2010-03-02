@@ -138,6 +138,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     layout_search = ''
     readonly = False
     hidden_in_navigation = False
+
     acl_directory_view_roles = 'Manager'
     acl_entry_create_roles = 'Manager'
     acl_entry_delete_roles = 'Manager'
@@ -547,7 +548,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             mtool = getToolByName(self, 'portal_membership')
             mtool.deleteMembers([id], check_permission=0)
 
-
     security.declarePrivate('_deleteEntry')
     def _deleteEntry(self, id):
         """Delete an entry in the directory, unrestricted.
@@ -757,7 +757,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             rendered, ok = callback_func(self, ds, **kw)
         rendered = formLayout + rendered
         return rendered, ok, ds
-
     #
     # Export API
     #

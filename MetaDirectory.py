@@ -615,6 +615,7 @@ class MetaDirectory(BaseDirectory):
                         str(b_dir), actualid, id)
                     raise KeyError(id)
                 id = entry[self.id_field] = actualid
+
             # Keep what we need in entry
             for b_fid in b_fids:
                 if b_fid == b_dir.id_field:
@@ -714,6 +715,7 @@ class MetaStorageAdapter(BaseStorageAdapter):
                     # typically for consistency with what was read
                     # before performing the write.
                     merged = info['missing_entry'].copy()
+
                     merged.update(b_entry)
                     b_dir._createEntry(merged)
 
