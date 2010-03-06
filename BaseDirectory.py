@@ -409,6 +409,12 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             else:
                 raise
 
+    def getEntryId(self, entry):
+        return entry[self.id_field]
+
+    def setEntryId(self, eid, entry):
+        entry[self.id_field] = eid
+
     security.declarePrivate('_getEntryFromDataModel')
     def _getEntryFromDataModel(self, datamodel):
         """Compute dict from datamodel."""

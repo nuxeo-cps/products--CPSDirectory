@@ -336,8 +336,8 @@ class SQLDirectory(BaseDirectory, Cacheable):
             columns = 'COUNT(*)'
         else:
             # Find field_ids needed to compute returned fields.
-            attrsd, return_fields = self._getSearchFields(return_fields)
-            field_ids = attrsd.keys()
+            field_ids, return_fields = self._getSearchFields(return_fields)
+            field_ids = list(field_ids)
             field_ids.sort()
             columns = ', '.join([self.getSQLField(fid) for fid in field_ids])
 
