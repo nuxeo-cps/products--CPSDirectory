@@ -29,19 +29,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CPSSchemas.Field import FieldRegistry
 from Products.CPSSchemas.BasicFields import CPSStringListField
 from Products.CPSSchemas.BasicFields import CPSStringField
-from Products.CPSSchemas.BasicFields import toUTF8
-from Products.CPSSchemas.BasicFields import default_encoding
+from Products.CPSSchemas.BasicFields import toUTF8, fromUTF8
 
 logger = logging.getLogger('Products.CPSDirectory.DirectoryFields')
-
-default_encoding = 'iso-8859-15'
-
-def fromUTF8(s):
-    try:
-        return unicode(s, 'utf-8').encode(default_encoding)
-    except UnicodeError:
-        logger.warn('convertFromLDAP: problem recoding %r', s)
-        return s
 
 def attribute_to_dn(value, attr, directory=None):
     """Resolve an attribute value to provide a Dn."""
