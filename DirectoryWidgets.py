@@ -37,6 +37,9 @@ from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSIdentifierWidget
 from Products.CPSSchemas.ExtendedWidgets import CPSGenericMultiSelectWidget
 
+def uni_lower(s):
+    return unicode(s).lower()
+
 class EntryMixin:
     """Mixin class that knows how to access id and title from
     and entry, even if it's LDAP keyed by dn.
@@ -292,7 +295,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             # sorting here because some storage (LDAP user group)
             # doesn't store ordered list
             value = list(value)
-            value.sort(key=str.lower)
+            value.sort(key=uni_lower)
         if mode == 'view':
             render = ''
             if value is not None:
