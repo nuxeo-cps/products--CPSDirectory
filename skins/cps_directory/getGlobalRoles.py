@@ -20,6 +20,7 @@ from logging import getLogger
 from AccessControl import Unauthorized
 
 from Products.CMFCore.utils import getToolByName
+from Products.CPSUtil.text import get_final_encoding
 
 LOG_KEY = 'getGlobalRoles'
 logger = getLogger(LOG_KEY)
@@ -28,7 +29,7 @@ portal = getToolByName(context, 'portal_url').getPortalObject()
 cpsmcat = portal.translation_service
 dtool = portal.portal_directories
 roles_directory = dtool.roles
-charset = portal.default_charset
+charset = get_final_encoding(portal)
 
 returned = []
 
