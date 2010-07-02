@@ -1,4 +1,38 @@
 ===========================================================
+Package: CPSDirectory 1.46.3
+===========================================================
+First release built by: gracinet at: 2010-06-30T02:35:15
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- logging stuff
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
+Package: CPSDirectory 1.46.2
+===========================================================
+First release built by: gracinet at: 2010-03-13T17:50:25
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- First hgbundler managed release
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.46.1
 ===========================================================
 First release built by: gracinet at: 2009-12-21T11:54:48

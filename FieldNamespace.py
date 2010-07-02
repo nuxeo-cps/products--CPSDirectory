@@ -24,10 +24,7 @@ Register directory-related methods to CPSSchemas' FieldNamespace utility
 so as to be able to make 'joins' with computed String List Fields.
 """
 from logging import getLogger
-
-from zLOG import LOG, DEBUG
-
-LOG_KEY = 'FieldNamespace'
+logger = getLogger('Products.CPSDirectory.FieldNameSpace')
 
 try:
     set
@@ -50,15 +47,13 @@ def crossGetList(self, dir_id, field_id, value):
     This method is used in the computed 'members' field of the groups
     directory's schema to list all members that belong to some group.
     """
-    log_key = LOG_KEY + '.crossGetList'
-    logger = getLogger(log_key)
     dtool = getToolByName(self, 'portal_directories')
     dir = dtool[dir_id]
     logger.debug("dir = %s" % dir)
     if field_id not in dir._getFieldIds():
         raise KeyError("%s not in %s's fields" % (field_id, dir_id))
     res = dir._searchEntries(**{field_id: [value]})
-    logger.debug("res = %s" % res)
+    logger.debug("crossGetList: res = %s", res)
     return res
 
 fieldStorageNamespace.register('dirCrossGetList', crossGetList)
@@ -77,8 +72,7 @@ def crossSetList(self, dir_id, field_id, value, entry_ids, value_search=None):
     semantics than gets and sets. Namely, the lookup of entries that
     hold 'value' will be done using 'value_search'.
     """
-    LOG_KEY = 'crossSetList'
-    LOG(LOG_KEY, DEBUG, "dir_id = %s" % dir_id)
+    logger.debug("crossSetList: dir_id = %s", dir_id)
     dtool = getToolByName(self, 'portal_directories')
     dir = dtool[dir_id]
     entry_ids = set(entry_ids)
@@ -119,9 +113,9 @@ def crossSetList(self, dir_id, field_id, value, entry_ids, value_search=None):
             field_id: values,
             }
         # Modify the entry with only the field that might have changed
-        LOG(LOG_KEY, DEBUG, "Modifying entry = %s" % entry)
+        logger.debug("crossSetList: modifying entry = %s", entry)
         entry = dir._editEntry(new_entry)
-        LOG(LOG_KEY, DEBUG, "Modification done for entry = %s" % entry)
+        logger.debug("crossSetList: modification done for entry = %s", entry)
 
 fieldStorageNamespace.register('dirCrossSetList', crossSetList)
 
@@ -139,17 +133,15 @@ def crossLdapGetList(self, dir_id, field_id, value, base_dn):
 
     'base_dn' is the DN where the entries are to be found in the LDAP.
     """
-    log_key = LOG_KEY + '.crossLdapGetList'
-    logger = getLogger(log_key)
     dtool = getToolByName(self, 'portal_directories')
     dir = dtool[dir_id]
-    logger.debug("dir = %s" % dir)
+    logger.debug("crossLdapGetList: dir = %s", dir)
     if field_id not in dir._getFieldIds():
         raise KeyError("%s not in %s's fields" % (field_id, dir_id))
     # TODO: "uid" should not be hardcoded here
     value = 'uid=%s,%s' % (value, base_dn)
     res = dir._searchEntries(**{field_id: [value]})
-    logger.debug("res = %s" % res)
+    logger.debug("crossLdapGetList, res = %s", res)
     entries_ids = []
     for entry_dn in res:
         entry_id = entry_dn
@@ -185,8 +177,7 @@ def mapDnToMemberIds(self, dn_field_ids):
     dn_field_ids is made of LDAP DNs from of the following form:
     'uid=joeuser,ou=people,dc=mysite,dc=net'
     """
-    LOG_KEY = 'mapDnToMemberIds'
-    LOG(LOG_KEY, DEBUG, "...")
+    logger.debug('mapDnToMemberIds: dns: %r', dn_field_ids)
     member_ids = []
     for dn_field_id in dn_field_ids:
         member_id = dn_field_id
@@ -206,12 +197,11 @@ def mapMemberIdsToDn(self, member_ids, base_dn, field_id, data):
     The return DNs are the following form:
     'uid=joeuser,ou=people,dc=mysite,dc=net'
     """
-    LOG_KEY = 'mapMemberIdsToDn'
-    LOG(LOG_KEY, DEBUG, "member_ids = %s, field_id = %s, data = %s"
-        % (member_ids, field_id, data))
+    logger.debug("mapMemberIdsToDn: member_ids = %s, field_id = %s, data = %s",
+                 member_ids, field_id, data)
     member_dns = ['%s,' + base_dn % x for x in member_ids]
     data[field_id] = member_dns
-    LOG(LOG_KEY, DEBUG, "data = %s" % (data))
+    logger.debug("mapMemberIdsToDn: data = %s", data)
     return member_ids
 
 fieldStorageNamespace.register('mapMemberIdsToDn', mapMemberIdsToDn)
