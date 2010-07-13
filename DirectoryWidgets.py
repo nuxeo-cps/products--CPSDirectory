@@ -29,6 +29,7 @@ from types import StringType, ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
 
+from Products.CPSUtil.text import uni_lower
 from Products.CPSSchemas.Vocabulary import ExclusionVocabularyWrapper
 from Products.CPSSchemas.Widget import widgetRegistry
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag
@@ -36,9 +37,6 @@ from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
 from Products.CPSSchemas.BasicWidgets import CPSIdentifierWidget
 from Products.CPSSchemas.ExtendedWidgets import CPSGenericMultiSelectWidget
-
-def uni_lower(s):
-    return unicode(s).lower()
 
 class EntryMixin:
     """Mixin class that knows how to access id and title from
