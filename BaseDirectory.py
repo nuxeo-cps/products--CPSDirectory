@@ -769,7 +769,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
 
     security.declarePublic('csvExport')
     def csvExport(self, return_fields=None, csv_dialect='excel',
-                  input_charset = 'iso-8859-15', output_charset = None,
+                  input_charset = 'utf-8', output_charset = 'utf-8',
                   **kw):
         """Perform a search and dump the results as CSV.
 
@@ -778,8 +778,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
               Label is used for the first line.
             - csv_dialect is the dialect as meant in the csv module
               documentation
-            - if output_charset is not None, transcoding is performed from
-              input charser
+            - normally, this method should handle unicode only, but it can still
+            transcode legacy  values, using the two charset kw args.
         """
 
         if return_fields is None:
@@ -806,11 +806,16 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 continue
 
             # transcoding
-            if output_charset is not None and output_charset != input_charset:
-                for k in return_keys:
-                    v = entry.get(k)
-                    if isinstance(v, basestring):
+            for k in return_keys:
+                v = entry.get(k)
+                if isinstance(v, str):
+                    if input_charset is None:
+                        logger.warn("Got encoded string %r but no "
+                                    "input charset indication", v)
+                    if output_charset != input_charset:
                         entry[k] = str_transcode(v)
+                elif isinstance(v, unicode):
+                    entry[k] = v.encode(output_charset)
 
             w.writerow(entry)
 
