@@ -29,6 +29,7 @@ from types import StringType, ListType, TupleType
 
 from Products.CMFCore.utils import getToolByName
 
+from Products.CPSUtil.text import uni_lower
 from Products.CPSSchemas.Vocabulary import ExclusionVocabularyWrapper
 from Products.CPSSchemas.Widget import widgetRegistry
 from Products.CPSSchemas.BasicWidgets import renderHtmlTag
@@ -292,7 +293,7 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
             # sorting here because some storage (LDAP user group)
             # doesn't store ordered list
             value = list(value)
-            value.sort(key=str.lower)
+            value.sort(key=uni_lower)
         if mode == 'view':
             render = ''
             if value is not None:
@@ -324,6 +325,10 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
         widget_id = self.getWidgetId()
         err, v = self._extractValue(datastructure[widget_id])
         if not err and v and not self._checkIdentifier(v):
+            err = 'cpsschemas_err_identifier'
+        try:
+            v = str(v)
+        except UnicodeEncodeError:
             err = 'cpsschemas_err_identifier'
 
         if err:

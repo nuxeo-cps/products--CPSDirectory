@@ -44,6 +44,13 @@ class LoggerZODBDirectory(ZODBDirectory):
         self.tests_called_search = True
         return ZODBDirectory._searchEntries(self, *args, **kwargs)
 
+from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+
+class LoggerZODBDirectory(ZODBDirectory):
+    def _searchEntries(self, *args, **kwargs):
+        self.tests_called_search = True
+        return ZODBDirectory._searchEntries(self, *args, **kwargs)
+
 
 class TestMetaDirectory(ZopeTestCase):
 

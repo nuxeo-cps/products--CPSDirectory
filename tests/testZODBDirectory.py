@@ -268,7 +268,7 @@ class TestZODBDirectory(ZopeTestCase):
         zdir = self.dir
         zdir.createEntry({'idd': 'chien', 'foo': 'ouah', 'bar': 'poil'})
         zdir.createEntry({'idd': 'canard', 'foo': 'coin', 'bar': 'plume'})
-        zdir.createEntry({'idd': 'cobra', 'foo': 'ssss', 'bar': '\xe9caille'})
+        zdir.createEntry({'idd': 'cobra', 'foo': 'ssss', 'bar': u'\xe9caille'})
 
         # forbid side effects
         self.assertEquals(len(zdir.listEntryIds()), 3)
@@ -279,7 +279,7 @@ class TestZODBDirectory(ZopeTestCase):
 
         self.assertEquals("Animal,Cri,Surface\r\n"
                           "chien,ouah,poil\r\n",
-                          zdir.csvExport(foo='ouah', 
+                          zdir.csvExport(foo='ouah', output_charset='latin1',
                                          return_fields=return_fields))
 
         zdir.search_substring_fields = ['bar']
@@ -295,7 +295,7 @@ class TestZODBDirectory(ZopeTestCase):
         
         self.assertEquals("Cri,Surface\r\n"
                           "ssss,\xe9caille\r\n",
-                          zdir.csvExport(idd='cobra', 
+                          zdir.csvExport(idd='cobra', output_charset='latin1',
                                          return_fields=return_fields[1:]))
 
         self.assertEquals("Cri,Surface\r\n"
@@ -312,7 +312,7 @@ class TestZODBDirectory(ZopeTestCase):
         idd_field.checkReadAccess = checkReadAccess
         self.assertEquals("Animal,Cri,Surface\r\n"
                           "cobra,,\xe9caille\r\n",
-                          zdir.csvExport(idd='cobra', 
+                          zdir.csvExport(idd='cobra', output_charset='latin1',
                                          return_fields=return_fields))
 
 

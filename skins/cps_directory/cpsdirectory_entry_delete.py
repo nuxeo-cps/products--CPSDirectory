@@ -6,6 +6,7 @@ This script can be both called with request parameters or with form parameters.
 """
 
 from zExceptions import Forbidden
+from Products.CMFCore.utils import getToolByName
 
 from Products.CMFCore.utils import getToolByName
 

@@ -24,6 +24,7 @@ from copy import deepcopy
 from OFS.SimpleItem import Item
 from OFS.Folder import Folder
 from Products.CPSSchemas.BasicFields import CPSBooleanField
+from Products.CPSSchemas.BasicFields import fromUTF8, toUTF8
 
 class FakeRoot(Folder):
     id = ''
@@ -47,16 +48,6 @@ class FakeMembershipTool(Folder):
     def deleteMembers(self, member_ids, delete_memberareas=1,
                       delete_localroles=0, check_permission=1):
         pass
-
-default_encoding = sys.getdefaultencoding()
-if default_encoding == 'ascii':
-    default_encoding = 'iso-8859-15'
-def toUTF8(s):
-    if not isinstance(s, UnicodeType):
-        s = unicode(s, default_encoding)
-    return s.encode('utf-8')
-def fromUTF8(s):
-    return unicode(s, 'utf-8').encode(default_encoding)
 
 class FakeField:
     def __init__(self, id='', read_expr=None, read_dep=()):

@@ -498,5 +498,9 @@ class IOrderable(Interface):
 class ILDAPServerAccess(Interface):
     """Object storing bind parameters."""
 
+class IPluggableConnection(Interface):
+    """Connector, typically for ZSQL Family"""
+    pass
+
     def getLdapUrl():
         """Return the full LDAP URL."""
