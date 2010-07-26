@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.47.0
+===========================================================
+First release built by: gracinet at: 2010-07-26T22:48:41
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+- UNICODE
+Bug fixes
+~~~~~~~~~
+- #2178: tests fixup after changes in CPSSchemasx
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.46.3
 ===========================================================
 First release built by: gracinet at: 2010-06-30T02:35:15
