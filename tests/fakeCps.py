@@ -60,6 +60,8 @@ class FakeField:
     read_ignore_storage = False
     def getDefault(self, datamodel=None):
         return ''
+    def validate(self, v):
+        return v
     def processValueAfterRead(self, value, *args):
         if self.read_expr is not None:
             return self.read_expr(value, *args)
