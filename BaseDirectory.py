@@ -792,8 +792,17 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                            extrasaction='ignore',
                            dialect=csv_dialect)
 
-        def str_transcode(v):
-            return v.decode(input_charset).encode(output_charset)
+        def basestring_transcode(v):
+            if isinstance(v, str):
+                if input_charset is None:
+                    logger.warn("Got encoded string %r but no "
+                                "input charset indication", v)
+                    return v
+                if output_charset != input_charset:
+                    return v.decode(input_charset).encode(output_charset)
+            elif isinstance(v, unicode):
+                return v.encode(output_charset)
+            return v
 
         w.writerow(dict(return_fields))
         return_keys = tuple(f[0] for f in return_fields)
@@ -805,18 +814,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             if not self.isViewEntryAllowed(entry=entry):
                 continue
 
-            # transcoding
+            # transcodings
             for k in return_keys:
                 v = entry.get(k)
-                if isinstance(v, str):
-                    if input_charset is None:
-                        logger.warn("Got encoded string %r but no "
-                                    "input charset indication", v)
-                    if output_charset != input_charset:
-                        entry[k] = str_transcode(v)
-                elif isinstance(v, unicode):
-                    entry[k] = v.encode(output_charset)
-
+                if isinstance(v, basestring):
+                    v = basestring_transcode(v)
+                elif isinstance(v, list):
+                    v = ', '.join([basestring_transcode(vl) for vl in v])
+                entry[k] = v
             w.writerow(entry)
 
         return out.getvalue()
