@@ -102,7 +102,7 @@ def upgrade_zodb_dirs_unicode(portal):
 
     for z in zdirs:
         total = len(z)
-        logging.info("Starting upgrade for %r (title: %s), with %d entries", z.getId(), z.title, total)
+        logger.info("Starting upgrade for %r (title: %s), with %d entries", z.getId(), z.title, total)
         # GR trying a memory efficient way to iterate on ids
         # maybe dangerous ?
         done = 0
