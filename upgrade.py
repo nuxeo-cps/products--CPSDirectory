@@ -23,6 +23,8 @@ import logging
 
 from Acquisition import aq_base
 from zExceptions import BadRequest
+from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+from Products.CPSSchemas.upgrade import upgrade_datamodel_unicode
 
 try:
     from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
@@ -91,3 +93,25 @@ def upgrade_ldap_server_access(portal):
 
         ldir.manage_changeProperties(ldap_server_access=lsa_id)
         logger.info("Directory '%s' now refers to '%s'", ldir.getId(), lsa_id)
+
+def upgrade_zodb_dirs_unicode(portal):
+    dtool = portal.portal_directories
+
+    logger = logging.getLogger('CPSDirectory upgrade_zodb_dirs_unicode')
+    zdirs = dtool.objectValues(ZODBDirectory.meta_type)
+
+    for z in zdirs:
+        total = len(z)
+        logging.info("Starting upgrade for %r (title: %s), with %d entries", z.getId(), z.title, total)
+        # GR trying a memory efficient way to iterate on ids
+        # maybe dangerous ?
+        done = 0
+        for eid in z._tree.iterkeys():
+            dm = z._getDataModel(eid)
+            upgrade_datamodel_unicode(dm)
+            done += 1
+            if done % 100 == 0:
+                logger.info("Upgraded %d/%d entries for %r", done, total,
+                            z.getId())
+                transaction.commit()
+        logger.info("Finished upgrade for %d/%d entries", done, total)

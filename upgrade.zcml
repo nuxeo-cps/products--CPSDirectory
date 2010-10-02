@@ -11,4 +11,12 @@
       checker=".upgrade.check_ldap_installed" 
       />
 
+  <!-- CPS 3.5.1 upgrades -->
+
+  <cps:upgradeStep
+      title="Upgrade ZODB directory entries to unicode"
+      source="3.5.0" destination="3.5.1"
+      handler=".upgrade.upgrade_zodb_dirs_unicode"
+      />
+
 </configure>
