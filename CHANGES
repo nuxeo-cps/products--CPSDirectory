@@ -6,8 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- #2229: lists in csv export
-- #2216: ZODB directory unicode upgrade step
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
