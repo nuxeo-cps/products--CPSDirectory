@@ -1,4 +1,22 @@
 ===========================================================
+Package: CPSDirectory 1.47.1
+===========================================================
+First release built by: gracinet at: 2010-10-03T11:46:42
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2229: lists in csv export
+- #2216: ZODB directory unicode upgrade step
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.47.0
 ===========================================================
 First release built by: gracinet at: 2010-07-26T22:48:41
