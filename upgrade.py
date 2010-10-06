@@ -20,6 +20,7 @@
 """
 
 import logging
+import transaction
 
 from Acquisition import aq_base
 from zExceptions import BadRequest
