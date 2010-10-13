@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
-- #2247: ZODB directory unicode upgrade failed over 99 entries
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
