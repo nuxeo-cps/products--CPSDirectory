@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.47.2
+===========================================================
+First release built by: gracinet at: 2010-10-13T11:36:07
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2247: ZODB directory unicode upgrade failed over 99 entries
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.47.1
 ===========================================================
 First release built by: gracinet at: 2010-10-03T11:46:42
