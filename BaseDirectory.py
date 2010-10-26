@@ -805,6 +805,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             return v
 
         cpsmcat = getToolByName(self, 'translation_service', None)
+        label_true = label_false = ''
 
         w.writerow(dict(return_fields))
         return_keys = tuple(f[0] for f in return_fields)
@@ -824,13 +825,18 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 elif isinstance(v, list):
                     v = ', '.join([basestring_transcode(vl) for vl in v])
                 elif isinstance(v, bool):
-                    if cpsmcat is None:
-                        v = str(v)
-                    elif v:
-                        v = cpsmcat('label_true', 'true')
-                    else:
-                        v = cpsmcat('label_false', 'false')
-                    v = v.encode(output_charset)
+                    if not label_true:
+                        if cpsmcat is None:
+                            label_true = 'True'
+                            label_false = 'False'
+                        else:
+                            label_true = cpsmcat('cpsschemas_label_true',
+                                                 default='true').encode(
+                                output_charset)
+                            label_false = cpsmcat('cpsschemas_label_false',
+                                                  default='false').encode(
+                                output_charset)
+                    v = v and label_true or label_false
                 entry[k] = v
             w.writerow(entry)
 

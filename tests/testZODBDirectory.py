@@ -307,7 +307,7 @@ class TestZODBDirectory(ZopeTestCase):
         # now with booleans (cheating a lot with schema)
         zdir.createEntry({'idd': 'mute', 'foo': False, 'bar': 'plume'})
         self.assertEquals("Cri,Surface\r\n"
-                          "False,plume",
+                          "False,plume\r\n",
                           zdir.csvExport(idd='mute',
                                          output_charset='utf-8',
                                          return_fields=return_fields[1:]))
