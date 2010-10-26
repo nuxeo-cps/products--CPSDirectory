@@ -304,6 +304,14 @@ class TestZODBDirectory(ZopeTestCase):
                                          output_charset='utf-8',
                                          return_fields=return_fields[1:]))
 
+        # now with booleans (cheating a lot with schema)
+        zdir.createEntry({'idd': 'mute', 'foo': False, 'bar': 'plume'})
+        self.assertEquals("Cri,Surface\r\n"
+                          "False,plume",
+                          zdir.csvExport(idd='mute',
+                                         output_charset='utf-8',
+                                         return_fields=return_fields[1:]))
+
         # minimal field security check and resilience
         from Products.CPSSchemas.DataModel import ReadAccessError
         def checkReadAccess(*args):
@@ -311,9 +319,11 @@ class TestZODBDirectory(ZopeTestCase):
         idd_field = self.portal.portal_schemas.testzodb['foo']
         idd_field.checkReadAccess = checkReadAccess
         self.assertEquals("Animal,Cri,Surface\r\n"
+
                           "cobra,,\xe9caille\r\n",
                           zdir.csvExport(idd='cobra', output_charset='latin1',
                                          return_fields=return_fields))
+
 
 
     def testCache(self):

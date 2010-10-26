@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- #2244: allow csv export of booleans in directories
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

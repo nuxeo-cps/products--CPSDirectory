@@ -804,6 +804,8 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 return v.encode(output_charset)
             return v
 
+        cpsmcat = getToolByName(self, 'translation_service', None)
+
         w.writerow(dict(return_fields))
         return_keys = tuple(f[0] for f in return_fields)
 
@@ -821,6 +823,14 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                     v = basestring_transcode(v)
                 elif isinstance(v, list):
                     v = ', '.join([basestring_transcode(vl) for vl in v])
+                elif isinstance(v, bool):
+                    if cpsmcat is None:
+                        v = str(v)
+                    elif v:
+                        v = cpsmcat('label_true', 'true')
+                    else:
+                        v = cpsmcat('label_false', 'false')
+                    v = v.encode(output_charset)
                 entry[k] = v
             w.writerow(entry)
 
