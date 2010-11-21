@@ -24,8 +24,12 @@ import transaction
 
 from Acquisition import aq_base
 from zExceptions import BadRequest
-from Products.CPSDirectory.ZODBDirectory import ZODBDirectory
+
 from Products.CPSSchemas.upgrade import upgrade_datamodel_unicode
+from Products.CPSSchemas.FieldNamespace import fieldStorageNamespace
+
+from ZODBDirectory import ZODBDirectory
+import FieldNamespace
 
 try:
     from Products.CPSDirectory.LDAPBackingDirectory import LDAPBackingDirectory
@@ -47,7 +51,7 @@ def upgrade_ldap_server_access(portal):
     """Move bind params from LDAPBackingDirectory to LDAPServerAccess instances.
     """
 
-    old_props = ('ldap_server', 'ldap_port', 'ldap_use_ssl', 
+    old_props = ('ldap_server', 'ldap_port', 'ldap_use_ssl',
                  'ldap_bind_dn', 'ldap_bind_password')
 
     new_props = ('server', 'port', 'use_ssl', 'bind_dn', 'bind_password')
@@ -59,7 +63,7 @@ def upgrade_ldap_server_access(portal):
         (tuple(lsa.getProperty(prop) for prop in new_props), lsa.getId())
         for lsa in dtool.objectValues([LDAPServerAccess.meta_type]))
 
-    
+
     logger = logging.getLogger('CPSDirectory upgrade_ldap_server_access')
     for ldir in dtool.objectValues([LDAPBackingDirectory.meta_type]):
         # NB: PropertyManager API wouldn't work in general
@@ -71,7 +75,7 @@ def upgrade_ldap_server_access(portal):
             continue
         if None in params:
             logger.warn(
-                'Directory %s is in a mixed state and needs manual cleanup', 
+                'Directory %s is in a mixed state and needs manual cleanup',
                 ldir.getId())
             continue
 
@@ -101,14 +105,24 @@ def upgrade_zodb_dirs_unicode(portal):
     logger = logging.getLogger('CPSDirectory upgrade_zodb_dirs_unicode')
     zdirs = dtool.objectValues(ZODBDirectory.meta_type)
 
+    # monkey patching to avoid ldap problems with directories
+    # with crossGet/crossSet if ldap dirs not ready
+    crossget = FieldNamespace.crossGetList
+    crossset = FieldNamespace.crossSetList
+    def noop(*args):
+        "Do nothing."
+    fieldStorageNamespace.register('dirCrossGetList', noop)
+    fieldStorageNamespace.register('dirCrossSetList', noop)
+
     for z in zdirs:
         total = len(z)
-        logger.info("Starting upgrade for %r (title: %s), with %d entries", z.getId(), z.title, total)
+        logger.info("Starting upgrade for %r (title: %s), with %d entries",
+                    z.getId(), z.title, total)
         # GR trying a memory efficient way to iterate on ids
         # maybe dangerous ?
         done = 0
         for eid in z._tree.iterkeys():
-            dm = z._getDataModel(eid)
+            dm = z._getDataModel(eid, check_acls=0)
             upgrade_datamodel_unicode(dm)
             done += 1
             if done % 100 == 0:
@@ -116,3 +130,10 @@ def upgrade_zodb_dirs_unicode(portal):
                             z.getId())
                 transaction.commit()
         logger.info("Finished upgrade for %d/%d entries", done, total)
+
+    # restoring
+    fieldStorageNamespace.register('dirCrossGetList',
+                                   FieldNamespace.crossGetList)
+    fieldStorageNamespace.register('dirCrossSetList',
+                                   FieldNamespace.crossSetList)
+
