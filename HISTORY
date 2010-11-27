@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.47.3
+===========================================================
+First release built by: gracinet at: 2010-11-27T04:24:39
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2244: allow csv export of booleans in directories
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.47.2
 ===========================================================
 First release built by: gracinet at: 2010-10-13T11:36:07
