@@ -19,8 +19,7 @@
 """BaseDirectory
 """
 
-from zLOG import LOG, DEBUG, INFO
-
+import logging
 import csv
 from StringIO import StringIO
 from urllib import urlencode
@@ -49,6 +48,7 @@ from Products.CPSSchemas.DataStructure import DataStructure
 from Products.CPSSchemas.Field import ReadAccessError
 from Products.CPSSchemas.Field import WriteAccessError
 
+logger = logging.getLogger(__name__)
 
 _marker = []
 
@@ -517,8 +517,7 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         """Edit an entry in the directory, unrestricted.
         """
         if self.readonly:
-            LOG('BaseDirectory._editEntry', INFO,
-                'directory %s is readonly' % self.getId())
+            logger.info('_editEntry: directory %r is readonly', self.getId())
             return
         id = entry[self.id_field]
         dm = self._getDataModel(id, check_acls=check_acls)
