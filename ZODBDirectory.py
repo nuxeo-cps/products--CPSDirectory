@@ -40,11 +40,26 @@ from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 
 from Products.CPSDirectory.utils import QueryMatcher
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import BaseDirectoryStorageMixin
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
 from Products.CPSDirectory.interfaces import IContentishDirectory
 
 from zope.interface import implements
+
+
+class ZODBDirectoryStorageAdapter(BaseDirectoryStorageMixin,
+                                  AttributeStorageAdapter):
+    """Brings directory specifics to Attribute Storage Adapter."""
+
+    def __init__(self, schema, ob, _dir, **kw):
+        AttributeStorageAdapter.__init__(self, schema, ob, proxy=None, **kw)
+        self._dir = _dir
+        getId = getattr(aq_base(ob), 'getId', None)
+        if getId is None:
+            self._id = None
+        else:
+            self._id = getId()
 
 
 class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
@@ -119,7 +134,8 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         for dep_id in dep_ids:
             field_ids_d[dep_id] = None
         field_ids = field_ids_d.keys()
-        adapter = AttributeStorageAdapter(schema, None, field_ids=field_ids)
+        adapter = ZODBDirectoryStorageAdapter(schema, None, self,
+                                              field_ids=field_ids)
         res = []
         for id, ob in self.objectItems():
             adapter.setContextObject(ob)
@@ -246,7 +262,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
 
         # Do the search.
         schema = self._getUniqueSchema()
-        adapter = AttributeStorageAdapter(schema, None,
+        adapter = ZODBDirectoryStorageAdapter(schema, None, self,
                                           field_ids=list(field_ids))
         res = []
         for id, ob in self.objectItems():
@@ -282,7 +298,7 @@ class ZODBDirectory(PropertiesPostProcessor, BTreeFolder2,
         else:
             # Creation
             ob = None
-        adapters = [AttributeStorageAdapter(schema, ob, **kw)
+        adapters = [ZODBDirectoryStorageAdapter(schema, ob, self, **kw)
                     for schema in self._getSchemas(search=search)]
         return adapters
 

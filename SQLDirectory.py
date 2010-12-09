@@ -35,7 +35,9 @@ from OFS.Cache import Cacheable
 from Products.CMFCore.utils import getToolByName
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.StorageAdapter import deprecate_getContentUrl
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import BaseDirectoryStorageMixin
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 
@@ -683,7 +685,7 @@ class SQLDirectory(BaseDirectory, Cacheable):
 
 InitializeClass(SQLDirectory)
 
-class SQLStorageAdapter(BaseStorageAdapter):
+class SQLStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
     """SQL  Storage Adapter
 
     This adapter gets and sets data from an SQL database.
@@ -725,8 +727,14 @@ class SQLStorageAdapter(BaseStorageAdapter):
         dir._updateDataInSQL(self._id, sql_data)
 
     def _getContentUrl(self, entry_id, field_id):
+        deprecate_getContentUrl()
         raise NotImplementedError
         return '%s/getImageFieldData?entry_id=%s&field_id=%s' % (
             self._dir.absolute_url(), entry_id, field_id)
+
+    def _getSubContentUri(self, field_id, field, absolute=False):
+        # interpreting the above _getContentUrl as a non-ready directory type.
+        return
+
 
 InitializeClass(SQLStorageAdapter)

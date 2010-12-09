@@ -36,10 +36,12 @@ from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getEngine
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.StorageAdapter import deprecate_getContentUrl
 
 from Products.CPSDirectory.utils import QueryMatcher
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import BaseDirectoryStorageMixin
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
@@ -628,7 +630,7 @@ class MetaDirectory(BaseDirectory):
 InitializeClass(MetaDirectory)
 
 
-class MetaStorageAdapter(BaseStorageAdapter):
+class MetaStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
     """Meta Storage Adapter
 
     This adapter gets and sets data from other backing directories.
@@ -720,7 +722,12 @@ class MetaStorageAdapter(BaseStorageAdapter):
                     b_dir._createEntry(merged)
 
     def _getContentUrl(self, entry_id, field_id):
-        """ giving content url if backing has it"""
+        """ giving content url if backing has it
+        GR: this can't work, because access control is typically very different
+        or there's a huge security hole.
+        Generic _getSubContentUri should work
+        """
+        deprecate_getContentUrl()
         result = None
         entry, b_dir = self._dir._getEntryFromBacking(self._id)
 

@@ -28,6 +28,7 @@ from logging import getLogger
 
 import re
 import sys
+from urllib import urlencode
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -40,10 +41,12 @@ from Products.CPSUtil.ssha import sshaDigest
 from Products.CPSUtil.testing.environment import isTestingEnvironment
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.StorageAdapter import deprecate_getContentUrl
 from Products.CPSSchemas.Field import ValidationError
 from Products.CPSSchemas.BasicFields import LDAP_FALSE, LDAP_TRUE
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import BaseDirectoryStorageMixin
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 from Products.CPSDirectory.BaseDirectory import _replaceProperty
@@ -640,16 +643,6 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
                 filter = other
         return filter
 
-    # XXX security
-    def getImageFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
-        """Gets the raw data from a non ZODB image field"""
-        entry = self.getEntry(entry_id)
-        value = entry[field_id]
-        if value is None:
-            return ''
-        else:
-            return value.index_html(REQUEST, RESPONSE)
-
     #
     # LDAP code
     #
@@ -994,7 +987,7 @@ class LDAPBackingDirectory(BaseDirectory, Cacheable):
 InitializeClass(LDAPBackingDirectory)
 
 
-class LDAPBackingStorageAdapter(BaseStorageAdapter):
+class LDAPBackingStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
     """LDAP Backing Storage Adapter
 
     This adapter gets and sets data from an LDAP server.
@@ -1050,11 +1043,12 @@ class LDAPBackingStorageAdapter(BaseStorageAdapter):
         # XXX treat change of rdn
 
         dir = self._dir
-        ldap_attrs = dir.convertDataToLDAP(data, keep_empty=1, 
+        ldap_attrs = dir.convertDataToLDAP(data, keep_empty=1,
                                            schema=self._schema)
         dir.modifyLDAP(dn, ldap_attrs)
 
     def _getContentUrl(self, entry_id, field_id):
+        deprecate_getContentUrl()
         return '%s/getImageFieldData?entry_id=%s&field_id=%s' % (
             self._dir.absolute_url(), entry_id, field_id)
 

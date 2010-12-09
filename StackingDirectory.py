@@ -21,6 +21,7 @@
 A directory that redirects requests to other backing directories.
 """
 
+# don't bother fixing zLOG, chances are that this code won't last for long
 from zLOG import LOG, DEBUG, WARNING
 from types import ListType, TupleType, StringType
 
@@ -32,8 +33,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.StorageAdapter import deprecate_getContentUrl
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
+from Products.CPSDirectory.BaseDirectory import BaseDirectoryStorageMixin
 from Products.CPSDirectory.BaseDirectory import AuthenticationFailed
 from Products.CPSDirectory.BaseDirectory import ConfigurationError
 
@@ -388,7 +391,7 @@ class StackingDirectory(BaseDirectory):
 InitializeClass(StackingDirectory)
 
 
-class StackingStorageAdapter(BaseStorageAdapter):
+class StackingStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
     """Stacking Storage Adapter
 
     This adapter gets and sets data from other backing directories.
@@ -461,7 +464,12 @@ class StackingStorageAdapter(BaseStorageAdapter):
             b_dir._createEntry(data)
 
     def _getContentUrl(self, entry_id, field_id):
-        """ giving content url if backing has it"""
+        """ giving content url if backing has it.
+        GR: this can't work, because access control is typically very different
+        or there's a huge security hole.
+        TODO: write appropriate getSubContentUri going through this dir
+        """
+        deprecate_getContentUrl()
         result = None
         entry, b_dir = self._dir._getEntryFromBacking(self._id)
 

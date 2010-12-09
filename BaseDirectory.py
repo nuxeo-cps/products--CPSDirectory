@@ -31,6 +31,7 @@ from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from AccessControl import ModuleSecurityInfo
 from DateTime.DateTime import DateTime
+from OFS.Image import File, Image
 
 from Products.PageTemplates.Expressions import SecureModuleImporter
 from Products.CMFCore.utils import getToolByName
@@ -42,7 +43,6 @@ from Products.PageTemplates.TALES import CompilerError
 
 from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
 from Products.CPSSchemas.Schema import CPSSchema
-from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 from Products.CPSSchemas.DataModel import DataModel
 from Products.CPSSchemas.DataStructure import DataStructure
 from Products.CPSSchemas.Field import ReadAccessError
@@ -588,6 +588,35 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
     #
     # Rendering API
     #
+
+    def _getRawFieldData(self, bin_cls, entry_id, field_id, REQUEST, RESPONSE):
+        """Serve the raw data from a binary field.
+
+        Useful for images, or any attachment (X509 certificates...)
+        bin_cls is the class to use.
+        Some may perform interesting treatment, like automatic content
+        recognition and that may turn crucial for proper serving.
+        """
+        entry = self.getEntry(entry_id) # goes through ACL check
+        value = entry[field_id]
+        if value is None:
+            return ''
+
+        if isinstance(value, str):
+            value = bin_cls(field_id, value, '')
+        return value.index_html(REQUEST, RESPONSE)
+
+    security.declarePublic('getImageFieldData')
+    def getImageFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
+        """Serve an image from an entry field."""
+        return self._getRawFieldData(Image, entry_id, field_id, REQUEST,
+                                     RESPONSE)
+
+    security.declarePublic('getFileFieldData')
+    def getFileFieldData(self, entry_id, field_id, REQUEST, RESPONSE):
+        """Serve an attachment from an entry field."""
+        return self._getRawFieldData(File, entry_id, field_id, REQUEST,
+                                     RESPONSE)
 
     security.declarePublic('renderEntryDetailed')
     def renderEntryDetailed(self, id, layout_mode='view', **kw):
@@ -1272,3 +1301,21 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
         REQUEST.RESPONSE.redirect(self.absolute_url()+'/manage_entryLocalRoles?'+args)
 
 InitializeClass(BaseDirectory)
+
+
+class BaseDirectoryStorageMixin:
+    """Common stuff for most directory related adapters.
+    """
+
+    def _getSubContentUri(self, field_id, field, absolute=False):
+        """See docstring of BaseStorageAdapter."""
+
+        if self._id is None or self._dir is None:
+            return # no point giving an URI for nothing
+
+        if absolute:
+            base_uri = self._dir.absolute_url()
+        else:
+            base_uri = self._dir.absolute_url_path()
+        return (base_uri + '/getFileFieldData?' +
+                urlencode(dict(entry_id=self._id, field_id=field_id)))

@@ -30,6 +30,7 @@ from DateTime.DateTime import DateTime
 from OFS.Image import File, Image
 
 from Products.CPSSchemas.StorageAdapter import BaseStorageAdapter
+from Products.CPSSchemas.StorageAdapter import BaseDirectoryStorageMixin
 from Products.CPSSchemas.BasicFields import CPSStringListField, CPSDateTimeField
 
 from Products.CPSDirectory.BaseDirectory import BaseDirectory
@@ -497,7 +498,7 @@ class LDAPDirectory(BaseDirectory):
 InitializeClass(LDAPDirectory)
 
 
-class LDAPStorageAdapter(BaseStorageAdapter):
+class LDAPStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
     """LDAP Storage Adapter
 
     This adapter gets and sets data from an LDAP server.
@@ -593,6 +594,7 @@ class LDAPStorageAdapter(BaseStorageAdapter):
                 raise ValueError("LDAP error: %s" % msg)
 
     def _getContentUrl(self, entry_id, field_id):
+        deprecate_getContentUrl()
         return '%s/getImageFieldData?entry_id=%s&field_id=%s' % (
             self._dir.absolute_url(), entry_id, field_id)
 
