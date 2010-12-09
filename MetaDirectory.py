@@ -725,7 +725,7 @@ class MetaStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
         """ giving content url if backing has it
         GR: this can't work, because access control is typically very different
         or there's a huge security hole.
-        Generic _getSubContentUri should work
+        Generic _getSubFileUri should work
         """
         deprecate_getContentUrl()
         result = None

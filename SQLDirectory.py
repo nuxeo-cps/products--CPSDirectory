@@ -732,7 +732,7 @@ class SQLStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
         return '%s/getImageFieldData?entry_id=%s&field_id=%s' % (
             self._dir.absolute_url(), entry_id, field_id)
 
-    def _getSubContentUri(self, field_id, field, absolute=False):
+    def _getSubFileUri(self, field_id, field, absolute=False):
         # interpreting the above _getContentUrl as a non-ready directory type.
         return
 

@@ -467,7 +467,7 @@ class StackingStorageAdapter(BaseDirectoryStorageMixin, BaseStorageAdapter):
         """ giving content url if backing has it.
         GR: this can't work, because access control is typically very different
         or there's a huge security hole.
-        TODO: write appropriate getSubContentUri going through this dir
+        TODO: write appropriate getSubFileUri going through this dir
         """
         deprecate_getContentUrl()
         result = None

@@ -1307,7 +1307,7 @@ class BaseDirectoryStorageMixin:
     """Common stuff for most directory related adapters.
     """
 
-    def _getSubContentUri(self, field_id, field, absolute=False):
+    def _getSubFileUri(self, field_id, field, absolute=False):
         """See docstring of BaseStorageAdapter."""
 
         if self._id is None or self._dir is None:
