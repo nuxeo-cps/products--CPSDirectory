@@ -1,9 +1,9 @@
 Requires
 ~~~~~~~~
-- CPSSchemas >= 1.14.0
+-
 New features
 ~~~~~~~~~~~~
-- #2308 : almost transparent support for binary content (images...)
+-
 Bug fixes
 ~~~~~~~~~
 -
