@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.48.0
+===========================================================
+First release built by: gracinet at: 2010-12-30T12:10:10
+Requires
+~~~~~~~~
+- CPSSchemas >= 1.14.0
+New features
+~~~~~~~~~~~~
+- #2308 : almost transparent support for binary content (images...)
+Bug fixes
+~~~~~~~~~
+-
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.47.3
 ===========================================================
 First release built by: gracinet at: 2010-11-27T04:24:39
