@@ -10,7 +10,8 @@
     <input type="hidden" name="dirname" value="."
       tal:attributes="value request/dirname|string:members" />
   </p>
-<table cellpadding="0" cellspacing="2" summary="form layout">
+<table cellpadding="0" cellspacing="0" summary="form layout"
+       class="directory directory_search">
   <tr tal:repeat="row layout/rows">
     <tal:block repeat="cell row">
     <tal:block define="widget cell/widget;
@@ -18,16 +19,16 @@
                        err python: ds.getError(wid);
                        is_required python: cell['widget_mode'] == 'edit' and widget.is_required;
                        ">
-      <td align="right"  valign="top">
+      <td class="directory_label">
         <div class="label" tal:condition="widget/label_edit">
           <span i18n:translate="" tal:condition="widget/is_i18n"
             tal:content="widget/label_edit">label</span
           ><span tal:condition="not:widget/is_i18n"
             tal:content="widget/label_edit">label</span
-          >&nbsp;:
+          >
         </div>
       </td>
-      <td valign="top" colspan="1"
+      <td class="directory_field" colspan="1"
         tal:attributes="colspan python:cell['ncols']*2-1">
         <div tal:attributes="class python:err and 'error' or nothing">
           <div tal:attributes="class widget/css_class|nothing">
