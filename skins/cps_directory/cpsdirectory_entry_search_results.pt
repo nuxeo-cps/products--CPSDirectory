@@ -101,9 +101,6 @@
                i18n:translate="batch_next">Next</a>
           </td>
         </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
       </table>
     </tal:block>
   </div>
