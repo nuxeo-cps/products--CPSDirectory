@@ -14,17 +14,20 @@
   isAdmin python:here.portal_membership.getAuthenticatedMember().has_role(['Manager',]);
   cpsmcat nocall:here/translation_service;
   ">
-  <div style="padding-left: 1.5em">
+   <div>
     <form action="cpsdirectory_entry_delete_form" method="post">
-      <table tal:condition="results" summary="search result list">
-        <tr>
-          <th tal:condition="isAdmin" i18n:translate="label_selection">
-            Selection
+      <table tal:condition="results" summary="search result list"
+	     id="folder_content" class="contentListing">
+       <thead>
+         <tr>
+          <th tal:condition="isAdmin">
           </th>
           <tal:block repeat="field fields">
             <th i18n:translate="" tal:content="field/title">id</th>
           </tal:block>
         </tr>
+        </thead>
+        <tbody id="folder_content_tbody">
         <tal:block repeat="result python:batch_list[0]">
           <tal:block define="id python:result[0];
             data python:result[1];
@@ -33,24 +36,32 @@
             <tr tal:attributes="class python:test(even, 'even', 'odd')">
               <tal:block repeat="field fields">
                 <tal:block tal:condition="isAdmin">
-                  <td tal:condition="not:repeat/field/index">
-                    <input type="checkbox" name="ids:list" tal:attributes="value id" />
+                  <td tal:condition="not:repeat/field/index"
+		      class="icon_column">
+                    <input type="checkbox" name="ids:list"
+			   tal:attributes="value id" />
                   </td>
                 </tal:block>
                 <td>
                   <a href="."
                     tal:attributes="href string:${portal_url}/cpsdirectory_entry_view?dirname=${dirname}&id=${id}"
-                    ><strong tal:content="structure python:data.get(field['id'])">john</strong></a>
+                    >
+		   <strong
+		     tal:content="structure python:data.get(field['id'])">
+		    john
+		  </strong>
+		  </a>
                 </td>
               </tal:block>
             </tr>
           </tal:block>
         </tal:block>
+       </tbody>
       </table>
       <div tal:condition="not:results">
         <span i18n:translate="label_no_results" />
       </div>
-      <p>
+      <p class="buttons">
         <input type="hidden" name="dirname" tal:attributes="value dirname" />
         <input type="hidden" name="ids:tokens:default" value="" />
         <tal:block condition="python:isAdmin and results">
@@ -61,8 +72,6 @@
           <input type="submit" class="destructive" value="button_delete"
             i18n:attributes="value"/>
         </tal:block>
-        <button type="button" onclick="javascript:history.back()"
-          i18n:translate="button_back">Back</button>
       </p>
     </form>
     <tal:block condition="python:batch_info and batch_info['nb_pages'] > 1">
