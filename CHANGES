@@ -3,10 +3,10 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
-- Creation of the stable CPS-3.5 branch
+-
 Bug fixes
 ~~~~~~~~~
-- #2457: unit test relied on iso-8859-15 chars
+-
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
