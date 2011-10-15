@@ -21,35 +21,35 @@ base_url = utool.getBaseUrl()
 create_action = {
     'id': 'new_entry',
     'url': base_url+'cpsdirectory_entry_create_form?dirname='+dirname,
-    'name': 'cpsdir_label_create_entry',
+    'title': 'cpsdir_label_create_entry',
     'category': 'object',
     }
 
 search_action = {
     'id': 'search_entry',
     'url': base_url+'cpsdirectory_entry_search_form?dirname='+dirname,
-    'name': 'cpsdir_label_search_entry',
+    'title': 'cpsdir_label_search_entry',
     'category': 'object'
     }
 
 view_action = {
     'id': 'view_entry',
     'url': base_url+'cpsdirectory_entry_view?dirname='+dirname+'&id='+id,
-    'name': 'cpsdir_label_view_entry',
+    'title': 'cpsdir_label_view_entry',
     'category': 'object',
     }
 
 edit_action = {
     'id': 'edit_entry',
     'url': base_url+'cpsdirectory_entry_edit_form?dirname='+dirname+'&id='+id,
-    'name': 'cpsdir_label_edit_entry',
+    'title': 'cpsdir_label_edit_entry',
     'category': 'object',
     }
 
 delete_action = {
     'id': 'delete_entry',
     'url': base_url+'cpsdirectory_entry_delete_form?dirname='+dirname+'&id='+id,
-    'name': 'cpsdir_label_delete_entry',
+    'title': 'cpsdir_label_delete_entry',
     'category': 'object',
     }
 
