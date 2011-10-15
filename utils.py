@@ -1,4 +1,3 @@
-#-*- coding=iso-8859-15 -*-
 # (C) Copyright 2004 Nuxeo SARL <http://nuxeo.com>
 # Author: Georges Racinet <gracinet@nuxeo.com>
 #
@@ -57,10 +56,10 @@ class QueryMatcher(object):
     Substring behaviour and accents:
     >>> qm = QueryMatcher({'id' : 'fooe'}, accepted_keys=['id'],
     ...                    substring_keys=['id'])
-    >>> qm.match({'id':'SpamFooÉggs'})
+    >>> qm.match({'id': u'SpamFoo\xc9ggs'})
     True
 
-    >>> qm = QueryMatcher({'id' : 'fooé'}, accepted_keys=['id'],
+    >>> qm = QueryMatcher({'id' : u'foo\xe9'}, accepted_keys=['id'],
     ...                    substring_keys=['id'])
     >>> qm.match({'id':'SpamFooEggs'})
     True
