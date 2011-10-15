@@ -25,7 +25,7 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore.utils import SimpleItemWithProperties
-from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSUtil.property import PropertiesPostProcessor
 from Products.CPSDirectory.interfaces import ILDAPServerAccess
 
 from zope.interface import implements

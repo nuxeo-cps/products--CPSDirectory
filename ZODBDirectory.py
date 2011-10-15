@@ -35,7 +35,7 @@ from OFS.Cache import Cacheable
 from Products.CMFCore.permissions import ManagePortal
 from Products.BTreeFolder2.BTreeFolder2 import BTreeFolder2
 
-from Products.CPSUtil.PropertiesPostProcessor import PropertiesPostProcessor
+from Products.CPSUtil.property import PropertiesPostProcessor
 from Products.CPSSchemas.StorageAdapter import AttributeStorageAdapter
 
 from Products.CPSDirectory.utils import QueryMatcher
