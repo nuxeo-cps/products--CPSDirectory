@@ -1,6 +1,8 @@
 ##parameters=dir, datastructure, **kw
 
 from ZTUtils import make_query
+from zExceptions import Redirect
+
 from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import SearchSizeLimitExceeded
 
@@ -47,9 +49,7 @@ if len(results) == 1:
     if dir.isViewEntryAllowed(id=eid):
         args = make_query(dirname=dir.getId(), id=eid)
         base_url = getToolByName(context, 'portal_url').getBaseUrl()
-        context.REQUEST.RESPONSE.redirect(
-            '%scpsdirectory_entry_view?%s' % (base_url, args))
-        return '', ''
+        raise Redirect('%scpsdirectory_entry_view?%s' % (base_url, args))
 
 for field, process_meth in process_fields.items():
     meth = getattr(context, process_meth, None)
