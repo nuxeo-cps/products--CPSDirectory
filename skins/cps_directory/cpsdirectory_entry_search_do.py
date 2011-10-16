@@ -1,6 +1,7 @@
 ##parameters=dir, datastructure, **kw
-# $Id$
 
+from ZTUtils import make_query
+from Products.CMFCore.utils import getToolByName
 from Products.CPSDirectory.BaseDirectory import SearchSizeLimitExceeded
 
 datamodel = datastructure.getDataModel()
@@ -38,6 +39,17 @@ try:
 except SearchSizeLimitExceeded, e:
     rendered = dir.cpsdirectory_entry_search_errors(exception=e)
     return rendered, 'results'
+
+if len(results) == 1:
+    eid = str(results[0][0])
+    # Should user be Unauthorized, at least keep expliciteness and don't
+    # automatically redirect
+    if dir.isViewEntryAllowed(id=eid):
+        args = make_query(dirname=dir.getId(), id=eid)
+        base_url = getToolByName(context, 'portal_url').getBaseUrl()
+        context.REQUEST.RESPONSE.redirect(
+            '%scpsdirectory_entry_view?%s' % (base_url, args))
+        return '', ''
 
 for field, process_meth in process_fields.items():
     meth = getattr(context, process_meth, None)
