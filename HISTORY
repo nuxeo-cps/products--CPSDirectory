@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.49.1-CPS-3.5
+===========================================================
+First release built by: gracinet at: 2011-11-23T19:44:30
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2475: directly jump to entry if there's a single result
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.49.0-CPS-3.5
 ===========================================================
 First release built by: gracinet at: 2011-09-28T20:54:54
