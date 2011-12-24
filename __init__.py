@@ -50,8 +50,6 @@ except ImportError:
 import SQLConnector
 
 import DirectoryTool
-# Register widgets. Don't remove.
-import DirectoryWidgets
 # Register fields
 import DirectoryFields
 
