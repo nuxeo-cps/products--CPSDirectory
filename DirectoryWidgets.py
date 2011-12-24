@@ -14,12 +14,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
-#
-# $Id$
-"""Directory widget types.
 
-Definition of directory-related widget types.
-"""
+"""Directory related widgets."""
 
 from zLOG import LOG, DEBUG, TRACE
 from urllib import urlencode
@@ -30,13 +26,13 @@ from types import StringType, ListType, TupleType
 from Products.CMFCore.utils import getToolByName
 
 from Products.CPSUtil.text import uni_lower
+from Products.CPSUtil.html import renderHtmlTag
 from Products.CPSSchemas.Vocabulary import ExclusionVocabularyWrapper
-from Products.CPSSchemas.Widget import widgetRegistry
-from Products.CPSSchemas.BasicWidgets import renderHtmlTag
-from Products.CPSSchemas.BasicWidgets import CPSSelectWidget
-from Products.CPSSchemas.BasicWidgets import CPSMultiSelectWidget
+
 from Products.CPSSchemas.BasicWidgets import CPSIdentifierWidget
-from Products.CPSSchemas.ExtendedWidgets import CPSGenericMultiSelectWidget
+from Products.CPSSchemas.widgets.select import CPSSelectWidget
+from Products.CPSSchemas.widgets.select import CPSMultiSelectWidget
+from Products.CPSSchemas.widgets.select import CPSGenericMultiSelectWidget
 
 class EntryMixin:
     """Mixin class that knows how to access id and title from
@@ -183,9 +179,6 @@ class CPSDirectoryEntryWidget(CPSSelectWidget, EntryMixin):
 
 InitializeClass(CPSDirectoryEntryWidget)
 
-widgetRegistry.register(CPSDirectoryEntryWidget)
-
-##################################################
 
 class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
     """Directory multi-entries widget.
@@ -312,9 +305,6 @@ class CPSDirectoryMultiEntriesWidget(CPSMultiSelectWidget, EntryMixin):
 
 InitializeClass(CPSDirectoryMultiEntriesWidget)
 
-widgetRegistry.register(CPSDirectoryMultiEntriesWidget)
-
-##################################################
 
 class CPSUserIdentifierWidget(CPSIdentifierWidget):
     """Identifier widget."""
@@ -351,9 +341,6 @@ class CPSUserIdentifierWidget(CPSIdentifierWidget):
 
 InitializeClass(CPSUserIdentifierWidget)
 
-widgetRegistry.register(CPSUserIdentifierWidget)
-
-##################################################
 
 class CPSSubSuperGroupMultiSelectWidget(CPSGenericMultiSelectWidget):
     """A variant that discards the entries from an auxiliary field."""
@@ -383,6 +370,3 @@ class CPSSubSuperGroupMultiSelectWidget(CPSGenericMultiSelectWidget):
         return ExclusionVocabularyWrapper(voc, excl)
 
 InitializeClass(CPSSubSuperGroupMultiSelectWidget)
-
-widgetRegistry.register(CPSSubSuperGroupMultiSelectWidget)
-
