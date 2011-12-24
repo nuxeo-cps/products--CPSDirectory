@@ -13,32 +13,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
-#
-# $Id$
 """CPSDirectory init.
 """
 
 import sys
-from zLOG import LOG, INFO, DEBUG
+
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CPSUtil.testing.environment import setTestingEnvironmentIfNeeded
 
 # for tests
 setTestingEnvironmentIfNeeded()
-
-import_errors = [] # Hold the tracebacks for failed imports.
-try:
-    from Products.LDAPUserGroupsFolder import LDAPDelegate
-except ImportError:
-    import_errors.append(sys.exc_info())
-    try:
-        from Products.LDAPUserFolder import LDAPDelegate
-    except ImportError:
-        LDAPDelegate = None
-        import_errors.append(sys.exc_info())
-has_ldap_delegate = (LDAPDelegate is not None)
-del LDAPDelegate
 
 try:
     import ldap
@@ -64,15 +49,6 @@ from StackingDirectory import StackingDirectory
 from SQLDirectory import SQLDirectory
 from IndirectDirectory import IndirectDirectory
 
-if has_ldap_delegate:
-    from LDAPDirectory import LDAPDirectory
-else:
-    LOG('LDAPDirectory', INFO, "Disabled (no LDAP user folder product found).")
-    # Display the tracebacks for further info in DEBUG mode.
-    #for error in import_errors:
-    #    LOG('LDAPDirectory', DEBUG, 'Import Traceback',
-    #        error=error)
-
 if has_ldap:
     from LDAPBackingDirectory import LDAPBackingDirectory
 
@@ -80,11 +56,6 @@ if has_ldap:
 # Vocabularies
 from DirectoryVocabulary import DirectoryVocabulary
 from DirectoryEntryVocabulary import DirectoryEntryVocabulary
-if has_ldap_delegate:
-    from LDAPDirectoryVocabulary import LDAPDirectoryVocabulary
-else:
-    LOG('LDAPDirectoryVocabulary', INFO,
-        "Disabled (no LDAP user folder product found).")
 from IndirectDirectoryVocabulary import IndirectDirectoryVocabulary
 
 
@@ -112,8 +83,6 @@ def initialize(registrar):
     DirectoryTypeRegistry.register(MetaDirectory)
     DirectoryTypeRegistry.register(StackingDirectory)
     DirectoryTypeRegistry.register(SQLDirectory)
-    if has_ldap_delegate:
-        DirectoryTypeRegistry.register(LDAPDirectory)
     if has_ldap:
         DirectoryTypeRegistry.register(LDAPBackingDirectory)
     DirectoryTypeRegistry.register(IndirectDirectory)
