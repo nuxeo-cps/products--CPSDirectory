@@ -2,8 +2,8 @@
  <!-- Registration for the widget classes provided by CPSSchemas itself.  -->
 
  <!--  CPS 3.5.2 to 3.6 reorg -->
- <widget class=".DirectoryWidgets.CPSDirectoryEntryWidget"/>
- <widget class=".DirectoryWidgets.CPSDirectoryMultiEntriesWidget"/>
- <widget class=".DirectoryWidgets.CPSUserIdentifierWidget"/>
- <widget class=".DirectoryWidgets.CPSSubSuperGroupMultiSelectWidget"/>
+ <widget class=".widgets.CPSDirectoryEntryWidget"/>
+ <widget class=".widgets.CPSDirectoryMultiEntriesWidget"/>
+ <widget class=".widgets.CPSUserIdentifierWidget"/>
+ <widget class=".widgets.CPSSubSuperGroupMultiSelectWidget"/>
 </configure>
