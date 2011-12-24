@@ -1,4 +1,4 @@
-# -*- coding: ISO-8859-15 -*-
+# -*- coding: iso-8859-15 -*-
 # Copyright (c) 2005 Nuxeo SARL <http://nuxeo.com>
 # Authors: Tarek Ziadé <tz@nuxeo.com>
 #
@@ -21,7 +21,7 @@
 import unittest
 from Acquisition import Implicit
 
-from Products.CPSDirectory.DirectoryWidgets import CPSUserIdentifierWidget
+from Products.CPSDirectory.widgets import CPSUserIdentifierWidget
 
 class FakePortal(Implicit):
     pass
