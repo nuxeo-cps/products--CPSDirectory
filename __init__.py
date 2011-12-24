@@ -35,8 +35,6 @@ except ImportError:
 import SQLConnector
 
 import DirectoryTool
-# Register fields
-import DirectoryFields
 
 from DirectoryTool import DirectoryTypeRegistry
 from ZODBDirectory import ZODBDirectory

@@ -14,24 +14,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
-#
-# $Id$
-"""Directory specific fields
+"""Directory specific fields.
 """
-
-#$Id$
 
 import logging
 
 from Globals import InitializeClass
 from Products.CMFCore.utils import getToolByName
 
-from Products.CPSSchemas.Field import FieldRegistry
 from Products.CPSSchemas.BasicFields import CPSStringListField
 from Products.CPSSchemas.BasicFields import CPSStringField
 from Products.CPSSchemas.BasicFields import toUTF8, fromUTF8
 
-logger = logging.getLogger('Products.CPSDirectory.DirectoryFields')
+logger = logging.getLogger(__name__)
 
 def attribute_to_dn(value, attr, directory=None):
     """Resolve an attribute value to provide a Dn."""
@@ -194,7 +189,6 @@ class CPSDistinguishedNameListField(CPSStringListField):
         return res
 
 InitializeClass(CPSDistinguishedNameListField)
-FieldRegistry.register(CPSDistinguishedNameListField)
 
 class CPSDistinguishedNameField(CPSStringField):
     """ Stores a DN in ldap while presenting an attribute value to CPS.
@@ -241,5 +235,4 @@ class CPSDistinguishedNameField(CPSStringField):
             return '' # XXX use default value ?
 
 InitializeClass(CPSDistinguishedNameField)
-FieldRegistry.register(CPSDistinguishedNameField)
 

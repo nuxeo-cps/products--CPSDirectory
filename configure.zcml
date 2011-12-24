@@ -5,6 +5,7 @@
     xmlns:zcml="http://namespaces.zope.org/zcml">
 
   <include file="upgrade.zcml"/>
+  <include file="fields.zcml"/>
   <include file="widgets.zcml"/>
 
   <adapter

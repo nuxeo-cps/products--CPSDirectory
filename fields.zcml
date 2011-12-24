@@ -1,0 +1,6 @@
+<configure xmlns="http://namespaces.nuxeo.org/cps">
+
+ <field class=".fields.CPSDistinguishedNameListField" />
+ <field class=".fields.CPSDistinguishedNameField" />
+
+</configure>
