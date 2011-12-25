@@ -24,6 +24,8 @@ import csv
 from StringIO import StringIO
 from urllib import urlencode
 
+from zope.tales.tales import CompilerError
+
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
@@ -39,7 +41,6 @@ from Products.CMFCore.utils import SimpleItemWithProperties
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getEngine
-from Products.PageTemplates.TALES import CompilerError
 
 from Products.CPSUtil.property import PropertiesPostProcessor
 from Products.CPSSchemas.Schema import CPSSchema
