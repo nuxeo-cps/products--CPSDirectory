@@ -167,17 +167,6 @@
       global="False"
       />
 
-  <!-- traversable so that add views and export views can work -->
-
-  <five:traversable
-      class=".DirectoryTool.DirectoryTool"/>
-
-  <five:traversable
-      class=".BaseDirectory.BaseDirectory"/>
-
-  <five:traversable
-      class=".LDAPServerAccess.LDAPServerAccess"/>
-
   <configure package="Products.GenericSetup.browser">
 
     <browser:page
