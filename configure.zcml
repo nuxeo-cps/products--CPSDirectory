@@ -158,15 +158,6 @@
       global="False"
       />
 
-  <five:registerClass
-      zcml:condition="installed ldap"
-      class=".LDAPDirectoryVocabulary.LDAPDirectoryVocabulary"
-      meta_type="CPS LDAP Directory Vocabulary"
-      addview="addLDAPDirectoryVocabulary.html"
-      permission="cmf.ManagePortal"
-      global="False"
-      />
-
   <configure package="Products.GenericSetup.browser">
 
     <browser:page
@@ -281,15 +272,6 @@
         name="addIndirectDirectoryVocabulary.html"
         template="addWithPresettings.pt"
         class="Products.CPSDirectory.browser.IndirectDirectoryVocabularyAddView"
-        permission="cmf.ManagePortal"
-        />
-
-    <browser:page
-        zcml:condition="installed ldap"
-        for="zope.app.container.interfaces.IAdding"
-        name="addLDAPDirectoryVocabulary.html"
-        template="addWithPresettings.pt"
-        class="Products.CPSDirectory.browser.LDAPDirectoryVocabularyAddView"
         permission="cmf.ManagePortal"
         />
 

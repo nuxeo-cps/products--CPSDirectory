@@ -51,9 +51,6 @@ from Products.CPSDirectory.DirectoryEntryVocabulary import (
     DirectoryEntryVocabulary)
 from Products.CPSDirectory.IndirectDirectoryVocabulary import (
     IndirectDirectoryVocabulary)
-if import_ldap_ok:
-    from Products.CPSDirectory.LDAPDirectoryVocabulary import (
-        LDAPDirectoryVocabulary)
 
 
 class BaseDirectoryAddView(BaseAddView):
@@ -122,8 +119,3 @@ class DirectoryEntryVocabularyAddView(BaseVocabularyAddView):
 class IndirectDirectoryVocabularyAddView(BaseVocabularyAddView):
     """Add view for IndirectDirectoryVocabulary."""
     klass = IndirectDirectoryVocabulary
-
-if import_ldap_ok:
-    class LDAPDirectoryVocabularyAddView(BaseVocabularyAddView):
-        """Add view for LDAPDirectoryVocabulary."""
-        klass = LDAPDirectoryVocabulary
