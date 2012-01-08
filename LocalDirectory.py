@@ -15,6 +15,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+import warnings
+
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
@@ -30,6 +32,19 @@ from Products.CPSDirectory.interfaces import IDirectory
 from zope.interface import implements
 
 _marker = []
+
+# GR: I've never been convinced by this concept, for me that's a dirty
+# workaround the fact that directory views are artificial. Directly attacking
+# a directory in the home folder would be so much better. Looking up the
+# directory should be the responsibility of application code.
+# Besides,
+#    - just got an error on _get_id_field, all the getattrs in these
+# ComputedAttributes are wrong. Don't understand how they could have worked one
+# day
+#    - not a single test.
+
+warnings.warn("LocalDirectory is considered broken and could be removed at "
+              "any point in CPS 3.6 series.", DeprecationWarning, stacklevel=2)
 
 class LocalDirectory(BaseDirectory):
     """A Directory that acts as a Proxy to a directory in the UserHomeFolder.
