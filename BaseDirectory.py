@@ -811,16 +811,6 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
             transcode legacy  values, using the two charset kw args.
         """
 
-        if return_fields is None:
-            raise ValueError("Return fields can't be None for csvExport()")
-
-        out = StringIO()
-        fields = tuple(rf[0] for rf in return_fields)
-        w = csv.DictWriter(out, fieldnames=fields,
-                           restval='',
-                           extrasaction='ignore',
-                           dialect=csv_dialect)
-
         def basestring_transcode(v):
             if isinstance(v, str):
                 if input_charset is None:
@@ -833,10 +823,30 @@ class BaseDirectory(PropertiesPostProcessor, SimpleItemWithProperties):
                 return v.encode(output_charset)
             return v
 
+
+        if return_fields is None:
+            raise ValueError("Return fields can't be None for csvExport()")
+
+        out = StringIO()
+        fields = tuple(rf[0] for rf in return_fields)
+        w = csv.DictWriter(out, fieldnames=fields,
+                           restval='',
+                           extrasaction='ignore',
+                           dialect=csv_dialect)
+
+
         cpsmcat = getToolByName(self, 'translation_service', None)
         label_true = label_false = ''
 
-        w.writerow(dict(return_fields))
+
+        transcoded_return_fields = [
+              ( basestring_transcode(c[0]), basestring_transcode(c[1]) )
+                for c in return_fields
+              ]
+
+
+
+        w.writerow(dict(transcoded_return_fields))
         return_keys = tuple(f[0] for f in return_fields)
 
         for eid in self.searchEntries(**kw):
