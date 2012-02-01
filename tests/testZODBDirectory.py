@@ -273,14 +273,29 @@ class TestZODBDirectory(ZopeTestCase):
         # forbid side effects
         self.assertEquals(len(zdir.listEntryIds()), 3)
 
-        return_fields = (('idd', 'Animal'),
+        return_fields = (
+                         ('idd', 'Animal'),
                          ('foo', 'Cri'),
-                         ('bar', 'Surface'))
+                         ('bar', 'Surface')
+                         )
 
         self.assertEquals("Animal,Cri,Surface\r\n"
                           "chien,ouah,poil\r\n",
                           zdir.csvExport(foo='ouah', output_charset='latin1',
                                          return_fields=return_fields))
+
+        #Reproducing ticket #2523
+        unicode_return_fields2 = (
+                                ('idd',u'qw\xe8'),
+                                ('foo', 'Cri'),
+                                ('bar', 'Surface')
+                                )
+
+        self.assertEquals('qw\xe8,Cri,Surface\r\n'
+                           'chien,ouah,poil\r\n',
+                           zdir.csvExport(foo='ouah',output_charset='latin1',
+                           return_fields = unicode_return_fields2)
+                           )
 
         zdir.search_substring_fields = ['bar']
         result = zdir.csvExport(bar='p', 
