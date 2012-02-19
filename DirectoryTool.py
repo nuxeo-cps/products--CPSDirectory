@@ -54,6 +54,9 @@ class DirectoryTool(UniqueObject, IFAwareObjectManager, Folder):
     meta_type = 'CPS Directory Tool'
     _product_interfaces = (IDirectory,)
 
+    generic_setup_name = 'directories'
+    generic_setup_logger = 'directories'
+
     security = ClassSecurityInfo()
 
     def __init__(self):

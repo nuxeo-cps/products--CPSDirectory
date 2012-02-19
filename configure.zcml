@@ -23,7 +23,7 @@
       />
 
   <adapter
-      factory=".exportimport.LDAPServerAccessXMLAdapter"
+      factory="Products.CPSUtil.genericsetup.PropertiesSubObjectsXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
       for=".interfaces.ILDAPServerAccess
            Products.GenericSetup.interfaces.ISetupEnviron"

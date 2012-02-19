@@ -7,6 +7,7 @@ New features
 Bug fixes
 ~~~~~~~~~
 - #2523: support unicode in CSV export colum title
+- #2537: removed some useless code in exportimport
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 

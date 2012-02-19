@@ -25,6 +25,9 @@ from Products.GenericSetup.utils import importObjects
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import ObjectManagerHelpers
 from Products.GenericSetup.utils import PropertyManagerHelpers
+
+from Products.CPSUtil.genericsetup import PropertiesSubObjectsXMLAdapter
+from Products.CPSUtil.genericsetup import tool_steps
 from Products.CPSUtil.property import PostProcessingPropertyManagerHelpers
 from Products.CPSUtil.cachemanagersetup import CacheableHelpers
 
@@ -42,56 +45,11 @@ from Products.CPSDirectory.interfaces import IPluggableConnection
 TOOL = 'portal_directories'
 NAME = 'directories'
 
-def exportDirectoryTool(context):
-    """Export directory tool and directories as a set of XML files.
-    """
-    site = context.getSite()
-    tool = getToolByName(site, TOOL, None)
-    if tool is None:
-        logger = context.getLogger(NAME)
-        logger.info("Nothing to export.")
-        return
-    exportObjects(tool, '', context)
+exportDirectoryTool, importDirectoryTool = tool_steps(TOOL)
 
-def importDirectoryTool(context):
-    """Import directory tool and directories from XML files.
-    """
-    site = context.getSite()
-    tool = getToolByName(site, TOOL)
-    importObjects(tool, '', context)
-
-
-class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
-                              PropertyManagerHelpers):
+class DirectoryToolXMLAdapter(PropertiesSubObjectsXMLAdapter):
     """XML importer and exporter for DirectoryTool.
     """
-
-    adapts(IDirectoryTool, ISetupEnviron)
-    implements(IBody)
-
-    _LOGGER_ID = NAME
-    name = NAME
-
-    def _exportNode(self):
-        """Export the object as a DOM node.
-        """
-        node = self._getObjectNode('object')
-        node.appendChild(self._extractProperties())
-        node.appendChild(self._extractObjects())
-
-        self._logger.info("Directory tool exported.")
-        return node
-
-    def _importNode(self, node):
-        """Import the object from the DOM node.
-        """
-        if self.environ.shouldPurge():
-            self._purgeProperties()
-            self._purgeObjects()
-
-        self._initProperties(node)
-        self._initObjects(node)
-        self._logger.info("Directory tool imported.")
 
     def _purgeObjects(self):
         parent = self.context
@@ -105,35 +63,6 @@ class DirectoryToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers,
                                      " if you really want to" % dir.getId())
                 continue
             parent._delObject(obj_id)
-
-
-class LDAPServerAccessXMLAdapter(XMLAdapterBase,
-                           PostProcessingPropertyManagerHelpers):
-    """XML importer and exporter for DirectoryTool.
-    """
-
-    adapts(ILDAPServerAccess, ISetupEnviron)
-    implements(IBody)
-
-    _LOGGER_ID = NAME
-
-    def _exportNode(self):
-        """Export the object as a DOM node.
-        """
-        node = self._getObjectNode('object')
-        node.appendChild(self._extractProperties())
-
-        self._logger.info("%r ldap access imported." % self.context.getId())
-        return node
-
-    def _importNode(self, node):
-        """Import the object from the DOM node.
-        """
-        if self.environ.shouldPurge():
-            self._purgeProperties()
-
-        self._initProperties(node)
-        self._logger.info("%r ldap access exported." % self.context.getId())
 
 
 class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
@@ -152,6 +81,8 @@ class DirectoryXMLAdapter(XMLAdapterBase, CacheableHelpers,
         node = self._getObjectNode('object')
         node.appendChild(self._extractProperties())
         node.appendChild(self._extractEntryLR())
+
+        # TODO heard about what an adapter is ?
         if IMetaDirectory.providedBy(self.context):
             node.appendChild(self._extractBackings())
         child = self._extractCacheableManagerAssociation()
