@@ -1,4 +1,22 @@
 ===========================================================
+Package: CPSDirectory 1.50.1
+===========================================================
+First release built by: gracinet at: 2012-05-27T21:00:41
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2523: support unicode in CSV export colum title
+- #2537: removed some useless code in exportimport
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.50.0
 ===========================================================
 First release built by: gracinet at: 2012-01-21T22:23:47
