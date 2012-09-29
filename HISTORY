@@ -34,6 +34,23 @@ New internal features
 - 
 
 ===========================================================
+Package: CPSDirectory 1.49.2-CPS-3.5
+===========================================================
+First release built by: gracinet at: 2012-02-18T23:00:03
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- #2523: support unicode in CSV export colum title
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.49.1-CPS-3.5
 ===========================================================
 First release built by: gracinet at: 2011-11-23T19:44:30
