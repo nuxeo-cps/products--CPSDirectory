@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSDirectory 1.50.2
+===========================================================
+First release built by: gracinet at: 2012-09-30T10:15:52
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- General merge from CPS-3.5 branch
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSDirectory 1.50.1
 ===========================================================
 First release built by: gracinet at: 2012-05-27T21:00:41
